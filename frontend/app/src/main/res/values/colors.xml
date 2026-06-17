@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--basic-->
+    <color name="black">#77000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!--primary-->
+    <color name="colorPrimary">#46A56C</color>
+
+    <!--state-->
+    <color name="colorSuccess">#00FF0B</color>
+    <color name="colorError">#F24B4C</color>
+
+    <!--text-->
+
+
+</resources>
