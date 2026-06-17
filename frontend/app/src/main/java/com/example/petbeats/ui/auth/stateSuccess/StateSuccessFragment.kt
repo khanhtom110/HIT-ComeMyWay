@@ -6,31 +6,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
+import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentStateSuccessBinding
 import kotlinx.coroutines.launch
 
 
 class StateSuccessFragment : Fragment() {
-    private lateinit var binding: FragmentStateSuccessBinding
+    private var _binding: FragmentStateSuccessBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: StateSuccessViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_state_success, container, false)
+        _binding = FragmentStateSuccessBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentStateSuccessBinding.bind(view)
 
         setOnCLick()
         eventData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setOnCLick() {
@@ -41,12 +51,13 @@ class StateSuccessFragment : Fragment() {
 
     private fun eventData() {
         lifecycleScope.launch {
-            viewModel.event.collect { event ->
-                when (event) {
-                    is StateSuccessEvent.NavigationLogin -> {
-                        findNavController().navigate(R.id.success_login)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        is StateSuccessEvent.NavigationLogin -> {
+                            findNavController().navigate(R.id.success_login)
+                        }
                     }
-
                 }
             }
         }
