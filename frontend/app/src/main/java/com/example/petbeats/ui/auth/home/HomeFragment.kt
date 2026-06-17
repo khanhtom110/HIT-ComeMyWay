@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
 import com.example.petbeats.databinding.FragmentHomeBinding
@@ -15,23 +17,30 @@ import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentHomeBinding.bind(view)
 
         setOnClick()
         stateData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setOnClick() {
@@ -45,13 +54,15 @@ class HomeFragment : Fragment() {
 
     private fun stateData() {
         lifecycleScope.launch {
-            viewModel.event.collect { event ->
-                when (event) {
-                    is HomeEvent.NavigationLogin -> {
-                        findNavController().navigate(R.id.loginFragment)
-                    }
-                    is HomeEvent.NavigationRegister -> {
-                        findNavController().navigate(R.id.registerFragment)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        is HomeEvent.NavigationLogin -> {
+                            findNavController().navigate(R.id.loginFragment)
+                        }
+                        is HomeEvent.NavigationRegister -> {
+                            findNavController().navigate(R.id.registerFragment)
+                        }
                     }
                 }
             }

@@ -14,29 +14,37 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
 import com.example.petbeats.databinding.FragmentForgotPasswordBinding
+import com.example.petbeats.databinding.FragmentHomeBinding
 import kotlinx.coroutines.launch
 import kotlin.toString
 
 
 class ForgotPasswordFragment : Fragment() {
-    private lateinit var binding: FragmentForgotPasswordBinding
+    private var _binding: FragmentForgotPasswordBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: ForgotPasswordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forgot_password, container, false)
+        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentForgotPasswordBinding.bind(view)
 
         setOnClick()
         stateData()
         eventData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setOnClick() {
@@ -82,19 +90,21 @@ class ForgotPasswordFragment : Fragment() {
 
     private fun eventData() {
         lifecycleScope.launch {
-            viewModel.event.collect { event ->
-                when (event) {
-                    is ForgotPasswordEvent.NavigationOTPSendEmail -> {
-                        findNavController().navigate(
-                            R.id.otpFragment,
-                            Bundle().apply {
-                                putString("email", event.email)
-                            }
-                        )
-                    }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        is ForgotPasswordEvent.NavigationOTPSendEmail -> {
+                            findNavController().navigate(
+                                R.id.otpFragment,
+                                Bundle().apply {
+                                    putString("email", event.email)
+                                }
+                            )
+                        }
 
-                    is ForgotPasswordEvent.NavigationLogin -> {
-                        findNavController().navigate(R.id.loginFragment)
+                        is ForgotPasswordEvent.NavigationLogin -> {
+                            findNavController().navigate(R.id.loginFragment)
+                        }
                     }
                 }
             }

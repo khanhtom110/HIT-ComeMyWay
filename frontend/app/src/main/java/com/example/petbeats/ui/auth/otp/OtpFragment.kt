@@ -13,30 +13,38 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
+import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentOtpBinding
 import kotlinx.coroutines.launch
 import kotlin.toString
 
 
 class OtpFragment : Fragment() {
-    private lateinit var binding: FragmentOtpBinding
+    private var _binding: FragmentOtpBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: OtpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_otp, container, false)
+        _binding = FragmentOtpBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentOtpBinding.bind(view)
 
         setOnCLick()
         stateData()
         eventData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setOnCLick() {
