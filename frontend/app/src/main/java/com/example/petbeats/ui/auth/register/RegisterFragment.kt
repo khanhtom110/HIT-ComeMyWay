@@ -15,37 +15,29 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
-import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
 import kotlin.toString
 
 class RegisterFragment : Fragment() {
-    private var _binding: FragmentRegisterBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentRegisterBinding
     private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
-
-        return binding.root
+        return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentRegisterBinding.bind(view)
 
         setOnCLick()
         stateData()
         eventData()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setOnCLick() {
@@ -166,12 +158,10 @@ class RegisterFragment : Fragment() {
     private fun eventData() {
         //navigationLogin
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    when (event) {
-                        is RegisterEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
-                        }
+            viewModel.event.collect { event ->
+                when (event) {
+                    is RegisterEvent.NavigationLogin -> {
+                        findNavController().navigate(R.id.loginFragment)
                     }
                 }
             }

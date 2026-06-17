@@ -20,31 +20,24 @@ import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
-    private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
-        return binding.root
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentLoginBinding.bind(view)
 
         setOnClick()
         stateData()
         eventData()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setOnClick() {
@@ -125,18 +118,16 @@ class LoginFragment : Fragment() {
 
     private fun eventData() {
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    when (event) {
-                        is LoginEvent.NavigationForgot -> {
-                            findNavController().navigate(R.id.forgotPasswordFragment)
-                        }
-                        is LoginEvent.NavigationRegister -> {
-                            findNavController().navigate(R.id.registerFragment)
-                        }
-                        is LoginEvent.NavigationHome -> {
-                            findNavController().navigate(R.id.homeFragment)
-                        }
+            viewModel.event.collect { event ->
+                when (event) {
+                    is LoginEvent.NavigationForgot -> {
+                        findNavController().navigate(R.id.forgotPasswordFragment)
+                    }
+                    is LoginEvent.NavigationRegister -> {
+                        findNavController().navigate(R.id.registerFragment)
+                    }
+                    is LoginEvent.NavigationHome -> {
+                        findNavController().navigate(R.id.homeFragment)
                     }
                 }
             }

@@ -15,38 +15,30 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
-import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentResetPasswordBinding
 import kotlinx.coroutines.launch
 import kotlin.toString
 
 
 class ResetPasswordFragment : Fragment() {
-    private var _binding: FragmentResetPasswordBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentResetPasswordBinding
     private val viewModel: ResetPasswordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentResetPasswordBinding.inflate(inflater, container, false)
-
-        return binding.root
+        return inflater.inflate(R.layout.fragment_reset_password, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentResetPasswordBinding.bind(view)
 
         setOnCLick()
         stateData()
         eventData()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setOnCLick() {
@@ -143,19 +135,16 @@ class ResetPasswordFragment : Fragment() {
 
     private fun eventData() {
         lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    when (event) {
-                        is ResetPasswordEvent.NavigationOTP -> {
-                            findNavController().navigate(R.id.otpFragment)
-                        }
+            viewModel.event.collect { event ->
+                when (event) {
+                    is ResetPasswordEvent.NavigationOTP -> {
+                        findNavController().navigate(R.id.otpFragment)
+                    }
 
-                        is ResetPasswordEvent.NavigationSuccess -> {
-                            findNavController().navigate(R.id.stateSuccessFragment)
-                        }
+                    is ResetPasswordEvent.NavigationSuccess -> {
+                        findNavController().navigate(R.id.stateSuccessFragment)
                     }
                 }
-
             }
         }
     }
