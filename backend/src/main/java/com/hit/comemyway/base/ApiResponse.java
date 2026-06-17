@@ -18,10 +18,10 @@ public record ApiResponse<T>(
     public static <T> ApiResponse<T> ok(String message,T data){
         return new ApiResponse<>(200,CommonMessage.SUCCESS,data,Instant.now());
     }
-    public static <T> ApiResponse<T> errorWithoutData(int code, String message){
-        return new ApiResponse<>(code,message,null,Instant.now());
+    public static <T> ApiResponse<T>error(int code, String message){
+        return new ApiResponse<T>(code,message,null,Instant.now());
     }
-    public static <T> ApiResponse<T> errorWithData(int code, String message,T data){
+    public static <T> ApiResponse<T> error(int code, String message, T data){
         return new ApiResponse<>(code,message,data,Instant.now());
     }
 }

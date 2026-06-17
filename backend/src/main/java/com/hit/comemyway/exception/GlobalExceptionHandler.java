@@ -15,29 +15,26 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AppException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAppException(AppException e){
-        return ResponseEntity
-                .status(e.getErrorCode())
-                .body(ApiResponse.errorWithoutData(e.getErrorCode(), e.getMessage()));
-    }
+  @ExceptionHandler(AppException.class)
+  public ResponseEntity<ApiResponse<Void>> handleAppException(AppException e) {
+    return ResponseEntity.status(e.getErrorCode())
+        .body(ApiResponse.error(e.getErrorCode(), e.getMessage()));
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(fieldError ->
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
+      MethodArgumentNotValidException ex) {
+    Map<String, String> errors = new HashMap<>();
+    ex.getBindingResult().getFieldErrors()
+        .forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 
-        return ResponseEntity
-                .badRequest()
-                .body(ApiResponse.errorWithData(400, "Dữ liệu nhập vào chưa đúng", errors));
-    }
+    return ResponseEntity.badRequest()
+        .body(ApiResponse.error(400, "Dữ liệu nhập vào chưa đúng", errors));
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
-        log.error("Lỗi hệ thống nghiêm trọng: ",ex);
-        return ResponseEntity
-                .status(500)
-                .body(ApiResponse.errorWithoutData(500, "Lỗi hệ thống"));
-    }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
+    log.error("Lỗi hệ thống nghiêm trọng: ", ex);
+    return ResponseEntity.status(500).body(ApiResponse.error(500, "Lỗi hệ thống"));
+  }
 }
