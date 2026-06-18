@@ -1,6 +1,7 @@
 package com.hit.comemyway.exception;
 
 import com.hit.comemyway.base.ApiResponse;
+import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.exception.extended.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -38,24 +39,24 @@ public class GlobalExceptionHandler {
     });
 
     return ResponseEntity.badRequest()
-            .body(ApiResponse.error(400, "Dữ liệu nhập vào chưa đúng", errors));
+            .body(ApiResponse.error(400, ErrorMessage.BAD_REQUEST, errors));
   }
 
   @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
   public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException ex) {
     return ResponseEntity.status(401)
-            .body(ApiResponse.error(401, "Tên đăng nhập hoặc mật khẩu chưa chính xác"));
+            .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
   }
 
   @ExceptionHandler(org.springframework.security.authentication.InternalAuthenticationServiceException.class)
   public ResponseEntity<ApiResponse<Void>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
     return ResponseEntity.status(401)
-            .body(ApiResponse.error(401, "Tên đăng nhập hoặc mật khẩu chưa chính xác"));
+            .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
     log.error("Lỗi hệ thống nghiêm trọng: ", ex);
-    return ResponseEntity.status(500).body(ApiResponse.error(500, "Lỗi hệ thống"));
+    return ResponseEntity.status(500).body(ApiResponse.error(500, ErrorMessage.EXCEPTION_GENERAL));
   }
 }

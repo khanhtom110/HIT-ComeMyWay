@@ -1,28 +1,31 @@
 package com.hit.comemyway.service;
 
-import com.hit.comemyway.constant.RoleConstant;
+import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.LoginRequest;
 import com.hit.comemyway.dto.request.LogoutRequest;
 import com.hit.comemyway.dto.request.RefreshTokenRequest;
 import com.hit.comemyway.dto.request.RegisterRequest;
 import com.hit.comemyway.dto.response.LoginResponse;
-import com.hit.comemyway.entity.RefreshToken;
+import com.hit.comemyway.entity.Role;
 import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.exception.extended.DuplicateResourceException;
 import com.hit.comemyway.exception.extended.ResourceNotFoundException;
-import com.hit.comemyway.repository.RefreshTokenRepository;
+import com.hit.comemyway.repository.InvalidatedRepository;
 import com.hit.comemyway.repository.UserRepository;
+import com.hit.comemyway.security.CustomUserDetails;
 import com.hit.comemyway.security.JwtService;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.UUID;
+import java.text.ParseException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,41 +34,38 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final InvalidatedRepository invalidatedRepository;
 
-    @Transactional
+
     public LoginResponse login(LoginRequest request) {
 
-        // kiểm tra Username & Password
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.username(),
-                        request.password()
-                )
-        );
-
         User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", request.username()));
+                .orElseThrow(() -> new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
 
-        String token = jwtService.generateToken(user);
+        boolean isPasswordMatch = passwordEncoder.matches(request.password(), user.getPassword());
 
-        RefreshToken refreshToken = createRefreshToken(user);
+        if (!isPasswordMatch) {
+            throw new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS);
+        }
 
-        return new LoginResponse(token, refreshToken.getToken());
+        String accessToken = jwtService.generateToken(user,false);
+        String refreshToken = jwtService.generateToken(user, true);
+
+        return new LoginResponse(accessToken, refreshToken);
     }
 
     @Transactional
     public void register(RegisterRequest request) {
         if (!request.password().equals(request.confirmPassword())) {
-            throw new AppException(400, "Mật khẩu xác nhận không trùng khớp");
+            throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
         }
 
         if (userRepository.existsByUsername(request.username())) {
-            throw new DuplicateResourceException("User", "username", request.username());
+            throw new AppException(400, ErrorMessage.User.USERNAME_EXISTED);
         }
 
         if (userRepository.existsByEmail(request.email())) {
-            throw new DuplicateResourceException("User", "email", request.email());
+            throw new AppException(400, ErrorMessage.User.EMAIL_EXISTED);
         }
 
         String password = passwordEncoder.encode(request.password());
@@ -74,51 +74,61 @@ public class AuthService {
                 .username(request.username())
                 .password(password)
                 .email(request.email())
-                .role(RoleConstant.USER)
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
     }
 
     @Transactional
-    public RefreshToken createRefreshToken(User user) {
-        //Xoa refresh token cu
-        refreshTokenRepository.deleteByUser(user);
-        refreshTokenRepository.flush();
+    public void logout(LogoutRequest request) throws ParseException {
+        try{
+            String token = request.refreshToken();
 
-        //Tao token moi
-        RefreshToken refreshToken = RefreshToken.builder()
-                .user(user)
-                .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(604800000)) // Han 7 ngay
-                .build();
+            if (jwtService.isAccessToken(token)) {
+                throw new AppException(400, ErrorMessage.Auth.INVALID_LOGOUT_TOKEN);
+            }
 
-        return refreshTokenRepository.save(refreshToken);
-    }
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            String jti =signedJWT.getJWTClaimsSet().getJWTID();
 
-    public LoginResponse refreshAccessToken(RefreshTokenRequest request) {
-        return refreshTokenRepository.findByToken(request.refreshToken())
-                .map(this::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    //Tao access token
-                    String newAccessToken = jwtService.generateToken(user);
-                    return new LoginResponse(newAccessToken, request.refreshToken());
-                })
-                .orElseThrow(() -> new AppException(404, "Refresh token not found"));
-    }
+            if(invalidatedRepository.existsById(jti)){
+                throw new AppException(400,ErrorMessage.Auth.TOKEN_ALREADY_INVALIDATED);
+            }
 
-    private RefreshToken verifyExpiration(RefreshToken token) {
-        if (token.getExpiryDate().isBefore(Instant.now())) {
-            refreshTokenRepository.delete(token);
-            throw new AppException(400, "Refresh token is expired, Login against please");
+            jwtService.invalidateToken(token);
+        } catch (ParseException e) {
+            throw new AppException(400, ErrorMessage.Auth.MALFORMED_TOKEN);
+        } catch (AppException e) {
+            throw e;
+        }catch (Exception e){
+            throw new AppException(500, ErrorMessage.EXCEPTION_GENERAL);
         }
-        return token;
     }
 
     @Transactional
-    public void logout(LogoutRequest request) {
-        refreshTokenRepository.findByToken(request.refreshToken())
-                .ifPresent(refreshTokenRepository::delete);
+    public LoginResponse refreshToken(RefreshTokenRequest request) {
+        String token = request.refreshToken();
+
+        String username = jwtService.extractUsername(token);
+
+        //Tim user trong db
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(400, ErrorMessage.User.USER_NOT_EXISTED));
+
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        // Neu token khong hop le
+        if (!jwtService.isTokenValid(token, userDetails) || jwtService.isAccessToken(token)) {
+            throw new AppException(400, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
+        }
+
+       //Dua token cu vao InvalidatedToken
+        jwtService.invalidateToken(token);
+
+        String newAccessToken = jwtService.generateToken(user, false);
+        String newRefreshToken = jwtService.generateToken(user, true);
+
+        return new LoginResponse(newAccessToken, newRefreshToken);
     }
 }
