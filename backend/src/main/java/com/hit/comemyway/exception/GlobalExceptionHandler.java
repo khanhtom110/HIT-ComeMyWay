@@ -4,6 +4,8 @@ import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.exception.extended.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,18 +20,37 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AppException.class)
   public ResponseEntity<ApiResponse<Void>> handleAppException(AppException e) {
     return ResponseEntity.status(e.getErrorCode())
-        .body(ApiResponse.error(e.getErrorCode(), e.getMessage()));
+            .body(ApiResponse.error(e.getErrorCode(), e.getMessage()));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
-      MethodArgumentNotValidException ex) {
+          MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
-    ex.getBindingResult().getFieldErrors()
-        .forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
+    ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+      String fieldName = fieldError.getField();
+      String errorMessage = fieldError.getDefaultMessage();
+      String errorCode = fieldError.getCode();
+
+      if (!errors.containsKey(fieldName) || "NotBlank".equals(errorCode)) {
+        errors.put(fieldName, errorMessage);
+      }
+    });
 
     return ResponseEntity.badRequest()
-        .body(ApiResponse.error(400, "Dữ liệu nhập vào chưa đúng", errors));
+            .body(ApiResponse.error(400, "Dữ liệu nhập vào chưa đúng", errors));
+  }
+
+  @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+  public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException ex) {
+    return ResponseEntity.status(401)
+            .body(ApiResponse.error(401, "Tên đăng nhập hoặc mật khẩu chưa chính xác"));
+  }
+
+  @ExceptionHandler(org.springframework.security.authentication.InternalAuthenticationServiceException.class)
+  public ResponseEntity<ApiResponse<Void>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
+    return ResponseEntity.status(401)
+            .body(ApiResponse.error(401, "Tên đăng nhập hoặc mật khẩu chưa chính xác"));
   }
 
   @ExceptionHandler(Exception.class)
