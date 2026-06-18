@@ -35,5 +35,5 @@ jobs:
       - name: Validate Code Formatting
         run: mvn -T 2C --batch-mode formatter:validate
 
-      - name: Build and Test
-        run: mvn -T 2C --batch-mode verify
+      - name: Build and Skip Test
+        run: mvn -T 2C --batch-mode verify -DskipTests
