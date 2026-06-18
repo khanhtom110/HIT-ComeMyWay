@@ -1,4 +1,5 @@
 package com.example.petbeats.core.network
 
-class ApiConstants {
+object ApiConstants {
+    // TODO: Add API base URL and endpoint paths.
 }
