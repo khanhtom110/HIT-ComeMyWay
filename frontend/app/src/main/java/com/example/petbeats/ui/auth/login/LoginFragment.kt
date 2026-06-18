@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
                     }
 
-                    if (binding.textError.toString() != state.error) {
+                    if (binding.textError.text.toString() != state.error) {
                         binding.textError.text = state.error
                     }
 

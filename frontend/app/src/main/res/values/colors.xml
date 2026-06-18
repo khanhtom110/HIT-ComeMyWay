@@ -5,13 +5,17 @@
     <color name="white">#FFFFFF</color>
 
     <!--primary-->
-    <color name="colorPrimary">#46A56C</color>
+    <color name="colorPrimary">#FF8817</color>
 
     <!--state-->
     <color name="colorSuccess">#00FF0B</color>
     <color name="colorError">#F24B4C</color>
 
     <!--text-->
+    <color name="colorTextTitle">#33322F</color>
+    <color name="colorTextSub">#A633322F</color>
 
+    <!--background-->
+    <color name="colorBackground">#FAF8F4</color>
 
 </resources>

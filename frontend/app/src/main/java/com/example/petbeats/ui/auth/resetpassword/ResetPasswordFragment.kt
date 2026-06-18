@@ -122,7 +122,7 @@ class ResetPasswordFragment : Fragment() {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input)
                     }
 
-                    if (binding.textError.toString() != state.error) {
+                    if (binding.textError.text.toString() != state.error) {
                         binding.textError.text = state.error
                     }
 

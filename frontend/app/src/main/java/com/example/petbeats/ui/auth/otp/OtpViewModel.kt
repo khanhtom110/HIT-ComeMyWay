@@ -46,7 +46,7 @@ class OtpViewModel: ViewModel() {
     }
 
     fun onResetClick(email: String) {
-        val otp = _state.value.otp1 + _state.value.otp2 + _state.value.otp3 + _state.value.otp4
+        val otp = _state.value.otp1 + _state.value.otp2 + _state.value.otp3 + _state.value.otp4 + _state.value.otp5 + _state.value.otp6
 
         viewModelScope.launch {
             _event.emit(OtpEvent.NavigationResetSendEmail(email))
