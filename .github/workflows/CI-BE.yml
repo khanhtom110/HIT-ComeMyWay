@@ -4,7 +4,7 @@ on:
     branches:
       - dev
     paths:
-      - 'Backend/**'
+      - 'backend/**'
   pull_request:
     types:
       - opened
@@ -12,7 +12,7 @@ on:
     branches:
       - dev
     paths:
-      - 'Backend/**'
+      - 'backend/**'
 
 jobs:
   build:
