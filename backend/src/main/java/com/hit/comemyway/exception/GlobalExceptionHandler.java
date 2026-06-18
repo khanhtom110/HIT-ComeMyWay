@@ -21,12 +21,12 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(AppException.class)
   public ResponseEntity<ApiResponse<Void>> handleAppException(AppException e) {
     return ResponseEntity.status(e.getErrorCode())
-            .body(ApiResponse.error(e.getErrorCode(), e.getMessage()));
+        .body(ApiResponse.error(e.getErrorCode(), e.getMessage()));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
-          MethodArgumentNotValidException ex) {
+      MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
     ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
       String fieldName = fieldError.getField();
@@ -39,19 +39,21 @@ public class GlobalExceptionHandler {
     });
 
     return ResponseEntity.badRequest()
-            .body(ApiResponse.error(400, ErrorMessage.BAD_REQUEST, errors));
+        .body(ApiResponse.error(400, ErrorMessage.BAD_REQUEST, errors));
   }
 
   @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
-  public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(BadCredentialsException ex) {
+  public ResponseEntity<ApiResponse<Void>> handleBadCredentialsException(
+      BadCredentialsException ex) {
     return ResponseEntity.status(401)
-            .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
+        .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
   }
 
   @ExceptionHandler(org.springframework.security.authentication.InternalAuthenticationServiceException.class)
-  public ResponseEntity<ApiResponse<Void>> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
+  public ResponseEntity<ApiResponse<Void>> handleInternalAuthenticationServiceException(
+      InternalAuthenticationServiceException ex) {
     return ResponseEntity.status(401)
-            .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
+        .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
   }
 
   @ExceptionHandler(Exception.class)

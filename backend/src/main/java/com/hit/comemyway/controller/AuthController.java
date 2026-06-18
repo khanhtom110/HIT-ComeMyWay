@@ -24,40 +24,36 @@ import java.text.ParseException;
 @RequestMapping(ApiPath.API_V1)
 @Tag(name = "Authentication", description = "Các API Quản lý đăng nhập, đăng ký và Token")
 public class AuthController {
-    private final AuthService authService;
+  private final AuthService authService;
 
-    @PostMapping(UrlConstant.Auth.LOGIN)
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
-        LoginResponse response = authService.login(request);
+  @PostMapping(UrlConstant.Auth.LOGIN)
+  public ResponseEntity<ApiResponse<LoginResponse>> login(
+      @Valid @RequestBody LoginRequest request) {
+    LoginResponse response = authService.login(request);
 
-        return ResponseEntity.ok(
-                ApiResponse.ok(CommonMessage.SUCCESS, response));
-    }
+    return ResponseEntity.ok(ApiResponse.ok(CommonMessage.SUCCESS, response));
+  }
 
-    @PostMapping(UrlConstant.Auth.REGISTER)
-    public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request){
-        authService.register(request);
+  @PostMapping(UrlConstant.Auth.REGISTER)
+  public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
+    authService.register(request);
 
-        return ResponseEntity.ok(
-                ApiResponse.ok(CommonMessage.SUCCESS, null)
-        );
-    }
+    return ResponseEntity.ok(ApiResponse.ok(CommonMessage.SUCCESS, null));
+  }
 
-    @PostMapping(UrlConstant.Auth.REFRESH_TOKEN)
-    public ResponseEntity<ApiResponse<LoginResponse>> refreshToken(
-            @Valid @RequestBody RefreshTokenRequest request){
-        LoginResponse response= authService.refreshToken(request);
-        return ResponseEntity.ok(
-                ApiResponse.ok(CommonMessage.SUCCESS,response)
-        );
-    }
+  @PostMapping(UrlConstant.Auth.REFRESH_TOKEN)
+  public ResponseEntity<ApiResponse<LoginResponse>> refreshToken(
+      @Valid @RequestBody RefreshTokenRequest request) {
+    LoginResponse response = authService.refreshToken(request);
+    return ResponseEntity.ok(ApiResponse.ok(CommonMessage.SUCCESS, response));
+  }
 
-    @PostMapping(UrlConstant.Auth.LOGOUT)
-    public ResponseEntity<ApiResponse<String>> logout(@Valid @RequestBody LogoutRequest request) throws ParseException {
-        authService.logout(request);
+  @PostMapping(UrlConstant.Auth.LOGOUT)
+  public ResponseEntity<ApiResponse<String>> logout(@Valid @RequestBody LogoutRequest request)
+      throws ParseException {
+    authService.logout(request);
 
-        return ResponseEntity.ok(
-                ApiResponse.ok(CommonMessage.SUCCESS, SuccessMessage.Auth.LOGOUT_SUCCESS)
-        );
-    }
+    return ResponseEntity
+        .ok(ApiResponse.ok(CommonMessage.SUCCESS, SuccessMessage.Auth.LOGOUT_SUCCESS));
+  }
 }

@@ -12,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class InvalidatedToken {
-    @Id
-    private String id;
+  @Id
+  private String id;
 
-    private Date expiryTime;
+  private Date expiryTime;
 }
