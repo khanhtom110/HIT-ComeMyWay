@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_auth"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.petbeats.ui.auth.home.HomeFragment"
+        android:label="homeFragment"/>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.petbeats.ui.auth.login.LoginFragment"
+        android:label="loginFragment"/>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.petbeats.ui.auth.register.RegisterFragment"
+        android:label="registerFragment"/>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.petbeats.ui.auth.forgotpassword.ForgotPasswordFragment"
+        android:label="forgotPasswordFragment"/>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.petbeats.ui.auth.resetpassword.ResetPasswordFragment"
+        android:label="resetPasswordFragment"/>
+
+    <fragment
+        android:id="@+id/otpFragment"
+        android:name="com.example.petbeats.ui.auth.otp.OtpFragment"
+        android:label="otpFragment"/>
+
+    <fragment
+        android:id="@+id/stateSuccessFragment"
+        android:name="com.example.petbeats.ui.auth.stateSuccess.StateSuccessFragment"
+        android:label="stateSuccessFragment">
+        <action
+            android:id="@+id/success_login"
+            app:destination="@+id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+</navigation>

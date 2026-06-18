@@ -3,12 +3,16 @@ on:
   push:
     branches:
       - dev
+    paths:
+      - 'backend/**'
   pull_request:
     types:
       - opened
       - synchronize
     branches:
       - dev
+    paths:
+      - 'backend/**'
 
 jobs:
   build:
