@@ -70,7 +70,7 @@ class ForgotPasswordFragment : Fragment() {
                         binding.inputEmail.setText(state.email)
                     }
 
-                    if (binding.textError.toString() != state.error) {
+                    if (binding.textError.text.toString() != state.error) {
                         binding.textError.text = state.error
                     }
 
