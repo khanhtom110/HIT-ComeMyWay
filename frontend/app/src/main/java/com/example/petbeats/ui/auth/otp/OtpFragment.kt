@@ -107,10 +107,10 @@ class OtpFragment : Fragment() {
         binding.input4.addTextChangedListener {
             viewModel.input4(it.toString())
         }
-        binding.input4.addTextChangedListener {
+        binding.input5.addTextChangedListener {
             viewModel.input5(it.toString())
         }
-        binding.input4.addTextChangedListener {
+        binding.input6.addTextChangedListener {
             viewModel.input6(it.toString())
         }
     }
