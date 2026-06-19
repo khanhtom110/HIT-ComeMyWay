@@ -5,6 +5,7 @@ public class UrlConstant {
     private static final String PREFIX = "/auth";
 
     public static final String LOGIN = PREFIX + "/login";
+    public static final String REGISTER = PREFIX + "/register";
     public static final String REFRESH_TOKEN = PREFIX + "/refresh";
     public static final String LOGOUT = PREFIX + "/logout";
 
