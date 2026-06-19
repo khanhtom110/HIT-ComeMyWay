@@ -15,6 +15,9 @@ public record ApiResponse<T>(
 
         Instant timestamp
 ) {
+    public static <T> ApiResponse<T> created(String message, T data) {
+        return new ApiResponse<>(201, message, data, Instant.now());
+    }
     public static <T> ApiResponse<T> ok(String message,T data){
         return new ApiResponse<>(200,CommonMessage.SUCCESS,data,Instant.now());
     }

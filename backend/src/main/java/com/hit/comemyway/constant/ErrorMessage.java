@@ -16,6 +16,7 @@ public final class ErrorMessage {
   public static final String INVALID_FORMAT_SOME_THING_FIELD = "ERR_VAL_INVALID_FORMAT";
   public static final String INVALID_SOME_THING_FIELD_IS_REQUIRED = "ERR_VAL_REQUIRED";
   public static final String NOT_BLANK_FIELD = "ERR_VAL_NOT_BLANK";
+  public static final String INVALID_FORMAT_USERNAME = "ERR_VAL_INVALID_USERNAME_FORMAT";
   public static final String INVALID_FORMAT_PASSWORD = "ERR_VAL_INVALID_PASSWORD_FORMAT";
   public static final String INVALID_USERNAME_LENGTH = "ERR_VAL_INVALID_USERNAME_LENGTH";
   public static final String INVALID_FORMAT_EMAIL = "ERR_VAL_INVALID_EMAIL_FORMAT";

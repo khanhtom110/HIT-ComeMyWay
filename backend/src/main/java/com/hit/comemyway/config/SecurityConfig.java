@@ -1,9 +1,11 @@
 package com.hit.comemyway.config;
 
+import com.hit.comemyway.constant.RoleConstant;
 import com.hit.comemyway.security.CustomUserDetailService;
 import com.hit.comemyway.security.JwtAuthenticationFilter;
 import com.hit.comemyway.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,45 +25,58 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-  private final CustomUserDetailService customUserDetailService;
-  private final JwtAuthenticationFilter jwtAuthFilter;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    @Value("${security.public-endpoints}")
+    String[] PUBLIC_END_POINT;
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(10);
-  }
+    @Value("${security.user-endpoints}")
+    String[] USER_END_POINT;
 
-  // Provider
-  @Bean
-  public AuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-    return authProvider;
-  }
+    @Value("${security.clinic-endpoints}")
+    String[] CLINIC_END_POINT;
 
-  // Manager
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-    return config.getAuthenticationManager();
-  }
+    @Value("${security.admin-endpoints}")
+    String[] ADMIN_END_POINT;
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(AbstractHttpConfigurer::disable) // disable CSRF cho API Stateless
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Mở
-                                                                                                 // API
-                                                                                                 // đăng
-                                                                                                 // nhập
-                                                                                                 // và
-                                                                                                 // Swagger
-            .anyRequest().authenticated())
-        .authenticationProvider(authenticationProvider())
-        // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    @Value("${security.swagger-endpoints}")
+    String[] OPEN_API;
 
-    return http.build();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
+    }
+
+    // Provider
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    // Manager
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PUBLIC_END_POINT).permitAll()
+                        .requestMatchers(USER_END_POINT).hasAuthority(RoleConstant.USER)
+                        .requestMatchers(CLINIC_END_POINT).hasAuthority(RoleConstant.CLINIC)
+                        .requestMatchers(ADMIN_END_POINT).hasAuthority(RoleConstant.ADMIN)
+                        .requestMatchers(OPEN_API).permitAll()
+                        .anyRequest().authenticated())
+                .authenticationProvider(authenticationProvider())
+                // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }

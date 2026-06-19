@@ -14,10 +14,9 @@ import com.hit.comemyway.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +30,16 @@ public class AuthController {
       @Valid @RequestBody LoginRequest request) {
     LoginResponse response = authService.login(request);
 
-    return ResponseEntity.ok(ApiResponse.ok(CommonMessage.SUCCESS, response));
+    return ResponseEntity.ok(ApiResponse.ok(SuccessMessage.Auth.LOGIN_SUCCESS, response));
   }
 
   @PostMapping(UrlConstant.Auth.REGISTER)
   public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
     authService.register(request);
 
-    return ResponseEntity.ok(ApiResponse.ok(CommonMessage.SUCCESS, null));
+    return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(ApiResponse.created(SuccessMessage.Auth.REGISTER_SUCCESS,null));
   }
 
   @PostMapping(UrlConstant.Auth.REFRESH_TOKEN)
@@ -49,11 +50,10 @@ public class AuthController {
   }
 
   @PostMapping(UrlConstant.Auth.LOGOUT)
-  public ResponseEntity<ApiResponse<String>> logout(@Valid @RequestBody LogoutRequest request)
-      throws ParseException {
+  public ResponseEntity<ApiResponse<Void>> logout(@Valid @RequestBody LogoutRequest request){
     authService.logout(request);
 
     return ResponseEntity
-        .ok(ApiResponse.ok(CommonMessage.SUCCESS, SuccessMessage.Auth.LOGOUT_SUCCESS));
+        .ok(ApiResponse.ok(SuccessMessage.Auth.LOGOUT_SUCCESS, null));
   }
 }
