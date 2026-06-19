@@ -37,9 +37,8 @@ public class AuthController {
   public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
     authService.register(request);
 
-    return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(ApiResponse.created(SuccessMessage.Auth.REGISTER_SUCCESS,null));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(ApiResponse.created(SuccessMessage.Auth.REGISTER_SUCCESS, null));
   }
 
   @PostMapping(UrlConstant.Auth.REFRESH_TOKEN)
@@ -50,10 +49,9 @@ public class AuthController {
   }
 
   @PostMapping(UrlConstant.Auth.LOGOUT)
-  public ResponseEntity<ApiResponse<Void>> logout(@Valid @RequestBody LogoutRequest request){
+  public ResponseEntity<ApiResponse<Void>> logout(@Valid @RequestBody LogoutRequest request) {
     authService.logout(request);
 
-    return ResponseEntity
-        .ok(ApiResponse.ok(SuccessMessage.Auth.LOGOUT_SUCCESS, null));
+    return ResponseEntity.ok(ApiResponse.ok(SuccessMessage.Auth.LOGOUT_SUCCESS, null));
   }
 }

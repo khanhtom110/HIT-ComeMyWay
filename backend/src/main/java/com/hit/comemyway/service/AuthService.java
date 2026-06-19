@@ -24,100 +24,100 @@ import java.text.ParseException;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserRepository userRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
-    private final InvalidatedRepository invalidatedRepository;
+  private final UserRepository userRepository;
+  private final JwtService jwtService;
+  private final PasswordEncoder passwordEncoder;
+  private final InvalidatedRepository invalidatedRepository;
 
 
-    public LoginResponse login(LoginRequest request) {
+  public LoginResponse login(LoginRequest request) {
 
-        User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
+    User user = userRepository.findByUsername(request.username())
+        .orElseThrow(() -> new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
 
-        boolean isPasswordMatch = passwordEncoder.matches(request.password(), user.getPassword());
+    boolean isPasswordMatch = passwordEncoder.matches(request.password(), user.getPassword());
 
-        if (!isPasswordMatch) {
-            throw new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS);
-        }
-
-        String accessToken = jwtService.generateToken(user, false);
-        String refreshToken = jwtService.generateToken(user, true);
-
-        return new LoginResponse(accessToken, refreshToken);
+    if (!isPasswordMatch) {
+      throw new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS);
     }
 
-    @Transactional
-    public void register(RegisterRequest request) {
-        if (!request.password().equals(request.confirmPassword())) {
-            throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
-        }
+    String accessToken = jwtService.generateToken(user, false);
+    String refreshToken = jwtService.generateToken(user, true);
 
-        if (userRepository.existsByUsername(request.username())) {
-            throw new AppException(400, ErrorMessage.User.USERNAME_EXISTED);
-        }
+    return new LoginResponse(accessToken, refreshToken);
+  }
 
-        if (userRepository.existsByEmail(request.email())) {
-            throw new AppException(400, ErrorMessage.User.EMAIL_EXISTED);
-        }
-
-        String password = passwordEncoder.encode(request.password());
-
-        User user = User.builder().username(request.username()).password(password)
-                .email(request.email()).role(Role.USER).build();
-
-        userRepository.save(user);
+  @Transactional
+  public void register(RegisterRequest request) {
+    if (!request.password().equals(request.confirmPassword())) {
+      throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
     }
 
-    @Transactional
-    public void logout(LogoutRequest request) {
-        try {
-            String token = request.refreshToken();
-
-            if (jwtService.isAccessToken(token)) {
-                throw new AppException(400, ErrorMessage.Auth.INVALID_LOGOUT_TOKEN);
-            }
-
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            String jti = signedJWT.getJWTClaimsSet().getJWTID();
-
-            if (invalidatedRepository.existsById(jti)) {
-                throw new AppException(400, ErrorMessage.Auth.TOKEN_ALREADY_INVALIDATED);
-            }
-
-            jwtService.invalidateToken(token);
-        } catch (ParseException e) {
-            throw new AppException(400, ErrorMessage.Auth.MALFORMED_TOKEN);
-        }catch (AppException e) {
-            throw e;
-        }catch (Exception e) {
-            throw new AppException(500, ErrorMessage.EXCEPTION_GENERAL);
-        }
+    if (userRepository.existsByUsername(request.username())) {
+      throw new AppException(400, ErrorMessage.User.USERNAME_EXISTED);
     }
 
-    @Transactional
-    public LoginResponse refreshToken(RefreshTokenRequest request) {
-        String token = request.refreshToken();
-
-        String username = jwtService.extractUsername(token);
-
-        // Tim user trong db
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(400, ErrorMessage.User.USER_NOT_EXISTED));
-
-        CustomUserDetails userDetails = new CustomUserDetails(user);
-
-        // Neu token khong hop le
-        if (!jwtService.isTokenValid(token, userDetails) || jwtService.isAccessToken(token)) {
-            throw new AppException(400, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
-        }
-
-        // Dua token cu vao InvalidatedToken
-        jwtService.invalidateToken(token);
-
-        String newAccessToken = jwtService.generateToken(user, false);
-        String newRefreshToken = jwtService.generateToken(user, true);
-
-        return new LoginResponse(newAccessToken, newRefreshToken);
+    if (userRepository.existsByEmail(request.email())) {
+      throw new AppException(400, ErrorMessage.User.EMAIL_EXISTED);
     }
+
+    String password = passwordEncoder.encode(request.password());
+
+    User user = User.builder().username(request.username()).password(password)
+        .email(request.email()).role(Role.USER).build();
+
+    userRepository.save(user);
+  }
+
+  @Transactional
+  public void logout(LogoutRequest request) {
+    try {
+      String token = request.refreshToken();
+
+      if (jwtService.isAccessToken(token)) {
+        throw new AppException(400, ErrorMessage.Auth.INVALID_LOGOUT_TOKEN);
+      }
+
+      SignedJWT signedJWT = SignedJWT.parse(token);
+      String jti = signedJWT.getJWTClaimsSet().getJWTID();
+
+      if (invalidatedRepository.existsById(jti)) {
+        throw new AppException(400, ErrorMessage.Auth.TOKEN_ALREADY_INVALIDATED);
+      }
+
+      jwtService.invalidateToken(token);
+    } catch (ParseException e) {
+      throw new AppException(400, ErrorMessage.Auth.MALFORMED_TOKEN);
+    } catch (AppException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new AppException(500, ErrorMessage.EXCEPTION_GENERAL);
+    }
+  }
+
+  @Transactional
+  public LoginResponse refreshToken(RefreshTokenRequest request) {
+    String token = request.refreshToken();
+
+    String username = jwtService.extractUsername(token);
+
+    // Tim user trong db
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(400, ErrorMessage.User.USER_NOT_EXISTED));
+
+    CustomUserDetails userDetails = new CustomUserDetails(user);
+
+    // Neu token khong hop le
+    if (!jwtService.isTokenValid(token, userDetails) || jwtService.isAccessToken(token)) {
+      throw new AppException(400, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
+    }
+
+    // Dua token cu vao InvalidatedToken
+    jwtService.invalidateToken(token);
+
+    String newAccessToken = jwtService.generateToken(user, false);
+    String newRefreshToken = jwtService.generateToken(user, true);
+
+    return new LoginResponse(newAccessToken, newRefreshToken);
+  }
 }

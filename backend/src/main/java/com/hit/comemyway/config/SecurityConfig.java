@@ -25,58 +25,56 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomUserDetailService customUserDetailService;
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    @Value("${security.public-endpoints}")
-    String[] PUBLIC_END_POINT;
+  private final CustomUserDetailService customUserDetailService;
+  private final JwtAuthenticationFilter jwtAuthFilter;
+  @Value("${security.public-endpoints}")
+  String[] PUBLIC_END_POINT;
 
-    @Value("${security.user-endpoints}")
-    String[] USER_END_POINT;
+  @Value("${security.user-endpoints}")
+  String[] USER_END_POINT;
 
-    @Value("${security.clinic-endpoints}")
-    String[] CLINIC_END_POINT;
+  @Value("${security.clinic-endpoints}")
+  String[] CLINIC_END_POINT;
 
-    @Value("${security.admin-endpoints}")
-    String[] ADMIN_END_POINT;
+  @Value("${security.admin-endpoints}")
+  String[] ADMIN_END_POINT;
 
-    @Value("${security.swagger-endpoints}")
-    String[] OPEN_API;
+  @Value("${security.swagger-endpoints}")
+  String[] OPEN_API;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(10);
+  }
 
-    // Provider
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+  // Provider
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+    return authProvider;
+  }
 
-    // Manager
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
-        return config.getAuthenticationManager();
-    }
+  // Manager
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+    return config.getAuthenticationManager();
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_END_POINT).permitAll()
-                        .requestMatchers(USER_END_POINT).hasAuthority(RoleConstant.USER)
-                        .requestMatchers(CLINIC_END_POINT).hasAuthority(RoleConstant.CLINIC)
-                        .requestMatchers(ADMIN_END_POINT).hasAuthority(RoleConstant.ADMIN)
-                        .requestMatchers(OPEN_API).permitAll()
-                        .anyRequest().authenticated())
-                .authenticationProvider(authenticationProvider())
-                // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
+        .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_END_POINT).permitAll()
+            .requestMatchers(USER_END_POINT).hasAuthority(RoleConstant.USER)
+            .requestMatchers(CLINIC_END_POINT).hasAuthority(RoleConstant.CLINIC)
+            .requestMatchers(ADMIN_END_POINT).hasAuthority(RoleConstant.ADMIN)
+            .requestMatchers(OPEN_API).permitAll().anyRequest().authenticated())
+        .authenticationProvider(authenticationProvider())
+        // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 }
