@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Instant;
 
 public record ApiResponse<T>(
-        int code,
+        int statusCode,
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         String message,
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         T data,
 
         Instant timestamp

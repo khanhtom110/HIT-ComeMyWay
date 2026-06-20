@@ -6,6 +6,7 @@ import com.hit.comemyway.dto.request.LogoutRequest;
 import com.hit.comemyway.dto.request.RefreshTokenRequest;
 import com.hit.comemyway.dto.request.RegisterRequest;
 import com.hit.comemyway.dto.response.LoginResponse;
+import com.hit.comemyway.dto.response.RegisterResponse;
 import com.hit.comemyway.entity.Role;
 import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
@@ -48,7 +49,7 @@ public class AuthService {
   }
 
   @Transactional
-  public void register(RegisterRequest request) {
+  public RegisterResponse register(RegisterRequest request) {
     if (!request.password().equals(request.confirmPassword())) {
       throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
     }
@@ -66,7 +67,7 @@ public class AuthService {
     User user = User.builder().username(request.username()).password(password)
         .email(request.email()).role(Role.USER).build();
 
-    userRepository.save(user);
+    return RegisterResponse.from(userRepository.save(user));
   }
 
   @Transactional

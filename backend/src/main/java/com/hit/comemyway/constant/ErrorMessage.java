@@ -4,52 +4,66 @@ public final class ErrorMessage {
   private ErrorMessage() {}
 
   // General System Errors
-  public static final String EXCEPTION_GENERAL = "ERR_SYS_GENERAL";
-  public static final String UNAUTHORIZED = "ERR_SYS_UNAUTHORIZED";
-  public static final String FORBIDDEN = "ERR_SYS_FORBIDDEN";
-  public static final String BAD_REQUEST = "ERR_SYS_BAD_REQUEST";
-  public static final String FORBIDDEN_UPDATE_DELETE = "ERR_SYS_FORBIDDEN_UPDATE_DELETE";
-  public static final String UPLOAD_IMAGE_FAIL = "ERR_SYS_UPLOAD_IMAGE_FAIL";
+  public static final String EXCEPTION_GENERAL =
+      "An unexpected system error occurred. Please try again later.";
+  public static final String UNAUTHORIZED =
+      "You are not authorized to access this resource. Please log in.";
+  public static final String FORBIDDEN = "Access to this resource is forbidden.";
+  public static final String BAD_REQUEST = "The request is invalid or malformed.";
+  public static final String FORBIDDEN_UPDATE_DELETE =
+      "You do not have permission to update or delete this resource.";
+  public static final String UPLOAD_IMAGE_FAIL =
+      "Failed to upload the image. Please check the file and try again.";
 
   // Common DTO Validation Errors
-  public static final String INVALID_SOME_THING_FIELD = "ERR_VAL_INVALID_FIELD";
-  public static final String INVALID_FORMAT_SOME_THING_FIELD = "ERR_VAL_INVALID_FORMAT";
-  public static final String INVALID_SOME_THING_FIELD_IS_REQUIRED = "ERR_VAL_REQUIRED";
-  public static final String NOT_BLANK_FIELD = "ERR_VAL_NOT_BLANK";
-  public static final String INVALID_FORMAT_USERNAME = "ERR_VAL_INVALID_USERNAME_FORMAT";
-  public static final String INVALID_FORMAT_PASSWORD = "ERR_VAL_INVALID_PASSWORD_FORMAT";
-  public static final String INVALID_USERNAME_LENGTH = "ERR_VAL_INVALID_USERNAME_LENGTH";
-  public static final String INVALID_FORMAT_EMAIL = "ERR_VAL_INVALID_EMAIL_FORMAT";
-  public static final String PASSWORD_MISMATCH = "ERR_VAL_PASSWORD_MISMATCH";
+  public static final String INVALID_SOME_THING_FIELD = "One or more fields contain invalid data.";
+  public static final String INVALID_FORMAT_SOME_THING_FIELD = "The field format is invalid.";
+  public static final String INVALID_SOME_THING_FIELD_IS_REQUIRED =
+      "This field is required and cannot be empty.";
+  public static final String NOT_BLANK_FIELD = "This field cannot be blank.";
+  public static final String INVALID_FORMAT_USERNAME =
+      "Username must be 4-120 characters long and contain only letters, numbers, and underscores.";
+  public static final String INVALID_FORMAT_PASSWORD =
+      "Password must be 8-120 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
+  public static final String INVALID_USERNAME_LENGTH =
+      "Username length is invalid. It must be between 4 and 120 characters.";
+  public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
+  public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
   // Authentication Errors (Auth)
   public static final class Auth {
     private Auth() {} // Prevent instantiation
 
-    public static final String INVALID_CREDENTIALS = "ERR_AUTH_INVALID_CREDENTIALS";
-    public static final String INVALID_REFRESH_TOKEN = "ERR_AUTH_INVALID_REFRESH_TOKEN";
-    public static final String EXPIRED_REFRESH_TOKEN = "ERR_AUTH_EXPIRED_REFRESH_TOKEN";
-    public static final String LOGIN_FAIL = "ERR_AUTH_LOGIN_FAIL";
-    public static final String GET_TOKEN_CLAIM_SET_FAIL = "ERR_AUTH_GET_TOKEN_CLAIM_FAIL";
-    public static final String TOKEN_INVALIDATED = "ERR_AUTH_TOKEN_INVALIDATED";
-    public static final String MALFORMED_TOKEN = "ERR_AUTH_MALFORMED_TOKEN";
-    public static final String TOKEN_ALREADY_INVALIDATED = "ERR_AUTH_TOKEN_ALREADY_INVALIDATED";
-    public static final String INVALID_LOGOUT_TOKEN = "ERR_AUTH_INVALID_LOGOUT_TOKEN";
+    public static final String INVALID_CREDENTIALS = "Invalid username or password.";
+    public static final String INVALID_REFRESH_TOKEN =
+        "The refresh token is invalid or has expired.";
+    public static final String EXPIRED_REFRESH_TOKEN =
+        "Your session has expired. Please log in again.";
+    public static final String LOGIN_FAIL =
+        "Login failed. Please check your credentials and try again.";
+    public static final String GET_TOKEN_CLAIM_SET_FAIL = "Failed to verify user session details.";
+    public static final String TOKEN_INVALIDATED = "This session has been invalidated.";
+    public static final String MALFORMED_TOKEN = "The authentication token is malformed.";
+    public static final String TOKEN_ALREADY_INVALIDATED = "This session is already logged out.";
+    public static final String INVALID_LOGOUT_TOKEN = "Invalid token provided for logout.";
   }
 
   // User Errors
   public static final class User {
     private User() {}
 
-    public static final String USER_NOT_EXISTED = "ERR_USER_NOT_EXISTED";
-    public static final String USERNAME_EXISTED = "ERR_USER_USERNAME_EXISTED";
-    public static final String EMAIL_EXISTED = "ERR_USER_EMAIL_EXISTED";
+    public static final String USER_NOT_EXISTED = "User does not exist.";
+    public static final String USERNAME_EXISTED =
+        "Username already exists. Please choose a different one.";
+    public static final String EMAIL_EXISTED =
+        "Email already exists. Please use another email or log in.";
   }
 
   // Administrator Errors (Admin)
   public static final class Admin {
     private Admin() {}
 
-    public static final String NOT_ADMIN = "ERR_ADMIN_NOT_ADMIN";
+    public static final String NOT_ADMIN =
+        "You do not have administrator privileges to perform this action.";
   }
 }

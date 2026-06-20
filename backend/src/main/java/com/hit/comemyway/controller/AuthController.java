@@ -10,7 +10,9 @@ import com.hit.comemyway.dto.request.LogoutRequest;
 import com.hit.comemyway.dto.request.RefreshTokenRequest;
 import com.hit.comemyway.dto.request.RegisterRequest;
 import com.hit.comemyway.dto.response.LoginResponse;
+import com.hit.comemyway.dto.response.RegisterResponse;
 import com.hit.comemyway.service.AuthService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping(ApiPath.API_V1)
 @Tag(name = "Authentication", description = "Các API Quản lý đăng nhập, đăng ký và Token")
+@SecurityRequirements(value = {})
 public class AuthController {
   private final AuthService authService;
 
@@ -34,11 +37,12 @@ public class AuthController {
   }
 
   @PostMapping(UrlConstant.Auth.REGISTER)
-  public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
-    authService.register(request);
+  public ResponseEntity<ApiResponse<RegisterResponse>> register(
+      @Valid @RequestBody RegisterRequest request) {
+    RegisterResponse response = authService.register(request);
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(ApiResponse.created(SuccessMessage.Auth.REGISTER_SUCCESS, null));
+        .body(ApiResponse.created(SuccessMessage.Auth.REGISTER_SUCCESS, response));
   }
 
   @PostMapping(UrlConstant.Auth.REFRESH_TOKEN)
