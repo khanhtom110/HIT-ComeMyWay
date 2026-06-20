@@ -4,7 +4,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 # Build ra file .jar và bỏ qua test
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -Dformatter.skip=true
 
 # Bước 2: Dùng ảnh chỉ chứa Java JRE 21 cho nhẹ server
 FROM eclipse-temurin:21-jre
