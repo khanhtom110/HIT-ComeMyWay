@@ -19,79 +19,79 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ForgotPasswordService {
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+  @Autowired
+  private RedisTemplate<String, String> redisTemplate;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JavaMailSender mailSender;
+  @Autowired
+  private JavaMailSender mailSender;
 
-    public String sendOtpForgotPassword(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new AppException(400, ErrorMessage.User.USER_NOT_EXISTED);
-        }
-
-        String otp = String.format("%06d", new Random().nextInt(1000000));
-
-        redisTemplate.opsForValue().set("OTP:" + email, otp, 5, TimeUnit.MINUTES);
-
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("maihunw@gmail.com");
-            message.setTo(email);
-            message.setSubject("Khôi phục mật khẩu");
-            message.setText("Mã OTP của bạn là: " + otp);
-
-            mailSender.send(message);
-        } catch (Exception e) {
-            throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
-        }
-
-        System.out.println("Mã OTP của " + email + " : " + otp);
-        return SuccessMessage.Auth.SEND_OTP_SUCCESS;
+  public String sendOtpForgotPassword(String email) {
+    if (!userRepository.existsByEmail(email)) {
+      throw new AppException(400, ErrorMessage.User.USER_NOT_EXISTED);
     }
 
-    public String verifyOtp(String email, String userInputOtp) {
-        String systemOtp = redisTemplate.opsForValue().get("OTP:" + email);
+    String otp = String.format("%06d", new Random().nextInt(1000000));
 
-        if (systemOtp == null) {
-            throw new AppException(400, ErrorMessage.Auth.OTP_EXPIRED);
-        }
-        if (!systemOtp.equals(userInputOtp)) {
-            throw new AppException(400, ErrorMessage.Auth.INVALID_OTP);
-        }
+    redisTemplate.opsForValue().set("OTP:" + email, otp, 5, TimeUnit.MINUTES);
 
-        redisTemplate.delete("OTP:" + email);
+    try {
+      SimpleMailMessage message = new SimpleMailMessage();
+      message.setFrom("maihunw@gmail.com");
+      message.setTo(email);
+      message.setSubject("Khôi phục mật khẩu");
+      message.setText("Mã OTP của bạn là: " + otp);
 
-        String resetToken = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set("RESET_TOKEN:" + resetToken, email, 10, TimeUnit.MINUTES);
-
-        return resetToken;
+      mailSender.send(message);
+    } catch (Exception e) {
+      throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
     }
 
-    public boolean resetPassword(ResetPasswordRequest request) {
-        if (!request.newPassword().equals(request.confirmPassword())) {
-            throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
-        }
+    System.out.println("Mã OTP của " + email + " : " + otp);
+    return SuccessMessage.Auth.SEND_OTP_SUCCESS;
+  }
 
-        String email = redisTemplate.opsForValue().get("RESET_TOKEN:" + request.token());
-        if (email == null) {
-            throw new AppException(400, ErrorMessage.Auth.RESET_SESSION_EXPIRED);
-        }
+  public String verifyOtp(String email, String userInputOtp) {
+    String systemOtp = redisTemplate.opsForValue().get("OTP:" + email);
 
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
-
-        user.setPassword(passwordEncoder.encode(request.newPassword()));
-        userRepository.save(user);
-
-        redisTemplate.delete("RESET_TOKEN:" + request.token());
-
-        return true;
+    if (systemOtp == null) {
+      throw new AppException(400, ErrorMessage.Auth.OTP_EXPIRED);
     }
+    if (!systemOtp.equals(userInputOtp)) {
+      throw new AppException(400, ErrorMessage.Auth.INVALID_OTP);
+    }
+
+    redisTemplate.delete("OTP:" + email);
+
+    String resetToken = UUID.randomUUID().toString();
+    redisTemplate.opsForValue().set("RESET_TOKEN:" + resetToken, email, 10, TimeUnit.MINUTES);
+
+    return resetToken;
+  }
+
+  public boolean resetPassword(ResetPasswordRequest request) {
+    if (!request.newPassword().equals(request.confirmPassword())) {
+      throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
+    }
+
+    String email = redisTemplate.opsForValue().get("RESET_TOKEN:" + request.token());
+    if (email == null) {
+      throw new AppException(400, ErrorMessage.Auth.RESET_SESSION_EXPIRED);
+    }
+
+    var user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    user.setPassword(passwordEncoder.encode(request.newPassword()));
+    userRepository.save(user);
+
+    redisTemplate.delete("RESET_TOKEN:" + request.token());
+
+    return true;
+  }
 }

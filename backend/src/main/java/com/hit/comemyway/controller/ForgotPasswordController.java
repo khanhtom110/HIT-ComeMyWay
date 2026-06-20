@@ -19,29 +19,27 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 public class ForgotPasswordController {
 
-    @Autowired
-    private ForgotPasswordService forgotPasswordService;
+  @Autowired
+  private ForgotPasswordService forgotPasswordService;
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> sendOtp(@Valid @RequestBody ForgotPasswordRequest request) {
-        String message = forgotPasswordService.sendOtpForgotPassword(request.email());
+  @PostMapping("/forgot-password")
+  public ResponseEntity<?> sendOtp(@Valid @RequestBody ForgotPasswordRequest request) {
+    String message = forgotPasswordService.sendOtpForgotPassword(request.email());
 
-        return ResponseEntity.ok(Map.of("message", message));
-    }
+    return ResponseEntity.ok(Map.of("message", message));
+  }
 
-    @PostMapping("/verify-otp")
-    public ResponseEntity<?> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
-        String resetToken = forgotPasswordService.verifyOtp(request.email(), request.otp());
+  @PostMapping("/verify-otp")
+  public ResponseEntity<?> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
+    String resetToken = forgotPasswordService.verifyOtp(request.email(), request.otp());
 
-        return ResponseEntity.ok(Map.of(
-                "message", SuccessMessage.Auth.VERIFY_OTP_SUCCESS,
-                "token", resetToken
-        ));
-    }
+    return ResponseEntity
+        .ok(Map.of("message", SuccessMessage.Auth.VERIFY_OTP_SUCCESS, "token", resetToken));
+  }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-        forgotPasswordService.resetPassword(request);
-        return ResponseEntity.ok(Map.of("message", SuccessMessage.Auth.RESET_PASSWORD_SUCCESS));
-    }
+  @PostMapping("/reset-password")
+  public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+    forgotPasswordService.resetPassword(request);
+    return ResponseEntity.ok(Map.of("message", SuccessMessage.Auth.RESET_PASSWORD_SUCCESS));
+  }
 }
