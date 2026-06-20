@@ -4,6 +4,7 @@ import com.hit.comemyway.constant.RoleConstant;
 import com.hit.comemyway.security.CustomUserDetailService;
 import com.hit.comemyway.security.JwtAuthenticationFilter;
 import com.hit.comemyway.security.JwtService;
+import com.hit.comemyway.security.RateLimitingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
   private final CustomUserDetailService customUserDetailService;
   private final JwtAuthenticationFilter jwtAuthFilter;
+  private final RateLimitingFilter rateLimitingFilter;
+
   @Value("${security.public-endpoints}")
   String[] PUBLIC_END_POINT;
 
@@ -72,8 +75,10 @@ public class SecurityConfig {
             .requestMatchers(ADMIN_END_POINT).hasAuthority(RoleConstant.ADMIN)
             .requestMatchers(OPEN_API).permitAll().anyRequest().authenticated())
         .authenticationProvider(authenticationProvider())
-        // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+
 
     return http.build();
   }

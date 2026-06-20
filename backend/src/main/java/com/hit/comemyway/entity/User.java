@@ -1,6 +1,5 @@
 package com.hit.comemyway.entity;
 
-import com.hit.comemyway.constant.RoleConstant;
 import jakarta.persistence.*;
 import lombok.*;
 

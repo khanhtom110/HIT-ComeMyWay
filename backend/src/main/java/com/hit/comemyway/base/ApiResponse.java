@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Instant;
 
 public record ApiResponse<T>(
-        int code,
+        int statusCode,
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         String message,
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
         T data,
 
         Instant timestamp
@@ -19,7 +17,7 @@ public record ApiResponse<T>(
         return new ApiResponse<>(201, message, data, Instant.now());
     }
     public static <T> ApiResponse<T> ok(String message,T data){
-        return new ApiResponse<>(200,CommonMessage.SUCCESS,data,Instant.now());
+        return new ApiResponse<>(200,message,data,Instant.now());
     }
     public static <T> ApiResponse<T>error(int code, String message){
         return new ApiResponse<T>(code,message,null,Instant.now());

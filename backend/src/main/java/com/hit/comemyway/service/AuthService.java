@@ -1,11 +1,11 @@
 package com.hit.comemyway.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.comemyway.constant.ErrorMessage;
-import com.hit.comemyway.dto.request.LoginRequest;
-import com.hit.comemyway.dto.request.LogoutRequest;
-import com.hit.comemyway.dto.request.RefreshTokenRequest;
-import com.hit.comemyway.dto.request.RegisterRequest;
+import com.hit.comemyway.dto.request.*;
 import com.hit.comemyway.dto.response.LoginResponse;
+import com.hit.comemyway.dto.response.RegisterResponse;
 import com.hit.comemyway.entity.Role;
 import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
@@ -15,11 +15,14 @@ import com.hit.comemyway.security.CustomUserDetails;
 import com.hit.comemyway.security.JwtService;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,10 @@ public class AuthService {
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
   private final InvalidatedRepository invalidatedRepository;
+
+  private final ForgotPasswordService forgotPasswordService;
+  private final ObjectMapper objectMapper;
+  private final RedisTemplate<String, String> redisTemplate;
 
 
   public LoginResponse login(LoginRequest request) {
@@ -48,7 +55,7 @@ public class AuthService {
   }
 
   @Transactional
-  public void register(RegisterRequest request) {
+  public void initRegister(RegisterRequest request) {
     if (!request.password().equals(request.confirmPassword())) {
       throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
     }
@@ -61,12 +68,49 @@ public class AuthService {
       throw new AppException(400, ErrorMessage.User.EMAIL_EXISTED);
     }
 
-    String password = passwordEncoder.encode(request.password());
+    String otp = String.format("%06d", new Random().nextInt(1000000));
 
-    User user = User.builder().username(request.username()).password(password)
-        .email(request.email()).role(Role.USER).build();
+    try {
+      String userInfor = objectMapper.writeValueAsString(request);
+      redisTemplate.opsForValue().set("REGISTRATION_DATA:" + request.email(), userInfor, 5,
+          TimeUnit.MINUTES);
+      redisTemplate.opsForValue().set("REGISTRATION_OTP:" + request.email(), otp, 5,
+          TimeUnit.MINUTES);
+    } catch (JsonProcessingException e) {
+      throw new AppException(500, ErrorMessage.EXCEPTION_GENERAL);
+    }
 
-    userRepository.save(user);
+    forgotPasswordService.sendOtpEmail(request.email(), otp);
+  }
+
+  @Transactional
+  public RegisterResponse verifyRegister(VerifyOtpRequest request) {
+
+    String registerOTP = redisTemplate.opsForValue().get("REGISTRATION_OTP:" + request.email());
+    if (registerOTP == null || !registerOTP.equals(request.otp())) {
+      throw new AppException(400, ErrorMessage.Auth.INVALID_OTP);
+    }
+
+    String userInfor = redisTemplate.opsForValue().get("REGISTRATION_DATA:" + request.email());
+    if (userInfor == null) {
+      throw new AppException(400, ErrorMessage.Auth.SESSION_EXPIRED);
+    }
+
+    try {
+      RegisterRequest registerRequest = objectMapper.readValue(userInfor, RegisterRequest.class);
+
+      String password = passwordEncoder.encode(registerRequest.password());
+      User user = User.builder().username(registerRequest.username()).password(password)
+          .email(registerRequest.email()).role(Role.USER).build();
+
+      redisTemplate.delete("REGISTRATION_OTP:" + request.email());
+      redisTemplate.delete("REGISTRATION_DATA:" + request.email());
+
+      User savedUser = userRepository.save(user);
+      return RegisterResponse.from(savedUser);
+    } catch (JsonProcessingException e) {
+      throw new AppException(500, ErrorMessage.EXCEPTION_GENERAL);
+    }
   }
 
   @Transactional
