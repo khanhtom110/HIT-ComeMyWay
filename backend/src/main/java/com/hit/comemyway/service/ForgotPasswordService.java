@@ -11,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 import java.util.UUID;
@@ -30,6 +31,19 @@ public class ForgotPasswordService {
 
   @Autowired
   private JavaMailSender mailSender;
+
+  public void sendOtpEmail(String email, String otp) {
+    try {
+      SimpleMailMessage message = new SimpleMailMessage();
+      message.setFrom("maihunw@gmail.com");
+      message.setTo(email);
+      message.setSubject("Mã xác nhận");
+      message.setText("Mã OTP của bạn là: " + otp);
+      mailSender.send(message);
+    } catch (Exception e) {
+      throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
+    }
+  }
 
   public String sendOtpForgotPassword(String email) {
     if (!userRepository.existsByEmail(email)) {
@@ -51,8 +65,6 @@ public class ForgotPasswordService {
     } catch (Exception e) {
       throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
     }
-
-    System.out.println("Mã OTP của " + email + " : " + otp);
     return SuccessMessage.Auth.SEND_OTP_SUCCESS;
   }
 
@@ -74,7 +86,8 @@ public class ForgotPasswordService {
     return resetToken;
   }
 
-  public boolean resetPassword(ResetPasswordRequest request) {
+  @Transactional
+  public void resetPassword(ResetPasswordRequest request) {
     if (!request.newPassword().equals(request.confirmPassword())) {
       throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
     }
@@ -87,11 +100,14 @@ public class ForgotPasswordService {
     var user = userRepository.findByEmail(email)
         .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
+    if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+      throw new AppException(400, ErrorMessage.Auth.PASSWORD_SAME_AS_OLD);
+    }
+
     user.setPassword(passwordEncoder.encode(request.newPassword()));
     userRepository.save(user);
 
     redisTemplate.delete("RESET_TOKEN:" + request.token());
 
-    return true;
   }
 }

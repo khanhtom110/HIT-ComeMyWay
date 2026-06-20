@@ -76,9 +76,9 @@ public class SecurityConfig {
             .requestMatchers(OPEN_API).permitAll().anyRequest().authenticated())
         .authenticationProvider(authenticationProvider())
 
-        .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
-        // Lắp màng lọc JWT vào trước bộ lọc mặc định của Spring
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+
 
     return http.build();
   }
