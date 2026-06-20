@@ -32,7 +32,7 @@ public final class ErrorMessage {
 
   // Authentication Errors (Auth)
   public static final class Auth {
-    private Auth() {} // Prevent instantiation
+    private Auth() {}
 
     public static final String INVALID_CREDENTIALS = "Invalid username or password.";
     public static final String INVALID_REFRESH_TOKEN =
@@ -46,6 +46,11 @@ public final class ErrorMessage {
     public static final String MALFORMED_TOKEN = "The authentication token is malformed.";
     public static final String TOKEN_ALREADY_INVALIDATED = "This session is already logged out.";
     public static final String INVALID_LOGOUT_TOKEN = "Invalid token provided for logout.";
+
+    public static final String OTP_EXPIRED = "The OTP has expired. Please request a new one.";
+    public static final String INVALID_OTP = "The provided OTP is invalid. Please check and try again.";
+    public static final String RESET_SESSION_EXPIRED = "Your password reset session has expired. Please start the process again.";
+    public static final String SEND_MAIL_FAIL = "Failed to send the email. Please try again later.";
   }
 
   // User Errors
