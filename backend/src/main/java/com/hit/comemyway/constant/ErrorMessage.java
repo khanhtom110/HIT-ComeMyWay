@@ -24,7 +24,7 @@ public final class ErrorMessage {
 
   // Authentication Errors (Auth)
   public static final class Auth {
-    private Auth() {} // Prevent instantiation
+    private Auth() {}
 
     public static final String INVALID_CREDENTIALS = "ERR_AUTH_INVALID_CREDENTIALS";
     public static final String INVALID_REFRESH_TOKEN = "ERR_AUTH_INVALID_REFRESH_TOKEN";
@@ -35,6 +35,12 @@ public final class ErrorMessage {
     public static final String MALFORMED_TOKEN = "ERR_AUTH_MALFORMED_TOKEN";
     public static final String TOKEN_ALREADY_INVALIDATED = "ERR_AUTH_TOKEN_ALREADY_INVALIDATED";
     public static final String INVALID_LOGOUT_TOKEN = "ERR_AUTH_INVALID_LOGOUT_TOKEN";
+
+    // --- THÊM MỚI CHO LUỒNG QUÊN MẬT KHẨU ---
+    public static final String OTP_EXPIRED = "ERR_AUTH_OTP_EXPIRED";
+    public static final String INVALID_OTP = "ERR_AUTH_INVALID_OTP";
+    public static final String RESET_SESSION_EXPIRED = "ERR_AUTH_RESET_SESSION_EXPIRED";
+    public static final String SEND_MAIL_FAIL = "ERR_AUTH_SEND_MAIL_FAIL";
   }
 
   // User Errors
