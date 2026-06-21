@@ -8,7 +8,6 @@ import com.hit.comemyway.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,17 +29,22 @@ public class ForgotPasswordService {
   private PasswordEncoder passwordEncoder;
 
   @Autowired
-  private JavaMailSender mailSender;
+  private BrevoEmailService brevoEmailService;
 
   public void sendOtpEmail(String email, String otp) {
     try {
-      SimpleMailMessage message = new SimpleMailMessage();
-      message.setFrom("maihunw@gmail.com");
-      message.setTo(email);
-      message.setSubject("Mã xác nhận");
-      message.setText("Mã OTP của bạn là: " + otp);
-      mailSender.send(message);
+      // Title and content by HTML for email
+      String subject = "Mã xác nhận App Nhịp đập thú cưng";
+      String htmlContent = "<h3>Xin chào,</h3>"
+          + "<p>Mã OTP của bạn là: <strong style='font-size: 24px; color: blue;'>" + otp
+          + "</strong></p>"
+          + "<p>Mã này sẽ hết hạn sau 5 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>";
+
+      brevoEmailService.sendOtpEmail(email, subject, htmlContent);
+
     } catch (Exception e) {
+      System.err
+          .println("Failure when sending mail for: " + email + " - Exception: " + e.getMessage());
       throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
     }
   }
@@ -54,17 +58,7 @@ public class ForgotPasswordService {
 
     redisTemplate.opsForValue().set("OTP:" + email, otp, 5, TimeUnit.MINUTES);
 
-    try {
-      SimpleMailMessage message = new SimpleMailMessage();
-      message.setFrom("maihunw@gmail.com");
-      message.setTo(email);
-      message.setSubject("Khôi phục mật khẩu");
-      message.setText("Mã OTP của bạn là: " + otp);
-
-      mailSender.send(message);
-    } catch (Exception e) {
-      throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
-    }
+    this.sendOtpEmail(email, otp);
     return SuccessMessage.Auth.SEND_OTP_SUCCESS;
   }
 
