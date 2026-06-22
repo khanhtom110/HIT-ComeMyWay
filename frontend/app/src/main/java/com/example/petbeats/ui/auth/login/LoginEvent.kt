@@ -4,6 +4,5 @@ sealed class LoginEvent {
     object NavigationRegister: LoginEvent()
     object NavigationForgot: LoginEvent()
 
-    //test
     object NavigationHome: LoginEvent()
 }
