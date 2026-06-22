@@ -1,4 +1,4 @@
-package com.example.petbeats.ui.auth.activityMain
+package com.example.petbeats.ui.auth.activitymain
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -13,8 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
+import com.example.petbeats.data.remote.api.ApiAuth
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
+import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentOtpBinding
+import com.example.petbeats.ui.auth.login.LoginViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.toString
 
@@ -22,7 +26,13 @@ import kotlin.toString
 class OtpFragment : Fragment() {
     private var _binding: FragmentOtpBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: OtpViewModel by viewModels()
+    private val viewModel: OtpViewModel by viewModels {
+        OtpViewModelFactory(
+            AuthRepository(
+                retrofit.create(ApiAuth::class.java)
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,10 +117,10 @@ class OtpFragment : Fragment() {
         binding.input4.addTextChangedListener {
             viewModel.input4(it.toString())
         }
-        binding.input4.addTextChangedListener {
+        binding.input5.addTextChangedListener {
             viewModel.input5(it.toString())
         }
-        binding.input4.addTextChangedListener {
+        binding.input6.addTextChangedListener {
             viewModel.input6(it.toString())
         }
     }
@@ -141,6 +151,28 @@ class OtpFragment : Fragment() {
 
                     if (binding.input6.text.toString() != state.otp6) {
                         binding.input6.setText(state.otp6)
+                    }
+
+
+                    //check error
+                    if (state.isOtp) {
+                        binding.input1.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.input2.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.input3.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.input4.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.input5.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.input6.setBackgroundResource(R.drawable.button_input_errol)
+                    }
+                    else {
+                        binding.input1.setBackgroundResource(R.drawable.button_input)
+                        binding.input2.setBackgroundResource(R.drawable.button_input)
+                        binding.input3.setBackgroundResource(R.drawable.button_input)
+                        binding.input4.setBackgroundResource(R.drawable.button_input)
+                        binding.input5.setBackgroundResource(R.drawable.button_input)
+                        binding.input6.setBackgroundResource(R.drawable.button_input)
+                    }
+                    if (binding.otpError.text.toString() != state.otpError) {
+                        binding.otpError.text = state.otpError
                     }
                 }
             }

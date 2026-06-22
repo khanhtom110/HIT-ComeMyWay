@@ -1,4 +1,4 @@
-package com.example.petbeats.ui.auth.stateSuccess
+package com.example.petbeats.ui.auth.statesuccess
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

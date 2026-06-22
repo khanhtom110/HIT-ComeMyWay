@@ -1,4 +1,4 @@
-package com.example.petbeats.ui.auth.stateSuccess
+package com.example.petbeats.ui.auth.statesuccess
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
-import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentStateSuccessBinding
 import kotlinx.coroutines.launch
 
@@ -34,7 +33,7 @@ class StateSuccessFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setOnCLick()
+        setOnClick()
         eventData()
     }
 
@@ -43,7 +42,7 @@ class StateSuccessFragment : Fragment() {
         _binding = null
     }
 
-    private fun setOnCLick() {
+    private fun setOnClick() {
         binding.backToLogin.setOnClickListener {
             viewModel.loginClick()
         }
@@ -55,12 +54,11 @@ class StateSuccessFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is StateSuccessEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.success_login)
+                            findNavController().navigate(R.id.loginFragment)
                         }
                     }
                 }
             }
         }
     }
-
 }

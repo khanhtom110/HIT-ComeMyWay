@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,8 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.petbeats.R
+import com.example.petbeats.data.remote.api.ApiAuth
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
+import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.databinding.FragmentHomeBinding
 import com.example.petbeats.databinding.FragmentResetPasswordBinding
+import com.example.petbeats.ui.auth.login.LoginViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.toString
 
@@ -24,7 +27,13 @@ import kotlin.toString
 class ResetPasswordFragment : Fragment() {
     private var _binding: FragmentResetPasswordBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ResetPasswordViewModel by viewModels()
+    private val viewModel: ResetPasswordViewModel by viewModels {
+        ResetPasswordViewModelFactory(
+            AuthRepository(
+                retrofit.create(ApiAuth::class.java)
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +71,10 @@ class ResetPasswordFragment : Fragment() {
             viewModel.changePassword1()
         }
 
+        binding.login.setOnClickListener {
+            viewModel.onLoginClick()
+        }
+
         binding.inputPassword.addTextChangedListener {
             viewModel.onPasswordChange(it.toString())
         }
@@ -85,11 +98,11 @@ class ResetPasswordFragment : Fragment() {
                     //isPassword
                     if (state.isPasswordVisible) {
                         binding.inputPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                        binding.eye.setImageResource(R.drawable.eyeopen)
+                        binding.eye.setImageResource(R.drawable.open_eye)
                     }
                     else {
                         binding.inputPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                        binding.eye.setImageResource(R.drawable.eyeclose)
+                        binding.eye.setImageResource(R.drawable.close_eye)
                     }
 
                     binding.inputPassword.setSelection(binding.inputPassword.length())
@@ -98,11 +111,11 @@ class ResetPasswordFragment : Fragment() {
                     //isPassword1
                     if (state.isPasswordVisible1) {
                         binding.inputPassword1.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                        binding.eye1.setImageResource(R.drawable.eyeopen)
+                        binding.eye1.setImageResource(R.drawable.open_eye)
                     }
                     else {
                         binding.inputPassword1.transformationMethod = PasswordTransformationMethod.getInstance()
-                        binding.eye1.setImageResource(R.drawable.eyeclose)
+                        binding.eye1.setImageResource(R.drawable.close_eye)
                     }
 
                     binding.inputPassword1.setSelection(binding.inputPassword1.length())
@@ -111,19 +124,27 @@ class ResetPasswordFragment : Fragment() {
                     //check error
                     if (state.isPassword) {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.passwordError.visibility = View.VISIBLE
                     }
                     else {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
+                        binding.passwordError.visibility = View.GONE
                     }
                     if (state.isPassword1) {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.passwordError1.visibility = View.VISIBLE
                     }
                     else {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input)
+                        binding.passwordError1.visibility = View.GONE
                     }
 
-                    if (binding.textError.text.toString() != state.error) {
-                        binding.textError.text = state.error
+
+                    if (binding.passwordError.text.toString() != state.passwordError) {
+                        binding.passwordError.text = state.passwordError
+                    }
+                    if (binding.passwordError1.text.toString() != state.passwordError1) {
+                        binding.passwordError1.text = state.passwordError1
                     }
 
 
@@ -152,6 +173,10 @@ class ResetPasswordFragment : Fragment() {
 
                         is ResetPasswordEvent.NavigationSuccess -> {
                             findNavController().navigate(R.id.stateSuccessFragment)
+                        }
+
+                        is ResetPasswordEvent.NavigationLogin -> {
+                            findNavController().navigate(R.id.loginFragment)
                         }
                     }
                 }

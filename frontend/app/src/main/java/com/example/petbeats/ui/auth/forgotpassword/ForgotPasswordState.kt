@@ -4,5 +4,5 @@ data class ForgotPasswordState (
     val email: String = "",
 
     val isEmail: Boolean = false,
-    val error: String = "",
+    val emailError: String = "",
 )

@@ -4,39 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
     tools:context=".ui.auth.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/login"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_60sdp"
-            android:background="@drawable/button"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:text="Sign In"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="@dimen/_20sdp"
-            app:layout_constraintBottom_toTopOf="@id/register"/>
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/_80sdp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
+            style="@style/Nut3"
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_270sdp"
+            android:background="@drawable/button_auth_blue"
+            android:gravity="center"
+            android:text="Đăng nhập"
+            android:textColor="@color/colorBackground"
+            app:layout_constraintTop_toBottomOf="@id/logo" />
+
+        <TextView
+            style="@style/Nut3"
             android:id="@+id/register"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_60sdp"
-            android:background="@drawable/button"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_80sdp"
-            android:text="create account"
-            android:textColor="@color/white"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/button_auth_blue"
             android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="@dimen/_20sdp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:text="Đăng kí"
+            android:textColor="@color/colorBackground"
+            app:layout_constraintTop_toBottomOf="@id/login" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

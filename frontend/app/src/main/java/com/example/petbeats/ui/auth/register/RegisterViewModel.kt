@@ -3,13 +3,17 @@ package com.example.petbeats.ui.auth.register
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.ui.auth.register.request_response.RegisterRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class RegisterViewModel: ViewModel() {
+class RegisterViewModel(
+    private val repository: AuthRepository
+): ViewModel() {
     private val _state = MutableStateFlow(RegisterState())
     val state = _state.asStateFlow()
 
@@ -46,7 +50,7 @@ class RegisterViewModel: ViewModel() {
         _state.value = _state.value.copy(password1 = password1)
     }
 
-    fun onLoginClick() {
+    fun onRegisterSuccess() {
         viewModelScope.launch {
             val name = _state.value.name.trim()
             val email = _state.value.email.trim()
@@ -54,24 +58,33 @@ class RegisterViewModel: ViewModel() {
             val password1 = _state.value.password1.trim()
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || password1.isEmpty()) {
-                _state.value = _state.value.copy(isName = true, isEmail = true, isPassword = true, isPassword1 = true, error = "Vui lòng nhập đầy đủ thông tin")
+                _state.value = _state.value.copy(isName = true, isEmail = true, isPassword = true, isPassword1 = true, nameError = "Nhập tên", emailError = "Nhập email", passwordError = "Nhập password", passwordError1 = "Nhập password1" )
                 return@launch
             }
             else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                _state.value = _state.value.copy(isName = false, isEmail = true, isPassword = false, isPassword1 = false, error = "Nhập không đúng email. Nhập lại!")
+                _state.value = _state.value.copy(isName = false, isEmail = true, isPassword = false, isPassword1 = false)
                 return@launch
             }
-            else if (password.length < 6 || password1.length < 6) {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true, error = "Mật khẩu phải lớn hơn 6 số")
+            else if (password.length < 7 || password1.length < 7) {
+                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true)
                 return@launch
             }
             else if (password != password1) {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true, error = "Hai mật khẩu không trùng khớp")
+                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true)
                 return@launch
             }
+
+            _event.emit(RegisterEvent.NavigationRegisterSuccess)
+
+            val request = RegisterRequest(name, email, password, password1)
+            val result = repository.registerUser(request)
+
+            if (result) {
+                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = false, isPassword1 = false)
+
+            }
             else {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = false, isPassword1 = false, error = "")
-                _event.emit(RegisterEvent.NavigationLogin)
+                _state.value = _state.value.copy()
             }
         }
     }

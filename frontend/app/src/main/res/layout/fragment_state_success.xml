@@ -3,27 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.auth.stateSuccess.StateSuccessFragment">
+    tools:context=".ui.auth.statesuccess.StateSuccessFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/logo1"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
+            style="@style/TieuDe"
+            android:id="@+id/tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mật khẩu đã thay đổi"
+            android:textColor="@color/colorTextTitle"
+            android:layout_marginTop="@dimen/_68sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo1"/>
+
+        <TextView
+            style="@style/Chu2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="Mật khẩu của bạn đã được thay đổi thành công"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tittle"/>
+
+        <TextView
+            style="@style/Nut3"
             android:id="@+id/backToLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_100sdp"
-            android:layout_marginHorizontal="@dimen/_30sdp"
-            android:padding="@dimen/_20sdp"
-            android:text="Back to login"
+            android:background="@drawable/button_auth_blue"
             android:gravity="center"
+            android:text="Quay lại đăng nhập"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tittle" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

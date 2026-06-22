@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetBeats">
         <activity
-            android:name=".ui.auth.activityMain.AuthActivity"
+            android:name=".ui.auth.activitymain.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

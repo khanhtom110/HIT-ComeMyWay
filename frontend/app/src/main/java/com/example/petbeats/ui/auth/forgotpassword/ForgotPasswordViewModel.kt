@@ -3,13 +3,16 @@ package com.example.petbeats.ui.auth.forgotpassword
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ForgotPasswordViewModel: ViewModel() {
+class ForgotPasswordViewModel(
+    private val repository: AuthRepository
+): ViewModel() {
     private val _state = MutableStateFlow(ForgotPasswordState())
     val state = _state.asStateFlow()
 
@@ -31,11 +34,11 @@ class ForgotPasswordViewModel: ViewModel() {
             val email = _state.value.email.trim()
 
             if (email.isEmpty()) {
-                _state.value = _state.value.copy(isEmail = true, error = "Vui lòng nhập đầy đủ thông tin")
+                _state.value = _state.value.copy(isEmail = true, emailError = "Vui lòng nhập đầy đủ thông tin")
                 return@launch
             }
             else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                _state.value = _state.value.copy(isEmail = true, error = "Nhập không đúng email. Nhập lại!")
+                _state.value = _state.value.copy(isEmail = true, emailError = "Nhập không đúng email. Nhập lại!")
                 return@launch
             }
 

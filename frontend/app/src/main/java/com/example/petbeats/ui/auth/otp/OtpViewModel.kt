@@ -2,13 +2,16 @@ package com.example.petbeats.ui.auth.otp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class OtpViewModel: ViewModel() {
+class OtpViewModel(
+    private val repository: AuthRepository
+): ViewModel() {
     private val _state = MutableStateFlow(OtpState())
     val state = _state.asStateFlow()
 
@@ -47,6 +50,10 @@ class OtpViewModel: ViewModel() {
 
     fun onResetClick(email: String) {
         val otp = _state.value.otp1 + _state.value.otp2 + _state.value.otp3 + _state.value.otp4 + _state.value.otp5 + _state.value.otp6
+
+        if (otp.length == 6) {
+            _state.value = _state.value.copy(isOtp = true, otpError = "Mã xác minh không chính xác, vui lòng thử lại")
+        }
 
         viewModelScope.launch {
             _event.emit(OtpEvent.NavigationResetSendEmail(email))
