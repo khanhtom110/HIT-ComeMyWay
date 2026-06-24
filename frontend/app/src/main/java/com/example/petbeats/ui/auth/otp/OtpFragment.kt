@@ -2,6 +2,7 @@ package com.example.petbeats.ui.auth.otp
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -91,30 +92,44 @@ class OtpFragment : Fragment() {
                 binding.input2.requestFocus()
             }
         }
-
         binding.input2.addTextChangedListener {
             if (it?.length == 1) {
                 binding.input3.requestFocus()
             }
+            else if (it?.isEmpty() == true) {
+                binding.input1.requestFocus()
+            }
         }
-
         binding.input3.addTextChangedListener {
             if (it?.length == 1) {
                 binding.input4.requestFocus()
             }
+            else if (it?.isEmpty() == true) {
+                binding.input2.requestFocus()
+            }
         }
-
         binding.input4.addTextChangedListener {
             if (it?.length == 1) {
                 binding.input5.requestFocus()
             }
+            else if (it?.isEmpty() == true) {
+                binding.input3.requestFocus()
+            }
         }
-
         binding.input5.addTextChangedListener {
             if (it?.length == 1) {
                 binding.input6.requestFocus()
             }
+            else if (it?.isEmpty() == true) {
+                binding.input4.requestFocus()
+            }
         }
+        binding.input6.addTextChangedListener {
+            if (it?.isEmpty() == true) {
+                binding.input5.requestFocus()
+            }
+        }
+
 
         //chuyển dữ liệu sang viewmodel để lưu lên OtpUiState
         binding.input1.addTextChangedListener {
@@ -232,7 +247,12 @@ class OtpFragment : Fragment() {
                     when (event) {
                         //Nút vector quay lại màn trước
                         is OtpEvent.NavigationVector -> {
-                            findNavController().popBackStack()
+                            if (currenScreen == "registersuccess") {
+                                findNavController().navigate(R.id.register)
+                            }
+                            if (currenScreen == "resetpassword") {
+                                findNavController().navigate(R.id.forgotPasswordFragment)
+                            }
                         }
 
                         //Nút verify chuyển sang màn tiếp theo

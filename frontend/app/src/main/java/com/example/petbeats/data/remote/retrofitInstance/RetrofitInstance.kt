@@ -17,25 +17,24 @@ object RetrofitInstance {
         if (authenticatedRetrofit == null) {
             val tokenManager = TokenManager(context)
 
-            // Lấy ApiAuth từ "súng chay" để nhét vào Authenticator
-            // (Tuyệt đối không dùng chính súng VIP để refresh, sẽ bị lặp vô hạn)
+            // Lấy ApiAuth từ "retrofit cũ" để nhét vào Authenticator
+            // Không dùng retrofit VIP để refresh, sẽ bị lặp vô hạn
             val apiAuth = retrofit.create(ApiAuth::class.java)
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(AuthInterceptor(tokenManager)) // Trạm kiểm tra vé vào cửa
-                .authenticator(TokenAuthenticator(tokenManager, apiAuth)) // Hệ thống cứu hộ khi hết vé
+                .addInterceptor(AuthInterceptor(tokenManager))
+                .authenticator(TokenAuthenticator(tokenManager, apiAuth))
                 .build()
 
             // Tạo Retrofit VIP
             authenticatedRetrofit = Retrofit.Builder()
                 .baseUrl(ApiConstants.BASE_URL)
-                .client(okHttpClient) // Gắn nòng súng xịn vào
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
         return authenticatedRetrofit!!
     }
-
 
 
 

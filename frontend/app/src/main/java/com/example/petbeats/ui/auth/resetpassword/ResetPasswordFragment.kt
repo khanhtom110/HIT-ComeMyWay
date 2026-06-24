@@ -165,7 +165,12 @@ class ResetPasswordFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is ResetPasswordEvent.NavigationOTP -> {
-                            findNavController().navigate(R.id.otpFragment)
+                            findNavController().navigate(
+                                R.id.otpFragment,
+                                Bundle().apply {
+                                    putString("nextscreen", "resetpassword")
+                                }
+                            )
                         }
 
                         is ResetPasswordEvent.NavigationSuccess -> {

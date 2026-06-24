@@ -3,7 +3,6 @@ package com.example.petbeats.data.repository
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.core.network.ApiResponse
 import com.example.petbeats.data.remote.model.LogoutRequest
-import com.example.petbeats.data.remote.model.RefreshTokenRequest
 import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.ui.auth.forgotpassword.request_response.ForgotPasswordRequest
 import com.example.petbeats.ui.auth.login.request_response.LoginRequest
@@ -13,7 +12,7 @@ import com.example.petbeats.ui.auth.otp.request_response.OtpResponse
 import com.example.petbeats.ui.auth.register.request_response.RegisterRequest
 import com.example.petbeats.ui.auth.register.request_response.RegisterResponse
 import com.example.petbeats.ui.auth.resetpassword.request_response.ResetPasswordRequest
-import com.google.gson.Gson
+import com.google.gson.JsonParser
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -29,7 +28,7 @@ class AuthRepository(
             "Username must be 4-120 characters long and contain only letters, numbers, and underscores." -> Pair(
                 ErrorTarget.NAME, "Tên đăng nhập chỉ được chứa chữ, số và dấu gạch dưới.")
             "Username length is invalid. It must be between 4 and 120 characters." -> Pair(
-                ErrorTarget.NAME, "Tên người dùng không hợp lệ. Tên người dùng phải có độ dài từ 4 đến 120 ký tự.")
+                ErrorTarget.NAME, "Tên người dùng không hợp lệ. Tên người dùng phải có độ \ndài từ 4 đến 120 ký tự.")
 
 
             //Email
@@ -42,7 +41,7 @@ class AuthRepository(
 
             //Password
             "Password must be 8-120 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character." ->
-                Pair(ErrorTarget.PASSWORD, "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và ký tự đặc biệt).")
+                Pair(ErrorTarget.PASSWORD, "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).")
             "Passwords do not match." ->
                 Pair(ErrorTarget.PASSWORD, "Mật khẩu xác nhận không khớp.")
             "New password must be different from the current password." ->
@@ -89,9 +88,24 @@ class AuthRepository(
         } catch (e: HttpException) {
             val errorMessage = try {
                 val errorBody = e.response()?.errorBody()?.string()
-                val apiResponse = Gson().fromJson(errorBody, ApiResponse::class.java)
 
-                getErrorTargetAndMessage(apiResponse.message)
+                val jsonObject = JsonParser.parseString(errorBody).asJsonObject
+
+
+                var finalError: String? = if (jsonObject.has("message")) jsonObject.get("message").asString else null
+
+                val dataElement = jsonObject.get("data")
+                if (dataElement != null && dataElement.isJsonObject) {
+                    val dataObj = dataElement.asJsonObject
+
+                    val firstKey = dataObj.keySet().firstOrNull()
+                    if (firstKey != null) {
+                        finalError = dataObj.get(firstKey).asString
+                    }
+                }
+
+
+                getErrorTargetAndMessage(finalError)
             } catch (e: Exception) {
                 Pair(ErrorTarget.GENERAL, "Lỗi dữ liệu lấy từ máy chủ")
             }

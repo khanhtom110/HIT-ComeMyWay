@@ -18,6 +18,7 @@ import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.data.local.TokenManager
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 
@@ -28,7 +29,7 @@ class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
             AuthRepository(
-                retrofit.create(ApiAuth::class.java)
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiAuth::class.java)
             )
         )
     }
