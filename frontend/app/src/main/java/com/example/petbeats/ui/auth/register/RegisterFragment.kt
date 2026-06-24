@@ -84,8 +84,8 @@ class RegisterFragment : Fragment() {
             viewModel.onPasswordChange1(it.toString())
         }
 
-        binding.registerSuccess.setOnClickListener {
-            viewModel.onRegisterSuccess()
+        binding.otp.setOnClickListener {
+            viewModel.onOtpClick()
         }
     }
 
@@ -103,7 +103,6 @@ class RegisterFragment : Fragment() {
                         binding.eye.setImageResource(R.drawable.close_eye)
                     }
 
-                    binding.inputPassword.setSelection(binding.inputPassword.length())
 
                     //isPassword1
                     if (state.isPasswordVisible1) {
@@ -115,7 +114,6 @@ class RegisterFragment : Fragment() {
                         binding.eye1.setImageResource(R.drawable.close_eye)
                     }
 
-                    binding.inputPassword1.setSelection(binding.inputPassword1.length())
 
 
 
@@ -198,8 +196,14 @@ class RegisterFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        is RegisterEvent.NavigationRegisterSuccess -> {
-                            findNavController().navigate(R.id.registerSuccessFragment)
+                        is RegisterEvent.NavigationRegisterSendEmail -> {
+                            findNavController().navigate(
+                                R.id.otpFragment,
+                                Bundle().apply {
+                                    putString("email", event.email)
+                                    putString("nextscreen", "registersuccess")
+                                }
+                            )
                         }
 
                         is RegisterEvent.NavigationLogin -> {

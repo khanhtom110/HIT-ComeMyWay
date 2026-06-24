@@ -2,7 +2,9 @@ package com.example.petbeats.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.data.repository.ErrorTarget
 import com.example.petbeats.ui.auth.login.request_response.LoginRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,26 +54,35 @@ class LoginViewModel(
             val name = _state.value.name.trim()
             val password = _state.value.password.trim()
 
-            if (name.isEmpty() || password.isEmpty()) {
-                _state.value = _state.value.copy(isName = true, isPassword = true, nameError = "Nhập tên", passwordError = "Nhập password")
-                return@launch
-            }
-            else if (password.length < 7) {
-                _state.value = _state.value.copy(isName = false, isPassword = true, nameError = "", passwordError = "Mật khẩu phải lớn hơn 7 số")
-                return@launch
-            }
+//            if (password.length < 7) {
+//                _state.value = _state.value.copy(isName = false,isPassword = true, nameError = "", passwordError = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).")
+//                return@launch
+//            }
 
-
-            _event.emit(LoginEvent.NavigationHome)
 
             val request = LoginRequest(name, password)
             val result = repository.loginUser(request)
 
-            if (result) {
-                _state.value = _state.value.copy(isName = false, isPassword = false)
-            }
-            else {
-                _state.value = _state.value.copy()
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isName = false, isPassword = false, nameError = "", passwordError = "")
+
+                    // Lấy Token từ result.data để lưu vào DataStore/SharedPreferences
+                    val accessToken = result.data.accessToken ?: ""
+                    val refreshToken = result.data.refreshToken ?: ""
+
+                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken))
+                }
+
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isName = (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL),
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        nameError = if (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else ""
+                    )
+                    return@launch
+                }
             }
         }
     }

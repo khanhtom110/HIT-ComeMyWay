@@ -1,11 +1,13 @@
 package com.example.petbeats.ui.auth.otp
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -33,6 +35,8 @@ class OtpFragment : Fragment() {
             )
         )
     }
+    private var currenScreen: String = ""
+    private var countDownTimer: CountDownTimer ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +51,10 @@ class OtpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currenScreen = arguments?.getString("nextscreen") ?: ""
+
+        startResendTimer()
+
         setOnCLick()
         stateData()
         eventData()
@@ -54,6 +62,7 @@ class OtpFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        countDownTimer?.cancel()
         _binding = null
     }
 
@@ -61,15 +70,18 @@ class OtpFragment : Fragment() {
         binding.verify.setOnClickListener {
             val email = arguments?.getString("email") ?: ""
 
-            viewModel.onResetClick(email)
+            viewModel.onResetClick(email, currenScreen)
         }
 
         setupOtp()
 
         binding.vector.setOnClickListener {
-            viewModel.forgotClick()
+            viewModel.vectorClick()
         }
 
+        binding.otp.setOnClickListener {
+            startResendTimer()
+        }
     }
 
     private fun setupOtp() {
@@ -125,6 +137,36 @@ class OtpFragment : Fragment() {
         }
     }
 
+    private fun startResendTimer() {
+        binding.otp.isEnabled = false
+        val otpReset = ContextCompat.getColor(requireContext(), R.color.colorOtp)
+        binding.otp.setTextColor(otpReset)
+
+
+        countDownTimer = object : CountDownTimer(120000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                val totalSeconds = millisUntilFinished / 1000
+                val minutes = totalSeconds / 60
+                val seconds = totalSeconds % 60
+
+                val timeString = String.format("%02d:%02d", minutes, seconds)
+
+                binding.otp.text = "Gửi lại ($timeString)"
+
+                val email = arguments?.getString("email") ?: ""
+                binding.content.text = "Chúng tôi đã gửi 1 mã xác minh đến $email.\nMã xác minh có giá trị trong $timeString"
+            }
+
+            override fun onFinish() {
+                binding.otp.isEnabled = true
+                val otpReset = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+                binding.otp.setTextColor(otpReset)
+                binding.otp.text = "Gửi lại"
+            }
+        }.start()
+    }
+
     private fun stateData() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -162,6 +204,8 @@ class OtpFragment : Fragment() {
                         binding.input4.setBackgroundResource(R.drawable.button_input_errol)
                         binding.input5.setBackgroundResource(R.drawable.button_input_errol)
                         binding.input6.setBackgroundResource(R.drawable.button_input_errol)
+
+                        binding.otpError.visibility = View.VISIBLE
                     }
                     else {
                         binding.input1.setBackgroundResource(R.drawable.button_input)
@@ -170,6 +214,8 @@ class OtpFragment : Fragment() {
                         binding.input4.setBackgroundResource(R.drawable.button_input)
                         binding.input5.setBackgroundResource(R.drawable.button_input)
                         binding.input6.setBackgroundResource(R.drawable.button_input)
+
+                        binding.otpError.visibility = View.GONE
                     }
                     if (binding.otpError.text.toString() != state.otpError) {
                         binding.otpError.text = state.otpError
@@ -181,22 +227,31 @@ class OtpFragment : Fragment() {
 
     private fun eventData() {
         lifecycleScope.launch {
-            viewModel.event.collect { event ->
-                when (event) {
-                    is OtpEvent.NavigationForgot -> {
-                        findNavController().navigate(R.id.forgotPasswordFragment)
-                    }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        //Nút vector quay lại màn trước
+                        is OtpEvent.NavigationVector -> {
+                            findNavController().popBackStack()
+                        }
 
-                    is OtpEvent.NavigationResetSendEmail -> {
-                        findNavController().navigate(
-                            R.id.resetPasswordFragment,
-                            Bundle().apply {
-                                putString("email", event.email)
-                                putString("otp", binding.input1.text.toString() + binding.input2.text.toString() + binding.input3.text.toString() + binding.input4.text.toString() + binding.input5.text.toString() + binding.input6.text.toString())
+                        //Nút verify chuyển sang màn tiếp theo
+                        is OtpEvent.NavigationSendToken -> {
+                            if (currenScreen == "registersuccess") {
+                                findNavController().navigate(R.id.registerSuccessFragment)
                             }
-                        )
-                    }
+                            if (currenScreen == "resetpassword") {
+                                findNavController().navigate(
+                                    R.id.resetPasswordFragment,
+                                    Bundle().apply {
+                                        putString("token", event.token)
+                                    }
+                                )
+                            }
+                        }
 
+
+                    }
                 }
             }
         }

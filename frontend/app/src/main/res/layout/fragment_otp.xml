@@ -145,8 +145,8 @@
         <TextView
             style="@style/Chu3"
             android:id="@+id/otpError"
-            android:layout_width="1dp"
-            android:layout_height="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
             android:text=""
             android:textColor="@color/colorError"
@@ -166,7 +166,7 @@
             android:gravity="center"
             android:text="Tiếp tục"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/input5" />
+            app:layout_constraintTop_toBottomOf="@id/otpError" />
 
         <TextView
             style="@style/Chu2"

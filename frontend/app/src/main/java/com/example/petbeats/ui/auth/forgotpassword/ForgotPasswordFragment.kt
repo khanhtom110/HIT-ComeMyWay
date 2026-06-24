@@ -109,6 +109,7 @@ class ForgotPasswordFragment : Fragment() {
                                 R.id.otpFragment,
                                 Bundle().apply {
                                     putString("email", event.email)
+                                    putString("nextscreen", "resetpassword")
                                 }
                             )
                         }

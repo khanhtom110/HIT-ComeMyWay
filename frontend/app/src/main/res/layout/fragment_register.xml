@@ -55,7 +55,8 @@
             android:textColor="@color/colorTextSub"
             android:layout_marginTop="@dimen/_4sdp"
             android:hint="Nhập tên đăng ký"
-            android:paddingStart="@dimen/_10sdp"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_40sdp"
             app:layout_constraintTop_toBottomOf="@id/text_name"/>
 
         <TextView
@@ -93,6 +94,7 @@
             android:textColor="@color/colorTextSub"
             android:hint="Nhập email"
             android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_4sdp"
             app:layout_constraintTop_toBottomOf="@id/text_email"/>
 
@@ -131,6 +133,7 @@
             android:textColor="@color/colorTextSub"
             android:hint="Mật khẩu phải có 8 kí tự trở lên"
             android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_4sdp"
             app:layout_constraintTop_toBottomOf="@id/text_password"/>
 
@@ -179,6 +182,7 @@
             android:textColor="@color/colorTextTitle"
             android:hint="Nhập lại mật khẩu"
             android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_4sdp"
             app:layout_constraintTop_toBottomOf="@id/text_password1"/>
 
@@ -206,7 +210,7 @@
 
         <TextView
             style="@style/Nut3"
-            android:id="@+id/registerSuccess"
+            android:id="@+id/otp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"

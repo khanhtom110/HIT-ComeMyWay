@@ -2,7 +2,13 @@ package com.example.petbeats.ui.auth.resetpassword
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.RefreshTokenRequest
 import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.data.repository.ErrorTarget
+import com.example.petbeats.ui.auth.login.LoginEvent
+import com.example.petbeats.ui.auth.login.request_response.LoginRequest
+import com.example.petbeats.ui.auth.resetpassword.request_response.ResetPasswordRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -46,26 +52,39 @@ class ResetPasswordViewModel(
         _state.value = _state.value.copy(password1 = password1)
     }
 
-    fun onSuccessClick(email: String, otp: String) {
+    fun onSuccessClick(token: String) {
         viewModelScope.launch {
             val password = _state.value.password.trim()
             val password1 = _state.value.password1.trim()
 
-            if (password.isEmpty() || password1.isEmpty()) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, passwordError = "Vui lòng nhập đầy đủ thông tin", passwordError1 = "Vui lòng nhập đầy đủ thông tin")
-                return@launch
-            }
-            else if (password.length < 7 || password1.length < 7) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, passwordError = "Mật khẩu phải lớn hơn 7 số", passwordError1 = "Mật khẩu phải lớn hơn 7 số")
-                return@launch
-            }
-            else if (password != password1) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true)
-                return@launch
-            }
-            else {
-                _state.value = _state.value.copy(isPassword = false, isPassword1 = false)
-                _event.emit(ResetPasswordEvent.NavigationSuccess)
+
+//            if (password.length < 7 || password1.length < 7) {
+//                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, passwordError = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).", passwordError1 = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và ký tự đặc biệt).")
+//                return@launch
+//            }
+
+
+
+            val request = ResetPasswordRequest(token, password, password1)
+            val result = repository.resetpasswordUser(request)
+
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isPassword = false, isPassword1 = false, passwordError = "", passwordError1 = "")
+
+                    _event.emit(ResetPasswordEvent.NavigationSuccess)
+                }
+
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        isPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordError1 = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else ""
+                    )
+                    return@launch
+                }
             }
         }
     }

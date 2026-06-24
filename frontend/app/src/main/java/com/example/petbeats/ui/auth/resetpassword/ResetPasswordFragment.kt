@@ -84,10 +84,9 @@ class ResetPasswordFragment : Fragment() {
         }
 
         binding.resetPassword.setOnClickListener {
-            val email = arguments?.getString("email") ?: ""
-            val otp = arguments?.getString("otp") ?: ""
+            val token = arguments?.getString("token") ?: ""
 
-            viewModel.onSuccessClick(email, otp)
+            viewModel.onSuccessClick(token)
         }
     }
 
@@ -105,7 +104,6 @@ class ResetPasswordFragment : Fragment() {
                         binding.eye.setImageResource(R.drawable.close_eye)
                     }
 
-                    binding.inputPassword.setSelection(binding.inputPassword.length())
 
 
                     //isPassword1
@@ -118,7 +116,6 @@ class ResetPasswordFragment : Fragment() {
                         binding.eye1.setImageResource(R.drawable.close_eye)
                     }
 
-                    binding.inputPassword1.setSelection(binding.inputPassword1.length())
 
 
                     //check error

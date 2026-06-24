@@ -9,5 +9,5 @@ data class OtpState (
     val otp6: String = "",
 
     val isOtp: Boolean = false,
-    val otpError: String = ""
+    val otpError: String = "",
 )

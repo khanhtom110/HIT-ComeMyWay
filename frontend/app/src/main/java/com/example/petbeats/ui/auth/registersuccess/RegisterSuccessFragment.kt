@@ -16,19 +16,14 @@ import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrof
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.databinding.FragmentRegisterSuccessBinding
 import com.example.petbeats.ui.auth.register.RegisterViewModelFactory
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class RegisterSuccessFragment: Fragment() {
     private var _binding: FragmentRegisterSuccessBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: RegisterSuccessViewModel by viewModels {
-        RegisterSuccessViewModelFactory(
-            AuthRepository(
-                retrofit.create(ApiAuth::class.java)
-            )
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,31 +38,14 @@ class RegisterSuccessFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        nextFragment()
-        eventData()
+        lifecycleScope.launch {
+            delay(2000)
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun nextFragment() {
-        viewModel.loginClick()
-    }
-
-    private fun eventData() {
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    when (event) {
-                        is RegisterSuccessEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 }

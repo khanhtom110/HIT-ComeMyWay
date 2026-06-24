@@ -17,6 +17,7 @@ import com.example.petbeats.R
 import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
 import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.data.local.TokenManager
 import com.example.petbeats.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 
@@ -94,7 +95,7 @@ class LoginFragment : Fragment() {
                         binding.eye.setImageResource(R.drawable.close_eye)
                     }
 
-                    binding.inputPassword.setSelection(binding.inputPassword.length())
+
 
 
 
@@ -125,10 +126,10 @@ class LoginFragment : Fragment() {
 
 
 
-//                    //check name
-//                    if (binding.inputName.text.toString() != state.name) {
-//                        binding.inputName.setText(state.name)
-//                    }
+                    //check name
+                    if (binding.inputName.text.toString() != state.name) {
+                        binding.inputName.setText(state.name)
+                    }
 
                     //check password
                     if (binding.inputPassword.text.toString() != state.password) {
@@ -151,6 +152,9 @@ class LoginFragment : Fragment() {
                             findNavController().navigate(R.id.registerFragment)
                         }
                         is LoginEvent.NavigationHome -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+
                             findNavController().navigate(R.id.homeFragment)
                         }
                     }

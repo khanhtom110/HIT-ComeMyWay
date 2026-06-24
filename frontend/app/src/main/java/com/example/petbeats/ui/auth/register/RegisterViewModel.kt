@@ -3,7 +3,9 @@ package com.example.petbeats.ui.auth.register
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.data.repository.ErrorTarget
 import com.example.petbeats.ui.auth.register.request_response.RegisterRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,41 +52,44 @@ class RegisterViewModel(
         _state.value = _state.value.copy(password1 = password1)
     }
 
-    fun onRegisterSuccess() {
+    fun onOtpClick() {
         viewModelScope.launch {
             val name = _state.value.name.trim()
             val email = _state.value.email.trim()
             val password = _state.value.password.trim()
             val password1 = _state.value.password1.trim()
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || password1.isEmpty()) {
-                _state.value = _state.value.copy(isName = true, isEmail = true, isPassword = true, isPassword1 = true, nameError = "Nhập tên", emailError = "Nhập email", passwordError = "Nhập password", passwordError1 = "Nhập password1" )
-                return@launch
-            }
-            else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                _state.value = _state.value.copy(isName = false, isEmail = true, isPassword = false, isPassword1 = false)
-                return@launch
-            }
-            else if (password.length < 7 || password1.length < 7) {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true)
-                return@launch
-            }
-            else if (password != password1) {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true)
-                return@launch
-            }
 
-            _event.emit(RegisterEvent.NavigationRegisterSuccess)
+
+//            if (password.length < 7 || password1.length < 7) {
+//                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = true, isPassword1 = true, nameError = "", emailError = "", passwordError = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).", passwordError1 = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).")
+//                return@launch
+//            }
+
 
             val request = RegisterRequest(name, email, password, password1)
             val result = repository.registerUser(request)
 
-            if (result) {
-                _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = false, isPassword1 = false)
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isName = false, isEmail = false, isPassword = false, isPassword1 = false, nameError = "", emailError = "", passwordError = "", passwordError1 = "")
 
-            }
-            else {
-                _state.value = _state.value.copy()
+                    _event.emit(RegisterEvent.NavigationRegisterSendEmail(email))
+                }
+
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isName = (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL),
+                        isEmail = (result.target == ErrorTarget.EMAIL || result.target ==  ErrorTarget.GENERAL),
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        isPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        nameError = if (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        emailError = if (result.target == ErrorTarget.EMAIL || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL)  result.message else "",
+                        passwordError1 = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else ""
+                    )
+                    return@launch
+                }
             }
         }
     }
