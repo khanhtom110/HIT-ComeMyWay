@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -89,10 +90,16 @@ class ForgotPasswordFragment : Fragment() {
                     if (state.isEmail) {
                         binding.inputEmail.setBackgroundResource(R.drawable.button_input_errol)
                         binding.emailError.visibility = View.VISIBLE
+
+                        val emailError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.inputEmail.setTextColor(emailError)
                     }
                     else {
                         binding.inputEmail.setBackgroundResource(R.drawable.button_input)
                         binding.emailError.visibility = View.GONE
+
+                        val emailSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.inputEmail.setTextColor(emailSub)
                     }
                 }
             }

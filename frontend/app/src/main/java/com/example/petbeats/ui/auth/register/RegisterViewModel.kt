@@ -37,19 +37,19 @@ class RegisterViewModel(
     }
 
     fun onNameChange(name: String) {
-        _state.value = _state.value.copy(name = name)
+        _state.value = _state.value.copy(name = name, isName = false)
     }
 
     fun onEmailChange(email: String) {
-        _state.value = _state.value.copy(email = email)
+        _state.value = _state.value.copy(email = email, isEmail = false)
     }
 
     fun onPasswordChange(password: String) {
-        _state.value = _state.value.copy(password = password)
+        _state.value = _state.value.copy(password = password, isPassword = false)
     }
 
     fun onPasswordChange1(password1: String) {
-        _state.value = _state.value.copy(password1 = password1)
+        _state.value = _state.value.copy(password1 = password1, isPassword1 = false)
     }
 
     fun onOtpClick() {

@@ -221,6 +221,14 @@ class OtpFragment : Fragment() {
                         binding.input6.setBackgroundResource(R.drawable.button_input_errol)
 
                         binding.otpError.visibility = View.VISIBLE
+
+                        val otpError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.input1.setTextColor(otpError)
+                        binding.input2.setTextColor(otpError)
+                        binding.input3.setTextColor(otpError)
+                        binding.input4.setTextColor(otpError)
+                        binding.input5.setTextColor(otpError)
+                        binding.input6.setTextColor(otpError)
                     }
                     else {
                         binding.input1.setBackgroundResource(R.drawable.button_input)
@@ -231,7 +239,17 @@ class OtpFragment : Fragment() {
                         binding.input6.setBackgroundResource(R.drawable.button_input)
 
                         binding.otpError.visibility = View.GONE
+
+                        val otpSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.input1.setTextColor(otpSub)
+                        binding.input2.setTextColor(otpSub)
+                        binding.input3.setTextColor(otpSub)
+                        binding.input4.setTextColor(otpSub)
+                        binding.input5.setTextColor(otpSub)
+                        binding.input6.setTextColor(otpSub)
                     }
+
+
                     if (binding.otpError.text.toString() != state.otpError) {
                         binding.otpError.text = state.otpError
                     }

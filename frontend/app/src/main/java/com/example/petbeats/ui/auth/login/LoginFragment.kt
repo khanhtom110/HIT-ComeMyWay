@@ -1,5 +1,6 @@
 package com.example.petbeats.ui.auth.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -21,6 +22,8 @@ import com.example.petbeats.data.local.TokenManager
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
+import androidx.core.content.ContextCompat
+import com.example.petbeats.ui.home.activitymain.HomeActivity
 
 
 class LoginFragment : Fragment() {
@@ -29,7 +32,7 @@ class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
             AuthRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiAuth::class.java)
+                RetrofitInstance.retrofit.create(ApiAuth::class.java)
             )
         )
     }
@@ -104,18 +107,30 @@ class LoginFragment : Fragment() {
                     if (state.isName) {
                         binding.inputName.setBackgroundResource(R.drawable.button_input_errol)
                         binding.nameError.visibility = View.VISIBLE
+
+                        val nameError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.inputName.setTextColor(nameError)
                     }
                     else {
                         binding.inputName.setBackgroundResource(R.drawable.button_input)
                         binding.nameError.visibility = View.GONE
+
+                        val nameSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.inputName.setTextColor(nameSub)
                     }
                     if (state.isPassword) {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input_errol)
                         binding.passwordError.visibility = View.VISIBLE
+
+                        val passwordError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.inputPassword.setTextColor(passwordError)
                     }
                     else {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
                         binding.passwordError.visibility = View.GONE
+
+                        val passwordSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.inputPassword.setTextColor(passwordSub)
                     }
 
                     if (binding.nameError.text.toString() != state.nameError) {
@@ -156,7 +171,8 @@ class LoginFragment : Fragment() {
                             val tokenManager = TokenManager(requireContext())
                             tokenManager.saveTokens(event.accessToken, event.refreshToken)
 
-                            findNavController().navigate(R.id.homeFragment)
+                            val intent = Intent(requireContext(), HomeActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }

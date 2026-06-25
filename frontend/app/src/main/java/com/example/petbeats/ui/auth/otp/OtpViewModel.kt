@@ -31,27 +31,27 @@ class OtpViewModel(
     }
 
     fun input1(otp: String) {
-        _state.value = _state.value.copy(otp1 = otp)
+        _state.value = _state.value.copy(otp1 = otp, isOtp = false)
     }
 
     fun input2(otp: String) {
-        _state.value = _state.value.copy(otp2 = otp)
+        _state.value = _state.value.copy(otp2 = otp, isOtp = false)
     }
 
     fun input3(otp: String) {
-        _state.value = _state.value.copy(otp3 = otp)
+        _state.value = _state.value.copy(otp3 = otp, isOtp = false)
     }
 
     fun input4(otp: String) {
-        _state.value = _state.value.copy(otp4 = otp)
+        _state.value = _state.value.copy(otp4 = otp, isOtp = false)
     }
 
     fun input5(otp: String) {
-        _state.value = _state.value.copy(otp5 = otp)
+        _state.value = _state.value.copy(otp5 = otp, isOtp = false)
     }
 
     fun input6(otp: String) {
-        _state.value = _state.value.copy(otp6 = otp)
+        _state.value = _state.value.copy(otp6 = otp, isOtp = false)
     }
 
     fun onResetClick(email: String, currentScreen: String) {

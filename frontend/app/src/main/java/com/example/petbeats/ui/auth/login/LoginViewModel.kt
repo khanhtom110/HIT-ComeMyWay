@@ -39,13 +39,13 @@ class LoginViewModel(
 
     fun onNameChange(name: String) {
         viewModelScope.launch {
-            _state.value =_state.value.copy(name = name)
+            _state.value =_state.value.copy(name = name, isName = false)
         }
     }
 
     fun onPasswordChange(password: String) {
         viewModelScope.launch {
-            _state.value =_state.value.copy(password = password)
+            _state.value =_state.value.copy(password = password, isPassword = false)
         }
     }
 

@@ -23,7 +23,7 @@ class ForgotPasswordViewModel(
     val event = _event.asSharedFlow()
 
     fun onEmailChange(email: String) {
-        _state.value = _state.value.copy(email = email)
+        _state.value = _state.value.copy(email = email, isEmail = false)
     }
 
     fun loginClick() {

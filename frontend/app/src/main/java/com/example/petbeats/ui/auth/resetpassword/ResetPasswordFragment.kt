@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -122,18 +123,30 @@ class ResetPasswordFragment : Fragment() {
                     if (state.isPassword) {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input_errol)
                         binding.passwordError.visibility = View.VISIBLE
+
+                        val passwordError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.inputPassword.setTextColor(passwordError)
                     }
                     else {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
                         binding.passwordError.visibility = View.GONE
+
+                        val passwordSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.inputPassword.setTextColor(passwordSub)
                     }
                     if (state.isPassword1) {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input_errol)
                         binding.passwordError1.visibility = View.VISIBLE
+
+                        val passwordError1 = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.inputPassword1.setTextColor(passwordError1)
                     }
                     else {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input)
                         binding.passwordError1.visibility = View.GONE
+
+                        val passwordSub1 = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.inputPassword1.setTextColor(passwordSub1)
                     }
 
 
