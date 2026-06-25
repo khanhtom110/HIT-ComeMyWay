@@ -3,12 +3,9 @@ package com.example.petbeats.ui.auth.resetpassword
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
-import com.example.petbeats.data.remote.model.RefreshTokenRequest
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.data.repository.ErrorTarget
-import com.example.petbeats.ui.auth.login.LoginEvent
-import com.example.petbeats.ui.auth.login.request_response.LoginRequest
-import com.example.petbeats.ui.auth.resetpassword.request_response.ResetPasswordRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,9 +35,9 @@ class ResetPasswordViewModel(
         }
     }
 
-    fun otpClick() {
+    fun otpClick(email: String) {
         viewModelScope.launch {
-            _event.emit(ResetPasswordEvent.NavigationOTP)
+            _event.emit(ResetPasswordEvent.NavigaitonOtpSendEmail(email))
         }
     }
 

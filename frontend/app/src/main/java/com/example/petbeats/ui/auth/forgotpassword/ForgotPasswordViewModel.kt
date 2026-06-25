@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.data.repository.ErrorTarget
-import com.example.petbeats.ui.auth.forgotpassword.request_response.ForgotPasswordRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

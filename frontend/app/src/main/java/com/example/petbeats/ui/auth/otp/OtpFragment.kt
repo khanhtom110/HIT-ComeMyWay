@@ -269,7 +269,7 @@ class OtpFragment : Fragment() {
                                 findNavController().navigate(R.id.register)
                             }
                             if (currenScreen == "resetpassword") {
-                                findNavController().navigate(R.id.forgotPasswordFragment)
+                                findNavController().navigate(R.id.otp_forgotPassword)
                             }
                         }
 
@@ -283,6 +283,7 @@ class OtpFragment : Fragment() {
                                     R.id.resetPasswordFragment,
                                     Bundle().apply {
                                         putString("token", event.token)
+                                        putString("email", event.email)
                                     }
                                 )
                             }

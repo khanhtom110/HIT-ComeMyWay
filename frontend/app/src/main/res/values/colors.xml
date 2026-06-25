@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--basic-->
-    <color name="black">#77000000</color>
+    <color name="black">#181818</color>
     <color name="white">#FFFFFF</color>
 
     <!--primary-->
@@ -16,6 +16,8 @@
     <color name="colorTextTitle">#4C4C4C</color>
     <color name="colorTextSub">#181818</color>
     <color name="colorTextContent">#9191A1</color>
+    <color name="colorTextHint">#A7A7B4</color>
+    <color name="colorTextButtonHome">#6F8CF4</color>
 
     <!--background-->
     <color name="colorBackground">#FAFCFF</color>
@@ -25,5 +27,8 @@
 
     <!--otp-->
     <color name="colorOtp">#A7A7B4</color>
+
+    <!--modes-->
+    <color name="colorModes">#E8ECFC</color>
 
 </resources>

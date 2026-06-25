@@ -122,7 +122,7 @@ class ForgotPasswordFragment : Fragment() {
                         }
 
                         is ForgotPasswordEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.forgotPassword_login)
                         }
                     }
                 }

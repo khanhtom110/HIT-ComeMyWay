@@ -17,6 +17,11 @@
         <item name="android:textSize">22sp</item>
     </style>
 
+    <style name="TieuDe1">
+        <item name="fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Chu1">
         <item name="fontFamily">@font/roboto_condensed_regular</item>
         <item name="android:textSize">16sp</item>

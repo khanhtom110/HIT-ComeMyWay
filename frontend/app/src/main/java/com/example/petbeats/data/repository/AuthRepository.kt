@@ -2,16 +2,16 @@ package com.example.petbeats.data.repository
 
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.core.network.ApiResponse
-import com.example.petbeats.data.remote.model.LogoutRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.example.petbeats.data.remote.api.ApiAuth
-import com.example.petbeats.ui.auth.forgotpassword.request_response.ForgotPasswordRequest
-import com.example.petbeats.ui.auth.login.request_response.LoginRequest
-import com.example.petbeats.ui.auth.login.request_response.LoginResponse
-import com.example.petbeats.ui.auth.otp.request_response.OtpRequest
-import com.example.petbeats.ui.auth.otp.request_response.OtpResponse
-import com.example.petbeats.ui.auth.register.request_response.RegisterRequest
-import com.example.petbeats.ui.auth.register.request_response.RegisterResponse
-import com.example.petbeats.ui.auth.resetpassword.request_response.ResetPasswordRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.LoginRequest
+import com.example.petbeats.data.remote.model.calendar.auth.response.LoginResponse
+import com.example.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import com.example.petbeats.data.remote.model.calendar.auth.response.OtpResponse
+import com.example.petbeats.data.remote.model.calendar.auth.request.RegisterRequest
+import com.example.petbeats.data.remote.model.calendar.auth.response.RegisterResponse
+import com.example.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.google.gson.JsonParser
 import retrofit2.HttpException
 import java.io.IOException

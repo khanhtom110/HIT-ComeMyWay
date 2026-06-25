@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".ui.home.activitymain.HomeActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -21,11 +22,12 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
         app:labelVisibilityMode="labeled"
         app:itemActiveIndicatorStyle="@null"
         app:menu="@menu/bottom_home"
         app:itemIconTint="@color/nav_color"
         app:itemTextColor="@color/paper_color"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.example.petbeats.data.remote.interceptor
 
-import com.example.petbeats.data.remote.model.RefreshTokenRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.example.petbeats.data.local.TokenManager
 import com.example.petbeats.data.remote.api.ApiAuth
 import okhttp3.Authenticator

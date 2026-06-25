@@ -61,7 +61,9 @@ class ResetPasswordFragment : Fragment() {
 
     private fun setOnCLick() {
         binding.vector.setOnClickListener {
-            viewModel.otpClick()
+            val email = arguments?.getString("email") ?: ""
+
+            viewModel.otpClick(email)
         }
 
         binding.eye.setOnClickListener {
@@ -177,11 +179,12 @@ class ResetPasswordFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        is ResetPasswordEvent.NavigationOTP -> {
+                        is ResetPasswordEvent.NavigaitonOtpSendEmail -> {
                             findNavController().navigate(
-                                R.id.otpFragment,
+                                R.id.resetPassword_otp,
                                 Bundle().apply {
                                     putString("nextscreen", "resetpassword")
+                                    putString("email", event.email)
                                 }
                             )
                         }

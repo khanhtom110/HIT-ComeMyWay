@@ -6,9 +6,9 @@ import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.data.repository.ErrorTarget
 import com.example.petbeats.ui.auth.forgotpassword.ForgotPasswordEvent
-import com.example.petbeats.ui.auth.forgotpassword.request_response.ForgotPasswordRequest
-import com.example.petbeats.ui.auth.otp.request_response.OtpRequest
-import com.example.petbeats.ui.auth.register.request_response.RegisterRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import com.example.petbeats.data.remote.model.calendar.auth.request.RegisterRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -74,7 +74,7 @@ class OtpViewModel(
                     _state.value = _state.value.copy(isOtp = false, otpError = "")
 
                     val refreshToken = result.data.token ?: ""
-                    _event.emit(OtpEvent.NavigationSendToken(refreshToken))
+                    _event.emit(OtpEvent.NavigationSendToken(refreshToken, email))
                 }
 
                 is DataResult.Error -> {

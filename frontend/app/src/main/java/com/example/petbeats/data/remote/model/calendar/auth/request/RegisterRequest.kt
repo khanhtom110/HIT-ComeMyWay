@@ -1,4 +1,4 @@
-package com.example.petbeats.ui.auth.register.request_response
+package com.example.petbeats.data.remote.model.calendar.auth.request
 
 data class RegisterRequest (
     val username: String,

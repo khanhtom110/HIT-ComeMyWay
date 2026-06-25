@@ -27,17 +27,35 @@
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.example.petbeats.ui.auth.forgotpassword.ForgotPasswordFragment"
-        android:label="forgotPasswordFragment"/>
+        android:label="forgotPasswordFragment">
+        <action
+            android:id="@+id/forgotPassword_login"
+            app:destination="@+id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.petbeats.ui.auth.resetpassword.ResetPasswordFragment"
-        android:label="resetPasswordFragment"/>
+        android:label="resetPasswordFragment">
+        <action
+            android:id="@+id/resetPassword_otp"
+            app:destination="@+id/otpFragment"
+            app:popUpTo="@id/otpFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/otpFragment"
         android:name="com.example.petbeats.ui.auth.otp.OtpFragment"
-        android:label="otpFragment"/>
+        android:label="otpFragment">
+        <action
+            android:id="@+id/otp_forgotPassword"
+            app:destination="@+id/forgotPasswordFragment"
+            app:popUpTo="@id/forgotPasswordFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/stateSuccessFragment"
