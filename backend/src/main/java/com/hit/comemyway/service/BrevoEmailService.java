@@ -41,9 +41,7 @@ public class BrevoEmailService {
     // Push Request into port HTTPS (443) - Render khong chan cong nay
     try {
       ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-      System.out.println("Send email successfully! Status: " + response.getStatusCode());
     } catch (Exception e) {
-      System.err.println("Error when calling API Brevo: " + e.getMessage());
       throw new AppException(500, ErrorMessage.Auth.SEND_MAIL_FAIL);
     }
   }

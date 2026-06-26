@@ -43,7 +43,7 @@ public class AuthController {
   public ResponseEntity<ApiResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
     authService.initRegister(request);
 
-    return ResponseEntity.ok(ApiResponse.ok("Vui lòng kiểm tra email để lấy mã OTP.", null));
+    return ResponseEntity.ok(ApiResponse.ok("Please check email to claim the OTP.", null));
   }
 
   @PostMapping(UrlConstant.Auth.VERIFY_REGISTER_OTP)

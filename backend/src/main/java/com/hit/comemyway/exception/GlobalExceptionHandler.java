@@ -3,6 +3,7 @@ package com.hit.comemyway.exception;
 import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.exception.extended.AppException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -54,6 +55,13 @@ public class GlobalExceptionHandler {
       InternalAuthenticationServiceException ex) {
     return ResponseEntity.status(401)
         .body(ApiResponse.error(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
+  }
+
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiResponse<?>> handleConstraintViolation(ConstraintViolationException e) {
+    return ResponseEntity.badRequest()
+            .body(ApiResponse.error(400,"Invalid parameter: " + e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)

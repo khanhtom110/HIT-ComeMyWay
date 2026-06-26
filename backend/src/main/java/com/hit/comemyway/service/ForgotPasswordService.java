@@ -5,6 +5,7 @@ import com.hit.comemyway.constant.SuccessMessage;
 import com.hit.comemyway.dto.request.ResetPasswordRequest;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,19 +18,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class ForgotPasswordService {
 
-  @Autowired
-  private RedisTemplate<String, String> redisTemplate;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  private BrevoEmailService brevoEmailService;
+  private final RedisTemplate<String, String> redisTemplate;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final BrevoEmailService brevoEmailService;
 
   public void sendOtpEmail(String email, String otp) {
     try {
