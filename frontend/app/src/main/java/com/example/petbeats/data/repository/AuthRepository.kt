@@ -2,6 +2,7 @@ package com.example.petbeats.data.repository
 
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.core.network.ApiResponse
+import com.example.petbeats.data.local.dao.HistoryDao
 import com.example.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest

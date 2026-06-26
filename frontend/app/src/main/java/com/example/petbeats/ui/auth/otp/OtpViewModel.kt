@@ -30,6 +30,13 @@ class OtpViewModel(
         }
     }
 
+    fun otpClick(email: String) {
+        viewModelScope.launch {
+            val request = ForgotPasswordRequest(email)
+            repository.forgotpasswordUser(request)
+        }
+    }
+
     fun input1(otp: String) {
         _state.value = _state.value.copy(otp1 = otp, isOtp = false)
     }

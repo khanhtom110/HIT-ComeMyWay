@@ -81,7 +81,11 @@ class OtpFragment : Fragment() {
         }
 
         binding.otp.setOnClickListener {
+            val email = arguments?.getString("email") ?: ""
+
             startResendTimer()
+
+            viewModel.otpClick(email)
         }
     }
 
@@ -158,7 +162,7 @@ class OtpFragment : Fragment() {
         binding.otp.setTextColor(otpReset)
 
 
-        countDownTimer = object : CountDownTimer(120000, 1000) {
+        countDownTimer = object : CountDownTimer(300000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
                 val totalSeconds = millisUntilFinished / 1000

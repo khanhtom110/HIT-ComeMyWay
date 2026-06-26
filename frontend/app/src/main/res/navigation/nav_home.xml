@@ -23,4 +23,9 @@
         android:id="@+id/petFragment"
         android:name="com.example.petbeats.ui.home.pet.PetFragment"
         android:label="petFragment"/>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.petbeats.ui.home.search.SearchFragment"
+        android:label="searchFragment"/>
 </navigation>

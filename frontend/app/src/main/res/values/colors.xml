@@ -11,6 +11,7 @@
     <!--state-->
     <color name="colorSuccess">#00FF0B</color>
     <color name="colorError">#CC0900</color>
+    <color name="colorWarning">#F7C120</color>
 
     <!--text-->
     <color name="colorTextTitle">#4C4C4C</color>

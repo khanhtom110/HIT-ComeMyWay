@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -62,6 +64,12 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //room
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:...") //coroutine
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
 
     implementation("com.google.code.gson:gson:2.10.1")

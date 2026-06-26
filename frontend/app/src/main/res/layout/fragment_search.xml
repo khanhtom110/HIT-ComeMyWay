@@ -5,57 +5,36 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.book.BookFragment">
+    tools:context=".ui.home.search.SearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            style="@style/TieuDe"
-            android:id="@+id/tittle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chào mừng đến với VetPet"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            style="@style/Chu2"
-            android:id="@+id/title1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đặt lịch khám cho thú cưng của bạn thôi nào!"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tittle"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_140sdp"
-            android:src="@drawable/logo1"
-            android:layout_marginHorizontal="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/title1"/>
-
-        <TextView
+        <EditText
             style="@style/Chu2"
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:background="@drawable/tittle_search"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:inputType="text"
+            android:layout_marginTop="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:hint="Tìm kiếm phòng khám theo tên, địa chỉ"
             android:gravity="center_vertical"
-            android:paddingStart="@dimen/_16sdp"
+            android:paddingStart="@dimen/_18sdp"
             android:paddingEnd="@dimen/_40sdp"
-            app:layout_constraintTop_toBottomOf="@id/logo"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+        
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/back"
+            android:layout_marginStart="@dimen/_2sdp"
+            app:layout_constraintTop_toTopOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="@id/search"
+            app:layout_constraintStart_toStartOf="@id/search"/>
 
         <ImageView
             android:id="@+id/buttonSearch"
@@ -81,7 +60,7 @@
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lịch của bạn"
+                android:text="Lịch sử tìm kiếm"
                 android:textColor="@color/black"
                 android:layout_marginTop="@dimen/_24sdp"
                 android:layout_marginStart="@dimen/_20sdp"
@@ -113,34 +92,20 @@
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 app:layout_constraintTop_toBottomOf="@id/text"/>
 
-            <TextView
-                style="@style/Chu2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Danh sách lịch khám trống"
-                android:textColor="@color/colorTextContent"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycle"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="@dimen/_2sdp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="@dimen/_4sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
+                app:layout_constraintTop_toBottomOf="@id/line"
+                app:layout_constraintVertical_bias="0.0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>
