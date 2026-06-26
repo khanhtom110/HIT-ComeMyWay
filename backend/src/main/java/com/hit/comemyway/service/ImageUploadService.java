@@ -12,10 +12,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ImageUploadService {
-    private final Cloudinary cloudinary;
+  private final Cloudinary cloudinary;
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-        return uploadResult.get("url").toString();
-    }
+  public String uploadImage(MultipartFile file) throws IOException {
+    Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+    return uploadResult.get("url").toString();
+  }
 }

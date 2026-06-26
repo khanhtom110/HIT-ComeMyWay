@@ -14,18 +14,18 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service extends BaseEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Service extends BaseEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clinic_id")
-    private Clinic clinic;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "clinic_id")
+  private Clinic clinic;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(precision = 38, scale = 2)
-    private BigDecimal price;
+  @Column(precision = 38, scale = 2)
+  private BigDecimal price;
 }

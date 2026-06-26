@@ -21,18 +21,16 @@ import java.io.IOException;
 @RequestMapping(ApiPath.API_V1)
 @Tag(name = "Media", description = "Các API Quản lý tài nguyên, upload hình ảnh và file")
 public class ImageController {
-    private final ImageUploadService imageUploadService;
+  private final ImageUploadService imageUploadService;
 
-    @PostMapping(UrlConstant.Media.UPLOAD)
-    @Operation(
-            summary = "Upload hình ảnh lên Cloudinary",
-            description = "Nhận vào một file ảnh và tải lên hệ thống lưu trữ Cloudinary. Trả về đường dẫn URL an toàn của ảnh để lưu vào cơ sở dữ liệu."
-    )
-    public ResponseEntity<String> upload(
-            @Parameter(description = "File ảnh cần tải lên", required = true)
-            @RequestParam("file") MultipartFile file) throws IOException {
-        String url = imageUploadService.uploadImage(file);
-        return ResponseEntity.ok(url);
-    }
+  @PostMapping(UrlConstant.Media.UPLOAD)
+  @Operation(summary = "Upload hình ảnh lên Cloudinary",
+      description = "Nhận vào một file ảnh và tải lên hệ thống lưu trữ Cloudinary. Trả về đường dẫn URL an toàn của ảnh để lưu vào cơ sở dữ liệu.")
+  public ResponseEntity<String> upload(
+      @Parameter(description = "File ảnh cần tải lên", required = true)
+      @RequestParam("file") MultipartFile file) throws IOException {
+    String url = imageUploadService.uploadImage(file);
+    return ResponseEntity.ok(url);
+  }
 }
 
