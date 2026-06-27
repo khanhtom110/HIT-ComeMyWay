@@ -46,7 +46,7 @@ public class ForgotPasswordService {
 
   public String sendOtpForgotPassword(String email) {
     if (!userRepository.existsByEmail(email)) {
-      throw new AppException(400, ErrorMessage.User.USER_NOT_EXISTED);
+      throw new AppException(404, ErrorMessage.User.USER_NOT_EXISTED);
     }
 
     String otp = String.format("%06d", new Random().nextInt(1000000));

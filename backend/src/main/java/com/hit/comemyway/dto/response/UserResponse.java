@@ -6,4 +6,4 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description="Tên đăng nhập hệ thống",example="khanhtom")String username,
 
-@Schema(description="Địa chỉ email cá nhân",example="khanhnnguyenviet25@gmail.com")String email){}
+@Schema(description="Địa chỉ email cá nhân",example="khanhn.nv@gmail.com")String email){}
