@@ -9,18 +9,24 @@ import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.ClinicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class ClinicService {
+  private final RedisTemplate<String, String> redisTemplate;
+  private final ObjectMapper objectMapper;
   private final ClinicRepository clinicRepository;
   private final SearchClinicsService searchClinicsService;
   private final double ONE_LATITUDE = 111.045;
@@ -133,5 +139,38 @@ public class ClinicService {
     LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     boolean isOperating = isOperating(clinic, now);
     return ClinicDetailResponse.from(clinic, isOperating);
+  }
+
+  @Transactional(readOnly = true)
+  public List<ClinicSuggestionResponse> getClinicByStatus(Boolean status) {
+    try {
+      String jsonClinics = redisTemplate.opsForValue().get("CLinics: " + status);
+      if (jsonClinics != null) {
+        return objectMapper.readValue(jsonClinics,
+            new TypeReference<List<ClinicSuggestionResponse>>() {});
+      }
+    } catch (Exception e) {
+      System.err.println("Failure when reading Redis cache for key: " + "CLinics: " + status
+          + " - Exception: " + e.getMessage());
+    }
+
+    List<ClinicSuggestionResponse> responses = clinicRepository.findByStatus(status);
+
+
+    try {
+      String jsonClinics = objectMapper.writeValueAsString(responses);
+      redisTemplate.opsForValue().set("CLinics: " + status, jsonClinics, 10, TimeUnit.MINUTES);
+    } catch (Exception e) {
+      System.err.println("Failure when saving Redis cache for key: " + "CLinics: " + status
+          + " - Exception: " + e.getMessage());
+    }
+
+    if (responses != null && responses.size() > 8) {
+      List<ClinicSuggestionResponse> randomizedList = new ArrayList<>(responses);
+      java.util.Collections.shuffle(randomizedList);
+      return randomizedList.subList(0, 8);
+    }
+
+    return responses;
   }
 }

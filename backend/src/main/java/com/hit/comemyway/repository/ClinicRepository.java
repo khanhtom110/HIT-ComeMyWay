@@ -38,4 +38,6 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
       Pageable pageable);
 
   Optional<Clinic> findById(Long id);
+
+  List<ClinicSuggestionResponse> findByStatus(Boolean status);
 }

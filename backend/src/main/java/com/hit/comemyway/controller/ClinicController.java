@@ -76,4 +76,12 @@ public class ClinicController {
     ClinicDetailResponse response = clinicService.getClinicById(clinicId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
+
+  @Operation(summary = "Gợi ý phòng khám",
+      description = "Trả về danh sách gợi ý khi người dùng nhấn vào ô tìm kiếm")
+  @GetMapping(UrlConstant.Public.GET_SUGGESTION)
+  public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getClinicSuggestion() {
+    List<ClinicSuggestionResponse> response = clinicService.getClinicByStatus(true);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
 }
