@@ -3,6 +3,7 @@ package com.hit.comemyway.controller;
 import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ApiPath;
 import com.hit.comemyway.constant.UrlConstant;
+import com.hit.comemyway.dto.response.ClinicDetailResponse;
 import com.hit.comemyway.dto.response.ClinicSearchResponse;
 import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
 import com.hit.comemyway.service.ClinicService;
@@ -17,10 +18,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -67,6 +65,15 @@ public class ClinicController {
       @Min(1) @Max(10) int limit) {
     List<ClinicSuggestionResponse> response = clinicService.getSuggestions(keyword, limit);
 
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Lấy chi tiết phòng khám",
+      description = "Trả về thông tin chi tiết của một phòng khám")
+  @GetMapping(UrlConstant.Public.CLINIC_DETAIL)
+  public ResponseEntity<ApiResponse<ClinicDetailResponse>> getClinicDetailById(
+      @Parameter(description = "ID của phòng khám", required = true) @PathVariable Long clinicId) {
+    ClinicDetailResponse response = clinicService.getClinicById(clinicId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

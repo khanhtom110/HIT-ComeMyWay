@@ -1,8 +1,11 @@
 package com.hit.comemyway.service;
 
+import com.hit.comemyway.constant.ErrorMessage;
+import com.hit.comemyway.dto.response.ClinicDetailResponse;
 import com.hit.comemyway.dto.response.ClinicSearchResponse;
 import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
 import com.hit.comemyway.entity.Clinic;
+import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.ClinicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -94,8 +97,23 @@ public class ClinicService {
   }
 
   private boolean isOperating(Clinic clinic, LocalTime now) {
-    return clinic.getOpenTime() != null && clinic.getCloseTime() != null
-        && now.isAfter(clinic.getOpenTime()) && now.isBefore(clinic.getCloseTime());
+    LocalTime open = clinic.getOpenTime();
+    LocalTime close = clinic.getCloseTime();
+
+    if (open == null || close == null) {
+      return false;
+    }
+
+    // Ca trong ngay
+    if (!close.isBefore(open)) {
+      // True neu 'now' >= 'open' va 'now' <= 'close'
+      return !now.isBefore(open) && !now.isAfter(close);
+    }
+    // Ca dem
+    else {
+      // true neu 'now' >= 'open' hoac 'now' <= 'close'
+      return !now.isBefore(open) || !now.isAfter(close);
+    }
   }
 
   @Transactional(readOnly = true)
@@ -106,5 +124,14 @@ public class ClinicService {
     }
 
     return clinicRepository.findSuggestions(validKeyword, PageRequest.of(0, limit));
+  }
+
+  @Transactional(readOnly = true)
+  public ClinicDetailResponse getClinicById(Long id) {
+    Clinic clinic = clinicRepository.findById(id)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+    LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+    boolean isOperating = isOperating(clinic, now);
+    return ClinicDetailResponse.from(clinic, isOperating);
   }
 }

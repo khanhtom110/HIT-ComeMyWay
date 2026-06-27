@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClinicRepository extends JpaRepository<Clinic, Long> {
@@ -35,4 +36,6 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
       + "OR LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')))")
   List<ClinicSuggestionResponse> findSuggestions(@Param("keyword") String keyword,
       Pageable pageable);
+
+  Optional<Clinic> findById(Long id);
 }
