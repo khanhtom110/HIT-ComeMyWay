@@ -4,5 +4,6 @@ sealed class LoginEvent {
     object NavigationRegister: LoginEvent()
     object NavigationForgot: LoginEvent()
 
-    object NavigationHome: LoginEvent()
+    //test
+    data class NavigationHome(val accessToken: String, val refreshToken: String): LoginEvent()
 }

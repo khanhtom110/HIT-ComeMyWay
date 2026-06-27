@@ -9,5 +9,6 @@ data class ResetPasswordState (
 
     val isPassword: Boolean = false,
     val isPassword1: Boolean = false,
-    val error: String = ""
+    val passwordError: String = "",
+    val passwordError1: String = ""
 )

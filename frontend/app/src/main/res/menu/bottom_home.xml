@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bookFragment"
+        android:icon="@drawable/book"
+        android:title="Đặt lịch"/>
+
+    <item
+        android:id="@+id/newsFragment"
+        android:icon="@drawable/news"
+        android:title="Tin tức"/>
+
+    <item
+        android:id="@+id/locketFragment"
+        android:icon="@drawable/locket"
+        android:title="Locket"/>
+
+    <item
+        android:id="@+id/petFragment"
+        android:icon="@drawable/pet"
+        android:title="Pet"/>
+
+</menu>

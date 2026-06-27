@@ -1,7 +1,7 @@
 package com.example.petbeats.ui.auth.otp
 
 sealed class OtpEvent {
-    object NavigationForgot: OtpEvent()
+    object NavigationVector: OtpEvent()
 
-    data class NavigationResetSendEmail(val email: String): OtpEvent()
+    data class NavigationSendToken(val token: String, val email: String): OtpEvent()
 }

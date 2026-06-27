@@ -13,5 +13,8 @@ data class RegisterState (
     val isEmail: Boolean = false,
     val isPassword: Boolean = false,
     val isPassword1: Boolean = false,
-    val error: String = "",
+    val nameError: String = "",
+    val emailError: String = "",
+    val passwordError: String = "",
+    val passwordError1: String = ""
 )

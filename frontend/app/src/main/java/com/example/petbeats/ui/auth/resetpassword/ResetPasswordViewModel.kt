@@ -2,13 +2,20 @@ package com.example.petbeats.ui.auth.resetpassword
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.example.petbeats.data.repository.AuthRepository
+import com.example.petbeats.data.repository.ErrorTarget
+import com.example.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ResetPasswordViewModel: ViewModel() {
+class ResetPasswordViewModel(
+    private val repository: AuthRepository
+): ViewModel() {
     private val _state = MutableStateFlow(ResetPasswordState())
     val state = _state.asStateFlow()
 
@@ -23,42 +30,62 @@ class ResetPasswordViewModel: ViewModel() {
         _state.value = _state.value.copy(isPasswordVisible1 = !_state.value.isPasswordVisible1)
     }
 
-
-
-    fun otpClick() {
+    fun onLoginClick() {
         viewModelScope.launch {
-            _event.emit(ResetPasswordEvent.NavigationOTP)
+            _event.emit(ResetPasswordEvent.NavigationLogin)
+        }
+    }
+
+    fun otpClick(email: String) {
+        viewModelScope.launch {
+            val request = ForgotPasswordRequest(email)
+            repository.forgotpasswordUser(request)
+
+            _event.emit(ResetPasswordEvent.NavigaitonOtpSendEmail(email))
         }
     }
 
     fun onPasswordChange(password: String) {
-        _state.value = _state.value.copy(password = password)
+        _state.value = _state.value.copy(password = password, isPassword = false)
     }
 
     fun onPasswordChange1(password1: String) {
-        _state.value = _state.value.copy(password1 = password1)
+        _state.value = _state.value.copy(password1 = password1, isPassword1 = false)
     }
 
-    fun onSuccessClick(email: String, otp: String) {
+    fun onSuccessClick(token: String) {
         viewModelScope.launch {
             val password = _state.value.password.trim()
             val password1 = _state.value.password1.trim()
 
-            if (password.isEmpty() || password1.isEmpty()) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, error = "Vui lòng nhập đầy đủ thông tin")
-                return@launch
-            }
-            else if (password.length < 6 || password1.length < 6) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, error = "Mật khẩu phải lớn hơn 6 số")
-                return@launch
-            }
-            else if (password != password1) {
-                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, error = "Hai mật khẩu không trùng khớp")
-                return@launch
-            }
-            else {
-                _state.value = _state.value.copy(isPassword = false, isPassword1 = false, error = "")
-                _event.emit(ResetPasswordEvent.NavigationSuccess)
+
+//            if (password.length < 7 || password1.length < 7) {
+//                _state.value = _state.value.copy(isPassword = true, isPassword1 = true, passwordError = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).", passwordError1 = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và ký tự đặc biệt).")
+//                return@launch
+//            }
+
+
+
+            val request = ResetPasswordRequest(token, password, password1)
+            val result = repository.resetpasswordUser(request)
+
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isPassword = false, isPassword1 = false, passwordError = "", passwordError1 = "")
+
+                    _event.emit(ResetPasswordEvent.NavigationSuccess)
+                }
+
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        isPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordError1 = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else ""
+                    )
+                    return@launch
+                }
             }
         }
     }
