@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.petbeats.R
 import com.example.petbeats.ui.home.book.adapter.BookChild
 import com.example.petbeats.ui.home.book.adapter.BookChildState
-import com.example.petbeats.ui.home.book.adapter.BookState
+import com.example.petbeats.ui.home.book.BookState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,7 +36,19 @@ class BookViewModel: ViewModel() {
             address = "83 Giải Phóng, P. Đồng Tâm",
             time = "Thứ 5, 25/06/06 - 9:00 AM",
             status = BookChildState.SUCCESS
+        ),
+        BookChild(
+            id = "2",
+            roomName = "Phòng khám thú y Hà Nội Funpet",
+            image = R.drawable.image_test,
+            action = "Đang hoạt động",
+            distance = 3.0,
+            rating = 2f,
+            address = "83 Giải Phóng, P. Đồng Tâm",
+            time = "Thứ 5, 25/06/06 - 9:00 AM",
+            status = BookChildState.REFUSE
         )
+
     )
 
     private val _state = MutableStateFlow(BookState(list = fakeList))
@@ -48,12 +60,6 @@ class BookViewModel: ViewModel() {
     fun searchClick() {
         viewModelScope.launch {
             _event.emit(BookEvent.NavigationSearch)
-        }
-    }
-
-    fun onBookItemClick(item: BookChild) {
-        viewModelScope.launch {
-
         }
     }
 }

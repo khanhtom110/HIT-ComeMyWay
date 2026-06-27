@@ -27,5 +27,11 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.petbeats.ui.home.search.SearchFragment"
-        android:label="searchFragment"/>
+        android:label="searchFragment">
+        <action
+            android:id="@+id/search_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

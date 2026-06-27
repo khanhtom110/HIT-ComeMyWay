@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.book.BookFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,117 +12,117 @@
         android:layout_height="match_parent">
 
         <TextView
-            style="@style/TieuDe"
             android:id="@+id/tittle"
+            style="@style/TieuDe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_40sdp"
             android:text="Chào mừng đến với VetPet"
             android:textColor="@color/colorPrimary"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            style="@style/Chu2"
             android:id="@+id/title1"
+            style="@style/Chu2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
             android:text="Đặt lịch khám cho thú cưng của bạn thôi nào!"
             android:textColor="@color/colorPrimary"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tittle"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tittle" />
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_140sdp"
-            android:src="@drawable/logo1"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/title1"/>
+            android:src="@drawable/logo1"
+            app:layout_constraintTop_toBottomOf="@id/title1" />
 
         <TextView
-            style="@style/Chu2"
             android:id="@+id/search"
+            style="@style/Chu2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/tittle_search"
-            android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
-            android:hint="Tìm kiếm phòng khám theo tên, địa chỉ"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/tittle_search"
             android:gravity="center_vertical"
+            android:hint="Tìm kiếm phòng khám theo tên, địa chỉ"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_40sdp"
-            app:layout_constraintTop_toBottomOf="@id/logo"/>
+            app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <ImageView
             android:id="@+id/buttonSearch"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            android:src="@drawable/button_search"
             android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintTop_toTopOf="@id/search"
+            android:src="@drawable/button_search"
             app:layout_constraintBottom_toBottomOf="@id/search"
-            app:layout_constraintEnd_toEndOf="@id/search"/>
+            app:layout_constraintEnd_toEndOf="@id/search"
+            app:layout_constraintTop_toTopOf="@id/search" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/modes"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginVertical="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/search"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:background="@drawable/modes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search">
 
             <TextView
-                style="@style/Chu2"
                 android:id="@+id/text"
+                style="@style/Chu2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_24sdp"
                 android:text="Lịch của bạn"
                 android:textColor="@color/black"
-                android:layout_marginTop="@dimen/_24sdp"
-                android:layout_marginStart="@dimen/_20sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                style="@style/TieuDe1"
                 android:id="@+id/buttonAll"
+                style="@style/TieuDe1"
                 android:layout_width="@dimen/_49sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:background="@drawable/button_all"
-                android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_21sdp"
-                android:text="Tất cả"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/button_all"
                 android:gravity="center"
+                android:text="Tất cả"
                 android:textColor="@color/colorTextButtonHome"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <ImageView
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:src="@drawable/line"
                 android:textColor="@color/colorTextContent"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:layout_marginHorizontal="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@id/text"/>
+                app:layout_constraintTop_toBottomOf="@id/text" />
 
             <TextView
                 style="@style/Chu2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="Danh sách lịch khám trống"
                 android:textColor="@color/colorTextContent"
-                android:layout_marginTop="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycle"
@@ -131,13 +131,12 @@
                 android:layout_marginHorizontal="@dimen/_2sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

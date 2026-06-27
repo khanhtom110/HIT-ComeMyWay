@@ -1,27 +1,15 @@
-package com.example.petbeats.data.repository
+package com.example.petbeats.core.base
 
-import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.core.network.ApiResponse
-import com.example.petbeats.data.local.dao.HistoryDao
+import com.example.petbeats.data.repository.ErrorTarget
+import com.example.petbeats.data.utils.ErrorUtils.getErrorTargetAndMessage
 import com.google.gson.JsonParser
 import retrofit2.HttpException
 import java.io.IOException
 
-class HomeRepository(
-    private val historyDao: HistoryDao
-) {
-    private fun getErrorTargetAndMessage(englishMessage: String?): Pair<ErrorTarget, String> {
-        return when (englishMessage) {
-
-
-            //Be trả lỗi lạ
-            null -> Pair(ErrorTarget.GENERAL, "Lỗi không xác định.")
-            else -> Pair(ErrorTarget.GENERAL, englishMessage)
-        }
-    }
-
-
-    private suspend fun <T> safeApiCall(apiCall: suspend () -> ApiResponse<T>): DataResult<T> {
+abstract class BaseRepository {
+    // Hàm dùng chung
+    protected suspend fun <T> safeApiCall(apiCall: suspend () -> ApiResponse<T>): DataResult<T> {
         return try {
             val response = apiCall()
             DataResult.Success<T>(data = response.data as T, message = getErrorTargetAndMessage(response.message).second)
@@ -57,6 +45,4 @@ class HomeRepository(
             DataResult.Error(target = ErrorTarget.GENERAL, message = "Đã có lỗi bất ngờ xảy ra: ${e.message}")
         }
     }
-
-
 }

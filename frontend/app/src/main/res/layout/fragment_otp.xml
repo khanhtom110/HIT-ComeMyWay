@@ -51,7 +51,7 @@
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:fontFamily="@font/roboto_condensed_regular"
             android:gravity="center"
-            android:text="Chúng tôi đã gửi 1 mã xác minh đến abc@gmail.com. Mã xác minh có giá trị trong 01:59"
+            android:text="Chúng tôi đã gửi 1 mã xác minh đến \nabc@gmail.com. \nMã xác minh có giá trị trong 01:59"
             android:textColor="@color/colorTextContent"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="parent"

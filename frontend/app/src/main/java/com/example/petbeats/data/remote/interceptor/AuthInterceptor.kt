@@ -1,6 +1,6 @@
 package com.example.petbeats.data.remote.interceptor
 
-import com.example.petbeats.data.local.TokenManager
+import com.example.petbeats.data.local.sharepreference.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Response
 

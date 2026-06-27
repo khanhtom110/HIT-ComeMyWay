@@ -37,6 +37,8 @@ class BookFragment : Fragment() {
 
         setOnClick()
 
+        adapter = BookAdapter()
+
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapter
 
@@ -52,10 +54,6 @@ class BookFragment : Fragment() {
     private fun setOnClick() {
         binding.search.setOnClickListener {
             viewModel.searchClick()
-        }
-
-        adapter = BookAdapter { book ->
-            viewModel.onBookItemClick(book)
         }
     }
 

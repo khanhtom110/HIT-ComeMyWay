@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petbeats.R
 
-class BookAdapter(
-    private val onClick: (BookChild) -> Unit
-): ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
+class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.book_child, holder, false)
         return ViewHolder(view)
@@ -24,7 +22,7 @@ class BookAdapter(
         holder.bind(currentBook)
     }
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val nameRoom: TextView = itemView.findViewById(R.id.nameRoom)
         val image: ImageView = itemView.findViewById(R.id.image)
         val action: TextView = itemView.findViewById(R.id.action)
@@ -55,10 +53,10 @@ class BookAdapter(
                     status.text = "Đặt lịch thành công"
                     status.setTextColor(Color.parseColor("#00FF0B"))
                 }
-            }
-
-            itemView.setOnClickListener {
-                onClick(item)
+                BookChildState.REFUSE -> {
+                    status.text = "Từ chối"
+                    status.setTextColor(Color.parseColor("#CC0900"))
+                }
             }
         }
     }

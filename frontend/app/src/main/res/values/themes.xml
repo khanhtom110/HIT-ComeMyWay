@@ -19,12 +19,12 @@
 
     <style name="TieuDe1">
         <item name="fontFamily">@font/roboto_semicondensed_medium</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TieuDe2">
         <item name="fontFamily">@font/roboto_semicondensed_medium</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Chu1">
@@ -34,7 +34,7 @@
 
     <style name="Chu2">
         <item name="fontFamily">@font/roboto_condensed_regular</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Chu3">

@@ -23,16 +23,18 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.home.activitymain.HomeActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".ui.auth.activitymain.AuthActivity"
             android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.auth.activitymain.AuthActivity"
+            android:exported="true">
+
+
         </activity>
         <activity
             android:name=".ui.splash_onboarding.splash.SplashActivity"

@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "User")
 data class HistoryEntity (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    @PrimaryKey val keyword: String,
+    val time: Long = System.currentTimeMillis() //sắp xếp lịch sử có thời gian gần nhất lên đầu
 )
