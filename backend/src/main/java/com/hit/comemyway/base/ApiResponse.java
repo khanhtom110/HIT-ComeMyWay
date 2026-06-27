@@ -18,6 +18,8 @@ public record ApiResponse<T>(
     }
     public static <T> ApiResponse<T> ok(String message,T data){
         return new ApiResponse<>(200,message,data,Instant.now());
+    }public static <T> ApiResponse<T> ok(T data){
+        return new ApiResponse<>(200,null,data,Instant.now());
     }
     public static <T> ApiResponse<T>error(int code, String message){
         return new ApiResponse<T>(code,message,null,Instant.now());

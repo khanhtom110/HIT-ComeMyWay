@@ -147,7 +147,7 @@ public class AuthService {
 
     // Tim user trong db
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new AppException(400, ErrorMessage.User.USER_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
     CustomUserDetails userDetails = new CustomUserDetails(user);
 
