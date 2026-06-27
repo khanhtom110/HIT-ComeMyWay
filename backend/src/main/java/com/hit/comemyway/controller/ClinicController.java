@@ -8,6 +8,7 @@ import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
 import com.hit.comemyway.service.ClinicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequestMapping(ApiPath.API_V1)
 @Validated
 @Tag(name = "Clinic Controller", description = "Các API tìm kiếm phòng khám")
+@SecurityRequirements(value = {})
 public class ClinicController {
   private final ClinicService clinicService;
 

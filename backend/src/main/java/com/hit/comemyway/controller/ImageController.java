@@ -7,11 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,12 +21,12 @@ import java.io.IOException;
 public class ImageController {
   private final ImageUploadService imageUploadService;
 
-  @PostMapping(UrlConstant.Media.UPLOAD)
+  @PostMapping(value = UrlConstant.Media.UPLOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Upload hình ảnh lên Cloudinary",
       description = "Nhận vào một file ảnh và tải lên hệ thống lưu trữ Cloudinary. Trả về đường dẫn URL an toàn của ảnh để lưu vào cơ sở dữ liệu.")
   public ResponseEntity<String> upload(
       @Parameter(description = "File ảnh cần tải lên", required = true)
-      @RequestParam("file") MultipartFile file) throws IOException {
+      @RequestPart("file") MultipartFile file) throws IOException {
     String url = imageUploadService.uploadImage(file);
     return ResponseEntity.ok(url);
   }

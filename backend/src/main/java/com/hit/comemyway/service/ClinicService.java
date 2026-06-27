@@ -7,7 +7,6 @@ import com.hit.comemyway.repository.ClinicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
