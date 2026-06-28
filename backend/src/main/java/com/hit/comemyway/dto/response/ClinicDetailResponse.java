@@ -13,5 +13,7 @@ public record ClinicDetailResponse(@Schema(description="ID phòng khám",example
 @Schema(description="Số điện thoại liên hệ",example="0383553886")String phone,
 
 
-@Schema(description="Địa chỉ chi tiết",example="83Giải Phóng,P.Đồng Tâm")String address,@Schema(description="Giờ mở cửa",example="08:00:00")LocalTime openTime,@Schema(description="Giờ đóng cửa",example="21:00:00")LocalTime closeTime,@Schema(description="Danh sách dịch vụ cung cấp",example="[\"Tiêm phòng\", \"Phẫu thuật\"]")List<String>services){public static ClinicDetailResponse from(Clinic clinic,boolean isOperating){return new ClinicDetailResponse(clinic.getId(),clinic.getThumbnailUrl(),clinic.getName(),isOperating,clinic.getRating(),clinic.getDescription(),clinic.getPhone(),clinic.getAddress(),clinic.getOpenTime(),clinic.getCloseTime(),clinic.getServices().stream().map(service->service.getName()).toList());}}
+@Schema(description="Địa chỉ chi tiết",example="83Giải Phóng,P.Đồng Tâm")String address,@Schema(description="Giờ mở cửa",example="08:00:00")LocalTime openTime,@Schema(description="Giờ đóng cửa",example="21:00:00")LocalTime closeTime,@Schema(description="Danh sách dịch vụ cung cấp",example="[\"Tiêm phòng\", \"Phẫu thuật\"]")List<String>services,
+
+@Schema(description="Link gg map phòng khám")String mapLink){public static ClinicDetailResponse from(Clinic clinic,boolean isOperating){return new ClinicDetailResponse(clinic.getId(),clinic.getThumbnailUrl(),clinic.getName(),isOperating,clinic.getRating(),clinic.getDescription(),clinic.getPhone(),clinic.getAddress(),clinic.getOpenTime(),clinic.getCloseTime(),clinic.getServices().stream().map(service->service.getName()).toList(),clinic.getMapLink());}}
 

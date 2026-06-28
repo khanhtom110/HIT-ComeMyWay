@@ -59,4 +59,7 @@ public class Clinic extends BaseEntity {
   @BatchSize(size = 20)
   @Builder.Default
   private List<Service> services = new ArrayList<>();
+
+  @Column(name = "map_link", columnDefinition = "TEXT", nullable = false)
+  private String mapLink;
 }
