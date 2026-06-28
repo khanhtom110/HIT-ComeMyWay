@@ -34,4 +34,15 @@
             app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/resultSearch"
+        android:name="com.example.petbeats.ui.home.resultsearch.ResultSearchFragment"
+        android:label="resultSearch">
+        <action
+            android:id="@+id/resultSearch_search"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

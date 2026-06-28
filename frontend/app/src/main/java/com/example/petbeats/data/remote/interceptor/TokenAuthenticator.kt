@@ -1,7 +1,7 @@
 package com.example.petbeats.data.remote.interceptor
 
 import com.example.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
-import com.example.petbeats.data.local.sharepreference.TokenManager
+import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.remote.api.ApiAuth
 import okhttp3.Authenticator
 import okhttp3.Request

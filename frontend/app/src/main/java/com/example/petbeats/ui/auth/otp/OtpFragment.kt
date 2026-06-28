@@ -270,7 +270,7 @@ class OtpFragment : Fragment() {
                         //Nút vector quay lại màn trước
                         is OtpEvent.NavigationVector -> {
                             if (currenScreen == "registersuccess") {
-                                findNavController().navigate(R.id.register)
+                                findNavController().popBackStack()
                             }
                             if (currenScreen == "resetpassword") {
                                 findNavController().navigate(R.id.otp_forgotPassword)

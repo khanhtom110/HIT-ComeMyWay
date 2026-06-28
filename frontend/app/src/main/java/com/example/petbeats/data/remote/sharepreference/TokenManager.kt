@@ -1,4 +1,4 @@
-package com.example.petbeats.data.local.sharepreference
+package com.example.petbeats.data.remote.sharepreference
 
 import android.content.Context
 import android.content.SharedPreferences

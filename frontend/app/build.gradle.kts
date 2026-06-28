@@ -71,7 +71,9 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-
+    //JsonParser
     implementation("com.google.code.gson:gson:2.10.1")
 
+    //Google Play Services Location
+    implementation("com.google.android.gms:play-services-location:21.1.0")
 }

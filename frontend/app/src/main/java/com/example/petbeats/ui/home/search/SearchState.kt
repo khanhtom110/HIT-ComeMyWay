@@ -10,6 +10,10 @@ data class SearchState (
 
     val isButtonAll: Boolean = false,
 
+    //history
+    val listHistory: List<HistoryChild> = emptyList(),
+    //hint
     val listHint: List<HintChild> = emptyList(),
-    val listHistory: List<HistoryChild> = emptyList()
+    //result_search
+    val listSearch: List<HintChild> = emptyList()
 )

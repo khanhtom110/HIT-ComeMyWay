@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context=".ui.home.resultsearch.ResultSearchFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            style="@style/Chu2"
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/tittle_search"
+            android:inputType="text"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:hint="Tìm kiếm phòng khám "
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/_30sdp"
+            android:paddingEnd="@dimen/_40sdp"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:src="@drawable/back"
+            android:layout_marginStart="@dimen/_6sdp"
+            app:layout_constraintTop_toTopOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="@id/search"
+            app:layout_constraintStart_toStartOf="@id/search"/>
+
+        <ImageView
+            android:id="@+id/buttonSearch"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/button_search"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="@id/search"
+            app:layout_constraintEnd_toEndOf="@id/search"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/modes"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginVertical="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                style="@style/Chu2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:text="Danh sách lịch khám trống"
+                android:textColor="@color/colorTextContent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

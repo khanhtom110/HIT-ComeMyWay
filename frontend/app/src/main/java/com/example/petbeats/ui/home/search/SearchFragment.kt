@@ -131,6 +131,30 @@ class SearchFragment : Fragment() {
                         binding.lineHint1.visibility = View.VISIBLE
                         binding.recycleHint.visibility = View.VISIBLE
                     }
+
+                    //Check search room
+                    if (state.search.isEmpty()) {
+                        binding.text.visibility = View.VISIBLE
+                        binding.buttonAll.visibility = View.VISIBLE
+                        binding.line.visibility = View.VISIBLE
+                        binding.recycleHistory.visibility = View.VISIBLE
+                        binding.hint.visibility = View.VISIBLE
+                        binding.lineHint.visibility = View.VISIBLE
+                        binding.lineHint1.visibility = View.VISIBLE
+
+                        adapterHint.submitList(state.listHint)
+                    }
+                    else {
+                        binding.text.visibility = View.GONE
+                        binding.buttonAll.visibility = View.GONE
+                        binding.line.visibility = View.GONE
+                        binding.recycleHistory.visibility = View.GONE
+                        binding.hint.visibility = View.GONE
+                        binding.lineHint.visibility = View.GONE
+                        binding.lineHint1.visibility = View.GONE
+
+                        adapterHint.submitList(state.listSearch)
+                    }
                 }
             }
         }

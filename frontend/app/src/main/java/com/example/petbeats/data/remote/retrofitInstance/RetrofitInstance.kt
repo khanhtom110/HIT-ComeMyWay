@@ -5,7 +5,7 @@ import com.example.petbeats.core.network.ApiConstants
 import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.data.remote.interceptor.AuthInterceptor
 import com.example.petbeats.data.remote.interceptor.TokenAuthenticator
-import com.example.petbeats.data.local.sharepreference.TokenManager
+import com.example.petbeats.data.remote.sharepreference.TokenManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
