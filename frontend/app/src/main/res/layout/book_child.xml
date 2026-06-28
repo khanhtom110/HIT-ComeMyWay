@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/colorBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/image_click"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_164sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:background="@drawable/ground_book_child">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/image_test"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe1"
+            android:id="@+id/nameRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phòng khám thú y Hà Nội Funpet"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintTop_toTopOf="parent"/>
+        
+        <ImageView
+            android:id="@+id/image_status"
+            android:layout_width="@dimen/_8sdp"
+            android:layout_height="@dimen/_8sdp"
+            android:src="@drawable/status"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/nameRoom"
+            app:layout_constraintStart_toEndOf="@id/image"/>
+
+        <TextView
+            style="@style/Status"
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đang hoạt động"
+            android:textColor="@color/colorTextContent"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toBottomOf="@id/nameRoom"
+            app:layout_constraintStart_toEndOf="@id/image_status"/>
+
+        <ImageView
+            android:id="@+id/image_rating"
+            android:layout_width="@dimen/_8sdp"
+            android:layout_height="@dimen/_8sdp"
+            android:src="@drawable/rating"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/action"
+            app:layout_constraintStart_toEndOf="@id/image"/>
+
+        <TextView
+            style="@style/Status"
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đánh giá: 4.8/5"
+            android:textColor="@color/colorTextContent"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toBottomOf="@id/action"
+            app:layout_constraintStart_toEndOf="@id/image_rating"/>
+
+        <ImageView
+            android:id="@+id/image_locate"
+            android:layout_width="@dimen/_9sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:src="@drawable/locate"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/Chu3"
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="83 Giải Phóng, P. Đồng Tâm"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintStart_toEndOf="@id/image_locate"/>
+
+        <ImageView
+            android:id="@+id/image_time"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:src="@drawable/time"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@id/image_locate"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/Chu3"
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thứ 5, 25/06/06 - 9:00 AM"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            app:layout_constraintTop_toBottomOf="@id/address"
+            app:layout_constraintStart_toEndOf="@id/image_time"/>
+
+        <TextView
+            android:id="@+id/status_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_28sdp"
+            android:background="@drawable/button_input"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/time"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/test"
+            android:layout_width="@dimen/_82sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:src="@drawable/secondary_input_book"
+            app:layout_constraintTop_toTopOf="@id/status_button"
+            android:layout_marginStart="@dimen/_14sdp"
+            app:layout_constraintBottom_toBottomOf="@id/status_button"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe2"
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chờ xử lý"
+            android:textColor="@color/colorWarning"
+            app:layout_constraintTop_toTopOf="@id/status_button"
+            app:layout_constraintBottom_toBottomOf="@id/status_button"
+            app:layout_constraintStart_toEndOf="@id/test"
+            app:layout_constraintEnd_toEndOf="@id/status_button"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

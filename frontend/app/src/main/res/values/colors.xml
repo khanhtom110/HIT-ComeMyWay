@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--basic-->
-    <color name="black">#77000000</color>
+    <color name="black">#181818</color>
     <color name="white">#FFFFFF</color>
 
     <!--primary-->
-    <color name="colorPrimary">#FF8817</color>
+    <color name="colorPrimary">#486BF3</color>
+    <color name="colorsecondary">#0F31BD</color>
 
     <!--state-->
     <color name="colorSuccess">#00FF0B</color>
-    <color name="colorError">#F24B4C</color>
+    <color name="colorError">#CC0900</color>
+    <color name="colorWarning">#F7C120</color>
 
     <!--text-->
-    <color name="colorTextTitle">#33322F</color>
-    <color name="colorTextSub">#A633322F</color>
+    <color name="colorTextTitle">#4C4C4C</color>
+    <color name="colorTextSub">#181818</color>
+    <color name="colorTextContent">#9191A1</color>
+    <color name="colorTextHint">#A7A7B4</color>
+    <color name="colorTextButtonHome">#6F8CF4</color>
 
     <!--background-->
-    <color name="colorBackground">#FAF8F4</color>
+    <color name="colorBackground">#FAFCFF</color>
+
+    <!--logo-->
+    <color name="colorLogo">#D9D9D9</color>
+
+    <!--otp-->
+    <color name="colorOtp">#A7A7B4</color>
+
+    <!--modes-->
+    <color name="colorModes">#E8ECFC</color>
 
 </resources>
