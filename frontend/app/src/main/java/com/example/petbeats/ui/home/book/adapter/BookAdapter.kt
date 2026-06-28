@@ -26,7 +26,6 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
         val nameRoom: TextView = itemView.findViewById(R.id.nameRoom)
         val image: ImageView = itemView.findViewById(R.id.image)
         val action: TextView = itemView.findViewById(R.id.action)
-        val distance: TextView = itemView.findViewById(R.id.distance)
         val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
         val time: TextView = itemView.findViewById(R.id.time)
@@ -35,7 +34,6 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
         fun bind(item: BookChild) {
             nameRoom.text = item.roomName
             action.text = item.action
-            distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
             time.text = item.time

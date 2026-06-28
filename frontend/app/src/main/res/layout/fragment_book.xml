@@ -50,6 +50,7 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_8sdp"
+            android:textSize="@dimen/_12ssp"
             android:background="@drawable/tittle_search"
             android:gravity="center_vertical"
             android:hint="Tìm kiếm phòng khám theo tên, địa chỉ"

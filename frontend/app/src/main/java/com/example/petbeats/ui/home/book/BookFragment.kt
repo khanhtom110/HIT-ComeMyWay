@@ -19,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petbeats.R
+import com.example.petbeats.core.base.PermissionHelper
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.ui.home.book.adapter.BookAdapter
 import kotlinx.coroutines.launch
@@ -87,15 +88,8 @@ class BookFragment : Fragment() {
     }
 
     private fun checkLocationPermissionAndStartSearch() {
-        val isFineGranted = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
 
-        val isCoarseGranted = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (isFineGranted || isCoarseGranted) {
+        if (PermissionHelper.hasLocationPermission(requireContext())) {
             getUserLocationAndSearch()
         }
         else {

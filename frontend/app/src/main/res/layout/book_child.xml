@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phòng khám thú y Hà Nội Funpet"
+            android:textSize="@dimen/_14ssp"
             android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:textColor="@color/colorTextSub"
@@ -151,17 +152,6 @@
             app:layout_constraintBottom_toBottomOf="@id/status_button"
             app:layout_constraintStart_toEndOf="@id/test"
             app:layout_constraintEnd_toEndOf="@id/status_button"/>
-
-        <TextView
-            style="@style/Chu3"
-            android:id="@+id/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.2 km"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:textColor="@color/colorTextSub"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nameRoom"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

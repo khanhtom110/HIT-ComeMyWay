@@ -5,7 +5,6 @@ data class BookChild (
     val roomName: String,
     val image: Int,
     val action: String, //hoạt động
-    val distance: Double, //khoảng cách
     val rating: Float,
     val address: String,
     val time: String,
