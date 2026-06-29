@@ -15,11 +15,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +36,9 @@ public class ClinicController {
       description = "Tìm kiếm theo từ khóa hoặc vị trí địa lý với bán kính cho trước")
   @GetMapping(UrlConstant.Public.CLINIC_SEARCH)
   public ResponseEntity<ApiResponse<List<ClinicSearchResponse>>> searchClinics(
-      @Valid SearchClinicsRequest request) {
-    List<ClinicSearchResponse> response = clinicService.findClinics(request.keyword(),
-        request.latitude(), request.longitude(), request.radius(), request.limit());
+      @Valid @ParameterObject SearchClinicsRequest request) {
+    List<ClinicSearchResponse> response = clinicService.findClinics(request.getKeyword(),
+        request.getLatitude(), request.getLongitude(), request.getRadius(), request.getLimit());
 
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
@@ -50,9 +47,9 @@ public class ClinicController {
       description = "Trả về danh sách gợi ý khi người dùng nhập các ký tự")
   @GetMapping(UrlConstant.Public.CLINIC_SUGGESTION)
   public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getSuggestions(
-      @Valid SuggestClinicsRequest request) {
+      @Valid @ParameterObject SuggestClinicsRequest request) {
     List<ClinicSuggestionResponse> response =
-        clinicService.getSuggestions(request.keyword(), request.limit());
+        clinicService.getSuggestions(request.getKeyword(), request.getLimit());
 
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
@@ -70,9 +67,9 @@ public class ClinicController {
       description = "Trả về danh sách gợi ý khi người dùng nhấn vào ô tìm kiếm")
   @GetMapping(UrlConstant.Public.GET_SUGGESTION)
   public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getClinicSuggestion(
-      @Valid DefaultSuggestClinicsRequest request) {
+      @Valid @ParameterObject DefaultSuggestClinicsRequest request) {
     List<ClinicSuggestionResponse> response = clinicService.getClinicSuggestions(true,
-        request.latitude(), request.longitude(), 10.0, request.limit());
+        request.getLatitude(), request.getLongitude(), 10.0, request.getLimit());
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }
