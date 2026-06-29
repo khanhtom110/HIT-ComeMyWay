@@ -8,6 +8,7 @@ public class UrlConstant {
     public static final String CLINIC_SUGGESTION = PREFIX + "/clinics/suggestions";
     public static final String CLINIC_DETAIL = PREFIX + "/clinics/{clinicId}";
     public static final String GET_SUGGESTION = PREFIX + "/suggestions/location";
+    public static final String HEALTH_CHECK = PREFIX + "/health";
 
     private Public() {}
   }
