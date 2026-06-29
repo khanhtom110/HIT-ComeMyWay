@@ -1,5 +1,6 @@
 package com.hit.comemyway.controller;
 
+import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ApiPath;
 import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.service.ImageUploadService;
@@ -24,11 +25,11 @@ public class ImageController {
   @PostMapping(value = UrlConstant.Media.UPLOAD, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(summary = "Upload hình ảnh lên Cloudinary",
       description = "Nhận vào một file ảnh và tải lên hệ thống lưu trữ Cloudinary. Trả về đường dẫn URL an toàn của ảnh để lưu vào cơ sở dữ liệu.")
-  public ResponseEntity<String> upload(
+  public ResponseEntity<ApiResponse<String>> upload(
       @Parameter(description = "File ảnh cần tải lên", required = true)
       @RequestPart("file") MultipartFile file) throws IOException {
     String url = imageUploadService.uploadImage(file);
-    return ResponseEntity.ok(url);
+    return ResponseEntity.ok(ApiResponse.ok(url));
   }
 }
 
