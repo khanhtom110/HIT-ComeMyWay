@@ -1,5 +1,6 @@
 package com.hit.comemyway.entity;
 
+import com.hit.comemyway.constant.CommonConstant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -24,16 +25,16 @@ public class Clinic extends BaseEntity {
   @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
   private User user;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false, length = CommonConstant.Clinic.NAME_LENGTH)
   private String name;
 
-  @Column(name = "thumbnail_url", length = 500)
+  @Column(name = "thumbnail_url", length = CommonConstant.Clinic.THUMBNAIL_LENGTH)
   private String thumbnailUrl;
 
-  @Column(length = 15)
+  @Column(length = CommonConstant.PHONE_LENGTH)
   private String phone;
 
-  @Column(nullable = false, length = 250)
+  @Column(nullable = false, length = CommonConstant.ADDRESS_LENGTH)
   private String address;
 
   @Builder.Default

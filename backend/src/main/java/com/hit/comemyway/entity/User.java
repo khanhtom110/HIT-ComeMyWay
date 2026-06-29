@@ -1,5 +1,6 @@
 package com.hit.comemyway.entity;
 
+import com.hit.comemyway.constant.CommonConstant;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,19 +16,20 @@ public class User extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, updatable = false, length = 120, unique = true)
+  @Column(nullable = false, updatable = false, length = CommonConstant.USERNAME_LENGTH,
+      unique = true)
   private String username;
 
-  @Column(nullable = false, length = 120)
+  @Column(nullable = false, length = CommonConstant.PASSWORD_LENGTH)
   private String password;
 
-  @Column(length = 255)
+  @Column(length = CommonConstant.FULLNAME_LENGTH)
   private String fullName;
 
-  @Column(length = 15)
+  @Column(length = CommonConstant.PHONE_LENGTH)
   private String phone;
 
-  @Column(nullable = false, unique = true, length = 100)
+  @Column(nullable = false, unique = true, length = CommonConstant.EMAIL_LENGTH)
   private String email;
 
   @Enumerated(EnumType.STRING)

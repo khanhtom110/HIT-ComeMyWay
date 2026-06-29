@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ApiResponse<?>> handleConstraintViolation(ConstraintViolationException e) {
-    return ResponseEntity.badRequest()
-        .body(ApiResponse.error(400, "Invalid parameter: " + e.getMessage()));
+    return ResponseEntity.unprocessableContent()
+        .body(ApiResponse.error(422, "Invalid parameter: " + e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)
