@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 public record LoginRequest(
 // @formatter:off
         @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
-        @Schema(description = "Tên đăng nhập", example = "customer")
+        @Schema(description = "Tên đăng nhập hoặc Email", example = "customer hoặc customer@gmail.com")
         String username,
 
         @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
