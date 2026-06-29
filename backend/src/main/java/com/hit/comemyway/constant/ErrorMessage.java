@@ -76,4 +76,11 @@ public final class ErrorMessage {
     public static final String NOT_ADMIN =
         "You do not have administrator privileges to perform this action.";
   }
+
+  // Clinic Errors
+  public static final class Clinic {
+    private Clinic() {}
+
+    public static final String CLINIC_NOT_EXISTED = "Clinic does not exist";
+  }
 }
