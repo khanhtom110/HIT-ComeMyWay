@@ -9,6 +9,7 @@ import com.hit.comemyway.dto.request.SuggestClinicsRequest;
 import com.hit.comemyway.dto.response.ClinicDetailResponse;
 import com.hit.comemyway.dto.response.ClinicSearchResponse;
 import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
+import com.hit.comemyway.dto.response.DefaultSuggestClinicResponse;
 import com.hit.comemyway.service.ClinicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -66,9 +67,9 @@ public class ClinicController {
   @Operation(summary = "Gợi ý phòng khám",
       description = "Trả về danh sách gợi ý khi người dùng nhấn vào ô tìm kiếm")
   @GetMapping(UrlConstant.Public.GET_SUGGESTION)
-  public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getClinicSuggestion(
+  public ResponseEntity<ApiResponse<List<DefaultSuggestClinicResponse>>> getClinicSuggestion(
       @Valid @ParameterObject DefaultSuggestClinicsRequest request) {
-    List<ClinicSuggestionResponse> response = clinicService.getClinicSuggestions(true,
+    List<DefaultSuggestClinicResponse> response = clinicService.getClinicSuggestions(true,
         request.getLatitude(), request.getLongitude(), 10.0, request.getLimit());
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

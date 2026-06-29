@@ -4,6 +4,7 @@ import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.response.ClinicDetailResponse;
 import com.hit.comemyway.dto.response.ClinicSearchResponse;
 import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
+import com.hit.comemyway.dto.response.DefaultSuggestClinicResponse;
 import com.hit.comemyway.entity.Clinic;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.ClinicRepository;
@@ -137,8 +138,8 @@ public class ClinicService {
   }
 
   @Transactional(readOnly = true)
-  public List<ClinicSuggestionResponse> getClinicSuggestions(Boolean status, Double userLatitude,
-      Double userLongitude, Double radius, int limit) {
+  public List<DefaultSuggestClinicResponse> getClinicSuggestions(Boolean status,
+      Double userLatitude, Double userLongitude, Double radius, Integer limit) {
     List<Clinic> clinics;
 
     if (userLatitude != null && userLongitude != null) {
@@ -152,7 +153,7 @@ public class ClinicService {
   }
 
   private List<Clinic> fetchClinicsForSuggestionWithLocation(Boolean status, Double userLatitude,
-      Double userLongitude, Double radius, int limit) {
+      Double userLongitude, Double radius, Integer limit) {
     double deltaLatitude = radius / ONE_LATITUDE;
     double deltaLongitude = radius / (ONE_LATITUDE * Math.cos(Math.toRadians(userLatitude)));
 
@@ -178,32 +179,31 @@ public class ClinicService {
     return clinics;
   }
 
-  private List<ClinicSuggestionResponse> mapToSuggestionResponses(List<Clinic> clinics,
+  private List<DefaultSuggestClinicResponse> mapToSuggestionResponses(List<Clinic> clinics,
       Double userLatitude, Double userLongitude) {
-    List<ClinicSuggestionResponse> responses = new ArrayList<>();
+    List<DefaultSuggestClinicResponse> responses = new ArrayList<>();
 
     if (userLatitude != null && userLongitude != null && !clinics.isEmpty()) {
       List<Double> distances =
           searchClinicsService.calculateDistance(userLatitude, userLongitude, clinics);
 
-      List<Pair<Clinic, Double>> tempPairs = new ArrayList<>();
       for (int i = 0; i < clinics.size(); i++) {
+        Clinic clinic = clinics.get(i);
+
         Double distance = (i < distances.size()) ? distances.get(i) : null;
-        tempPairs.add(Pair.of(clinics.get(i), distance));
+
+        responses.add(new DefaultSuggestClinicResponse(clinic.getId(), clinic.getName(),
+            clinic.getAddress(), clinic.getThumbnailUrl(), distance, null));
       }
 
-      tempPairs.sort(
-          Comparator.comparing(Pair::getSecond, Comparator.nullsLast(Comparator.naturalOrder())));
-
-      for (Pair<Clinic, Double> pair : tempPairs) {
-        Clinic c = pair.getFirst();
-        responses.add(new ClinicSuggestionResponse(c.getId(), c.getName(), c.getAddress(),
-            c.getThumbnailUrl()));
+      if (userLatitude != null && userLongitude != null) {
+        responses.sort(Comparator.comparing(DefaultSuggestClinicResponse::distance,
+            Comparator.nullsLast(Comparator.naturalOrder())));
       }
     } else {
       for (Clinic clinic : clinics) {
-        responses.add(new ClinicSuggestionResponse(clinic.getId(), clinic.getName(),
-            clinic.getAddress(), clinic.getThumbnailUrl()));
+        responses.add(new DefaultSuggestClinicResponse(clinic.getId(), clinic.getName(),
+            clinic.getAddress(), clinic.getThumbnailUrl(), null, clinic.getRating()));
       }
     }
     return responses;

@@ -14,28 +14,13 @@ import java.util.Optional;
 @Repository
 public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 
-  @Query("""
-      SELECT DISTINCT c
-      FROM            Clinic c
-      LEFT JOIN FETCH c.services s
-      WHERE c.status = true
-          AND (:keyword IS NULL
-              OR :keyword = ''
-              OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-              OR LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
-              OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
-          AND c.latitude BETWEEN :minLatitude AND :maxLatitude
-          AND c.longitude BETWEEN :minLongitude AND :maxLongitude
-      """)
-  List<Clinic> findClinicsWithLocation(
-  // @formatter:off
-          @Param("keyword") String keyword,
-          @Param("minLatitude") Double minLatitude,
-          @Param("maxLatitude") Double maxLatitude,
-          @Param("minLongitude") Double minLongitude,
-          @Param("maxLongitude") Double maxLongitude
-          // @formatter:on
-  );
+  @Query("SELECT DISTINCT c FROM Clinic c LEFT JOIN FETCH c.services s " + "WHERE c.status = true "
+      + "AND (:keyword IS NULL OR :keyword = '' OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
+      + "AND c.latitude BETWEEN :minLatitude AND :maxLatitude "
+      + "AND c.longitude BETWEEN :minLongitude AND :maxLongitude")
+  List<Clinic> findClinicsWithLocation(@Param("keyword") String keyword,
+      @Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude,
+      @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude);
 
   @Query("""
       SELECT c
@@ -69,15 +54,21 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
   Optional<Clinic> findById(Long id);
 
   @Query("""
-       SELECT c
-       FROM   Clinic c
-       WHERE  c.status = :status
-         AND  c.latitude BETWEEN :minLatitude AND :maxLatitude
-         AND  c.longitude BETWEEN :minLongitude AND :maxLongitude
+      SELECT c
+      FROM   Clinic c
+      WHERE  c.status = :status
+        AND  c.latitude BETWEEN :minLatitude AND :maxLatitude
+        AND  c.longitude BETWEEN :minLongitude AND :maxLongitude
       """)
-  List<Clinic> findClinicsByStatusWithLocation(@Param("status") Boolean status,
-      @Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude,
-      @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude);
+  List<Clinic> findClinicsByStatusWithLocation(
+  // @formatter:off
+      @Param("status") Boolean status,
+      @Param("minLatitude") Double minLatitude,
+      @Param("maxLatitude") Double maxLatitude,
+      @Param("minLongitude") Double minLongitude,
+      @Param("maxLongitude") Double maxLongitude
+      // @formatter:on
+  );
 
   List<Clinic> findByStatusOrderByRatingDesc(Boolean status, Pageable pageable);
 }
