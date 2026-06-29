@@ -80,8 +80,17 @@ public class ClinicController {
   @Operation(summary = "Gợi ý phòng khám",
       description = "Trả về danh sách gợi ý khi người dùng nhấn vào ô tìm kiếm")
   @GetMapping(UrlConstant.Public.GET_SUGGESTION)
-  public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getClinicSuggestion() {
-    List<ClinicSuggestionResponse> response = clinicService.getClinicByStatus(true);
+  public ResponseEntity<ApiResponse<List<ClinicSuggestionResponse>>> getClinicSuggestion(
+      @Parameter(description = "Vĩ độ của người dùng") @RequestParam(required = false)
+      @DecimalMin("-90.0") @DecimalMax("90.0") Double latitude,
+
+      @Parameter(description = "Kinh độ của người dùng") @RequestParam(required = false)
+      @DecimalMin("-180.0") @DecimalMax("180.0") Double longitude,
+
+      @Parameter(description = "Số lượng phòng khám tối đa trên một trang gợi ý")
+      @RequestParam(defaultValue = "5") @Min(1) @Max(8) int limit) {
+    List<ClinicSuggestionResponse> response =
+        clinicService.getClinicSuggestions(true, latitude, longitude, 10.0, limit);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

@@ -39,5 +39,16 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 
   Optional<Clinic> findById(Long id);
 
-  List<ClinicSuggestionResponse> findByStatus(Boolean status);
+  @Query("""
+       SELECT c
+       FROM   Clinic c
+       WHERE  c.status = :status
+         AND  c.latitude BETWEEN :minLatitude AND :maxLatitude
+         AND  c.longitude BETWEEN :minLongitude AND :maxLongitude
+      """)
+  List<Clinic> findClinicsByStatusWithLocation(@Param("status") Boolean status,
+      @Param("minLatitude") double minLatitude, @Param("maxLatitude") double maxLatitude,
+      @Param("minLongitude") double minLongitude, @Param("maxLongitude") double maxLongitude);
+
+  List<Clinic> findByStatusOrderByRatingDesc(Boolean status, Pageable pageable);
 }
