@@ -39,7 +39,7 @@ public class AuthService {
 
   public LoginResponse login(LoginRequest request) {
 
-    User user = userRepository.findByUsername(request.username())
+    User user = userRepository.findByUsernameOrEmail(request.username(), request.username())
         .orElseThrow(() -> new AppException(401, ErrorMessage.Auth.INVALID_CREDENTIALS));
 
     boolean isPasswordMatch = passwordEncoder.matches(request.password(), user.getPassword());

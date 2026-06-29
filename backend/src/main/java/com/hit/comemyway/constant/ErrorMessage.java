@@ -34,7 +34,7 @@ public final class ErrorMessage {
   public static final class Auth {
     private Auth() {}
 
-    public static final String INVALID_CREDENTIALS = "Invalid username or password.";
+    public static final String INVALID_CREDENTIALS = "Invalid username, email, or password.";
     public static final String INVALID_REFRESH_TOKEN =
         "The refresh token is invalid or has expired.";
     public static final String EXPIRED_REFRESH_TOKEN =
