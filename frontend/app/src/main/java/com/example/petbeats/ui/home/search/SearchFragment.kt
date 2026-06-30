@@ -19,6 +19,7 @@ import androidx.room.Room
 import com.example.petbeats.R
 import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
@@ -26,6 +27,7 @@ import com.example.petbeats.databinding.FragmentSearchBinding
 import com.example.petbeats.ui.home.search.adapterhint.AdapterHint
 import com.example.petbeats.ui.home.search.adapterhistory.AdapterHistory
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.launch
 
@@ -57,8 +59,7 @@ class SearchFragment : Fragment() {
                 val userLat = location.latitude
                 val userLng = location.longitude
 
-                Toast.makeText(requireContext(), "Tọa độ: $userLat, $userLng", Toast.LENGTH_SHORT).show()
-
+                viewModel.onHintList(userLat, userLng)
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
             }
@@ -79,9 +80,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getUserLocationAndSearch()
 
-        setOnClick()
 
         adapterHint = AdapterHint()
         adapterHistory = AdapterHistory()
@@ -92,7 +93,7 @@ class SearchFragment : Fragment() {
         binding.recycleHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleHistory.adapter = adapterHistory
 
-
+        setOnClick()
         stateData()
         eventData()
     }

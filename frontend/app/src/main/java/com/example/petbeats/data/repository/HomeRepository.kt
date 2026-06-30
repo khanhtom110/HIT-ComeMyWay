@@ -1,5 +1,6 @@
 package com.example.petbeats.data.repository
 
+import android.util.Log
 import com.example.petbeats.core.base.BaseRepository
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.api.ApiHome
@@ -17,25 +18,36 @@ class HomeRepository(
 ): BaseRepository() {
     suspend fun location(request: LocationRequest): DataResult<List<LocationResponse>> {
         return safeApiCall {
-            apiHome.location(request)
+            apiHome.location(
+                latitude = request.latitude,
+                longitude = request.longitude
+            )
         }
     }
 
     suspend fun clinicid(request: ClinicIdRequest): DataResult<List<ClinicIdResponse>> {
         return safeApiCall {
-            apiHome.clinicid(request)
+            apiHome.clinicid(
+                id = request.id
+            )
         }
     }
 
     suspend fun suggest(request: SuggestRequest): DataResult<List<SuggestResponse>> {
         return safeApiCall {
-            apiHome.suggest(request)
+            apiHome.suggest(
+                keyword = request.keyword
+            )
         }
     }
 
     suspend fun search(request: SearchRequest): DataResult<List<SearchResponse>> {
         return safeApiCall {
-            apiHome.search(request)
+            apiHome.search(
+                keyword = request.keyword,
+                latitude = request.latitude,
+                longitude = request.longitude
+            )
         }
     }
 }

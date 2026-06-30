@@ -1,8 +1,8 @@
 package com.example.petbeats.ui.home.search.adapterhint
 
 data class HintChild (
-    val id: String,
+    val id: Int,
     val roomName: String,
-    val image: Int,
+    val image: String,
     val address: String
 )
