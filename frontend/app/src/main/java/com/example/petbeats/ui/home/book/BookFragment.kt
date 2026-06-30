@@ -18,8 +18,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.petbeats.R
 import com.example.petbeats.core.base.PermissionHelper
+import com.example.petbeats.data.local.database.AppDatabase
+import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.ui.home.book.adapter.BookAdapter
 import kotlinx.coroutines.launch
@@ -31,7 +36,13 @@ class BookFragment : Fragment() {
     private var _binding: FragmentBookBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapter: BookAdapter
-    private val viewModel: BookViewModel by viewModels()
+    private val viewModel: BookViewModel by viewModels {
+        BookViewModelFactory(
+            HomeRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            )
+        )
+    }
 
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient

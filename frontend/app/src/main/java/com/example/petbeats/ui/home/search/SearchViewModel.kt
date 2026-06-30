@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.petbeats.R
 import com.example.petbeats.data.local.dao.HistoryDao
 import com.example.petbeats.data.local.entity.HistoryEntity
+import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.book.adapter.BookChild
 import com.example.petbeats.ui.home.search.adapterhint.HintChild
 import com.example.petbeats.ui.home.search.adapterhistory.HistoryChild
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
+    private val repository: HomeRepository,
     private val historyDao: HistoryDao
 ): ViewModel() {
     private var _state = MutableStateFlow(SearchState())
@@ -76,4 +78,5 @@ class SearchViewModel(
             _state.value = _state.value.copy(isSearch = isSearch)
         }
     }
+
 }

@@ -1,11 +1,13 @@
 package com.example.petbeats.ui.home.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,10 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.petbeats.R
 import com.example.petbeats.data.local.database.AppDatabase
+import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.databinding.FragmentSearchBinding
 import com.example.petbeats.ui.home.search.adapterhint.AdapterHint
 import com.example.petbeats.ui.home.search.adapterhistory.AdapterHistory
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.launch
 
@@ -30,12 +36,35 @@ class SearchFragment : Fragment() {
     private lateinit var adapterHint: AdapterHint
     private val viewModel: SearchViewModel by viewModels {
         SearchViewModelFactory(
+            HomeRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            ),
+
             Room.databaseBuilder(
                 requireContext(),
                 AppDatabase::class.java,
                 "app_db"
             ).build().historyDao()
         )
+    }
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    @SuppressLint("MissingPermission")
+    private fun getUserLocationAndSearch() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val userLat = location.latitude
+                val userLng = location.longitude
+
+                Toast.makeText(requireContext(), "Tọa độ: $userLat, $userLng", Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateView(
@@ -49,6 +78,8 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        getUserLocationAndSearch()
 
         setOnClick()
 
