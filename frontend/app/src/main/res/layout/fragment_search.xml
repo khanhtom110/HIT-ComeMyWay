@@ -109,11 +109,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/_4sdp"
                 app:layout_constrainedHeight="true"
                 app:layout_constraintHeight_max="@dimen/_200sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
+                app:layout_constraintTop_toBottomOf="@id/line" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrierHistory"

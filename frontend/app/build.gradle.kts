@@ -76,4 +76,7 @@ dependencies {
 
     //Google Play Services Location
     implementation("com.google.android.gms:play-services-location:21.1.0")
+
+    //thư viện lấy ảnh mạng
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

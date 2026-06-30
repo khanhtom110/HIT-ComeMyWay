@@ -110,6 +110,7 @@ class SearchFragment : Fragment() {
 
         binding.search.addTextChangedListener {
             viewModel.onSearchChange(it.toString())
+            viewModel.onHintSearch()
         }
 
         binding.buttonAll.setOnClickListener {
@@ -173,6 +174,7 @@ class SearchFragment : Fragment() {
                         binding.hint.visibility = View.VISIBLE
                         binding.lineHint.visibility = View.VISIBLE
                         binding.lineHint1.visibility = View.VISIBLE
+                        binding.tvEmptyHistory.visibility = View.VISIBLE
 
                         adapterHint.submitList(state.listHint)
                     }
@@ -184,6 +186,7 @@ class SearchFragment : Fragment() {
                         binding.hint.visibility = View.GONE
                         binding.lineHint.visibility = View.GONE
                         binding.lineHint1.visibility = View.GONE
+                        binding.tvEmptyHistory.visibility = View.GONE
 
                         adapterHint.submitList(state.listSearch)
                     }

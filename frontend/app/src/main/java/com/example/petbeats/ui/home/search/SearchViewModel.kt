@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.local.dao.HistoryDao
 import com.example.petbeats.data.local.entity.HistoryEntity
+import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.search.adapterhint.HintChild
 import com.example.petbeats.ui.home.search.adapterhistory.HistoryChild
@@ -102,6 +104,35 @@ class SearchViewModel(
                 }
                 is DataResult.Error -> {
                     _state.value = _state.value.copy(listHint = emptyList())
+                }
+            }
+        }
+    }
+
+    fun onHintSearch() {
+        viewModelScope.launch {
+            val search = _state.value.search
+
+            val request = SuggestRequest(search)
+            val result = repository.suggest(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val apiDataList = result.data ?: emptyList()
+
+                    val showList = apiDataList.map { list ->
+                        HintChild(
+                            id = list.id,
+                            roomName = list.name,
+                            image = list.thumbnailUrl,
+                            address = list.address
+                        )
+                    }
+
+                    _state.value = _state.value.copy(listSearch = showList)
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(listSearch = emptyList())
                 }
             }
         }
