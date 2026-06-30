@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.petbeats.R
 import com.example.petbeats.ui.home.book.adapter.BookAdapter.ViewHolder
 import com.example.petbeats.ui.home.book.adapter.BookChild
@@ -32,35 +33,28 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
         val distance: TextView = itemView.findViewById(R.id.distance)
         val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
-        val time: TextView = itemView.findViewById(R.id.time)
-        val status: TextView = itemView.findViewById(R.id.status)
+        val closeTime: TextView = itemView.findViewById(R.id.closeTime)
+        val opentTime: TextView = itemView.findViewById(R.id.opentTime)
 
         fun bind(item: ResultSearchChild) {
             nameRoom.text = item.roomName
-            action.text = item.action
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
-            time.text = item.time
+            closeTime.text = "${item.closeTime} - "
+            opentTime.text = item.openTime
 
-
-            image.setImageResource(R.drawable.image_test)
-
-
-            when(item.status) {
-                ResultSearchChildState.PENDING -> {
-                    status.text = "Chờ xử lý"
-                    status.setTextColor(Color.parseColor("#F7C120"))
-                }
-                ResultSearchChildState.SUCCESS -> {
-                    status.text = "Đặt lịch thành công"
-                    status.setTextColor(Color.parseColor("#00FF0B"))
-                }
-                ResultSearchChildState.REFUSE -> {
-                    status.text = "Từ chối"
-                    status.setTextColor(Color.parseColor("#CC0900"))
-                }
+            if (item.isOperating) {
+                action.text = "Đang hoạt động"
             }
+            else {
+                action.text = "Không hoạt động"
+            }
+
+            Glide.with(itemView.context)
+                .load(item.image)
+                .circleCrop()
+                .into(image)
         }
     }
 }

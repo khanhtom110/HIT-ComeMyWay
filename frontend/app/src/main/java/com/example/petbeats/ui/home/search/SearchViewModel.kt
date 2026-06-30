@@ -53,6 +53,8 @@ class SearchViewModel(
                 historyDao.insertHistory(newHistory)
 
                 _state.value = _state.value.copy(search = "")
+
+                _event.emit(SearchEvent.NavigationResultSearch(search))
             }
         }
     }

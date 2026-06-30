@@ -203,6 +203,14 @@ class SearchFragment : Fragment() {
                         is SearchEvent.NavigationBook -> {
                             findNavController().navigate(R.id.search_book)
                         }
+                        is SearchEvent.NavigationResultSearch -> {
+                            findNavController().navigate(
+                                R.id.search_resultSearch,
+                                Bundle().apply {
+                                    putString("search", event.search)
+                                }
+                            )
+                        }
                     }
                 }
             }

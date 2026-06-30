@@ -33,10 +33,16 @@
             app:destination="@+id/bookFragment"
             app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/search_resultSearch"
+            app:destination="@id/resultSearchFragment"
+            app:popUpTo="@id/resultSearchFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
-        android:id="@+id/resultSearch"
+        android:id="@+id/resultSearchFragment"
         android:name="com.example.petbeats.ui.home.resultsearch.ResultSearchFragment"
         android:label="resultSearch">
         <action
