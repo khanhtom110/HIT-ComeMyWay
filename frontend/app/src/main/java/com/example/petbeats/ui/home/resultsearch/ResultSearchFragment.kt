@@ -14,20 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.example.petbeats.R
-import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.databinding.FragmentResultSearchBinding
-import com.example.petbeats.databinding.ResultSearchChildBinding
-import com.example.petbeats.ui.home.book.BookEvent
-import com.example.petbeats.ui.home.book.BookViewModel
-import com.example.petbeats.ui.home.book.adapter.BookAdapter
 import com.example.petbeats.ui.home.resultsearch.adapter.ResultSearchAdapter
-import com.example.petbeats.ui.home.search.SearchViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
@@ -53,12 +45,20 @@ class ResultSearchFragment : Fragment() {
                 val userLat = location.latitude
                 val userLng = location.longitude
 
-                viewModel.onResultSearchList(userLat, userLng)
+                viewModel.onLatiLong(userLat, userLng)
+
+                //Check search của màn trước
+                viewModel.onResultSearchList()
+
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
+
+                viewModel.onResultSearchList()
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
+
+            viewModel.onResultSearchList()
         }
     }
 
@@ -74,16 +74,14 @@ class ResultSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         val search = arguments?.getString("search") ?: ""
         viewModel.onChangeSearch(search)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getUserLocationAndSearch()
 
-
-
-        adapter = ResultSearchAdapter()
+        clickList()
 
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapter
@@ -99,10 +97,31 @@ class ResultSearchFragment : Fragment() {
         _binding = null
     }
 
+    private fun clickList() {
+        adapter = ResultSearchAdapter { click ->
+            viewModel.itemClick(click)
+        }
+    }
+
     private fun setOnClick() {
         binding.back.setOnClickListener {
             viewModel.backClick()
         }
+
+        binding.search.addTextChangedListener { text ->
+            viewModel.onChangeSearch(text.toString())
+        }
+
+        //Tự động check true khi click, flase thì thoát
+        binding.search.setOnFocusChangeListener { _, search ->
+            viewModel.onCheck(search)
+        }
+
+        //Xử lý khi bấm kính lúp
+        binding.buttonSearch.setOnClickListener {
+            viewModel.onResultSearchList()
+        }
+
     }
 
     private fun stateData() {
@@ -113,6 +132,14 @@ class ResultSearchFragment : Fragment() {
 
                     if (binding.search.text.toString() != state.search) {
                         binding.search.setText(state.search)
+                    }
+
+
+                    if (state.isSearch) {
+                        binding.search.setBackgroundResource(R.drawable.tittle_search_blue)
+                    }
+                    else {
+                        binding.search.setBackgroundResource(R.drawable.tittle_search)
                     }
                 }
             }
@@ -126,6 +153,15 @@ class ResultSearchFragment : Fragment() {
                     when (event) {
                         is ResultSearchEvent.NavigationSearch -> {
                             findNavController().navigate(R.id.resultSearch_search)
+                        }
+
+                        is ResultSearchEvent.NavigationInformation -> {
+                            findNavController().navigate(
+                                R.id.informationRoomFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }

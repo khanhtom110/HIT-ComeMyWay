@@ -25,10 +25,10 @@ class HomeRepository(
         }
     }
 
-    suspend fun clinicid(request: ClinicIdRequest): DataResult<List<ClinicIdResponse>> {
+    suspend fun clinicid(request: ClinicIdRequest): DataResult<ClinicIdResponse> {
         return safeApiCall {
             apiHome.clinicid(
-                id = request.id
+                clinicId = request.id
             )
         }
     }

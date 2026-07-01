@@ -7,7 +7,6 @@ import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.resultsearch.adapter.ResultSearchChild
-import com.example.petbeats.ui.home.search.adapterhint.HintChild
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,15 +29,33 @@ class ResultSearchViewModel(
         }
     }
 
+    fun onCheck(isSearch: Boolean) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isSearch = isSearch)
+        }
+    }
+
     fun onChangeSearch(search: String) {
         _state.value = _state.value.copy(search = search)
     }
 
-    fun onResultSearchList(latitude: Double, longitude: Double) {
+    fun onLatiLong(latitude: Double, longitude: Double) {
+        _state.value = _state.value.copy(latitude = latitude, longitude = longitude)
+    }
+
+    fun itemClick(id: Int) {
+        viewModelScope.launch {
+            _event.emit(ResultSearchEvent.NavigationInformation(id))
+        }
+    }
+
+    fun onResultSearchList() {
         viewModelScope.launch {
             val search = _state.value.search
+            val latitude = _state.value.latitude
+            val longitude = _state.value.longitude
 
-            android.util.Log.d("TEST_API", "Đang gửi lên Server -> Keyword: '$search' | Tọa độ: $latitude, $longitude")
+            Log.d("TEST_API", "Đang gửi -> Keyword: $search, Tọa độ: $latitude, $longitude")
 
             val request = SearchRequest(search, latitude, longitude)
             val result = repository.search(request)
@@ -46,8 +63,6 @@ class ResultSearchViewModel(
 
             when (result) {
                 is DataResult.Success -> {
-                    android.util.Log.d("TEST_API", "Thành công! Tìm thấy: ${result.data?.size} phòng khám")
-
                     val apiDataList = result.data ?: emptyList()
 
                     val showList = apiDataList.map { list ->
@@ -67,8 +82,6 @@ class ResultSearchViewModel(
                     _state.value = _state.value.copy(listResultSearch = showList)
                 }
                 is DataResult.Error -> {
-                    android.util.Log.e("TEST_API", "Toang rồi! Lỗi là: ${result.message}")
-
                     _state.value = _state.value.copy(listResultSearch = emptyList())
                 }
             }

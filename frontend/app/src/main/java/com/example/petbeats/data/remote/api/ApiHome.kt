@@ -9,6 +9,7 @@ import com.example.petbeats.data.remote.model.calendar.home.response.LocationRes
 import com.example.petbeats.data.remote.model.calendar.home.response.SearchResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.SuggestResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiHome {
@@ -20,8 +21,8 @@ interface ApiHome {
 
     @GET(ApiConstants.CLINICID)
     suspend fun clinicid(
-        @Query("id") id: Int
-    ): ApiResponse<List<ClinicIdResponse>>
+        @Path("clinicId") clinicId: Int
+    ): ApiResponse<ClinicIdResponse>
 
     @GET(ApiConstants.SUGGEST)
     suspend fun suggest(
@@ -31,7 +32,7 @@ interface ApiHome {
     @GET(ApiConstants.SEARCH)
     suspend fun search(
         @Query("keyword") keyword: String,
-        @Query("latitude") latitude: Double,
-        @Query("longitude") longitude: Double
+        @Query("latitude") latitude: Double?,
+        @Query("longitude") longitude: Double?
     ): ApiResponse<List<SearchResponse>>
 }

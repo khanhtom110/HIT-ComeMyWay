@@ -136,6 +136,7 @@
 
         <TextView
             style="@style/TieuDe2"
+            android:id="@+id/btnDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Xem chi tiết"

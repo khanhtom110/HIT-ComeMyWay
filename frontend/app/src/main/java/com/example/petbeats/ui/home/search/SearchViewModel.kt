@@ -83,6 +83,12 @@ class SearchViewModel(
         }
     }
 
+    fun itemClick(nameSearch: String) {
+        viewModelScope.launch {
+            _event.emit(SearchEvent.NavigationResultSearch(nameSearch))
+        }
+    }
+
 
     fun onHintList(latitude: Double, longitude: Double) {
         viewModelScope.launch {

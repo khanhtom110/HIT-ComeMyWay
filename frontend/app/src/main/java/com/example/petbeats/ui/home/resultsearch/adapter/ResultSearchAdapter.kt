@@ -14,7 +14,9 @@ import com.example.petbeats.ui.home.book.adapter.BookAdapter.ViewHolder
 import com.example.petbeats.ui.home.book.adapter.BookChild
 import com.example.petbeats.ui.home.book.adapter.BookChildState
 
-class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.ViewHolder>(ResultSearchDiffCallBack()) {
+class ResultSearchAdapter(
+    private val onItemClick: (Int) -> Unit
+): ListAdapter<ResultSearchChild, ResultSearchAdapter.ViewHolder>(ResultSearchDiffCallBack()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ResultSearchAdapter.ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.result_search_child, holder, false)
         return ViewHolder(view)
@@ -23,7 +25,7 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
     override fun onBindViewHolder(holder: ResultSearchAdapter.ViewHolder, position: Int) {
         val currentResultSearch = getItem(position)
 
-        holder.bind(currentResultSearch)
+        holder.bind(currentResultSearch, onItemClick)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -35,14 +37,16 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
         val address: TextView = itemView.findViewById(R.id.address)
         val closeTime: TextView = itemView.findViewById(R.id.closeTime)
         val opentTime: TextView = itemView.findViewById(R.id.opentTime)
+        val detail: TextView = itemView.findViewById(R.id.btnDetail)
 
-        fun bind(item: ResultSearchChild) {
+        fun bind(item: ResultSearchChild, onItemClick: (Int) -> Unit) {
             nameRoom.text = item.roomName
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
             closeTime.text = "${item.closeTime} - "
             opentTime.text = item.openTime
+
 
             if (item.isOperating) {
                 action.text = "Đang hoạt động"
@@ -55,6 +59,10 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
                 .load(item.image)
                 .circleCrop()
                 .into(image)
+
+            detail.setOnClickListener {
+                onItemClick(item.id)
+            }
         }
     }
 }
