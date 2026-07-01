@@ -38,7 +38,7 @@
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên đăng ký"
+            android:text="Tên đăng nhập"
             android:textColor="@color/colorPrimary"
             android:layout_marginStart="@dimen/_16sdp"
             app:layout_constraintTop_toBottomOf="@id/tittle"
@@ -55,7 +55,7 @@
             android:textColor="@color/colorTextSub"
             android:textColorHint="@color/colorTextHint"
             android:layout_marginTop="@dimen/_4sdp"
-            android:hint="Nhập tên đăng ký"
+            android:hint="Nhập tên đăng nhập"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_40sdp"
             app:layout_constraintTop_toBottomOf="@id/text_name"/>

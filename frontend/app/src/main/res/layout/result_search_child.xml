@@ -2,15 +2,15 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/image_click"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_164sdp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_20sdp"
-        android:layout_marginHorizontal="@dimen/_12sdp"
         android:background="@drawable/ground_book_child">
 
         <ImageView
@@ -26,11 +26,12 @@
         <TextView
             style="@style/TieuDe1"
             android:id="@+id/nameRoom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phòng khám thú y Hà Nội Funpet"
             android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_65sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:textColor="@color/colorTextSub"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -81,22 +82,24 @@
             android:id="@+id/image_locate"
             android:layout_width="@dimen/_9sdp"
             android:layout_height="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_24sdp"
             android:src="@drawable/locate"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/image"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rating" />
 
         <TextView
             style="@style/Chu3"
             android:id="@+id/address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="83 Giải Phóng, P. Đồng Tâm"
             android:textColor="@color/colorTextSub"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            app:layout_constraintTop_toBottomOf="@id/image"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="@id/image_locate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/image_locate"
             app:layout_constraintStart_toEndOf="@id/image_locate"/>
 
         <ImageView
@@ -106,51 +109,47 @@
             android:src="@drawable/time"
             android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginStart="@dimen/_15sdp"
-            app:layout_constraintTop_toBottomOf="@id/image_locate"
+            app:layout_constraintTop_toBottomOf="@id/address"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             style="@style/Chu3"
-            android:id="@+id/time"
+            android:id="@+id/closeTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thứ 5, 25/06/06 - 9:00 AM"
+            android:text="7:00AM"
             android:textColor="@color/colorTextSub"
-            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_3sdp"
-            app:layout_constraintTop_toBottomOf="@id/address"
+            app:layout_constraintTop_toTopOf="@id/image_time"
+            app:layout_constraintBottom_toBottomOf="@id/image_time"
             app:layout_constraintStart_toEndOf="@id/image_time"/>
 
         <TextView
-            android:id="@+id/status_button"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_28sdp"
-            android:background="@drawable/button_input"
-            android:layout_marginHorizontal="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/time"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            style="@style/Chu3"
+            android:id="@+id/opentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17:00PM"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginStart="@dimen/_3sdp"
+            app:layout_constraintTop_toTopOf="@id/closeTime"
+            app:layout_constraintStart_toEndOf="@id/closeTime"
+            app:layout_constraintBottom_toBottomOf="@id/closeTime"/>
 
-        <ImageView
-            android:id="@+id/test"
-            android:layout_width="@dimen/_82sdp"
-            android:layout_height="@dimen/_26sdp"
-            android:src="@drawable/secondary_input_book"
-            app:layout_constraintTop_toTopOf="@id/status_button"
-            android:layout_marginStart="@dimen/_14sdp"
-            app:layout_constraintBottom_toBottomOf="@id/status_button"
-            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             style="@style/TieuDe2"
-            android:id="@+id/status"
+            android:id="@+id/btnDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chờ xử lý"
-            android:textColor="@color/colorWarning"
-            app:layout_constraintTop_toTopOf="@id/status_button"
-            app:layout_constraintBottom_toBottomOf="@id/status_button"
-            app:layout_constraintStart_toEndOf="@id/test"
-            app:layout_constraintEnd_toEndOf="@id/status_button"/>
+            android:text="Xem chi tiết"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/closeTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             style="@style/Chu3"

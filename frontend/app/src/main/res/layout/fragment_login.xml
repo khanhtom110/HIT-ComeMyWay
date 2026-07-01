@@ -55,7 +55,7 @@
             android:inputType="text"
             android:textColor="@color/colorTextSub"
             android:textColorHint="@color/colorTextHint"
-            android:hint="Nhập tên đăng nhập"
+            android:hint="Nhập email hoặc tên đăng nhập"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_4sdp"

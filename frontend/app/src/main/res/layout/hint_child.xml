@@ -16,18 +16,18 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@drawable/image_test"
-            android:layout_marginStart="@dimen/_20sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             style="@style/Chu2"
             android:id="@+id/nameRoom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phòng khám ABC"
             android:textColor="@color/colorTextSub"
-            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_45sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"/>
 
@@ -44,11 +44,12 @@
         <TextView
             style="@style/Chu3"
             android:id="@+id/address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="83 Giải Phóng, P. Đồng Tâm"
             android:textColor="@color/colorTextContent"
-            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginStart="@dimen/_60sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_3sdp"
             app:layout_constraintTop_toBottomOf="@id/nameRoom"
             app:layout_constraintStart_toEndOf="@id/locate"/>

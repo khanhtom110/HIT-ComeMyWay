@@ -1,62 +1,53 @@
 package com.example.petbeats.data.repository
 
+import android.util.Log
+import com.example.petbeats.core.base.BaseRepository
 import com.example.petbeats.core.base.DataResult
-import com.example.petbeats.core.network.ApiResponse
-import com.example.petbeats.data.local.dao.HistoryDao
-import com.google.gson.JsonParser
-import retrofit2.HttpException
-import java.io.IOException
+import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
+import com.example.petbeats.data.remote.model.calendar.home.response.ClinicIdResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.LocationResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.SearchResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.SuggestResponse
 
 class HomeRepository(
-    private val historyDao: HistoryDao
-) {
-    private fun getErrorTargetAndMessage(englishMessage: String?): Pair<ErrorTarget, String> {
-        return when (englishMessage) {
-
-
-            //Be trả lỗi lạ
-            null -> Pair(ErrorTarget.GENERAL, "Lỗi không xác định.")
-            else -> Pair(ErrorTarget.GENERAL, englishMessage)
+    private val apiHome: ApiHome
+): BaseRepository() {
+    suspend fun location(request: LocationRequest): DataResult<List<LocationResponse>> {
+        return safeApiCall {
+            apiHome.location(
+                latitude = request.latitude,
+                longitude = request.longitude
+            )
         }
     }
 
-
-    private suspend fun <T> safeApiCall(apiCall: suspend () -> ApiResponse<T>): DataResult<T> {
-        return try {
-            val response = apiCall()
-            DataResult.Success<T>(data = response.data as T, message = getErrorTargetAndMessage(response.message).second)
-        } catch (e: HttpException) {
-            val errorMessage = try {
-                val errorBody = e.response()?.errorBody()?.string()
-
-                val jsonObject = JsonParser.parseString(errorBody).asJsonObject
-
-
-                var finalError: String? = if (jsonObject.has("message")) jsonObject.get("message").asString else null
-
-                val dataElement = jsonObject.get("data")
-                if (dataElement != null && dataElement.isJsonObject) {
-                    val dataObj = dataElement.asJsonObject
-
-                    val firstKey = dataObj.keySet().firstOrNull()
-                    if (firstKey != null) {
-                        finalError = dataObj.get(firstKey).asString
-                    }
-                }
-
-
-                getErrorTargetAndMessage(finalError)
-            } catch (e: Exception) {
-                Pair(ErrorTarget.GENERAL, "Lỗi dữ liệu lấy từ máy chủ")
-            }
-
-            DataResult.Error(target = errorMessage.first, message = errorMessage.second)
-        } catch (e: IOException) {
-            DataResult.Error(target = ErrorTarget.GENERAL, message = "Không có kết nối mạng. Vui lòng kiểm tra lại")
-        } catch (e: Exception) {
-            DataResult.Error(target = ErrorTarget.GENERAL, message = "Đã có lỗi bất ngờ xảy ra: ${e.message}")
+    suspend fun clinicid(request: ClinicIdRequest): DataResult<ClinicIdResponse> {
+        return safeApiCall {
+            apiHome.clinicid(
+                clinicId = request.id
+            )
         }
     }
 
+    suspend fun suggest(request: SuggestRequest): DataResult<List<SuggestResponse>> {
+        return safeApiCall {
+            apiHome.suggest(
+                keyword = request.keyword
+            )
+        }
+    }
 
+    suspend fun search(request: SearchRequest): DataResult<List<SearchResponse>> {
+        return safeApiCall {
+            apiHome.search(
+                keyword = request.keyword,
+                latitude = request.latitude,
+                longitude = request.longitude
+            )
+        }
+    }
 }

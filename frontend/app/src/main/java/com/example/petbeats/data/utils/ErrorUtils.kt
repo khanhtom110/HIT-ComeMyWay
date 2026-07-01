@@ -54,7 +54,7 @@ object ErrorUtils {
                 Pair(ErrorTarget.GENERAL, "Vui lòng nhập đầy đủ thông tin")
             "Too many request. Please try again after 1 minute." ->
                 Pair(ErrorTarget.GENERAL, "Có quá nhiều yêu cầu. Làm ơn hãy thử lại sau 1 phút")
-            "Invalid username or password." ->
+            "Invalid username, email, or password." ->
                 Pair(ErrorTarget.GENERAL, "Tài khoản hoặc mật khẩu không chính xác.")
 
             //Be trả lỗi lạ

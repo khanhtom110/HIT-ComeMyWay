@@ -2,16 +2,13 @@ package com.example.petbeats.ui.home.book
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +17,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petbeats.R
 import com.example.petbeats.core.base.PermissionHelper
+import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.ui.home.book.adapter.BookAdapter
 import kotlinx.coroutines.launch
@@ -31,7 +31,13 @@ class BookFragment : Fragment() {
     private var _binding: FragmentBookBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapter: BookAdapter
-    private val viewModel: BookViewModel by viewModels()
+    private val viewModel: BookViewModel by viewModels {
+        BookViewModelFactory(
+            HomeRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            )
+        )
+    }
 
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
