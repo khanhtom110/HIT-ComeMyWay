@@ -8,7 +8,6 @@
     tools:context=".ui.home.informationroom.InformationRoomFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -30,20 +29,21 @@
             android:layout_height="wrap_content"
             android:text="Thông tin phòng khám"
             android:textColor="@color/colorTextSub"
-            app:layout_constraintTop_toTopOf="@id/back"
+            app:layout_constraintTop_toTopOf="@id/btnBack"
             app:layout_constraintBottom_toBottomOf="@id/btnBack"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_24sdp"
+            android:paddingBottom="@dimen/_90sdp"
             app:layout_constraintTop_toBottomOf="@id/btnBack">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp">
 
@@ -60,9 +60,10 @@
                 <TextView
                     style="@style/Nut1"
                     android:id="@+id/tvClinicName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_80sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     android:text="Phòng khám thú y FunVet"
                     android:textColor="@color/colorTextSub"
                     app:layout_constraintStart_toEndOf="@id/imgClinic"
@@ -77,8 +78,9 @@
                     android:text="Đang hoạt động"
                     android:textColor="@color/colorTextContent"
                     android:drawablePadding="4dp"
+                    android:layout_marginStart="@dimen/_13sdp"
                     app:drawableStartCompat="@drawable/status"
-                    app:layout_constraintStart_toStartOf="@id/tvClinicName"
+                    app:layout_constraintStart_toEndOf="@id/imgClinic"
                     app:layout_constraintTop_toBottomOf="@id/tvClinicName"/>
 
                 <TextView
@@ -91,7 +93,8 @@
                     android:textColor="@color/colorTextContent"
                     app:drawableStartCompat="@drawable/rating"
                     android:drawablePadding="4dp"
-                    app:layout_constraintStart_toStartOf="@id/tvClinicName"
+                    android:layout_marginStart="@dimen/_13sdp"
+                    app:layout_constraintStart_toEndOf="@id/imgClinic"
                     app:layout_constraintTop_toBottomOf="@id/tvStatus" />
 
                 <TextView
@@ -119,15 +122,17 @@
                 <TextView
                     style="@style/Chu1"
                     android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="83 Giải Phóng, P. Đồng Tâm"
                     android:textColor="@color/colorTextSub"
                     android:layout_marginTop="16dp"
                     android:drawablePadding="8dp"
                     android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     app:drawableStartCompat="@drawable/locate_information"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
                 <View

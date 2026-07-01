@@ -56,11 +56,5 @@
         android:id="@+id/informationRoomFragment"
         android:name="com.example.petbeats.ui.home.informationroom.InformationRoomFragment"
         android:label="informationRoomFragment">
-
-        <action
-            android:id="@+id/information_resultSearch"
-            app:destination="@id/resultSearchFragment"
-            app:popUpTo="@id/resultSearchFragment"
-            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

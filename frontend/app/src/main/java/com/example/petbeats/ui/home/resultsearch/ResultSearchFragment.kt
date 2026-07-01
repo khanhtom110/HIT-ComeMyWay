@@ -97,6 +97,7 @@ class ResultSearchFragment : Fragment() {
         _binding = null
     }
 
+    //Dùng để lấy id sang cho màn information để lấy dữ liệu API
     private fun clickList() {
         adapter = ResultSearchAdapter { click ->
             viewModel.itemClick(click)

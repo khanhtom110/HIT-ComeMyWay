@@ -83,21 +83,30 @@ class SearchViewModel(
         }
     }
 
-    fun itemClick(nameSearch: String) {
+    //Dùng để lấy search của history sang cho màn resultSearch
+    fun itemClickHistory(nameSearch: String) {
         viewModelScope.launch {
             _event.emit(SearchEvent.NavigationResultSearch(nameSearch))
         }
     }
 
-
-    fun onHintList(latitude: Double, longitude: Double) {
+    fun itemClickHint(id: Int) {
         viewModelScope.launch {
+            _event.emit(SearchEvent.NavigationInformationId(id))
+        }
+    }
+
+
+    fun onHintList() {
+        viewModelScope.launch {
+            val latitude = _state.value.latitude
+            val longitude = _state.value.longitude
             val request = LocationRequest(latitude, longitude)
             val result = repository.location(request)
 
             when (result) {
                 is DataResult.Success -> {
-                    val apiDataList = result.data ?: emptyList()
+                    val apiDataList = result.data
 
                     val showList = apiDataList.map { list ->
                         HintChild(
@@ -115,6 +124,10 @@ class SearchViewModel(
                 }
             }
         }
+    }
+
+    fun onLatiLong(latitude: Double, longitude: Double) {
+        _state.value = _state.value.copy(latitude = latitude, longitude = longitude)
     }
 
     fun onHintSearch() {

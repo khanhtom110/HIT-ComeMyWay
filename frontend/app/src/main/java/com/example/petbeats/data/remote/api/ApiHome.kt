@@ -15,8 +15,8 @@ import retrofit2.http.Query
 interface ApiHome {
     @GET(ApiConstants.LOCATION)
     suspend fun location(
-        @Query("latitude") latitude: Double,
-        @Query("longitude") longitude: Double
+        @Query("latitude") latitude: Double?,
+        @Query("longitude") longitude: Double?
     ): ApiResponse<List<LocationResponse>>
 
     @GET(ApiConstants.CLINICID)

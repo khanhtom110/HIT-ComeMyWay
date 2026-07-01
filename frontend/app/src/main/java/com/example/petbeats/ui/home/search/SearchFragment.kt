@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
                 val userLat = location.latitude
                 val userLng = location.longitude
 
-                viewModel.onHintList(userLat, userLng)
+                viewModel.onLatiLong(userLat, userLng)
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
             }
@@ -84,8 +84,11 @@ class SearchFragment : Fragment() {
         getUserLocationAndSearch()
 
 
-        adapterHint = AdapterHint()
-        clickList()
+        viewModel.onHintList()
+
+
+        clickListHistory()
+        clickListHint()
 
 
         binding.recycleHint.layoutManager = LinearLayoutManager(requireContext())
@@ -103,9 +106,17 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    private fun clickList() {
+
+    //Dùng để lấy search của history sang cho màn resultSearch
+    private fun clickListHistory() {
         adapterHistory = AdapterHistory { click ->
-            viewModel.itemClick(click)
+            viewModel.itemClickHistory(click)
+        }
+    }
+
+    private fun clickListHint() {
+        adapterHint = AdapterHint { click ->
+            viewModel.itemClickHint(click)
         }
     }
 
@@ -216,6 +227,14 @@ class SearchFragment : Fragment() {
                                 R.id.search_resultSearch,
                                 Bundle().apply {
                                     putString("search", event.search)
+                                }
+                            )
+                        }
+                        is SearchEvent.NavigationInformationId -> {
+                            findNavController().navigate(
+                                R.id.informationRoomFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
                                 }
                             )
                         }

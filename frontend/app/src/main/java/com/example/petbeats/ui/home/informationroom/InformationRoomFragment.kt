@@ -107,6 +107,7 @@ class InformationRoomFragment : Fragment() {
 
                             chipStrokeWidth = 0f
                             setChipBackgroundColorResource(R.color.colorModes)
+                            setTextColor(android.graphics.Color.parseColor("#486BF3"))
                         }
                         binding.service.addView(chip)
                     }
@@ -121,7 +122,7 @@ class InformationRoomFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is InformationRoomEvent.NavigationResultSearch -> {
-                            findNavController().navigate(R.id.information_resultSearch)
+                            findNavController().popBackStack()
                         }
                     }
                 }

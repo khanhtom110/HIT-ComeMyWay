@@ -26,11 +26,12 @@
         <TextView
             style="@style/TieuDe1"
             android:id="@+id/nameRoom"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phòng khám thú y Hà Nội Funpet"
             android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_65sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:textColor="@color/colorTextSub"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -90,12 +91,14 @@
         <TextView
             style="@style/Chu3"
             android:id="@+id/address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="83 Giải Phóng, P. Đồng Tâm"
             android:textColor="@color/colorTextSub"
-            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintTop_toTopOf="@id/image_locate"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/image_locate"
             app:layout_constraintStart_toEndOf="@id/image_locate"/>
 

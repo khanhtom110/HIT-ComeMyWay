@@ -15,5 +15,8 @@ data class SearchState (
     //hint
     val listHint: List<HintChild> = emptyList(),
     //result_search
-    val listSearch: List<HintChild> = emptyList()
+    val listSearch: List<HintChild> = emptyList(),
+
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )
