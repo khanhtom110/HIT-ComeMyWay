@@ -1,6 +1,7 @@
 package com.example.petbeats.ui.home.activitymain
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ class HomeActivity : AppCompatActivity() {
 
         setupController()
         setupBottomNav()
+        hideDestination()
     }
 
     private fun setupController() {
@@ -32,5 +34,22 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupBottomNav() {
         binding.bottomNav.setupWithNavController(navController)
+    }
+
+    private fun hideDestination() {
+        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+            // Fix lỗi không hiện màu ở Bottom Nav
+            when (destination.id) {
+                R.id.searchFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.resultSearchFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.informationRoomFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+            }
+        }
     }
 }

@@ -71,9 +71,10 @@ class LoginViewModel(
                     val accessToken = result.data.accessToken ?: ""
                     val refreshToken = result.data.refreshToken ?: ""
 
+                    val currentUserName = name
 
 
-                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken))
+                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, currentUserName))
                 }
 
                 is DataResult.Error -> {

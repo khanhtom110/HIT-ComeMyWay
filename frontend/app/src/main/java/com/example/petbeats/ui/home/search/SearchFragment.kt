@@ -21,6 +21,7 @@ import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.databinding.FragmentSearchBinding
@@ -46,7 +47,9 @@ class SearchFragment : Fragment() {
                 requireContext(),
                 AppDatabase::class.java,
                 "app_db"
-            ).build().historyDao()
+            ).build().historyDao(),
+
+            TokenManager(requireContext())
         )
     }
 
@@ -60,11 +63,16 @@ class SearchFragment : Fragment() {
                 val userLng = location.longitude
 
                 viewModel.onLatiLong(userLat, userLng)
+                viewModel.onHintList()
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
+
+                viewModel.onHintList()
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
+
+            viewModel.onHintList()
         }
     }
 
@@ -82,9 +90,6 @@ class SearchFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getUserLocationAndSearch()
-
-
-        viewModel.onHintList()
 
 
         clickListHistory()

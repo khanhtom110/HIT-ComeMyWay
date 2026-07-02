@@ -15,6 +15,7 @@ interface HistoryDao {
 
     // Lấy danh sách lịch sử
     // Chỉ lấy 10 từ khóa gần nhất để giao diện không bị quá dài
-    @Query("SELECT * FROM User ORDER BY time DESC LIMIT 10")
-    fun listHistory(): Flow<List<HistoryEntity>>
+    @Query("SELECT * FROM User WHERE userName = :currentUserName ORDER BY id DESC")
+    fun listHistory(currentUserName: String): Flow<List<HistoryEntity>>
+
 }

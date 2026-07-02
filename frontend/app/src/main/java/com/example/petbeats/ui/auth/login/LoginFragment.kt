@@ -169,6 +169,7 @@ class LoginFragment : Fragment() {
                         is LoginEvent.NavigationHome -> {
                             val tokenManager = TokenManager(requireContext())
                             tokenManager.saveTokens(event.accessToken, event.refreshToken)
+                            tokenManager.saveUserName(event.userName)
 
                             val intent = Intent(requireContext(), HomeActivity::class.java)
                             startActivity(intent)

@@ -1,5 +1,6 @@
 package com.example.petbeats.ui.home.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
@@ -8,6 +9,7 @@ import com.example.petbeats.data.local.entity.HistoryEntity
 import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
+import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.search.adapterhint.HintChild
 import com.example.petbeats.ui.home.search.adapterhistory.HistoryChild
@@ -19,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val repository: HomeRepository,
-    private val historyDao: HistoryDao
+    private val historyDao: HistoryDao,
+    private val tokenManager: TokenManager
 ): ViewModel() {
     private var _state = MutableStateFlow(SearchState())
     val state = _state.asStateFlow()
@@ -31,7 +34,9 @@ class SearchViewModel(
     //Gán database vào list của mình để hiển thị lên màn hình
     init {
         viewModelScope.launch {
-            historyDao.listHistory().collect { historyDao ->
+            val currentUserId = tokenManager.getUserName()
+
+            historyDao.listHistory(currentUserId).collect { historyDao ->
                 val showList = historyDao.map { listDao ->
                     HistoryChild(nameSearch = listDao.keyword)
                 }
@@ -49,11 +54,15 @@ class SearchViewModel(
         }
         else {
             viewModelScope.launch {
-                val newHistory = HistoryEntity(keyword = search.trim())
+                val currentUserName = tokenManager.getUserName()
+
+                val newHistory = HistoryEntity(
+                    keyword = search.trim(),
+                    userName = currentUserName
+                )
                 historyDao.insertHistory(newHistory)
 
                 _state.value = _state.value.copy(search = "")
-
                 _event.emit(SearchEvent.NavigationResultSearch(search))
             }
         }
@@ -97,6 +106,7 @@ class SearchViewModel(
     }
 
 
+
     fun onHintList() {
         viewModelScope.launch {
             val latitude = _state.value.latitude
@@ -106,6 +116,8 @@ class SearchViewModel(
 
             when (result) {
                 is DataResult.Success -> {
+                    Log.d("TEST_API", "lati: $latitude, longi: $longitude")
+
                     val apiDataList = result.data
 
                     val showList = apiDataList.map { list ->
