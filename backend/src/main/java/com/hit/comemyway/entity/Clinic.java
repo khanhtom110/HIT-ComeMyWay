@@ -63,4 +63,7 @@ public class Clinic extends BaseEntity {
 
   @Column(name = "map_link", columnDefinition = "TEXT", nullable = false)
   private String mapLink;
+
+  @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+  private List<Appointment> appointments;
 }

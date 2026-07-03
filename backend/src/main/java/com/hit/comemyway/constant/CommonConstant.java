@@ -7,6 +7,8 @@ public final class CommonConstant {
   public static final int PHONE_LENGTH = 15;
   public static final int EMAIL_LENGTH = 100;
   public static final int ADDRESS_LENGTH = 255;
+  public static final int BOOKING_TYPE_LENGTH = 255;
+  public static final int CONDITION_LENGTH = 1000;
 
   public static final class Clinic {
     public static final int NAME_LENGTH = 120;

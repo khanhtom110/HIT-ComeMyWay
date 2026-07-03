@@ -4,6 +4,8 @@ import com.hit.comemyway.constant.CommonConstant;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -35,4 +37,7 @@ public class User extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Role role;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<Appointment> appointments;
 }
