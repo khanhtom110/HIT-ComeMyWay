@@ -9,7 +9,7 @@ import java.util.TimeZone;
 public class ComemywayApplication {
 
   public static void main(String[] args) {
-      TimeZone.setDefault(TimeZone.getTimeZone("GMT+7"));
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT+7"));
     SpringApplication.run(ComemywayApplication.class, args);
   }
 

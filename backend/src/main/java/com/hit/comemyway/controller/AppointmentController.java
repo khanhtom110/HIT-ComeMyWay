@@ -24,7 +24,7 @@ public class AppointmentController {
   @Operation(summary = "Tạo lịch hẹn mới", description = "Người dùng gửi thông tin đặt lịch")
   @PostMapping(UrlConstant.Appointment.CREATE_APPOINTMENT)
   public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(
-          @Valid @RequestBody AppointmentRequest request) {
+      @Valid @RequestBody AppointmentRequest request) {
     AppointmentResponse response = appointmentService.createAppointment(request);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

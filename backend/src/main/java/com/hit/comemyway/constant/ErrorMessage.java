@@ -31,7 +31,7 @@ public final class ErrorMessage {
       "Username length is invalid. It must be between 4 and 120 characters.";
   public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
   public static final String INVALID_FORMAT_CONDITION =
-          "Condition must be under 1000 characters long.";
+      "Condition must be under 1000 characters long.";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
   // Authentication Errors (Auth)
@@ -90,8 +90,7 @@ public final class ErrorMessage {
 
   // Appointment Errors
   public static final class Appointment {
-      private Appointment() {
-      }
+    private Appointment() {}
 
     public static final String APPOINTMENT_NOT_EXISTED = "Appointment does not exist";
 

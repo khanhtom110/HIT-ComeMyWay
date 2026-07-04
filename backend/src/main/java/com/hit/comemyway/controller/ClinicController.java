@@ -72,10 +72,10 @@ public class ClinicController {
   }
 
   @Operation(summary = "Lấy thông tin phòng khám để đặt lịch",
-          description = "Trả về các thông tin cơ bản của phòng khám và danh sách các dịch vụ của màn hình Đặt lịch khám.")
+      description = "Trả về các thông tin cơ bản của phòng khám và danh sách các dịch vụ của màn hình Đặt lịch khám.")
   @GetMapping(UrlConstant.Public.CLINIC_BOOKING)
   public ResponseEntity<ApiResponse<ClinicBookingResponse>> getClinicBookingById(
-          @PathVariable Long clinicId) {
+      @PathVariable Long clinicId) {
     ClinicBookingResponse response = clinicService.getClinicBookingById(clinicId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

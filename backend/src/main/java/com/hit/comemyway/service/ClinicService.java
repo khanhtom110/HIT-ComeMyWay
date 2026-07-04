@@ -209,7 +209,7 @@ public class ClinicService {
   @Transactional(readOnly = true)
   public ClinicBookingResponse getClinicBookingById(Long id) {
     Clinic clinic = clinicRepository.findById(id)
-            .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
     LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     boolean isOperating = isOperating(clinic, now);
     return ClinicBookingResponse.from(clinic, isOperating);
