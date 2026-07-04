@@ -6,10 +6,7 @@ import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.DefaultSuggestClinicsRequest;
 import com.hit.comemyway.dto.request.SearchClinicsRequest;
 import com.hit.comemyway.dto.request.SuggestClinicsRequest;
-import com.hit.comemyway.dto.response.ClinicDetailResponse;
-import com.hit.comemyway.dto.response.ClinicSearchResponse;
-import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
-import com.hit.comemyway.dto.response.DefaultSuggestClinicResponse;
+import com.hit.comemyway.dto.response.*;
 import com.hit.comemyway.service.ClinicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -71,6 +68,15 @@ public class ClinicController {
       @Valid @ParameterObject DefaultSuggestClinicsRequest request) {
     List<DefaultSuggestClinicResponse> response = clinicService.getClinicSuggestions(true,
         request.getLatitude(), request.getLongitude(), 10.0, request.getLimit());
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Lấy thông tin phòng khám để đặt lịch",
+          description = "Trả về các thông tin cơ bản của phòng khám và danh sách các dịch vụ của màn hình Đặt lịch khám.")
+  @GetMapping(UrlConstant.Public.CLINIC_BOOKING)
+  public ResponseEntity<ApiResponse<ClinicBookingResponse>> getClinicBookingById(
+          @PathVariable Long clinicId) {
+    ClinicBookingResponse response = clinicService.getClinicBookingById(clinicId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

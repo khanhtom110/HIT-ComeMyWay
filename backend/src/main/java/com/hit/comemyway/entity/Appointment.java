@@ -3,12 +3,9 @@ package com.hit.comemyway.entity;
 import com.hit.comemyway.constant.CommonConstant;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Table(name = "appointments")
@@ -36,7 +33,7 @@ public class Appointment extends BaseEntity {
   @Column(name = "phone", nullable = false, length = CommonConstant.PHONE_LENGTH)
   private String phone;
 
-  @Column(name = "booking_type")
+  @Column(name = "booking_type", nullable = false)
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private BookingType bookingType = BookingType.AT_CLINIC;
@@ -44,9 +41,8 @@ public class Appointment extends BaseEntity {
   @Column(name = "home_address", length = CommonConstant.ADDRESS_LENGTH)
   private String homeAddress;
 
-  @JdbcTypeCode(SqlTypes.JSON)
-  @Column(name = "pet_type", columnDefinition = "json", nullable = false)
-  private List<String> petType;
+  @Column(name = "pet_type", nullable = false)
+  private String petType;
 
   @Column(name = "pet_condition", length = CommonConstant.CONDITION_LENGTH)
   private String petCondition;

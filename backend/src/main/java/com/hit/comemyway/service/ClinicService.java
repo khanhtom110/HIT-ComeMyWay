@@ -1,10 +1,7 @@
 package com.hit.comemyway.service;
 
 import com.hit.comemyway.constant.ErrorMessage;
-import com.hit.comemyway.dto.response.ClinicDetailResponse;
-import com.hit.comemyway.dto.response.ClinicSearchResponse;
-import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
-import com.hit.comemyway.dto.response.DefaultSuggestClinicResponse;
+import com.hit.comemyway.dto.response.*;
 import com.hit.comemyway.entity.Clinic;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.ClinicRepository;
@@ -207,5 +204,14 @@ public class ClinicService {
       }
     }
     return responses;
+  }
+
+  @Transactional(readOnly = true)
+  public ClinicBookingResponse getClinicBookingById(Long id) {
+    Clinic clinic = clinicRepository.findById(id)
+            .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+    LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+    boolean isOperating = isOperating(clinic, now);
+    return ClinicBookingResponse.from(clinic, isOperating);
   }
 }
