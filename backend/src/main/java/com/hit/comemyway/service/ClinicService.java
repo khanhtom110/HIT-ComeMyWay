@@ -215,3 +215,5 @@ public class ClinicService {
     return ClinicBookingResponse.from(clinic, isOperating);
   }
 }
+
+

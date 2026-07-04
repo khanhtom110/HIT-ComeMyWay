@@ -90,8 +90,8 @@ public final class ErrorMessage {
 
   // Appointment Errors
   public static final class Appointment {
-    private Appointment() {
-    }
+      private Appointment() {
+      }
 
     public static final String APPOINTMENT_NOT_EXISTED = "Appointment does not exist";
 

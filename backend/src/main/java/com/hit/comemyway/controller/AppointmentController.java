@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping(ApiPath.API_V1)
 public class AppointmentController {
-    private final AppointmentService appointmentService;
+  private final AppointmentService appointmentService;
 
-    @Operation(summary = "Tạo lịch hẹn mới", description = "Người dùng gửi thông tin đặt lịch")
-    @PostMapping(UrlConstant.Appointment.CREATE_APPOINTMENT)
-    public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(
-            @Valid @RequestBody AppointmentRequest request) {
-        AppointmentResponse response = appointmentService.createAppointment(request);
-        return ResponseEntity.ok(ApiResponse.ok(response));
-    }
+  @Operation(summary = "Tạo lịch hẹn mới", description = "Người dùng gửi thông tin đặt lịch")
+  @PostMapping(UrlConstant.Appointment.CREATE_APPOINTMENT)
+  public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(
+          @Valid @RequestBody AppointmentRequest request) {
+    AppointmentResponse response = appointmentService.createAppointment(request);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
 }

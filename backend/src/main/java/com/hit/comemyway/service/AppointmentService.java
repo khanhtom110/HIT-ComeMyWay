@@ -18,28 +18,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
-    private final AppointmentRepository appointmentRepository;
-    private final UserRepository userRepository;
-    private final ClinicRepository clinicRepository;
+  private final AppointmentRepository appointmentRepository;
+  private final UserRepository userRepository;
+  private final ClinicRepository clinicRepository;
 
-    @Transactional
-    public AppointmentResponse createAppointment(AppointmentRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+  @Transactional
+  public AppointmentResponse createAppointment(AppointmentRequest request) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
-        Clinic clinic = clinicRepository.findById(request.clinicId())
-                .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+    Clinic clinic = clinicRepository.findById(request.clinicId())
+            .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
 
-        Appointment appointment = Appointment.builder().user(user).clinic(clinic)
-                .fullName(request.fullName()).phone(request.phone()).bookingType(request.bookingType())
-                .homeAddress(request.homeAddress()).petType(request.petType())
-                .petCondition(request.petCondition()).petQuantity(request.petQuantity())
-                .appointmentDate(request.appointmentDate()).appointmentTime(request.appointmentTime())
-                .build();
+    Appointment appointment = Appointment.builder().user(user).clinic(clinic)
+            .fullName(request.fullName()).phone(request.phone()).bookingType(request.bookingType())
+            .homeAddress(request.homeAddress()).petType(request.petType())
+            .petCondition(request.petCondition()).petQuantity(request.petQuantity())
+            .appointmentDate(request.appointmentDate()).appointmentTime(request.appointmentTime())
+            .build();
 
-        Appointment savedAppointment = appointmentRepository.save(appointment);
-        return AppointmentResponse.from(savedAppointment);
-    }
+    Appointment savedAppointment = appointmentRepository.save(appointment);
+    return AppointmentResponse.from(savedAppointment);
+  }
 }
