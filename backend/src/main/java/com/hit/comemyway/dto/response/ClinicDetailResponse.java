@@ -42,9 +42,12 @@ public record ClinicDetailResponse(
         List<String> services,
 
         @Schema(description = "Link gg map phòng khám")
-        String mapLink
+        String mapLink,
+
+        @Schema(description = "Khoảng cách tới người dùng (km)", example = "2.5")
+        Double distance
 ){
-        public static ClinicDetailResponse from(Clinic clinic,boolean isOperating){
+        public static ClinicDetailResponse from(Clinic clinic,boolean isOperating, Double distance){
                 return new ClinicDetailResponse(
                         clinic.getId(),
                         clinic.getThumbnailUrl(),
@@ -57,7 +60,8 @@ public record ClinicDetailResponse(
                         clinic.getOpenTime(),
                         clinic.getCloseTime(),
                         clinic.getServices().stream().map(service->service.getName()).toList(),
-                        clinic.getMapLink()
+                        clinic.getMapLink(),
+                        distance
                 );
         }
 }
