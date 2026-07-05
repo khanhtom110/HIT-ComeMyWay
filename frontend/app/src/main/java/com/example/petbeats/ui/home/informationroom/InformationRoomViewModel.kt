@@ -29,10 +29,16 @@ class InformationRoomViewModel(
         }
     }
 
+    fun onLatiLong(latitude: Double, longitude: Double) {
+        _state.value = _state.value.copy(latitude = latitude, longitude = longitude)
+    }
+
 
     fun onInformationList(id: Int) {
         viewModelScope.launch {
-            val request = ClinicIdRequest(id = id)
+            val latitude = _state.value.latitude
+            val longitude = _state.value.longitude
+            val request = ClinicIdRequest(id = id, latitude, longitude)
             val result = repository.clinicid(request)
 
             when (result) {
@@ -49,7 +55,9 @@ class InformationRoomViewModel(
                         closeTime = data.closeTime,
                         description = data.description,
                         phone = data.phone,
-                        services = data.services ?: emptyList()
+                        services = data.services,
+                        mapLink = data.mapLink,
+                        distance = data.distance
                     )
 
                 }

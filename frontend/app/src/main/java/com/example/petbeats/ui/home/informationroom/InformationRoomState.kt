@@ -12,5 +12,10 @@ data class InformationRoomState (
     val closeTime: String = "",
     val description: String = "",
     val phone: String = "",
-    val services: List<String> = emptyList()
+    val services: List<String> = emptyList(),
+    val mapLink: String = "",
+    val distance: Double = 0.0,
+
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )

@@ -54,6 +54,8 @@
             android:background="@drawable/tittle_search"
             android:gravity="center_vertical"
             android:hint="Tìm kiếm phòng khám theo tên, địa chỉ"
+            android:textColorHint="@color/colorTextContent"
+            android:textColor="@color/colorTextSub"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_40sdp"
             app:layout_constraintTop_toBottomOf="@id/logo" />

@@ -28,15 +28,9 @@ class HomeRepository(
     suspend fun clinicid(request: ClinicIdRequest): DataResult<ClinicIdResponse> {
         return safeApiCall {
             apiHome.clinicid(
-                clinicId = request.id
-            )
-        }
-    }
-
-    suspend fun suggest(request: SuggestRequest): DataResult<List<SuggestResponse>> {
-        return safeApiCall {
-            apiHome.suggest(
-                keyword = request.keyword
+                clinicId = request.id,
+                latitude = request.latitude,
+                longitude = request.longitude
             )
         }
     }

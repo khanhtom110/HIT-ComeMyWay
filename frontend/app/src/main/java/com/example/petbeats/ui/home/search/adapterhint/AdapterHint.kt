@@ -25,23 +25,41 @@ class AdapterHint(
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val roomName: TextView = itemView.findViewById(R.id.nameRoom)
-        val image: ImageView = itemView.findViewById(R.id.image)
+        val name: TextView = itemView.findViewById(R.id.nameRoom)
+        val thumbnailUrl: ImageView = itemView.findViewById(R.id.image)
         val address: TextView = itemView.findViewById(R.id.address)
         val click: TextView = itemView.findViewById(R.id.nameRoom)
+        val distance: TextView = itemView.findViewById(R.id.distance)
+        val rating: TextView = itemView.findViewById(R.id.rating)
+        val iconrating: ImageView = itemView.findViewById(R.id.iconRating)
+
 
         fun bind(item: HintChild, onItemClick: (Int) -> Unit) {
-            roomName.text = item.roomName
+            name.text = item.name
             address.text = item.address
+            distance.text = "${item.distance} km"
+            rating.text = "${item.rating}/5"
 
             Glide.with(itemView.context)
-                .load(item.image)
+                .load(item.thumbnailUrl)
                 .circleCrop()
-                .into(image)
+                .into(thumbnailUrl)
 
 
             click.setOnClickListener {
                 onItemClick(item.id)
+            }
+
+            //ẩn hiện rating và distance
+            if (item.distance == 0.0) {
+                distance.visibility = View.GONE
+                rating.visibility = View.VISIBLE
+                iconrating.visibility = View.VISIBLE
+            }
+            else {
+                distance.visibility = View.VISIBLE
+                rating.visibility = View.GONE
+                iconrating.visibility = View.GONE
             }
         }
     }

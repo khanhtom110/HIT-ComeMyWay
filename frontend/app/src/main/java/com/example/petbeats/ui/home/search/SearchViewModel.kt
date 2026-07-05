@@ -34,7 +34,7 @@ class SearchViewModel(
     //Gán database vào list của mình để hiển thị lên màn hình
     init {
         viewModelScope.launch {
-            val currentUserId = tokenManager.getUserName()
+            val currentUserId = tokenManager.getUserId()
 
             historyDao.listHistory(currentUserId).collect { historyDao ->
                 val showList = historyDao.map { listDao ->
@@ -54,11 +54,11 @@ class SearchViewModel(
         }
         else {
             viewModelScope.launch {
-                val currentUserName = tokenManager.getUserName()
+                val currentUserId = tokenManager.getUserId()
 
                 val newHistory = HistoryEntity(
                     keyword = search.trim(),
-                    userName = currentUserName
+                    userId = currentUserId
                 )
                 historyDao.insertHistory(newHistory)
 
@@ -123,9 +123,11 @@ class SearchViewModel(
                     val showList = apiDataList.map { list ->
                         HintChild(
                             id = list.id,
-                            roomName = list.name,
-                            image = list.thumbnailUrl,
-                            address = list.address
+                            name = list.name,
+                            thumbnailUrl = list.thumbnailUrl,
+                            address = list.address,
+                            distance = list.distance,
+                            rating = list.rating
                         )
                     }
 
@@ -140,34 +142,5 @@ class SearchViewModel(
 
     fun onLatiLong(latitude: Double, longitude: Double) {
         _state.value = _state.value.copy(latitude = latitude, longitude = longitude)
-    }
-
-    fun onHintSearch() {
-        viewModelScope.launch {
-            val search = _state.value.search
-
-            val request = SuggestRequest(search)
-            val result = repository.suggest(request)
-
-            when (result) {
-                is DataResult.Success -> {
-                    val apiDataList = result.data ?: emptyList()
-
-                    val showList = apiDataList.map { list ->
-                        HintChild(
-                            id = list.id,
-                            roomName = list.name,
-                            image = list.thumbnailUrl,
-                            address = list.address
-                        )
-                    }
-
-                    _state.value = _state.value.copy(listSearch = showList)
-                }
-                is DataResult.Error -> {
-                    _state.value = _state.value.copy(listSearch = emptyList())
-                }
-            }
-        }
     }
 }

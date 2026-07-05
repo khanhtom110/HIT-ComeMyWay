@@ -1,6 +1,8 @@
 package com.example.petbeats.ui.home.informationroom
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -28,6 +30,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import androidx.core.net.toUri
+import androidx.core.graphics.toColorInt
 
 
 class InformationRoomFragment : Fragment() {
@@ -41,6 +45,32 @@ class InformationRoomFragment : Fragment() {
         )
     }
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    @SuppressLint("MissingPermission")
+    private fun getUserLocationAndSearch() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val userLat = location.latitude
+                val userLng = location.longitude
+
+                viewModel.onLatiLong(userLat, userLng)
+                val id = arguments?.getInt("id") ?: 0
+                viewModel.onInformationList(id)
+            } else {
+                Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
+
+                val id = arguments?.getInt("id") ?: 0
+                viewModel.onInformationList(id)
+            }
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
+
+            val id = arguments?.getInt("id") ?: 0
+            viewModel.onInformationList(id)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +82,9 @@ class InformationRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        getUserLocationAndSearch()
 
         setOnClick()
         stateData()
@@ -67,9 +100,6 @@ class InformationRoomFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             viewModel.resultClick()
         }
-
-        val id = arguments?.getInt("id") ?: 0
-        viewModel.onInformationList(id)
     }
 
     private fun stateData() {
@@ -82,8 +112,17 @@ class InformationRoomFragment : Fragment() {
                     binding.tvOpenTime.text = state.openTime
                     binding.tvCloseTime.text = state.closeTime
                     binding.tvPhone.text = state.phone
-                    binding.tvDescription.text = state.name
+                    binding.tvDescription.text = state.description
                     binding.tvRating.text = "Đánh giá: ${state.rating}/5"
+                    binding.tvDistance.text = "${state.distance} km"
+
+                    if (state.distance == 0.0) {
+                        binding.tvDistance.visibility = View.GONE
+                    }
+                    else {
+                        binding.tvDistance.visibility = View.VISIBLE
+                    }
+
 
                     if (state.isOperating) {
                         binding.tvStatus.text = "Đang hoạt động"
@@ -107,9 +146,26 @@ class InformationRoomFragment : Fragment() {
 
                             chipStrokeWidth = 0f
                             setChipBackgroundColorResource(R.color.colorModes)
-                            setTextColor(android.graphics.Color.parseColor("#486BF3"))
+                            setTextColor("#486BF3".toColorInt())
                         }
                         binding.service.addView(chip)
+                    }
+
+                    //Đến đường dẫn link locate
+                    binding.btnLocate.setOnClickListener {
+                        val link = state.mapLink
+
+                        if (!link.isEmpty()) {
+                            try {
+                                val intent = Intent(Intent.ACTION_VIEW, link.toUri())
+                                startActivity(intent)
+                            } catch (e: Exception) {
+                                Toast.makeText(requireContext(), "Không thể mở link này", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        else {
+                            Toast.makeText(requireContext(), "Đường dẫn không tồn tại", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

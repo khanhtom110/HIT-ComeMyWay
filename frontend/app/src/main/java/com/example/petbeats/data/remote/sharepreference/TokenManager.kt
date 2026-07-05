@@ -19,12 +19,12 @@ class TokenManager(context: Context) {
     fun getRefreshToken(): String? = prefs.getString("REFRESH_TOKEN", null)
 
 
-    fun saveUserName(userName: String) {
-        prefs.edit().putString("UserName", userName).apply()
+    fun saveUserId(userId: Int) {
+        prefs.edit().putInt("UserName", userId).apply()
     }
 
-    fun getUserName(): String {
-        return prefs.getString("UserName", "") ?: ""
+    fun getUserId(): Int {
+        return prefs.getInt("UserName", 0)
     }
 
 

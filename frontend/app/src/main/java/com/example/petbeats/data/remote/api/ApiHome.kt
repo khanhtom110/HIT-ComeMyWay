@@ -21,13 +21,11 @@ interface ApiHome {
 
     @GET(ApiConstants.CLINICID)
     suspend fun clinicid(
-        @Path("clinicId") clinicId: Int
+        @Path("clinicId") clinicId: Int,
+        @Query("latitude") latitude: Double?,
+        @Query("longitude") longitude: Double?
     ): ApiResponse<ClinicIdResponse>
 
-    @GET(ApiConstants.SUGGEST)
-    suspend fun suggest(
-        @Query("keyword") keyword: String
-    ): ApiResponse<List<SuggestResponse>>
 
     @GET(ApiConstants.SEARCH)
     suspend fun search(

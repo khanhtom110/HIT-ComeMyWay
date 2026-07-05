@@ -11,5 +11,7 @@ data class ClinicIdResponse (
     val address: String,
     val openTime: String,
     val closeTime: String,
-    val services: List<String> = emptyList()
+    val services: List<String> = emptyList(),
+    val mapLink: String,
+    val distance: Double
 )

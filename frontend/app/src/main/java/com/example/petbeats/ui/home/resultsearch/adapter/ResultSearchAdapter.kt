@@ -63,6 +63,13 @@ class ResultSearchAdapter(
             detail.setOnClickListener {
                 onItemClick(item.id)
             }
+
+            if (item.distance == 0.0) {
+                distance.visibility = View.GONE
+            }
+            else {
+                distance.visibility = View.VISIBLE
+            }
         }
     }
 }

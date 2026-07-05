@@ -132,7 +132,6 @@ class SearchFragment : Fragment() {
 
         binding.search.addTextChangedListener {
             viewModel.onSearchChange(it.toString())
-            viewModel.onHintSearch()
         }
 
         binding.buttonAll.setOnClickListener {
@@ -198,21 +197,6 @@ class SearchFragment : Fragment() {
 
                             adapterHint.submitList(state.listHint)
                         }
-                    }
-                    else {
-                        // Nếu gõ chữ thì ẩn lịch sử và gợi ý
-                        binding.text.visibility = View.GONE
-                        binding.buttonAll.visibility = View.GONE
-                        binding.line.visibility = View.GONE
-                        binding.recycleHistory.visibility = View.GONE
-                        binding.hint.visibility = View.GONE
-                        binding.lineHint.visibility = View.GONE
-                        binding.lineHint1.visibility = View.GONE
-                        binding.tvEmptyHistory.visibility = View.GONE
-
-
-                        binding.recycleHint.visibility = View.VISIBLE
-                        adapterHint.submitList(state.listSearch)
                     }
                 }
             }

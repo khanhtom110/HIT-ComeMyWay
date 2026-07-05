@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class HistoryEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val keyword: String,
-    val userName: String
+    val userId: Int
 )

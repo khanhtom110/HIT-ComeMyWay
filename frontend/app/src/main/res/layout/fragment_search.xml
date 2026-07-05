@@ -21,6 +21,8 @@
             android:layout_marginTop="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:hint="Tìm kiếm phòng khám "
+            android:textColorHint="@color/colorTextContent"
+            android:textColor="@color/colorTextSub"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_30sdp"
             android:paddingEnd="@dimen/_40sdp"
