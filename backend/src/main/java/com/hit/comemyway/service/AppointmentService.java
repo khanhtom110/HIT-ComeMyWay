@@ -57,10 +57,10 @@ public class AppointmentService {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
     User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
     Appointment appointment = appointmentRepository.findById(appointmentId)
-            .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
 
     if (!BookingStatus.PENDING.equals(appointment.getStatus())) {
       throw new AppException(400, ErrorMessage.Appointment.CANNOT_EDIT_APPOINTMENT);
@@ -71,7 +71,7 @@ public class AppointmentService {
     }
 
     Clinic clinic = clinicRepository.findById(request.clinicId())
-            .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
 
     appointment.setClinic(clinic);
     appointment.setFullName(request.fullName());
@@ -89,17 +89,14 @@ public class AppointmentService {
   }
 
   private void validateAppointmentTime(LocalDate appointmentDate, LocalTime appointmentTime) {
-    // Ép múi giờ chuẩn của người dùng hệ thống (VD: Việt Nam)
     ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
     LocalDate today = LocalDate.now(zoneId);
     LocalTime now = LocalTime.now(zoneId);
 
-    // 1. Nếu ngày hẹn nằm trong quá khứ -> Lỗi
     if (appointmentDate.isBefore(today)) {
       throw new AppException(400, ErrorMessage.Appointment.INVALID_APPOINTMENT_DATE);
     }
 
-    // 2. Nếu ngày hẹn là hôm nay, nhưng giờ hẹn đã qua -> Lỗi
     if (appointmentDate.isEqual(today) && appointmentTime.isBefore(now)) {
       throw new AppException(400, ErrorMessage.Appointment.INVALID_APPOINTMENT_TIME);
     }

@@ -35,7 +35,7 @@ public class AppointmentController {
   @Operation(summary = "Chỉnh sửa lịch hẹn", description = "Người dùng thay đổi thông tin đặt lịch")
   @PostMapping(UrlConstant.Appointment.UPDATE_APPOINTMENT)
   public ResponseEntity<ApiResponse<AppointmentResponse>> updateAppointment(
-          @PathVariable Long appointmentId, @Valid @RequestBody AppointmentRequest request) {
+      @PathVariable Long appointmentId, @Valid @RequestBody AppointmentRequest request) {
     AppointmentResponse response = appointmentService.updateAppointment(request, appointmentId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

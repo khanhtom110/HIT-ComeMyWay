@@ -94,10 +94,10 @@ public final class ErrorMessage {
 
     public static final String APPOINTMENT_NOT_EXISTED = "Appointment does not exist";
     public static final String CANNOT_EDIT_APPOINTMENT =
-            "Cannot edit appointment because it is not in pending status";
+        "Cannot edit appointment because it is not in pending status";
     public static final String INVALID_APPOINTMENT_DATE = "Appointment date cannot be in the past.";
     public static final String INVALID_APPOINTMENT_TIME =
-            "Appointment time must be after the current time.";
+        "Appointment time must be after the current time.";
 
   }
 }
