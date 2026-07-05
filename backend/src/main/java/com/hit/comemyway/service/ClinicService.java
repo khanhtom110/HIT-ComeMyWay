@@ -129,12 +129,19 @@ public class ClinicService {
   }
 
   @Transactional(readOnly = true)
-  public ClinicDetailResponse getClinicById(Long id) {
+  public ClinicDetailResponse getClinicById(Long id, Double userLatitude, Double userLongitude) {
     Clinic clinic = clinicRepository.findById(id)
         .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
     LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     boolean isOperating = isOperating(clinic, now);
-    return ClinicDetailResponse.from(clinic, isOperating);
+
+    // Xu ly khoang cach
+    Double distance = null;
+    if (userLatitude != null && userLongitude != null) {
+      distance = searchClinicsService.calculateDistance(userLatitude, userLongitude, clinic);
+    }
+
+    return ClinicDetailResponse.from(clinic, isOperating, distance);
   }
 
   @Transactional(readOnly = true)

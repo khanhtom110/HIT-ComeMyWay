@@ -59,8 +59,12 @@ public class ClinicController {
       description = "Trả về thông tin chi tiết của một phòng khám")
   @GetMapping(UrlConstant.Public.CLINIC_DETAIL)
   public ResponseEntity<ApiResponse<ClinicDetailResponse>> getClinicDetailById(
-      @Parameter(description = "ID của phòng khám", required = true) @PathVariable Long clinicId) {
-    ClinicDetailResponse response = clinicService.getClinicById(clinicId);
+      @Parameter(description = "ID của phòng khám", required = true) @PathVariable Long clinicId,
+      @Parameter(description = "Vĩ độ hiện tại của người dùng")
+      @RequestParam(required = false) Double latitude,
+      @Parameter(description = "Kinh độ hiện tại của người dùng")
+      @RequestParam(required = false) Double longitude) {
+    ClinicDetailResponse response = clinicService.getClinicById(clinicId, latitude, longitude);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 
