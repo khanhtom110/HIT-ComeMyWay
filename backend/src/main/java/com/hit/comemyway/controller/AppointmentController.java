@@ -7,16 +7,19 @@ import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
 import com.hit.comemyway.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
+@Tag(name = "Appointment", description = "Các API liên quan tới đặt lịch khám")
 @RequestMapping(ApiPath.API_V1)
 public class AppointmentController {
   private final AppointmentService appointmentService;
@@ -26,6 +29,14 @@ public class AppointmentController {
   public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(
       @Valid @RequestBody AppointmentRequest request) {
     AppointmentResponse response = appointmentService.createAppointment(request);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Chỉnh sửa lịch hẹn", description = "Người dùng thay đổi thông tin đặt lịch")
+  @PostMapping(UrlConstant.Appointment.UPDATE_APPOINTMENT)
+  public ResponseEntity<ApiResponse<AppointmentResponse>> updateAppointment(
+          @PathVariable Long appointmentId, @Valid @RequestBody AppointmentRequest request) {
+    AppointmentResponse response = appointmentService.updateAppointment(request, appointmentId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

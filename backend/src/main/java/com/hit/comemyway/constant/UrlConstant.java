@@ -71,7 +71,7 @@ public class UrlConstant {
     public static final String CREATE_APPOINTMENT = PREFIX;
     public static final String GET_APPOINTMENT = PREFIX + "/{userId}";
     public static final String GET_DETAIL = PREFIX + "/detail/{id}";
-    public static final String UPDATE_APPOINTMENT = PREFIX + "{id}";
+    public static final String UPDATE_APPOINTMENT = PREFIX + "/update/{appointmentId}";
 
     private Appointment() {}
   }
