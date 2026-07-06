@@ -26,10 +26,8 @@ public record ClinicDetailResponse(
         @Schema(description = "Mô tả chi tiết phòng khám", example = "Phòng khám thú y uy tín hàng đầu với trang thiết bị hiện đại")
         String description,
 
-
         @Schema(description = "Số điện thoại liên hệ", example = "0383553886")
         String phone,
-
 
         @Schema(description = "Địa chỉ chi tiết", example = "83Giải Phóng,P.Đồng Tâm")
         String address,
@@ -43,9 +41,27 @@ public record ClinicDetailResponse(
         @Schema(description = "DS dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
         List<String> services,
 
-
         @Schema(description = "Link gg map phòng khám")
-        String mapLink
-        // @formatter:on
-){public static ClinicDetailResponse from(Clinic clinic,boolean isOperating){return new ClinicDetailResponse(clinic.getId(),clinic.getThumbnailUrl(),clinic.getName(),isOperating,clinic.getRating(),clinic.getDescription(),clinic.getPhone(),clinic.getAddress(),clinic.getOpenTime(),clinic.getCloseTime(),clinic.getServices().stream().map(service->service.getName()).toList(),clinic.getMapLink());}}
+        String mapLink,
 
+        @Schema(description = "Khoảng cách tới người dùng (km)", example = "2.5")
+        Double distance
+){
+        public static ClinicDetailResponse from(Clinic clinic,boolean isOperating, Double distance){
+                return new ClinicDetailResponse(
+                        clinic.getId(),
+                        clinic.getThumbnailUrl(),
+                        clinic.getName(),
+                        isOperating,
+                        clinic.getRating(),
+                        clinic.getDescription(),
+                        clinic.getPhone(),
+                        clinic.getAddress(),
+                        clinic.getOpenTime(),
+                        clinic.getCloseTime(),
+                        clinic.getServices().stream().map(service->service.getName()).toList(),
+                        clinic.getMapLink(),
+                        distance
+                );
+        }
+}

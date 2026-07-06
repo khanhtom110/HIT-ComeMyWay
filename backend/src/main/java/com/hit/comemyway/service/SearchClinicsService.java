@@ -66,6 +66,14 @@ public class SearchClinicsService {
     return result;
   }
 
+  public Double calculateDistance(Double userLatitude, Double userLongitude, Clinic clinic) {
+    List<Double> distances = this.calculateDistance(userLatitude, userLongitude, List.of(clinic));
+    if (distances != null && !distances.isEmpty()) {
+      return distances.get(0);
+    }
+    return null;
+  }
+
   public double calculateFallback(Double userLatitude, Double userLongitude, Double clinicLatitude,
       Double clinicLongitude) {
     double distance =

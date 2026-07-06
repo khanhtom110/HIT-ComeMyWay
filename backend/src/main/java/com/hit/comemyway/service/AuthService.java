@@ -51,7 +51,7 @@ public class AuthService {
     String accessToken = jwtService.generateToken(user, false);
     String refreshToken = jwtService.generateToken(user, true);
 
-    return new LoginResponse(accessToken, refreshToken);
+    return new LoginResponse(accessToken, refreshToken, user.getId());
   }
 
   @Transactional
@@ -162,6 +162,6 @@ public class AuthService {
     String newAccessToken = jwtService.generateToken(user, false);
     String newRefreshToken = jwtService.generateToken(user, true);
 
-    return new LoginResponse(newAccessToken, newRefreshToken);
+    return new LoginResponse(newAccessToken, newRefreshToken, user.getId());
   }
 }

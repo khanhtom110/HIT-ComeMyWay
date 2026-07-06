@@ -8,6 +8,9 @@ public record LoginResponse(
         String accessToken,
 
         @Schema(description = "Mã dùng để duy trì")
-        String refreshToken
+        String refreshToken,
+
+        @Schema(description = "Id người dùng")
+        Long userId
 ) {
 }
