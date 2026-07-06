@@ -1,13 +1,10 @@
-package com.example.petbeats.ui.home.search
+package com.example.petbeats.ui.home.historylistall
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,26 +16,21 @@ import androidx.room.Room
 import com.example.petbeats.R
 import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
-import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentBookBinding
-import com.example.petbeats.databinding.FragmentSearchBinding
-import com.example.petbeats.ui.home.search.adapterhint.AdapterHint
+import com.example.petbeats.databinding.FragmentHistoryListAllBinding
+import com.example.petbeats.ui.home.search.SearchEvent
 import com.example.petbeats.ui.home.search.adapterhistory.AdapterHistory
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
-    private var _binding: FragmentSearchBinding ?= null
+
+class HistoryListAllFragment : Fragment() {
+    private var _binding: FragmentHistoryListAllBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterHistory: AdapterHistory
-    private lateinit var adapterHint: AdapterHint
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(
+    private val viewModel: HistoryListAllViewModel by viewModels {
+        HistoryListAllVIewModelFactory(
             HomeRepository(
                 RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
             ),
@@ -53,51 +45,20 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    @SuppressLint("MissingPermission")
-    private fun getUserLocationAndSearch() {
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                val userLat = location.latitude
-                val userLng = location.longitude
-
-                viewModel.onLatiLong(userLat, userLng)
-                viewModel.onHintList()
-            } else {
-                Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
-
-                viewModel.onHintList()
-            }
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
-
-            viewModel.onHintList()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentHistoryListAllBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        getUserLocationAndSearch()
-
-
         clickListHistory()
-        clickListHint()
 
-
-        binding.recycleHint.layoutManager = LinearLayoutManager(requireContext())
-        binding.recycleHint.adapter = adapterHint
         binding.recycleHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleHistory.adapter = adapterHistory
 
@@ -111,31 +72,19 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-
-    //Dùng để lấy search của history sang cho màn resultSearch
     private fun clickListHistory() {
         adapterHistory = AdapterHistory { click ->
             viewModel.itemClickHistory(click)
         }
     }
 
-    private fun clickListHint() {
-        adapterHint = AdapterHint { click ->
-            viewModel.itemClickHint(click)
-        }
-    }
-
     private fun setOnClick() {
         binding.back.setOnClickListener {
-            viewModel.bookClick()
+            viewModel.searchClick()
         }
 
         binding.search.addTextChangedListener {
             viewModel.onSearchChange(it.toString())
-        }
-
-        binding.buttonAll.setOnClickListener {
-            viewModel.buttonAllClick()
         }
 
         //Tự động check true khi click, flase thì thoát
@@ -153,9 +102,6 @@ class SearchFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    //list hint
-                    adapterHint.submitList(state.listHint)
-
                     //list history
                     adapterHistory.submitList(state.listHistory)
 
@@ -180,27 +126,17 @@ class SearchFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        is SearchEvent.NavigationBook -> {
-                            findNavController().navigate(R.id.search_book)
+                        is HistoryListAllEvent.NavigationSearch -> {
+                            findNavController().navigate(R.id.historyListAll_Search)
                         }
-                        is SearchEvent.NavigationResultSearch -> {
+
+                        is HistoryListAllEvent.NavigationResultSearch -> {
                             findNavController().navigate(
-                                R.id.search_resultSearch,
+                                R.id.resultSearchFragment,
                                 Bundle().apply {
                                     putString("search", event.search)
                                 }
                             )
-                        }
-                        is SearchEvent.NavigationInformationId -> {
-                            findNavController().navigate(
-                                R.id.informationRoomFragment,
-                                Bundle().apply {
-                                    putInt("id", event.id)
-                                }
-                            )
-                        }
-                        is SearchEvent.NavigationHistoryListALl -> {
-                            findNavController().navigate(R.id.historyListAllFragment)
                         }
                     }
                 }

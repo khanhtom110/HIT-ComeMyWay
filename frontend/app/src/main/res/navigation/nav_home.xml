@@ -57,4 +57,15 @@
         android:name="com.example.petbeats.ui.home.informationroom.InformationRoomFragment"
         android:label="informationRoomFragment">
     </fragment>
+
+    <fragment
+        android:id="@+id/historyListAllFragment"
+        android:name="com.example.petbeats.ui.home.historylistall.HistoryListAllFragment"
+        android:label="historyListAllFragment">
+        <action
+            android:id="@+id/historyListAll_Search"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>
