@@ -23,11 +23,15 @@ public final class ErrorMessage {
   public static final String NOT_BLANK_FIELD = "This field cannot be blank.";
   public static final String INVALID_FORMAT_USERNAME =
       "Username must be 4-120 characters long and contain only letters, numbers, and underscores.";
+  public static final String INVALID_FORMAT_FULLNAME = "Fullname must be 4-120 characters long.";
+  public static final String INVALID_FORMAT_PHONE = "Invalid phone number format";
   public static final String INVALID_FORMAT_PASSWORD =
       "Password must be 8-120 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
   public static final String INVALID_USERNAME_LENGTH =
       "Username length is invalid. It must be between 4 and 120 characters.";
   public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
+  public static final String INVALID_FORMAT_CONDITION =
+      "Condition must be under 1000 characters long.";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
   // Authentication Errors (Auth)
@@ -82,5 +86,18 @@ public final class ErrorMessage {
     private Clinic() {}
 
     public static final String CLINIC_NOT_EXISTED = "Clinic does not exist";
+  }
+
+  // Appointment Errors
+  public static final class Appointment {
+    private Appointment() {}
+
+    public static final String APPOINTMENT_NOT_EXISTED = "Appointment does not exist";
+    public static final String CANNOT_EDIT_APPOINTMENT =
+        "Cannot edit appointment because it is not in pending status";
+    public static final String INVALID_APPOINTMENT_DATE = "Appointment date cannot be in the past.";
+    public static final String INVALID_APPOINTMENT_TIME =
+        "Appointment time must be after the current time.";
+
   }
 }

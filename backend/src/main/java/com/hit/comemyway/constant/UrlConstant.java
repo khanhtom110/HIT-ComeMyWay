@@ -7,6 +7,7 @@ public class UrlConstant {
     public static final String CLINIC_SEARCH = PREFIX + "/clinics/search";
     public static final String CLINIC_SUGGESTION = PREFIX + "/clinics/suggestions";
     public static final String CLINIC_DETAIL = PREFIX + "/clinics/{clinicId}";
+    public static final String CLINIC_BOOKING = PREFIX + "/clinics/{clinicId}/booking";
     public static final String GET_SUGGESTION = PREFIX + "/suggestions/location";
     public static final String HEALTH_CHECK = PREFIX + "/health";
 
@@ -32,7 +33,6 @@ public class UrlConstant {
 
     public static final String GET_PROFILE = PREFIX + "/profile";
     public static final String LOGOUT = PREFIX + "/logout";
-    public static final String BOOK_APPOINTMENT = PREFIX + "/appointments/book";
 
     private User() {}
   }
@@ -63,5 +63,16 @@ public class UrlConstant {
     public static final String GET_ALL = PREFIX;
 
     private Clinic() {}
+  }
+
+  public static class Appointment {
+    private static final String PREFIX = "/user/appointments";
+
+    public static final String CREATE_APPOINTMENT = PREFIX;
+    public static final String GET_APPOINTMENT = PREFIX + "/{userId}";
+    public static final String GET_DETAIL = PREFIX + "/detail/{id}";
+    public static final String UPDATE_APPOINTMENT = PREFIX + "/update/{appointmentId}";
+
+    private Appointment() {}
   }
 }
