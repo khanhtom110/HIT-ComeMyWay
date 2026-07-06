@@ -121,16 +121,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/imgClinic" />
 
-                <TextView
-                    style="@style/Chu3"
-                    android:id="@+id/tvDescription"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/groundDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Với tầm nhìn trở thành cơ sở khám chữa bệnh..."
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_marginHorizontal="@dimen/_15sdp"
-                    android:textColor="@color/colorTextContent"
-                    app:layout_constraintTop_toBottomOf="@id/tvTitleDescription" />
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:background="@drawable/ground_hint_information_service"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitleDescription">
+                    <TextView
+                        style="@style/Chu3"
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Với tầm nhìn trở thành cơ sở khám chữa bệnh..."
+                        android:layout_marginVertical="@dimen/_8sdp"
+                        android:layout_marginHorizontal="@dimen/_8sdp"
+                        android:textColor="@color/colorTextContent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     style="@style/Chu1"
@@ -146,7 +156,7 @@
                     app:drawableStartCompat="@drawable/locate_information"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/groundDescription" />
 
                 <View
                     android:id="@+id/line1"
@@ -178,14 +188,14 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginHorizontal="@dimen/_8sdp"
                     android:background="@color/colorTextHint"
-                    app:layout_constraintTop_toBottomOf="@id/tvPhone" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPhone"/>
 
                 <TextView
                     style="@style/Chu1"
-                    android:id="@+id/tvOpenTime"
+                    android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8:00:00"
+                    android:text="Thứ 2 - Chủ nhật"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:drawablePadding="8dp"
@@ -193,6 +203,18 @@
                     app:drawableStartCompat="@drawable/time_information"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2"/>
+
+                <TextView
+                    style="@style/Chu1"
+                    android:id="@+id/tvOpenTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8:00:00"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_26sdp"
+                    android:textColor="@color/colorTextSub"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTime"/>
 
                 <TextView
                     style="@style/Chu1"

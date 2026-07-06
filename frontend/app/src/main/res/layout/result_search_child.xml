@@ -114,7 +114,7 @@
 
         <TextView
             style="@style/Chu3"
-            android:id="@+id/closeTime"
+            android:id="@+id/opentTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="7:00AM"
@@ -126,15 +126,15 @@
 
         <TextView
             style="@style/Chu3"
-            android:id="@+id/opentTime"
+            android:id="@+id/closeTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="17:00PM"
             android:textColor="@color/colorTextSub"
             android:layout_marginStart="@dimen/_3sdp"
-            app:layout_constraintTop_toTopOf="@id/closeTime"
-            app:layout_constraintStart_toEndOf="@id/closeTime"
-            app:layout_constraintBottom_toBottomOf="@id/closeTime"/>
+            app:layout_constraintTop_toTopOf="@id/opentTime"
+            app:layout_constraintStart_toEndOf="@id/opentTime"
+            app:layout_constraintBottom_toBottomOf="@id/opentTime"/>
 
 
         <TextView
@@ -146,7 +146,7 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintTop_toBottomOf="@id/closeTime"
+            app:layout_constraintTop_toBottomOf="@id/opentTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

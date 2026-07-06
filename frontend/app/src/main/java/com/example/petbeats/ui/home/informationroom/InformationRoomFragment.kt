@@ -109,8 +109,8 @@ class InformationRoomFragment : Fragment() {
                     Log.d("UI_DEBUG", "Data arrived: ${state.name}")
                     binding.tvClinicName.text = state.name
                     binding.tvAddress.text = state.address
-                    binding.tvOpenTime.text = state.openTime
-                    binding.tvCloseTime.text = state.closeTime
+                    binding.tvOpenTime.text = state.openTime.take(5)
+                    binding.tvCloseTime.text = state.closeTime.take(5)
                     binding.tvPhone.text = state.phone
                     binding.tvDescription.text = state.description
                     binding.tvRating.text = "Đánh giá: ${state.rating}/5"

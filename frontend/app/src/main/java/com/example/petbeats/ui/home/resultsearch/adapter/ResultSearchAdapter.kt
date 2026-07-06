@@ -36,7 +36,7 @@ class ResultSearchAdapter(
         val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
         val closeTime: TextView = itemView.findViewById(R.id.closeTime)
-        val opentTime: TextView = itemView.findViewById(R.id.opentTime)
+        val openTime: TextView = itemView.findViewById(R.id.opentTime)
         val detail: TextView = itemView.findViewById(R.id.btnDetail)
 
         fun bind(item: ResultSearchChild, onItemClick: (Int) -> Unit) {
@@ -44,8 +44,8 @@ class ResultSearchAdapter(
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
-            closeTime.text = "${item.closeTime} - "
-            opentTime.text = item.openTime
+            openTime.text = "${item.openTime.take(5)}AM -"
+            closeTime.text = "${item.closeTime.take(5)}PM"
 
 
             if (item.isOperating) {
