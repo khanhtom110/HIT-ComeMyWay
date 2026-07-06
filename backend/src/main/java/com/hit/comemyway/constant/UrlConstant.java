@@ -66,7 +66,7 @@ public class UrlConstant {
   }
 
   public static class Appointment {
-    private static final String PREFIX = "/appointments";
+    private static final String PREFIX = "/user/appointments";
 
     public static final String CREATE_APPOINTMENT = PREFIX;
     public static final String GET_APPOINTMENT = PREFIX + "/{userId}";
