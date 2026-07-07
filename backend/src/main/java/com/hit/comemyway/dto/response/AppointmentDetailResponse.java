@@ -3,10 +3,12 @@ package com.hit.comemyway.dto.response;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
 import com.hit.comemyway.entity.BookingType;
+import com.hit.comemyway.entity.Service;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record AppointmentDetailResponse(
 //@formatter:off
@@ -52,6 +54,9 @@ public record AppointmentDetailResponse(
         @Schema(description = "Giờ khám", example = "09:30:00")
         LocalTime appointmentTime,
 
+        @Schema(description = "Danh sách dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
+        List<String> services,
+
         @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
         BookingStatus status) {
     public static AppointmentDetailResponse from (Appointment appointment) {
@@ -70,6 +75,9 @@ public record AppointmentDetailResponse(
                 appointment.getPetQuantity(),
                 appointment.getAppointmentDate(),
                 appointment.getAppointmentTime(),
+                appointment.getServices().stream()
+                           .map(service -> service.getName())
+                           .toList(),
                 appointment.getStatus()
         );
     }

@@ -7,22 +7,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FirebaseMessagingService {
-    public void sendNotification(String deviceToken, String title, String body) {
-        try {
-            Notification notification = Notification.builder()
-                    .setTitle(title)
-                    .setBody(body)
-                    .build();
+  public void sendNotification(String deviceToken, String title, String body) {
+    try {
+      Notification notification = Notification.builder().setTitle(title).setBody(body).build();
 
-            Message message = Message.builder()
-                    .setToken(deviceToken)
-                    .setNotification(notification)
-                    .build();
+      Message message =
+          Message.builder().setToken(deviceToken).setNotification(notification).build();
 
-            FirebaseMessaging.getInstance().send(message);
+      FirebaseMessaging.getInstance().send(message);
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 }

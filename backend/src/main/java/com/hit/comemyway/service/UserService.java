@@ -12,17 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Transactional
-    public void updateDeviceToken(String deviceToken) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+  @Transactional
+  public void updateDeviceToken(String deviceToken) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
-        user.setDeviceToken(deviceToken);
+    user.setDeviceToken(deviceToken);
 
-        userRepository.save(user);
-    }
+    userRepository.save(user);
+  }
 }

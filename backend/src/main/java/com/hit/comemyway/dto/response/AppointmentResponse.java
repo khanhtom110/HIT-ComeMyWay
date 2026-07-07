@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record AppointmentResponse(
 //@formatter:off
@@ -46,6 +47,9 @@ public record AppointmentResponse(
         @Schema(description = "Giờ khám", example = "09:30:00")
         LocalTime appointmentTime,
 
+        @Schema(description = "Danh sách dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
+        List<String> services,
+
         @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
         BookingStatus status) {
     public static AppointmentResponse from(Appointment appointment) {
@@ -62,6 +66,9 @@ public record AppointmentResponse(
                 appointment.getPetQuantity(),
                 appointment.getAppointmentDate(),
                 appointment.getAppointmentTime(),
+                appointment.getServices().stream()
+                           .map(service -> service.getName())
+                           .toList(),
                 appointment.getStatus()
         );
     }

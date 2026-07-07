@@ -36,6 +36,7 @@ public class UrlConstant {
     public static final String BOOK_APPOINTMENT = PREFIX + "/appointments/book";
     public static final String DEVICE_TOKEN = PREFIX + "/device-token";
     public static final String USER_REMINDER = PREFIX + "/user-reminder";
+
     private User() {}
   }
 
@@ -71,7 +72,7 @@ public class UrlConstant {
     private static final String PREFIX = "/user/appointments";
 
     public static final String CREATE_APPOINTMENT = PREFIX;
-    public static final String GET_APPOINTMENT = PREFIX + "/{userId}";
+    public static final String GET_APPOINTMENT = PREFIX;
     public static final String GET_DETAIL = PREFIX + "/detail/{id}";
     public static final String UPDATE_APPOINTMENT = PREFIX + "/update/{appointmentId}";
 

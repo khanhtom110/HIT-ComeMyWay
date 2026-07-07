@@ -22,22 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(ApiPath.API_V1)
 public class UserController {
 
-    private final UserService userService;
-    private final AppointmentReminderService appointmentReminderService;
+  private final UserService userService;
 
-    @Operation(summary = "Cập nhật Firebase Device Token", description = "gọi API này ngay sau khi đăng nhập thành công hoặc và người dùng cấp quyền cho phép thông báo.")
-    @PostMapping(UrlConstant.User.DEVICE_TOKEN)
-    public ResponseEntity<ApiResponse<Void>> updateDeviceToken(
-            @Valid @RequestBody DeviceTokenRequest request) {
-        userService.updateDeviceToken(request.deviceToken());
+  @Operation(summary = "Cập nhật Firebase Device Token",
+      description = "gọi API này ngay sau khi đăng nhập thành công hoặc và người dùng cấp quyền cho phép thông báo.")
+  @PostMapping(UrlConstant.User.DEVICE_TOKEN)
+  public ResponseEntity<ApiResponse<Void>> updateDeviceToken(
+      @Valid @RequestBody DeviceTokenRequest request) {
+    userService.updateDeviceToken(request.deviceToken());
 
-        return ResponseEntity.ok(ApiResponse.ok(null));
-    }
-
-    @Operation(summary = "Gửi thông báo cho người dùng", description = "")
-    @PostMapping(UrlConstant.User.USER_REMINDER)
-    ResponseEntity<ApiResponse<Void>> sendReminder() {
-        appointmentReminderService.sendAppointmentReminder();
-        return ResponseEntity.ok(ApiResponse.ok(null));
-    }
+    return ResponseEntity.ok(ApiResponse.ok(null));
+  }
 }

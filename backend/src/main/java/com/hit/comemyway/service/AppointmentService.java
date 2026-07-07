@@ -12,6 +12,7 @@ import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.AppointmentRepository;
 import com.hit.comemyway.repository.ClinicRepository;
+import com.hit.comemyway.repository.ServiceRepository;
 import com.hit.comemyway.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ public class AppointmentService {
   private final AppointmentRepository appointmentRepository;
   private final UserRepository userRepository;
   private final ClinicRepository clinicRepository;
+  private final ServiceRepository serviceRepository;
 
   @Transactional
   public AppointmentResponse createAppointment(AppointmentRequest request) {
@@ -47,18 +49,21 @@ public class AppointmentService {
         .homeAddress(request.homeAddress()).petType(request.petType())
         .petCondition(request.petCondition()).petQuantity(request.petQuantity())
         .appointmentDate(request.appointmentDate()).appointmentTime(request.appointmentTime())
-        .build();
+        .services(serviceRepository.findAllById(request.serviceIds())).build();
 
     Appointment savedAppointment = appointmentRepository.save(appointment);
     return AppointmentResponse.from(savedAppointment);
   }
-    @Transactional(readOnly = true)
-    public List<AppointmentDisplayResponse> getUserAppointment(Long userId) {
-        return appointmentRepository.findByUserId(userId)
-                .stream()
-                .map(AppointmentDisplayResponse::from)
-                .toList();
-    }
+
+  @Transactional(readOnly = true)
+  public List<AppointmentDisplayResponse> getUserAppointment() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    return appointmentRepository.findByUserId(user.getId()).stream()
+        .map(AppointmentDisplayResponse::from).toList();
+  }
 
   @Transactional
   public AppointmentResponse updateAppointment(AppointmentRequest request, Long appointmentId) {
@@ -93,6 +98,7 @@ public class AppointmentService {
     appointment.setPetQuantity(request.petQuantity());
     appointment.setAppointmentDate(request.appointmentDate());
     appointment.setAppointmentTime(request.appointmentTime());
+    appointment.setServices(serviceRepository.findAllById(request.serviceIds()));
 
     Appointment savedAppointment = appointmentRepository.save(appointment);
     return AppointmentResponse.from(savedAppointment);
@@ -111,10 +117,12 @@ public class AppointmentService {
       throw new AppException(400, ErrorMessage.Appointment.INVALID_APPOINTMENT_TIME);
     }
   }
-    @Transactional(readOnly = true)
-    public AppointmentDetailResponse getAppointmentDetail(Long id) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));;
-        return AppointmentDetailResponse.from(appointment);
-    }
+
+  @Transactional(readOnly = true)
+  public AppointmentDetailResponse getAppointmentDetail(Long id) {
+    Appointment appointment = appointmentRepository.findByIdWithUserAndClinic(id)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
+
+    return AppointmentDetailResponse.from(appointment);
+  }
 }
