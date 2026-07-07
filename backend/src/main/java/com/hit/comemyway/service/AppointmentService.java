@@ -3,6 +3,8 @@ package com.hit.comemyway.service;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
+import com.hit.comemyway.dto.response.AppointmentDetailResponse;
+import com.hit.comemyway.dto.response.AppointmentDisplayResponse;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
 import com.hit.comemyway.entity.Clinic;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -49,6 +52,13 @@ public class AppointmentService {
     Appointment savedAppointment = appointmentRepository.save(appointment);
     return AppointmentResponse.from(savedAppointment);
   }
+    @Transactional(readOnly = true)
+    public List<AppointmentDisplayResponse> getUserAppointment(Long userId) {
+        return appointmentRepository.findByUserId(userId)
+                .stream()
+                .map(AppointmentDisplayResponse::from)
+                .toList();
+    }
 
   @Transactional
   public AppointmentResponse updateAppointment(AppointmentRequest request, Long appointmentId) {
@@ -101,4 +111,10 @@ public class AppointmentService {
       throw new AppException(400, ErrorMessage.Appointment.INVALID_APPOINTMENT_TIME);
     }
   }
+    @Transactional(readOnly = true)
+    public AppointmentDetailResponse getAppointmentDetail(Long id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));;
+        return AppointmentDetailResponse.from(appointment);
+    }
 }

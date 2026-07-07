@@ -5,17 +5,23 @@ import com.hit.comemyway.constant.ApiPath;
 import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
+import com.hit.comemyway.dto.response.AppointmentDetailResponse;
+import com.hit.comemyway.dto.response.AppointmentDisplayResponse;
 import com.hit.comemyway.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +37,14 @@ public class AppointmentController {
     AppointmentResponse response = appointmentService.createAppointment(request);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
+    @Operation(summary = "Lấy các lịch hẹn của người dùng",
+            description = "Trả về danh sách lịch hẹn của người dùng")
+    @GetMapping(UrlConstant.Appointment.GET_APPOINTMENT)
+    public ResponseEntity<ApiResponse<List<AppointmentDisplayResponse>>> getAppointment(
+            @Parameter(description = "ID của người dùng", required = true) @PathVariable Long userId) {
+        List<AppointmentDisplayResponse> response = appointmentService.getUserAppointment(userId);
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
 
   @Operation(summary = "Chỉnh sửa lịch hẹn", description = "Người dùng thay đổi thông tin đặt lịch")
   @PostMapping(UrlConstant.Appointment.UPDATE_APPOINTMENT)
@@ -39,4 +53,12 @@ public class AppointmentController {
     AppointmentResponse response = appointmentService.updateAppointment(request, appointmentId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
+    @Operation(summary = "Lấy chi tiết 1 lịch hẹn",
+            description = "Trả về thông tin chi tiết 1 lịch hẹn")
+    @GetMapping(UrlConstant.Appointment.GET_DETAIL)
+    public ResponseEntity<ApiResponse<AppointmentDetailResponse>> getAppointmentDetail(
+            @Parameter(description = "ID của phòng khám", required = true) @PathVariable Long id) {
+        AppointmentDetailResponse response = appointmentService.getAppointmentDetail(id);
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
 }

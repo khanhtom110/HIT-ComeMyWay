@@ -59,4 +59,8 @@ public class Appointment extends BaseEntity {
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.PENDING;
+
+  @Column(name = "is_notified", nullable = false)
+  @Builder.Default
+  private Boolean isNotified = false;
 }
