@@ -8,7 +8,6 @@ public final class CommonConstant {
   public static final String PHONE_REGEX = "^0[35789]\\d{8}$";
   public static final int EMAIL_LENGTH = 100;
   public static final int ADDRESS_LENGTH = 255;
-  public static final int BOOKING_TYPE_LENGTH = 255;
   public static final int CONDITION_LENGTH = 1000;
 
   public static final class Clinic {

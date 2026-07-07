@@ -56,6 +56,7 @@ public class Appointment extends BaseEntity {
   @Column(name = "appointment_time", nullable = false)
   private LocalTime appointmentTime;
 
+  @Column(name = "status", nullable = false)
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.PENDING;
