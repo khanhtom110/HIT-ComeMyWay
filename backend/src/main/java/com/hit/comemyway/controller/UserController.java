@@ -15,8 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Tag(name = "User", description = "Các API liên quan tới quản lý tài khoản người dùng")
 @RequestMapping(ApiPath.API_V1)
