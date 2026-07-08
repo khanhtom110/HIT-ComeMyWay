@@ -54,8 +54,8 @@ public record AppointmentDetailResponse(
         @Schema(description = "Giờ khám", example = "09:30:00")
         LocalTime appointmentTime,
 
-        @Schema(description = "Danh sách dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
-        List<String> services,
+        @Schema(description = "Danh sách các id và tên dịch vụ", example = "[{\"id\": 1, \"name\": \"Tiêm phòng\"}, ...]")
+        List<ServiceResponse> services,
 
         @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
         BookingStatus status) {
@@ -76,8 +76,8 @@ public record AppointmentDetailResponse(
                 appointment.getAppointmentDate(),
                 appointment.getAppointmentTime(),
                 appointment.getServices().stream()
-                           .map(service -> service.getName())
-                           .toList(),
+                        .map(ServiceResponse::from)
+                        .toList(),
                 appointment.getStatus()
         );
     }

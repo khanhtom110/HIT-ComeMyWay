@@ -29,7 +29,7 @@ public class Appointment extends BaseEntity {
   private Clinic clinic;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "appointment_servicces", joinColumns = @JoinColumn(name = "appointment_id"),
+  @JoinTable(name = "appointment_services", joinColumns = @JoinColumn(name = "appointment_id"),
       inverseJoinColumns = @JoinColumn(name = "service_id"))
   private List<Service> services;
 

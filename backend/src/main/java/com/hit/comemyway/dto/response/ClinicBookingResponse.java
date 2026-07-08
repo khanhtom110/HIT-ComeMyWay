@@ -22,8 +22,8 @@ public record ClinicBookingResponse(
         @Schema(description = "Điểm đánh giá trung bình", example = "4.8")
         Double rating,
 
-        @Schema(description = "Danh sách các dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
-        List<String> services
+        @Schema(description = "Danh sách các id và tên dịch vụ", example = "[{\"id\": 1, \"name\": \"Tiêm phòng\"}, ...]")
+        List<ServiceResponse> services
 ) {
     public static ClinicBookingResponse from(Clinic clinic, Boolean isOperating){
         return new ClinicBookingResponse(
@@ -33,7 +33,7 @@ public record ClinicBookingResponse(
         isOperating,
         clinic.getRating(),
         clinic.getServices().stream()
-                .map(service -> service.getName())
+                .map(ServiceResponse::from)
                 .toList()
         );
     }

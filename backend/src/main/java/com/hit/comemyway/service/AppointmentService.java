@@ -19,10 +19,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,12 +47,29 @@ public class AppointmentService {
     Clinic clinic = clinicRepository.findById(request.clinicId())
         .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
 
+    // Loai bo ID trung lap
+    Set<Long> uniqueServiceIds = new HashSet<>(request.serviceIds());
+
+    List<com.hit.comemyway.entity.Service> services =
+        serviceRepository.findAllById(uniqueServiceIds);
+
+    if (services.size() != uniqueServiceIds.size()) {
+      throw new AppException(404, ErrorMessage.Appointment.APPOINTMENT_SERVICE_NOT_EXISTED);
+    }
+
+    Set<Long> clinicAvailableServiceIds = clinic.getServices().stream()
+        .map(com.hit.comemyway.entity.Service::getId).collect(Collectors.toSet());
+
+    if (!clinicAvailableServiceIds.containsAll(uniqueServiceIds)) {
+      throw new AppException(404, ErrorMessage.Appointment.CLINIC_SERVICE_MISMATCH);
+    }
+
     Appointment appointment = Appointment.builder().user(user).clinic(clinic)
         .fullName(request.fullName()).phone(request.phone()).bookingType(request.bookingType())
         .homeAddress(request.homeAddress()).petType(request.petType())
         .petCondition(request.petCondition()).petQuantity(request.petQuantity())
         .appointmentDate(request.appointmentDate()).appointmentTime(request.appointmentTime())
-        .services(serviceRepository.findAllById(request.serviceIds())).build();
+        .services(services).build();
 
     Appointment savedAppointment = appointmentRepository.save(appointment);
     return AppointmentResponse.from(savedAppointment);
@@ -88,6 +108,23 @@ public class AppointmentService {
     Clinic clinic = clinicRepository.findById(request.clinicId())
         .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
 
+    // Loai bo ID trung lap
+    Set<Long> uniqueServiceIds = new HashSet<>(request.serviceIds());
+
+    List<com.hit.comemyway.entity.Service> services =
+        serviceRepository.findAllById(uniqueServiceIds);
+
+    if (services.size() != uniqueServiceIds.size()) {
+      throw new AppException(404, ErrorMessage.Appointment.APPOINTMENT_SERVICE_NOT_EXISTED);
+    }
+
+    Set<Long> clinicAvailableServiceIds = clinic.getServices().stream()
+        .map(com.hit.comemyway.entity.Service::getId).collect(Collectors.toSet());
+
+    if (!clinicAvailableServiceIds.containsAll(uniqueServiceIds)) {
+      throw new AppException(404, ErrorMessage.Appointment.CLINIC_SERVICE_MISMATCH);
+    }
+
     appointment.setClinic(clinic);
     appointment.setFullName(request.fullName());
     appointment.setPhone(request.phone());
@@ -98,7 +135,7 @@ public class AppointmentService {
     appointment.setPetQuantity(request.petQuantity());
     appointment.setAppointmentDate(request.appointmentDate());
     appointment.setAppointmentTime(request.appointmentTime());
-    appointment.setServices(serviceRepository.findAllById(request.serviceIds()));
+    appointment.setServices(services);
 
     Appointment savedAppointment = appointmentRepository.save(appointment);
     return AppointmentResponse.from(savedAppointment);

@@ -93,6 +93,10 @@ public final class ErrorMessage {
     private Appointment() {}
 
     public static final String APPOINTMENT_NOT_EXISTED = "Appointment does not exist";
+    public static final String APPOINTMENT_SERVICE_NOT_EXISTED =
+        "One of appointment service does not exist";
+    public static final String CLINIC_SERVICE_MISMATCH =
+        "One of service does not belong to this clinic";
     public static final String CANNOT_EDIT_APPOINTMENT =
         "Cannot edit appointment because it is not in pending status";
     public static final String INVALID_APPOINTMENT_DATE = "Appointment date cannot be in the past.";
