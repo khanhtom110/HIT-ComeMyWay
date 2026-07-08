@@ -72,5 +72,11 @@
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.petbeats.ui.home.calendar.CalendarFragment"
-        android:label="calendarFragment"/>
+        android:label="calendarFragment">
+        <action
+            android:id="@+id/calendar_informationRoom"
+            app:destination="@+id/informationRoomFragment"
+            app:popUpTo="@id/informationRoomFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

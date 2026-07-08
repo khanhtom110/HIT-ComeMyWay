@@ -107,6 +107,20 @@
                 app:layout_constraintTop_toTopOf="@id/tvStar"
                 app:layout_constraintStart_toEndOf="@id/tvStar"/>
 
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvInformationError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStar"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/boxInformation"
                 android:layout_width="match_parent"
@@ -114,7 +128,8 @@
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvStar">
+                android:paddingBottom="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvInformationError">
 
                 <TextView
                     style="@style/Chu3"
@@ -239,10 +254,8 @@
                     android:text="Chó"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_70sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
                     app:layout_constraintTop_toBottomOf="@id/tvTypePet"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"/>
                 
                 <ImageView
                     android:id="@+id/btnDog"
@@ -296,6 +309,64 @@
                     app:layout_constraintBottom_toBottomOf="@id/tvOther"
                     app:layout_constraintStart_toEndOf="@id/tvOther"/>
 
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvTextOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loại thú cưng khác"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/tvOther"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_36sdp"
+                    android:background="@drawable/tittle_search"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="Nhập loại thú cưng"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:inputType="number"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/tvTextOther"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số lượng thú cưng"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvDog"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ground_hint_information_service"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="Nhập tình trạng hiện tại của thú cưng (không bắt \nbuộc)"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:inputType="number"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_35sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvState"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -320,6 +391,20 @@
                 app:layout_constraintTop_toTopOf="@id/tvStarService"
                 app:layout_constraintStart_toEndOf="@id/tvStarService"/>
 
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvServiceError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStarService"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/boxService"
                 android:layout_width="match_parent"
@@ -327,7 +412,7 @@
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvStarService">
+                app:layout_constraintTop_toBottomOf="@id/tvServiceError">
 
                 <TextView
                     style="@style/Nut2"
@@ -415,6 +500,20 @@
                 app:layout_constraintTop_toTopOf="@id/tvStarCalendar"
                 app:layout_constraintStart_toEndOf="@id/tvStarCalendar"/>
 
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/calendarError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStarCalendar"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/boxCalendar"
                 android:layout_width="match_parent"
@@ -422,7 +521,7 @@
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvStarCalendar">
+                app:layout_constraintTop_toBottomOf="@id/calendarError">
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -460,6 +559,20 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/timeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStarTime"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 style="@style/Nut2"
