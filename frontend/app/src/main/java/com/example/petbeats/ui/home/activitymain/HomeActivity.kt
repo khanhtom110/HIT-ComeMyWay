@@ -49,6 +49,12 @@ class HomeActivity : AppCompatActivity() {
                 R.id.informationRoomFragment -> {
                     binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
+                R.id.historyListAllFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.calendarFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
             }
         }
     }

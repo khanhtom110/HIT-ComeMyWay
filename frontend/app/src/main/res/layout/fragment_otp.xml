@@ -151,6 +151,8 @@
             android:text=""
             android:textColor="@color/colorError"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/input3" />

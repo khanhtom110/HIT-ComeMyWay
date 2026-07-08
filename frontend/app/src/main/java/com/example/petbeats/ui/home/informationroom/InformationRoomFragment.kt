@@ -100,6 +100,10 @@ class InformationRoomFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             viewModel.resultClick()
         }
+
+        binding.btnBooking.setOnClickListener {
+            viewModel.calendarClick()
+        }
     }
 
     private fun stateData() {
@@ -179,6 +183,9 @@ class InformationRoomFragment : Fragment() {
                     when (event) {
                         is InformationRoomEvent.NavigationResultSearch -> {
                             findNavController().popBackStack()
+                        }
+                        is InformationRoomEvent.NavigationCalendar -> {
+                            findNavController().navigate(R.id.calendarFragment)
                         }
                     }
                 }

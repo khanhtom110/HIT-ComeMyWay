@@ -24,7 +24,7 @@ object ErrorUtils {
 
             //Password
             "Password must be 8-120 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character." ->
-                Pair(ErrorTarget.PASSWORD, "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).")
+                Pair(ErrorTarget.PASSWORD, "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ \nthường, số và ký tự đặc biệt).")
             "Passwords do not match." ->
                 Pair(ErrorTarget.PASSWORD, "Mật khẩu xác nhận không khớp.")
             "New password must be different from the current password." ->

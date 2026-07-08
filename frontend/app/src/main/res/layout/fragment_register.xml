@@ -69,6 +69,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_16sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputName"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,6 +111,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_16sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputEmail"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -159,6 +163,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_16sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputPassword"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -209,6 +215,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_16sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputPassword1"
             app:layout_constraintStart_toStartOf="parent" />
 

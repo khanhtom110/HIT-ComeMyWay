@@ -29,6 +29,12 @@ class InformationRoomViewModel(
         }
     }
 
+    fun calendarClick() {
+        viewModelScope.launch {
+            _event.emit(InformationRoomEvent.NavigationCalendar)
+        }
+    }
+
     fun onLatiLong(latitude: Double, longitude: Double) {
         _state.value = _state.value.copy(latitude = latitude, longitude = longitude)
     }
