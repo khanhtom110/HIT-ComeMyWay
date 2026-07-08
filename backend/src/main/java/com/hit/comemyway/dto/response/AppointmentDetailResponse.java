@@ -3,22 +3,29 @@ package com.hit.comemyway.dto.response;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
 import com.hit.comemyway.entity.BookingType;
+import com.hit.comemyway.entity.Service;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public record AppointmentResponse(
+public record AppointmentDetailResponse(
 //@formatter:off
-        @Schema(description = "ID lịch hẹn", example = "1")
-        Long id,
-
         @Schema(description = "ID người dùng", example = "12")
         Long userId,
 
         @Schema(description = "ID phòng khám", example = "45")
         Long clinicId,
+
+        @Schema(description = "Tên phòng khám", example = "Phòng khám Thú y Cộng đồng")
+        String name,
+
+        @Schema(description = "Địa chỉ phòng khám", example = "83 Giải Phóng, P. Đồng Tâm")
+        String address,
+
+        @Schema(description = "URL ảnh đại diện", example = "https://example.com/clinic.jpg")
+        String thumbnailUrl,
 
         @Schema(description = "Họ và tên", example = "Nguyễn Công Phượng")
         String fullName,
@@ -52,11 +59,13 @@ public record AppointmentResponse(
 
         @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
         BookingStatus status) {
-    public static AppointmentResponse from(Appointment appointment) {
-        return new AppointmentResponse(
-                appointment.getId(),
+    public static AppointmentDetailResponse from (Appointment appointment) {
+        return new AppointmentDetailResponse(
                 appointment.getUser().getId(),
                 appointment.getClinic().getId(),
+                appointment.getClinic().getName(),
+                appointment.getClinic().getAddress(),
+                appointment.getClinic().getThumbnailUrl(),
                 appointment.getFullName(),
                 appointment.getPhone(),
                 appointment.getBookingType(),
@@ -67,8 +76,8 @@ public record AppointmentResponse(
                 appointment.getAppointmentDate(),
                 appointment.getAppointmentTime(),
                 appointment.getServices().stream()
-                           .map(ServiceResponse::from)
-                           .toList(),
+                        .map(ServiceResponse::from)
+                        .toList(),
                 appointment.getStatus()
         );
     }

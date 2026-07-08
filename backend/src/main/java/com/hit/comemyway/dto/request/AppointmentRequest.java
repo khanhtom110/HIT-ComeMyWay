@@ -5,13 +5,11 @@ import com.hit.comemyway.constant.CommonConstant;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.entity.BookingType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record AppointmentRequest(
 // @formatter:off
@@ -48,13 +46,18 @@ public record AppointmentRequest(
         @Size(max = CommonConstant.CONDITION_LENGTH, message = ErrorMessage.INVALID_FORMAT_CONDITION)
         String petCondition,
 
-        @Schema(description = "Ngày khám", example = "2026-07-05")
+        @Schema(description = "Ngày khám", example = "2026-07-15")
         @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
         LocalDate appointmentDate,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         @Schema(description = "Giờ khám", example = "09:30")
         @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
-        LocalTime appointmentTime
+        LocalTime appointmentTime,
+
+        @Schema(description = "Danh sách dịch vụ", example = "[1, 2, 3]")
+        @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
+        @Size(min = 1)
+        List<Long> serviceIds
 ) {
 }

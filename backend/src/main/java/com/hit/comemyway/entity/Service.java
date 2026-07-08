@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+import java.util.List;
+
 @Entity
 @Table(name = "services")
 @Getter
@@ -22,6 +24,9 @@ public class Service extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "clinic_id")
   private Clinic clinic;
+
+  @ManyToMany(mappedBy = "services")
+  private List<Appointment> appointments;
 
   @Column(nullable = false)
   private String name;

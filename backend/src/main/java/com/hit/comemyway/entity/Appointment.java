@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "appointments")
@@ -26,6 +27,11 @@ public class Appointment extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "clinic_id", nullable = false)
   private Clinic clinic;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "appointment_services", joinColumns = @JoinColumn(name = "appointment_id"),
+      inverseJoinColumns = @JoinColumn(name = "service_id"))
+  private List<Service> services;
 
   @Column(name = "full_name", nullable = false, length = CommonConstant.FULLNAME_LENGTH)
   private String fullName;
@@ -60,4 +66,8 @@ public class Appointment extends BaseEntity {
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.PENDING;
+
+  @Column(name = "is_notified", nullable = false)
+  @Builder.Default
+  private Boolean isNotified = false;
 }

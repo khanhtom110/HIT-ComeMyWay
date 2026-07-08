@@ -40,4 +40,7 @@ public class User extends BaseEntity {
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Appointment> appointments;
+
+  @Column(nullable = true)
+  private String deviceToken;
 }
