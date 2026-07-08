@@ -18,6 +18,17 @@ class TokenManager(context: Context) {
 
     fun getRefreshToken(): String? = prefs.getString("REFRESH_TOKEN", null)
 
+
+    fun saveUserId(userId: Int) {
+        prefs.edit().putInt("UserName", userId).apply()
+    }
+
+    fun getUserId(): Int {
+        return prefs.getInt("UserName", 0)
+    }
+
+
+
     fun clearTokens() {
         prefs.edit().clear().apply()
     }

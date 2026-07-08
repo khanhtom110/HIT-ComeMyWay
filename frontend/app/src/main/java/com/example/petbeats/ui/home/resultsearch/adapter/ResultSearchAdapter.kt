@@ -8,12 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.petbeats.R
 import com.example.petbeats.ui.home.book.adapter.BookAdapter.ViewHolder
 import com.example.petbeats.ui.home.book.adapter.BookChild
 import com.example.petbeats.ui.home.book.adapter.BookChildState
 
-class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.ViewHolder>(ResultSearchDiffCallBack()) {
+class ResultSearchAdapter(
+    private val onItemClick: (Int) -> Unit
+): ListAdapter<ResultSearchChild, ResultSearchAdapter.ViewHolder>(ResultSearchDiffCallBack()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ResultSearchAdapter.ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.result_search_child, holder, false)
         return ViewHolder(view)
@@ -22,7 +25,7 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
     override fun onBindViewHolder(holder: ResultSearchAdapter.ViewHolder, position: Int) {
         val currentResultSearch = getItem(position)
 
-        holder.bind(currentResultSearch)
+        holder.bind(currentResultSearch, onItemClick)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -32,34 +35,40 @@ class ResultSearchAdapter: ListAdapter<ResultSearchChild, ResultSearchAdapter.Vi
         val distance: TextView = itemView.findViewById(R.id.distance)
         val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
-        val time: TextView = itemView.findViewById(R.id.time)
-        val status: TextView = itemView.findViewById(R.id.status)
+        val closeTime: TextView = itemView.findViewById(R.id.closeTime)
+        val openTime: TextView = itemView.findViewById(R.id.opentTime)
+        val detail: TextView = itemView.findViewById(R.id.btnDetail)
 
-        fun bind(item: ResultSearchChild) {
+        fun bind(item: ResultSearchChild, onItemClick: (Int) -> Unit) {
             nameRoom.text = item.roomName
-            action.text = item.action
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
-            time.text = item.time
+            openTime.text = "${item.openTime.take(5)}AM -"
+            closeTime.text = "${item.closeTime.take(5)}PM"
 
 
-            image.setImageResource(R.drawable.image_test)
+            if (item.isOperating) {
+                action.text = "Đang hoạt động"
+            }
+            else {
+                action.text = "Không hoạt động"
+            }
 
+            Glide.with(itemView.context)
+                .load(item.image)
+                .circleCrop()
+                .into(image)
 
-            when(item.status) {
-                ResultSearchChildState.PENDING -> {
-                    status.text = "Chờ xử lý"
-                    status.setTextColor(Color.parseColor("#F7C120"))
-                }
-                ResultSearchChildState.SUCCESS -> {
-                    status.text = "Đặt lịch thành công"
-                    status.setTextColor(Color.parseColor("#00FF0B"))
-                }
-                ResultSearchChildState.REFUSE -> {
-                    status.text = "Từ chối"
-                    status.setTextColor(Color.parseColor("#CC0900"))
-                }
+            detail.setOnClickListener {
+                onItemClick(item.id)
+            }
+
+            if (item.distance == 0.0) {
+                distance.visibility = View.GONE
+            }
+            else {
+                distance.visibility = View.VISIBLE
             }
         }
     }

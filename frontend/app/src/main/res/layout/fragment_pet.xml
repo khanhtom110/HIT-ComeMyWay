@@ -11,9 +11,10 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="pet"
+            android:text="Đăng xuất"
             android:textSize="@dimen/_42sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

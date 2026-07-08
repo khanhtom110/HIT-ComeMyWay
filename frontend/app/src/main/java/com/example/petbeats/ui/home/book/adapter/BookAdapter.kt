@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.petbeats.R
 
 class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
@@ -39,7 +40,10 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
             time.text = item.time
 
 
-            image.setImageResource(R.drawable.image_test)
+            Glide.with(itemView.context)
+                .load(item.image)
+                .circleCrop()
+                .into(image)
 
 
             when(item.status) {

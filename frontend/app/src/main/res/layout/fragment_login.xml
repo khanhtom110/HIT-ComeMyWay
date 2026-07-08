@@ -46,20 +46,21 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <EditText
-            style="@style/Chu1"
             android:id="@+id/inputName"
+            style="@style/Chu1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_42sdp"
-            android:background="@drawable/button_input"
             android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/button_input"
+            android:hint="Nhập email hoặc tên đăng nhập"
             android:inputType="text"
-            android:textColor="@color/colorTextSub"
-            android:textColorHint="@color/colorTextHint"
-            android:hint="Nhập tên đăng nhập"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            app:layout_constraintTop_toBottomOf="@id/text_name"/>
+            android:textColor="@color/colorTextSub"
+            android:textColorHint="@color/colorTextHint"
+            app:layout_constraintTop_toBottomOf="@id/text_name"
+            tools:layout_editor_absoluteX="3dp" />
 
         <TextView
             style="@style/Chu3"
@@ -70,6 +71,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_20sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputName"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -120,6 +123,8 @@
             android:textColor="@color/colorError"
             android:layout_marginStart="@dimen/_20sdp"
             android:visibility="gone"
+            android:drawablePadding="2dp"
+            app:drawableStartCompat="@drawable/warning"
             app:layout_constraintTop_toBottomOf="@id/inputPassword"
             app:layout_constraintStart_toStartOf="parent"/>
 

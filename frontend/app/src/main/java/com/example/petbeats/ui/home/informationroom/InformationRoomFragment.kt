@@ -1,60 +1,195 @@
 package com.example.petbeats.ui.home.informationroom
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.petbeats.R
+import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.example.petbeats.data.repository.HomeRepository
+import com.example.petbeats.databinding.FragmentBookBinding
+import com.example.petbeats.databinding.FragmentInformationRoomBinding
+import com.example.petbeats.databinding.FragmentResultSearchBinding
+import com.example.petbeats.ui.home.book.BookViewModel
+import com.example.petbeats.ui.home.book.BookViewModelFactory
+import com.example.petbeats.ui.home.book.adapter.BookAdapter
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.launch
+import kotlin.getValue
+import androidx.core.net.toUri
+import androidx.core.graphics.toColorInt
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [InformationRoomFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class InformationRoomFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentInformationRoomBinding ?= null
+    private val binding get() = _binding!!
+    private val viewModel: InformationRoomViewModel by viewModels {
+        InformationRoomViewModelFactory(
+            HomeRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            )
+        )
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    @SuppressLint("MissingPermission")
+    private fun getUserLocationAndSearch() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val userLat = location.latitude
+                val userLng = location.longitude
+
+                viewModel.onLatiLong(userLat, userLng)
+                val id = arguments?.getInt("id") ?: 0
+                viewModel.onInformationList(id)
+            } else {
+                Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
+
+                val id = arguments?.getInt("id") ?: 0
+                viewModel.onInformationList(id)
+            }
+        }.addOnFailureListener {
+            Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
+
+            val id = arguments?.getInt("id") ?: 0
+            viewModel.onInformationList(id)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_information_room, container, false)
+        _binding = FragmentInformationRoomBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InformationRoomFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            InformationRoomFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        getUserLocationAndSearch()
+
+        setOnClick()
+        stateData()
+        eventData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setOnClick() {
+        binding.btnBack.setOnClickListener {
+            viewModel.resultClick()
+        }
+
+        binding.btnBooking.setOnClickListener {
+            viewModel.calendarClick()
+        }
+    }
+
+    private fun stateData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    Log.d("UI_DEBUG", "Data arrived: ${state.name}")
+                    binding.tvClinicName.text = state.name
+                    binding.tvAddress.text = state.address
+                    binding.tvOpenTime.text = state.openTime.take(5)
+                    binding.tvCloseTime.text = state.closeTime.take(5)
+                    binding.tvPhone.text = state.phone
+                    binding.tvDescription.text = state.description
+                    binding.tvRating.text = "Đánh giá: ${state.rating}/5"
+                    binding.tvDistance.text = "${state.distance} km"
+
+                    if (state.distance == 0.0) {
+                        binding.tvDistance.visibility = View.GONE
+                    }
+                    else {
+                        binding.tvDistance.visibility = View.VISIBLE
+                    }
+
+
+                    if (state.isOperating) {
+                        binding.tvStatus.text = "Đang hoạt động"
+                    } else {
+                        binding.tvStatus.text = "Không hoạt động"
+                    }
+
+                    if (state.thumbnailUrl.isNotEmpty()) {
+                        Glide.with(requireContext())
+                            .load(state.thumbnailUrl)
+                            .into(binding.imgClinic)
+                    }
+
+                    //Service
+                    binding.service.removeAllViews()
+                    state.services.forEach { serviceName ->
+                        val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                            text = serviceName
+                            isClickable = false
+                            isCheckable = false
+
+                            chipStrokeWidth = 0f
+                            setChipBackgroundColorResource(R.color.colorModes)
+                            setTextColor("#486BF3".toColorInt())
+                        }
+                        binding.service.addView(chip)
+                    }
+
+                    //Đến đường dẫn link locate
+                    binding.btnLocate.setOnClickListener {
+                        val link = state.mapLink
+
+                        if (!link.isEmpty()) {
+                            try {
+                                val intent = Intent(Intent.ACTION_VIEW, link.toUri())
+                                startActivity(intent)
+                            } catch (e: Exception) {
+                                Toast.makeText(requireContext(), "Không thể mở link này", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        else {
+                            Toast.makeText(requireContext(), "Đường dẫn không tồn tại", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    private fun eventData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    when (event) {
+                        is InformationRoomEvent.NavigationResultSearch -> {
+                            findNavController().popBackStack()
+                        }
+                        is InformationRoomEvent.NavigationCalendar -> {
+                            findNavController().navigate(R.id.calendarFragment)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

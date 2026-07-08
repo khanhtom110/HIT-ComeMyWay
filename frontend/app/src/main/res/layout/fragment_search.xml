@@ -21,6 +21,8 @@
             android:layout_marginTop="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:hint="Tìm kiếm phòng khám "
+            android:textColorHint="@color/colorTextContent"
+            android:textColor="@color/colorTextSub"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_30sdp"
             android:paddingEnd="@dimen/_40sdp"
@@ -110,10 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_4sdp"
-                app:layout_constrainedHeight="true"
-                app:layout_constraintHeight_max="@dimen/_200sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
+                app:layout_constraintTop_toBottomOf="@id/line" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrierHistory"
