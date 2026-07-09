@@ -64,6 +64,14 @@ public class AppointmentService {
       throw new AppException(404, ErrorMessage.Appointment.CLINIC_SERVICE_MISMATCH);
     }
 
+    LocalTime requestedTime = request.appointmentTime();
+    LocalTime clinicOpenTime = clinic.getOpenTime();
+    LocalTime clinicCloseTime = clinic.getCloseTime();
+
+    if (requestedTime.isBefore(clinicOpenTime) || requestedTime.isAfter(clinicCloseTime)) {
+      throw new AppException(400, ErrorMessage.Appointment.OUT_OF_OPERATING_HOURS);
+    }
+
     Appointment appointment = Appointment.builder().user(user).clinic(clinic)
         .fullName(request.fullName()).phone(request.phone()).bookingType(request.bookingType())
         .homeAddress(request.homeAddress()).petType(request.petType())
@@ -123,6 +131,14 @@ public class AppointmentService {
 
     if (!clinicAvailableServiceIds.containsAll(uniqueServiceIds)) {
       throw new AppException(404, ErrorMessage.Appointment.CLINIC_SERVICE_MISMATCH);
+    }
+
+    LocalTime requestedTime = request.appointmentTime();
+    LocalTime clinicOpenTime = clinic.getOpenTime();
+    LocalTime clinicCloseTime = clinic.getCloseTime();
+
+    if (requestedTime.isBefore(clinicOpenTime) || requestedTime.isAfter(clinicCloseTime)) {
+      throw new AppException(400, ErrorMessage.Appointment.OUT_OF_OPERATING_HOURS);
     }
 
     appointment.setClinic(clinic);
