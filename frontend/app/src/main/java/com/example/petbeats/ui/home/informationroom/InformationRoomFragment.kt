@@ -102,7 +102,9 @@ class InformationRoomFragment : Fragment() {
         }
 
         binding.btnBooking.setOnClickListener {
-            viewModel.calendarClick()
+            val id = arguments?.getInt("id") ?: 0
+
+            viewModel.calendarClick(id)
         }
     }
 
@@ -185,7 +187,12 @@ class InformationRoomFragment : Fragment() {
                             findNavController().popBackStack()
                         }
                         is InformationRoomEvent.NavigationCalendar -> {
-                            findNavController().navigate(R.id.calendarFragment)
+                            findNavController().navigate(
+                                R.id.calendarFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }

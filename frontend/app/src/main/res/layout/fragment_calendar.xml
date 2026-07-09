@@ -331,41 +331,42 @@
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:hint="Nhập loại thú cưng"
                     android:paddingHorizontal="@dimen/_16sdp"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:textColor="@color/colorTextSub"
                     android:textColorHint="@color/colorTextContent"
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/tvTextOther"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvTextOther" />
 
                 <TextView
                     style="@style/Chu3"
                     android:id="@+id/tvState"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Số lượng thú cưng"
+                    android:text="Tình trạng thú cưng"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_16sdp"
-                    app:layout_constraintTop_toBottomOf="@id/tvDog"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputOther"
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <EditText
-                    style="@style/Chu3"
                     android:id="@+id/tvInputState"
+                    style="@style/Chu3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/ground_hint_information_service"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:hint="Nhập tình trạng hiện tại của thú cưng (không bắt \nbuộc)"
+                    android:hint="Nhập tình trạng hiện tại của thú cưng \n(không bắt buộc)"
+                    android:inputType="text"
+                    android:gravity="start"
+                    android:paddingTop="@dimen/_8sdp"
                     android:paddingHorizontal="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:inputType="number"
                     android:textColor="@color/colorTextSub"
                     android:textColorHint="@color/colorTextContent"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_35sdp"
-                    app:layout_constraintTop_toBottomOf="@id/tvState"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvState" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -415,7 +416,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvServiceError">
 
                 <TextView
-                    style="@style/Nut2"
+                    style="@style/Nut3"
                     android:id="@+id/btnClinicRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -429,7 +430,7 @@
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
-                    style="@style/Nut2"
+                    style="@style/Nut3"
                     android:id="@+id/btnHomeRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -437,6 +438,8 @@
                     android:text="Khám tại nhà"
                     android:textColor="@color/colorPrimary"
                     android:padding="@dimen/_6sdp"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_12sdp"

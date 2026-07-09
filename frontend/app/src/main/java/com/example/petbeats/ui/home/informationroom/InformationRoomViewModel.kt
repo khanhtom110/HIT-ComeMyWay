@@ -29,9 +29,9 @@ class InformationRoomViewModel(
         }
     }
 
-    fun calendarClick() {
+    fun calendarClick(id: Int) {
         viewModelScope.launch {
-            _event.emit(InformationRoomEvent.NavigationCalendar)
+            _event.emit(InformationRoomEvent.NavigationCalendar(id))
         }
     }
 

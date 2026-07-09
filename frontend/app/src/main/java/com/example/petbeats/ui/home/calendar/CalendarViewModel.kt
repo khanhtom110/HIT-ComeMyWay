@@ -2,6 +2,9 @@ package com.example.petbeats.ui.home.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,26 +21,10 @@ class CalendarViewModel(
     private var _event = MutableSharedFlow< CalendarEvent>()
     val event = _event.asSharedFlow()
 
-    fun InformationClick() {
+    fun InformationClick(id: Int) {
         viewModelScope.launch {
-            _event.emit(CalendarEvent.NavigationInformationRoom)
+            _event.emit(CalendarEvent.NavigationInformationRoom(id))
         }
-    }
-
-    fun changeName() {
-        _state.value = _state.value.copy(isName = !_state.value.isName)
-    }
-
-    fun changePhone() {
-        _state.value = _state.value.copy(isPhone = !_state.value.isPhone)
-    }
-
-    fun changeAddress() {
-        _state.value = _state.value.copy(isAddress = !_state.value.isAddress)
-    }
-
-    fun changeQuantity() {
-        _state.value = _state.value.copy(isQuantity = !_state.value.isQuantity)
     }
 
     fun onNameChange(name: String) {
@@ -60,6 +47,10 @@ class CalendarViewModel(
         _state.value = _state.value.copy(other = other, isInputOther = true)
     }
 
+    fun onStateChange(state: String) {
+        _state.value = _state.value.copy(state = state, isInputState = true)
+    }
+
     fun onDogClick() {
         _state.value = _state.value.copy(isDog = true, isCat = false, isOther = false)
     }
@@ -72,6 +63,39 @@ class CalendarViewModel(
         _state.value = _state.value.copy(isDog = false, isCat = false, isOther = true)
     }
 
+    fun onClinicClick() {
+        _state.value = _state.value.copy(isClinic = true, isHome = false)
+    }
+
+    fun onHomeClick() {
+        _state.value = _state.value.copy(isClinic = false, isHome = true)
+    }
+
+    //api này tự động lấy id của màn information và gắn id cho service(người dùng click) và hiển thị thông tin lên giao diện
+    fun onInformationBookingAPI(id: Int) {
+        viewModelScope.launch {
+            val request = TakeBookingRequest(id)
+            val result = repository.takeBook(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val data = result.data
+
+                    _state.value = _state.value.copy(
+                        thumbnailUrl = data.thumbnailUrl,
+                        tittle = data.name,
+                        isOperating = data.isOperating,
+                        rating = data.rating,
+                        services = data.services
+                    )
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(thumbnailUrl = "", name = "", isOperating = false, rating = 0.0, services = emptyList())
+                    return@launch
+                }
+            }
+        }
+    }
 
 
     fun onCalendarClick() {
@@ -81,10 +105,17 @@ class CalendarViewModel(
             val address = _state.value.address
             val quantity = _state.value.quantity
 
-            if (name.isEmpty() || phone.isEmpty() || address.isEmpty() || quantity.isEmpty()) {
-                _state.value = _state.value.copy(isInformation = true, informationError = "Vui lòng nhập đầy đủ thông tin bắt buộc")
-            }
-
+//            val request = CreateAppointmentRequest()
+//            val result = repository.createAppointment(request)
+//
+//            when (result) {
+//                is DataResult.Success -> {
+//
+//                }
+//                is DataResult.Error -> {
+//
+//                }
+//            }
 
         }
     }

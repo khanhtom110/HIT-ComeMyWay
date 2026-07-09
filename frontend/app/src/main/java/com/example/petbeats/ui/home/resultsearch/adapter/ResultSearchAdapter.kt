@@ -44,8 +44,8 @@ class ResultSearchAdapter(
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
-            openTime.text = "${item.openTime.take(5)}AM -"
-            closeTime.text = "${item.closeTime.take(5)}PM"
+            openTime.text = "${item.openTime.take(5)} -"
+            closeTime.text = "${item.closeTime.take(5)}"
 
 
             if (item.isOperating) {

@@ -1,5 +1,7 @@
 package com.example.petbeats.ui.home.calendar
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +19,8 @@ import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 
 
 class CalendarFragment : Fragment() {
@@ -42,6 +46,9 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val id = arguments?.getInt("id") ?: 0
+        viewModel.onInformationBookingAPI(id)
+
         setOnClick()
         stateData()
         eventData()
@@ -54,7 +61,8 @@ class CalendarFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
-            viewModel.InformationClick()
+            val id = arguments?.getInt("id") ?: 0
+            viewModel.InformationClick(id)
         }
 
 
@@ -73,6 +81,9 @@ class CalendarFragment : Fragment() {
         binding.tvInputOther.addTextChangedListener {
             viewModel.onOtherChange(it.toString())
         }
+        binding.tvInputState.addTextChangedListener {
+            viewModel.onStateChange(it.toString())
+        }
 
 
         binding.btnBooking.setOnClickListener {
@@ -88,6 +99,14 @@ class CalendarFragment : Fragment() {
         }
         binding.btnOther.setOnClickListener {
             viewModel.onOtherClick()
+        }
+
+
+        binding.btnClinicRoom.setOnClickListener {
+            viewModel.onClinicClick()
+        }
+        binding.btnHomeRoom.setOnClickListener {
+            viewModel.onHomeClick()
         }
     }
 
@@ -143,6 +162,36 @@ class CalendarFragment : Fragment() {
                     else {
                         binding.tvInputOther.setBackgroundResource(R.drawable.ground_information)
                     }
+                    if (state.isInputState) {
+                        binding.tvInputState.setBackgroundResource(R.drawable.button_input)
+                    }
+                    else {
+                        binding.tvInputState.setBackgroundResource(R.drawable.ground_information)
+                    }
+                    if (state.isClinic) {
+                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
+
+                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorBackground)
+                        binding.btnClinicRoom.setTextColor(clinic)
+                    }
+                    else {
+                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child)
+
+                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorPrimary)
+                        binding.btnClinicRoom.setTextColor(clinic)
+                    }
+                    if (state.isHome) {
+                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
+
+                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorBackground)
+                        binding.btnHomeRoom.setTextColor(clinic)
+                    }
+                    else {
+                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child)
+
+                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorPrimary)
+                        binding.btnHomeRoom.setTextColor(clinic)
+                    }
 
 
 
@@ -162,30 +211,132 @@ class CalendarFragment : Fragment() {
                     if (binding.tvInputOther.text.toString() != state.other) {
                         binding.tvInputOther.setText(state.other)
                     }
+                    if (binding.tvInputState.text.toString() != state.state) {
+                        binding.tvInputState.setText(state.state)
+                    }
+
+                    binding.tvClinicName.text = state.tittle
+                    binding.tvRating.text = "Đánh giá: ${state.rating}/5"
+
+                    if (state.isOperating) {
+                        binding.tvStatus.text = "Đang hoạt động"
+                    } else {
+                        binding.tvStatus.text = "Không hoạt động"
+                    }
+
+                    if (state.thumbnailUrl.isNotEmpty()) {
+                        Glide.with(requireContext())
+                            .load(state.thumbnailUrl)
+                            .into(binding.imgClinic)
+                    }
+
+                    //Service
+                    binding.btnService.removeAllViews()
+                    state.services.forEach { servieName ->
+                        val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                            text = servieName.name
+                            id = servieName.id
+
+                            //cho phép bấm chọn
+                            isClickable = true
+                            isCheckable = true
+                            chipStrokeWidth = 3f
+
+                            //nền thay đổi theo click
+                            val groundColor = ColorStateList(
+                                arrayOf(
+                                    intArrayOf(android.R.attr.state_checked), // đang chọn
+                                    intArrayOf(-android.R.attr.state_checked) //bình thường
+                                ),
+                                intArrayOf(
+                                    ContextCompat.getColor(context, R.color.colorPrimary), //đã click
+                                    ContextCompat.getColor(context, R.color.colorBackground) //chưa click
+                                )
+                            )
+                            chipBackgroundColor = groundColor
+
+                            //màu text thay đổi theo click
+                            val textColors = ColorStateList(
+                                arrayOf(
+                                    intArrayOf(android.R.attr.state_checked),
+                                    intArrayOf(-android.R.attr.state_checked)
+                                ),
+                                intArrayOf(
+                                    ContextCompat.getColor(context, R.color.colorBackground), //đã click
+                                    ContextCompat.getColor(context, R.color.colorPrimary) //chưa click
+                                )
+                            )
+                            setTextColor(textColors)
+
+                            //màu viền thay đổi theo click
+                            val strokeColorState = ColorStateList(
+                                arrayOf(
+                                    intArrayOf(android.R.attr.state_checked),
+                                    intArrayOf(-android.R.attr.state_checked)
+                                ),
+                                intArrayOf(
+                                    ContextCompat.getColor(context, R.color.colorPrimary), //đã click
+                                    ContextCompat.getColor(context, R.color.colorPrimary)  //chưa click
+                                )
+                            )
+                            chipStrokeColor = strokeColorState
+
+                            //người dùng click để báo về viewmodel
+                            setOnCheckedChangeListener { button, isChecked ->
+                                if (isChecked) {
+
+                                }
+                                else {
+
+                                }
+                            }
+                        }
+                        binding.btnService.addView(chip)
+                    }
+
+
 
 
                     //check type
                     if (state.isDog) {
                         binding.btnDog.setBackgroundResource(R.drawable.icon_open)
+
+                        val dog = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.tvDog.setTextColor(dog)
                     }
                     else {
                         binding.btnDog.setBackgroundResource(R.drawable.icon_close)
+
+                        val dog = ContextCompat.getColor(requireContext(),R.color.colorTextContent)
+                        binding.tvDog.setTextColor(dog)
                     }
                     if (state.isCat) {
                         binding.btnCat.setBackgroundResource(R.drawable.icon_open)
+
+                        val cat = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.tvCat.setTextColor(cat)
                     }
                     else {
                         binding.btnCat.setBackgroundResource(R.drawable.icon_close)
+
+                        val cat = ContextCompat.getColor(requireContext(),R.color.colorTextContent)
+                        binding.tvCat.setTextColor(cat)
                     }
                     if (state.isOther) {
                         binding.btnOther.setBackgroundResource(R.drawable.icon_open)
                         binding.tvTextOther.visibility = View.VISIBLE
                         binding.tvInputOther.visibility = View.VISIBLE
+
+                        val other = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.tvOther.setTextColor(other)
                     }
                     else {
                         binding.btnOther.setBackgroundResource(R.drawable.icon_close)
                         binding.tvTextOther.visibility = View.GONE
                         binding.tvInputOther.visibility = View.GONE
+
+                        val other = ContextCompat.getColor(requireContext(),R.color.colorTextContent)
+                        binding.tvOther.setTextColor(other)
                     }
                 }
             }
@@ -195,10 +346,15 @@ class CalendarFragment : Fragment() {
     private fun eventData() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { state ->
-                    when (state) {
+                viewModel.event.collect { event ->
+                    when (event) {
                         is CalendarEvent.NavigationInformationRoom -> {
-                            findNavController().navigate(R.id.calendar_informationRoom)
+                            findNavController().navigate(
+                                R.id.calendar_informationRoom,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }
