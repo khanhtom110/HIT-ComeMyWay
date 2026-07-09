@@ -36,6 +36,7 @@ public record AppointmentRequest(
 
         @Schema(description = "Số lượng thú cưng", example = "1")
         @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
+        @Min(value = 1, message = ErrorMessage.Appointment.MIN_ONE_PET_QUANTITY)
         Integer petQuantity,
 
         @Schema(description = "Loại thú cưng", example = "Chó")
@@ -46,7 +47,7 @@ public record AppointmentRequest(
         @Size(max = CommonConstant.CONDITION_LENGTH, message = ErrorMessage.INVALID_FORMAT_CONDITION)
         String petCondition,
 
-        @Schema(description = "Ngày khám", example = "2026-07-15")
+        @Schema(description = "Ngày khám", example = "2026-11-20")
         @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
         LocalDate appointmentDate,
 
@@ -57,7 +58,7 @@ public record AppointmentRequest(
 
         @Schema(description = "Danh sách dịch vụ", example = "[1, 2, 3]")
         @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
-        @Size(min = 1)
+        @Size(min = 1, message = ErrorMessage.Appointment.MIN_ONE_SERVICE)
         List<Long> serviceIds
 ) {
 }

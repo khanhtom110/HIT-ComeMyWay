@@ -16,6 +16,7 @@ public final class ErrorMessage {
       "Failed to upload the image. Please check the file and try again.";
 
   // Common DTO Validation Errors
+  public static final String INVALID_JSON_FORMAT = "Invalid request body format or malformed JSON.";
   public static final String INVALID_SOME_THING_FIELD = "One or more fields contain invalid data.";
   public static final String INVALID_FORMAT_SOME_THING_FIELD = "The field format is invalid.";
   public static final String INVALID_SOME_THING_FIELD_IS_REQUIRED =
@@ -102,6 +103,9 @@ public final class ErrorMessage {
     public static final String INVALID_APPOINTMENT_DATE = "Appointment date cannot be in the past.";
     public static final String INVALID_APPOINTMENT_TIME =
         "Appointment time must be after the current time.";
+    public static final String OUT_OF_OPERATING_HOURS = "Appointment time must be within operating hours.";
+    public static final String MIN_ONE_SERVICE = "At least one service must be selected.";
+    public static final String MIN_ONE_PET_QUANTITY = "At least one pet quantity";
 
   }
 }
