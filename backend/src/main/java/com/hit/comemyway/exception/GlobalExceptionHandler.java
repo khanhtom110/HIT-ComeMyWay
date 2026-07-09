@@ -69,8 +69,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<ApiResponse<Void>> handlerHttpMessageNotReadableException(
-          HttpMessageNotReadableException e
-  ){
+      HttpMessageNotReadableException e) {
     String customMessage = ErrorMessage.INVALID_JSON_FORMAT;
 
     Throwable cause = e.getCause();
@@ -78,15 +77,19 @@ public class GlobalExceptionHandler {
     while (cause != null) {
       if (cause instanceof InvalidFormatException invalidFormatException) {
 
-        if (invalidFormatException.getTargetType() != null && invalidFormatException.getTargetType().isEnum()) {
+        if (invalidFormatException.getTargetType() != null
+            && invalidFormatException.getTargetType().isEnum()) {
 
           if (!invalidFormatException.getPath().isEmpty()) {
             // Lấy tên trường bị sai
-            String fieldName = invalidFormatException.getPath().get(invalidFormatException.getPath().size() - 1).getPropertyName();
+            String fieldName = invalidFormatException.getPath()
+                .get(invalidFormatException.getPath().size() - 1).getPropertyName();
             // Lấy danh sách các giá trị Enum hợp lệ
-            String allowedValues = java.util.Arrays.toString(invalidFormatException.getTargetType().getEnumConstants());
+            String allowedValues = java.util.Arrays
+                .toString(invalidFormatException.getTargetType().getEnumConstants());
 
-            customMessage = String.format("Invalid value for field '%s'. Accepted values are: %s", fieldName, allowedValues);
+            customMessage = String.format("Invalid value for field '%s'. Accepted values are: %s",
+                fieldName, allowedValues);
           }
         }
         break;
@@ -95,7 +98,7 @@ public class GlobalExceptionHandler {
     }
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ApiResponse.error(400,customMessage));
+        .body(ApiResponse.error(400, customMessage));
   }
 
   @ExceptionHandler(Exception.class)

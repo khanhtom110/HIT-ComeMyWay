@@ -103,7 +103,8 @@ public final class ErrorMessage {
     public static final String INVALID_APPOINTMENT_DATE = "Appointment date cannot be in the past.";
     public static final String INVALID_APPOINTMENT_TIME =
         "Appointment time must be after the current time.";
-    public static final String OUT_OF_OPERATING_HOURS = "Appointment time must be within operating hours.";
+    public static final String OUT_OF_OPERATING_HOURS =
+        "Appointment time must be within operating hours.";
     public static final String MIN_ONE_SERVICE = "At least one service must be selected.";
     public static final String MIN_ONE_PET_QUANTITY = "At least one pet quantity";
 
