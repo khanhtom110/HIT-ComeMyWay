@@ -5,7 +5,6 @@ import com.hit.comemyway.constant.ApiPath;
 import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
-import com.hit.comemyway.dto.response.AppointmentDetailResponse;
 import com.hit.comemyway.dto.response.AppointmentDisplayResponse;
 import com.hit.comemyway.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,9 +51,9 @@ public class AppointmentController {
   @Operation(summary = "Lấy chi tiết 1 lịch hẹn",
       description = "Trả về thông tin chi tiết 1 lịch hẹn")
   @GetMapping(UrlConstant.Appointment.GET_DETAIL)
-  public ResponseEntity<ApiResponse<AppointmentDetailResponse>> getAppointmentDetail(
+  public ResponseEntity<ApiResponse<AppointmentResponse>> getAppointmentDetail(
       @Parameter(description = "ID của lịch hẹn", required = true) @PathVariable Long id) {
-    AppointmentDetailResponse response = appointmentService.getAppointmentDetail(id);
+    AppointmentResponse response = appointmentService.getAppointmentDetail(id);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

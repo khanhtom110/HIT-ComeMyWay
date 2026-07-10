@@ -3,7 +3,6 @@ package com.hit.comemyway.service;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
-import com.hit.comemyway.dto.response.AppointmentDetailResponse;
 import com.hit.comemyway.dto.response.AppointmentDisplayResponse;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
@@ -172,10 +171,10 @@ public class AppointmentService {
   }
 
   @Transactional(readOnly = true)
-  public AppointmentDetailResponse getAppointmentDetail(Long id) {
+  public AppointmentResponse getAppointmentDetail(Long id) {
     Appointment appointment = appointmentRepository.findByIdWithUserAndClinic(id)
         .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
 
-    return AppointmentDetailResponse.from(appointment);
+    return AppointmentResponse.from(appointment);
   }
 }
