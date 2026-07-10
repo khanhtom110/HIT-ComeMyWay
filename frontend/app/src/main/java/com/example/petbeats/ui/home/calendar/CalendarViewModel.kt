@@ -98,12 +98,14 @@ class CalendarViewModel(
     }
 
 
-    fun onCalendarClick() {
+    fun onCalendarClick(id: Int) {
         viewModelScope.launch {
             val name = _state.value.name
             val phone = _state.value.phone
             val address = _state.value.address
             val quantity = _state.value.quantity
+
+            _event.emit(CalendarEvent.NavigationConfirmAppointment(id))
 
 //            val request = CreateAppointmentRequest()
 //            val result = repository.createAppointment(request)

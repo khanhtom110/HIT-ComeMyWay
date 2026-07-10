@@ -79,4 +79,35 @@
             app:popUpTo="@id/informationRoomFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/confirmAppointmentFragment"
+        android:name="com.example.petbeats.ui.home.confirmappointment.ConfirmAppointmentFragment"
+        android:label="confirmAppointmentFragment">
+        <action
+            android:id="@+id/confirmAppointment_calendar"
+            app:destination="@+id/calendarFragment"
+            app:popUpTo="@id/calendarFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/successAppointFragment"
+        android:name="com.example.petbeats.ui.home.successAppointment.SuccessAppointmentFragment"
+        android:label="successAppointFragment">
+
+        <action
+            android:id="@+id/successAppointment_booking"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/successAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+
 </navigation>

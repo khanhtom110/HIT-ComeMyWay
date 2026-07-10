@@ -20,7 +20,15 @@ import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.petbeats.ui.home.calendar.adapter.TimePagerAdapter
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.view.MonthDayBinder
+import java.time.YearMonth
+import java.time.LocalDate
 
 
 class CalendarFragment : Fragment() {
@@ -33,6 +41,7 @@ class CalendarFragment : Fragment() {
             )
         )
     }
+    private var selectedDate: LocalDate? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +58,8 @@ class CalendarFragment : Fragment() {
         val id = arguments?.getInt("id") ?: 0
         viewModel.onInformationBookingAPI(id)
 
+        calendar()
+        setupTime()
         setOnClick()
         stateData()
         eventData()
@@ -57,6 +68,78 @@ class CalendarFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun calendar() {
+        binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            override fun create(view: View): DayViewContainer {
+                return DayViewContainer(view)
+            }
+
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.textView.text = data.date.dayOfMonth.toString()
+
+                //Ngày thuộc tháng hiện tại thì chữ đen, tháng trước/sau thì chữ xám
+                if (data.position == DayPosition.MonthDate) {
+                    container.textView.setTextColor(Color.parseColor("#181818"))
+                } else {
+                    container.textView.setTextColor(Color.parseColor("#A7A7B4"))
+                }
+
+                //click thì hiện background xanh, chữ xanh
+                if (data.date == selectedDate) {
+                    container.textView.setBackgroundResource(R.drawable.ground_book_child)
+                    container.textView.setTextColor(Color.parseColor("#486BF3"))
+                } else {
+                    container.textView.background = null
+                }
+
+                //Lắng nghe sự kiện click
+                container.view.setOnClickListener {
+                    // Chỉ cho phép click vào ngày của tháng hiện tại
+                    if (data.position == DayPosition.MonthDate) {
+                        val currentSelection = selectedDate
+                        // click lại vào ngày đang chọn bỏ chọn ô đó
+                        if (currentSelection == data.date) {
+                            selectedDate = null
+                            binding.calendarView.notifyDateChanged(currentSelection)
+                        } else {
+                            // Cập nhật biến selectedDate và load lại màu 2 ô
+                            selectedDate = data.date
+                            binding.calendarView.notifyDateChanged(data.date)
+                            if (currentSelection != null) {
+                                binding.calendarView.notifyDateChanged(currentSelection)
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        val currentMonth = YearMonth.now() // Tháng hiện tại (Ví dụ: Tháng 7/2026)
+        val startMonth = currentMonth.minusMonths(100) // Trừ đi 100 tháng làm mốc bắt đầu
+        val endMonth = currentMonth.plusMonths(100)    // Cộng thêm 100 tháng làm mốc kết thúc
+        val firstDayOfWeek = firstDayOfWeekFromLocale() // Lấy thứ đầu tiên của tuần (Ví dụ: Thứ 2)
+
+        binding.calendarView.setup(startMonth, endMonth, firstDayOfWeek)
+
+        binding.calendarView.scrollToMonth(currentMonth)
+    }
+
+    private fun setupTime() {
+        val hourList = (0..23).map {
+            String.format("%02d", it)
+        }
+        val minuteList = listOf("00", "30")
+
+        binding.vpTimeOpen.apply {
+            adapter = TimePagerAdapter(hourList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+        binding.vpTimeClose.apply {
+            adapter = TimePagerAdapter(minuteList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
     }
 
     private fun setOnClick() {
@@ -87,7 +170,9 @@ class CalendarFragment : Fragment() {
 
 
         binding.btnBooking.setOnClickListener {
-            viewModel.onCalendarClick()
+            val id = arguments?.getInt("id") ?: 0
+
+            viewModel.onCalendarClick(id)
         }
 
 
@@ -351,6 +436,14 @@ class CalendarFragment : Fragment() {
                         is CalendarEvent.NavigationInformationRoom -> {
                             findNavController().navigate(
                                 R.id.calendar_informationRoom,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
+                        }
+                        is CalendarEvent.NavigationConfirmAppointment -> {
+                            findNavController().navigate(
+                                R.id.confirmAppointmentFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }

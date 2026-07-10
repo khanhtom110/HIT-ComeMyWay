@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.example.petbeats"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.petbeats"
-        minSdk = 29
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -79,4 +79,10 @@ dependencies {
 
     //thư viện lấy ảnh mạng
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Thư viện Calendar (phiên bản dành cho Android View)
+    implementation("com.kizitonwose.calendar:view:2.10.1")
+
+    // Hỗ trợ Java 8 API cho các thiết bị Android cũ (minSdk < 26)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

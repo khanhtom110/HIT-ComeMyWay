@@ -526,6 +526,76 @@
                 android:layout_marginVertical="@dimen/_8sdp"
                 app:layout_constraintTop_toBottomOf="@id/calendarError">
 
+                <ImageView
+                    android:id="@+id/btnBackCalendarStart"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:src="@drawable/back_calendar"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_27sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/TieuDe1"
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tháng 7 năm 2026"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginEnd="@dimen/_30sdp"
+                    app:layout_constraintTop_toTopOf="@id/btnBackCalendarStart"
+                    app:layout_constraintBottom_toBottomOf="@id/btnBackCalendarStart"
+                    app:layout_constraintStart_toEndOf="@id/btnBackCalendarStart"
+                    app:layout_constraintEnd_toEndOf="@id/btnBackCalendarEnd"/>
+
+                <ImageView
+                    android:id="@+id/btnBackCalendarEnd"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:src="@drawable/back_calendar_end"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_27sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:src="@drawable/line"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginHorizontal="@dimen/_57sdp"
+                    app:layout_constraintTop_toBottomOf="@id/btnBackCalendarStart"/>
+
+                <LinearLayout
+                    android:id="@+id/day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginHorizontal="@dimen/_25sdp"
+                    app:layout_constraintTop_toBottomOf="@id/line">
+
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T2" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T3" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T4" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T5" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T6" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="T7" android:textColor="@color/colorTextContent"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="CN" android:textColor="@color/colorTextContent"/>
+                </LinearLayout>
+
+                <com.kizitonwose.calendar.view.CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginHorizontal="@dimen/_30sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    app:cv_dayViewResource="@layout/calendar_day_layout"
+                    app:layout_constraintTop_toBottomOf="@id/day"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -537,7 +607,7 @@
                 android:text="*"
                 android:textColor="@color/colorError"
                 android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 app:layout_constraintTop_toBottomOf="@id/boxCalendar"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -558,8 +628,36 @@
                 android:background="@drawable/ground_book_child"
                 android:layout_marginEnd="@dimen/_28sdp"
                 app:layout_constraintTop_toTopOf="@id/tvStarTime"
-                app:layout_constraintBottom_toBottomOf="@id/tvStarTime"
                 app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpTimeOpen"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/Chu1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintTop_toTopOf="@id/vpTimeClose"
+                    app:layout_constraintBottom_toBottomOf="@id/vpTimeClose"
+                    app:layout_constraintStart_toEndOf="@id/vpTimeOpen"
+                    app:layout_constraintEnd_toStartOf="@id/vpTimeClose"/>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpTimeClose"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
