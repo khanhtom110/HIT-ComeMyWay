@@ -29,6 +29,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
       FROM Appointment a
       WHERE a.appointmentDate = :date
       AND a.appointmentTime = :time
+      AND a.status = 'CONFIRMED'
       AND a.isNotified = false
       """)
   List<Appointment> findAppointmentByDateAndTimeAndIsNotified(

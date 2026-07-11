@@ -3,7 +3,6 @@ package com.hit.comemyway.service;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.AppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
-import com.hit.comemyway.dto.response.AppointmentDetailResponse;
 import com.hit.comemyway.dto.response.AppointmentDisplayResponse;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
@@ -172,10 +171,26 @@ public class AppointmentService {
   }
 
   @Transactional(readOnly = true)
-  public AppointmentDetailResponse getAppointmentDetail(Long id) {
+  public AppointmentResponse getAppointmentDetail(Long id) {
     Appointment appointment = appointmentRepository.findByIdWithUserAndClinic(id)
         .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
 
-    return AppointmentDetailResponse.from(appointment);
+    return AppointmentResponse.from(appointment);
+  }
+
+  @Transactional
+  public AppointmentResponse cancelAppoinment(Long id) {
+    Appointment appointment = appointmentRepository.findById(id)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
+
+    if (appointment.getStatus() != BookingStatus.PENDING) {
+      throw new AppException(400, ErrorMessage.Appointment.ONLY_PENDING_CAN_BE_CANCELLED);
+    }
+
+    appointment.setStatus(BookingStatus.CANCELLED);
+
+    Appointment updatedAppointment = appointmentRepository.save(appointment);
+
+    return AppointmentResponse.from(updatedAppointment);
   }
 }
