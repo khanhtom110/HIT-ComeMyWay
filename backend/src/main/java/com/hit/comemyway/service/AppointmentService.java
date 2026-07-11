@@ -177,4 +177,20 @@ public class AppointmentService {
 
     return AppointmentResponse.from(appointment);
   }
+
+  @Transactional
+  public AppointmentResponse cancelAppoinment(Long id) {
+    Appointment appointment = appointmentRepository.findById(id)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
+
+    if (appointment.getStatus() != BookingStatus.PENDING) {
+      throw new AppException(400, ErrorMessage.Appointment.ONLY_PENDING_CAN_BE_CANCELLED);
+    }
+
+    appointment.setStatus(BookingStatus.CANCELLED);
+
+    Appointment updatedAppointment = appointmentRepository.save(appointment);
+
+    return AppointmentResponse.from(updatedAppointment);
+  }
 }

@@ -16,6 +16,12 @@ public record ClinicBookingResponse(
         @Schema(description = "Tên phòng khám", example = "Phòng khám thú y FunVet")
         String name,
 
+        @Schema(description = "Số điện thoại liên hệ", example = "0383553886")
+        String phone,
+
+        @Schema(description = "Địa chỉ chi tiết", example = "83 Giải Phóng,P.Đồng Tâm")
+        String address,
+
         @Schema(description = "Trạng thái hoạt động", example = "true")
         Boolean isOperating,
 
@@ -30,6 +36,8 @@ public record ClinicBookingResponse(
         clinic.getId(),
         clinic.getThumbnailUrl(),
         clinic.getName(),
+        clinic.getPhone(),
+        clinic.getAddress(),
         isOperating,
         clinic.getRating(),
         clinic.getServices().stream()

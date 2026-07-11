@@ -52,8 +52,18 @@ public class AppointmentController {
       description = "Trả về thông tin chi tiết 1 lịch hẹn")
   @GetMapping(UrlConstant.Appointment.GET_DETAIL)
   public ResponseEntity<ApiResponse<AppointmentResponse>> getAppointmentDetail(
-      @Parameter(description = "ID của lịch hẹn", required = true) @PathVariable Long id) {
-    AppointmentResponse response = appointmentService.getAppointmentDetail(id);
+      @Parameter(description = "ID của lịch hẹn", required = true)
+      @PathVariable Long appointmentId) {
+    AppointmentResponse response = appointmentService.getAppointmentDetail(appointmentId);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Hủy lịch hẹn", description = "Hủy lịch hẹn của 1 người dùng")
+  @PostMapping(UrlConstant.Appointment.CANCEL_APPOINTMENT)
+  public ResponseEntity<ApiResponse<AppointmentResponse>> cancelAppointment(
+      @Parameter(description = "ID của lịch hẹn", required = true)
+      @PathVariable Long appointmentId) {
+    AppointmentResponse response = appointmentService.cancelAppoinment(appointmentId);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

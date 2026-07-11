@@ -107,6 +107,7 @@ public final class ErrorMessage {
         "Appointment time must be within operating hours.";
     public static final String MIN_ONE_SERVICE = "At least one service must be selected.";
     public static final String MIN_ONE_PET_QUANTITY = "At least one pet quantity";
-
+    public static final String ONLY_PENDING_CAN_BE_CANCELLED =
+        "Only pending appointments can be cancelled.";
   }
 }
