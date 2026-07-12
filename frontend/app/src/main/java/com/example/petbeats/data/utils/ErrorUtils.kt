@@ -36,6 +36,29 @@ object ErrorUtils {
             "The OTP has expired. Please request a new one." ->
                 Pair(ErrorTarget.OTP, "Mã OTP đã hết hạn. Vui lòng yêu cầu mã mới.")
 
+            //Phone
+            "Invalid phone number format" -> {
+                Pair(ErrorTarget.PHONE, "Số điện thoại không đúng định dạng")
+            }
+
+            //Service
+            "At least one service must be selected." -> {
+                Pair(ErrorTarget.SERVICE, "Phải chọn ít nhất một dịch vụ.")
+            }
+
+            //Calendar
+            "Appointment date cannot be in the past." -> {
+                Pair(ErrorTarget.CALENDAR, "Ngày hẹn không được là ngày trong quá khứ.")
+            }
+
+            //Time
+            "Appointment time must be after the current time." -> {
+                Pair(ErrorTarget.TIME, "Thời gian hẹn phải \nsau thời điểm hiện tại.")
+            }
+            "Appointment time must be within operating hours." -> {
+                Pair(ErrorTarget.TIME, "Thời gian hẹn phải \nnằm trong khung giờ hoạt động.")
+            }
+
             //General, Hệ thống, token
             "One or more fields contain invalid data." ->
                 Pair(ErrorTarget.GENERAL, "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.")

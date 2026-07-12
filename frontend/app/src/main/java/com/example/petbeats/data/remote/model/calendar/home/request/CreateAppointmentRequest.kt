@@ -1,7 +1,7 @@
 package com.example.petbeats.data.remote.model.calendar.home.request
 
 data class CreateAppointmentRequest (
-    val clinicId: Int,
+    val clinicId:Int,
     val fullName: String,
     val phone: String,
     val bookingType: String,

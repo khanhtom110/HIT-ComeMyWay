@@ -7,15 +7,13 @@ data class CalendarState (
     val name: String = "",
     val phone: String = "",
     val address: String = "",
-    val quantity: String = "",
+    val quantity: Int = 0,
     val other: String = "",
     val state: String = "",
     val tittle: String = "",
     val thumbnailUrl: String = "",
     val isOperating: Boolean = false,
     val rating: Double = 0.0,
-
-    val informationError: String = "",
 
     val isName: Boolean = false,
     val isPhone: Boolean = false,
@@ -29,11 +27,32 @@ data class CalendarState (
     val isOther: Boolean = false,
     val isInputOther: Boolean = false,
     val isInputState: Boolean = false,
+    val petType: String = "",
 
 
     //service
+    val isService: Boolean = false,
     val isClinic: Boolean = false,
     val isHome: Boolean = false,
+    val bookingType: String = "",
     val services: List<ServiceItem> = emptyList(),
 
+    val selectService: List<Int> = emptyList(),
+
+    //calendar
+    val isCalendar: Boolean = false,
+    val appointmentDate: String = "",
+
+    //time
+    val isTime: Boolean = false,
+    val hour: String = "",
+    val minute: String = "",
+    val appointmentTime: String = "",
+
+    //Error
+    val phoneError: String = "",
+    val informationError: String = "",
+    val serviceError: String = "",
+    val calendarError: String = "",
+    val timeError: String = ""
     )

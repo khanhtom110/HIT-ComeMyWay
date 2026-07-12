@@ -26,25 +26,22 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val nameRoom: TextView = itemView.findViewById(R.id.nameRoom)
         val image: ImageView = itemView.findViewById(R.id.image)
-        val action: TextView = itemView.findViewById(R.id.action)
-        val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
+        val date: TextView = itemView.findViewById(R.id.date)
         val time: TextView = itemView.findViewById(R.id.time)
         val status: TextView = itemView.findViewById(R.id.status)
 
         fun bind(item: BookChild) {
-            nameRoom.text = item.roomName
-            action.text = item.action
-            rating.text = "Đánh giá: ${item.rating}/5"
+            nameRoom.text = item.nameClinic
             address.text = item.address
+            date.text = "${item.calendar}-"
             time.text = item.time
 
 
             Glide.with(itemView.context)
-                .load(item.image)
+                .load(item.thumbnailUrl)
                 .circleCrop()
                 .into(image)
-
 
             when(item.status) {
                 BookChildState.PENDING -> {

@@ -109,5 +109,17 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/historyBookFragment"
+        android:name="com.example.petbeats.ui.home.historyBook.HistoryBookFragment"
+        android:label="historyBookFragment">
+
+        <action
+            android:id="@+id/historyBook_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
 
 </navigation>

@@ -85,7 +85,7 @@ class SuccessAppointmentFragment : Fragment() {
                             findNavController().navigate(R.id.successAppointment_search)
                         }
                         is SuccessAppointmentEvent.NavigationBooking -> {
-                            findNavController().navigate(R.id.successAppointment_booking)
+                            findNavController().navigate(R.id.successAppointment_booking,)
                         }
                     }
                 }

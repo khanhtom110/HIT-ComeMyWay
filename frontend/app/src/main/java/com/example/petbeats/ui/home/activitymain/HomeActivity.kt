@@ -55,6 +55,9 @@ class HomeActivity : AppCompatActivity() {
                 R.id.calendarFragment -> {
                     binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
+                R.id.successAppointFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
             }
         }
     }

@@ -29,6 +29,7 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
 import java.time.YearMonth
 import java.time.LocalDate
+import androidx.core.view.isEmpty
 
 
 class CalendarFragment : Fragment() {
@@ -106,6 +107,7 @@ class CalendarFragment : Fragment() {
                         } else {
                             // Cập nhật biến selectedDate và load lại màu 2 ô
                             selectedDate = data.date
+                            viewModel.onDateSelect(data.date.toString())
                             binding.calendarView.notifyDateChanged(data.date)
                             if (currentSelection != null) {
                                 binding.calendarView.notifyDateChanged(currentSelection)
@@ -122,8 +124,36 @@ class CalendarFragment : Fragment() {
         val firstDayOfWeek = firstDayOfWeekFromLocale() // Lấy thứ đầu tiên của tuần (Ví dụ: Thứ 2)
 
         binding.calendarView.setup(startMonth, endMonth, firstDayOfWeek)
-
         binding.calendarView.scrollToMonth(currentMonth)
+
+        //Hiển thị ngày tháng hiện tại
+        if (selectedDate == null) {
+            val today = LocalDate.now()
+            selectedDate = today
+            viewModel.onDateSelect(today.toString())
+            binding.calendarView.notifyDateChanged(today)
+        }
+
+        //Vuốt lịch thì năm, tháng cũng đổi theo
+        binding.calendarView.monthScrollListener = { month ->
+            binding.tvTime.text = "Tháng ${month.yearMonth.monthValue} năm ${month.yearMonth.year}"
+        }
+
+        // Nút lùi về tháng trước
+        binding.btnBackCalendarStart.setOnClickListener {
+            val firstVisibleMonth = binding.calendarView.findFirstVisibleMonth()
+            if (firstVisibleMonth != null) {
+                binding.calendarView.smoothScrollToMonth(firstVisibleMonth.yearMonth.minusMonths(1))
+            }
+        }
+
+        // Nút tiến tới tháng sau
+        binding.btnBackCalendarEnd.setOnClickListener {
+            val firstVisibleMonth = binding.calendarView.findFirstVisibleMonth()
+            if (firstVisibleMonth != null) {
+                binding.calendarView.smoothScrollToMonth(firstVisibleMonth.yearMonth.plusMonths(1))
+            }
+        }
     }
 
     private fun setupTime() {
@@ -140,6 +170,21 @@ class CalendarFragment : Fragment() {
             adapter = TimePagerAdapter(minuteList)
             orientation = ViewPager2.ORIENTATION_VERTICAL
         }
+    }
+
+    private fun getSelectTime() {
+        val openTime = binding.vpTimeOpen.currentItem
+        val closeTime = binding.vpTimeClose.currentItem
+
+        val hour = String.format("%02d", openTime)
+        val minute = if (closeTime == 0) {
+            "00"
+        }
+        else {
+            "30"
+        }
+
+        viewModel.onTimeSelect(hour, minute)
     }
 
     private fun setOnClick() {
@@ -159,7 +204,8 @@ class CalendarFragment : Fragment() {
             viewModel.onAddressChange(it.toString())
         }
         binding.tvInputQuantity.addTextChangedListener {
-            viewModel.onQuantityChange(it.toString())
+            val quantity = it.toString().toIntOrNull() ?: 0
+            viewModel.onQuantityChange(quantity)
         }
         binding.tvInputOther.addTextChangedListener {
             viewModel.onOtherChange(it.toString())
@@ -170,9 +216,11 @@ class CalendarFragment : Fragment() {
 
 
         binding.btnBooking.setOnClickListener {
-            val id = arguments?.getInt("id") ?: 0
+            val clinicId = arguments?.getInt("id") ?: 0
 
-            viewModel.onCalendarClick(id)
+            getSelectTime()
+
+            viewModel.onCalendarClick(clinicId)
         }
 
 
@@ -222,12 +270,6 @@ class CalendarFragment : Fragment() {
                     }
                     else {
                         binding.tvInputName.setBackgroundResource(R.drawable.ground_information)
-                    }
-                    if (state.isPhone) {
-                        binding.tvInputPhone.setBackgroundResource(R.drawable.button_input)
-                    }
-                    else {
-                        binding.tvInputPhone.setBackgroundResource(R.drawable.ground_information)
                     }
                     if (state.isAddress) {
                         binding.tvInputAddress.setBackgroundResource(R.drawable.button_input)
@@ -279,6 +321,66 @@ class CalendarFragment : Fragment() {
                     }
 
 
+                    //check error
+                    if (state.isPhone) {
+                        binding.tvInputPhone.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvPhoneError.visibility = View.VISIBLE
+
+                        val phoneError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.tvInputPhone.setTextColor(phoneError)
+                    }
+                    else {
+                        binding.tvInputPhone.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvPhoneError.visibility = View.GONE
+
+                        val phoneSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.tvInputPhone.setTextColor(phoneSub)
+                    }
+                    binding.tvPhoneError.text = state.phoneError
+
+                    if (state.isInformation) {
+                        binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvInformationError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvInformationError.visibility = View.GONE
+                    }
+                    binding.tvInformationError.text = state.informationError
+
+                    if (state.isService) {
+                        binding.boxService.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvServiceError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxService.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvServiceError.visibility = View.GONE
+                    }
+                    binding.tvServiceError.text = state.serviceError
+
+                    if (state.isCalendar) {
+                        binding.boxCalendar.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvCalendarError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxCalendar.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvCalendarError.visibility = View.GONE
+                    }
+                    binding.tvCalendarError.text = state.calendarError
+
+                    if (state.isTime) {
+                        binding.boxTime.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvTimeError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvTimeError.visibility = View.GONE
+                    }
+                    binding.tvTimeError.text = state.timeError
+
+
+
+
 
                     //check input
                     if (binding.tvInputName.text.toString() != state.name) {
@@ -290,9 +392,13 @@ class CalendarFragment : Fragment() {
                     if (binding.tvInputAddress.text.toString() != state.address) {
                         binding.tvInputAddress.setText(state.address)
                     }
-                    if (binding.tvInputQuantity.text.toString() != state.quantity) {
-                        binding.tvInputQuantity.setText(state.quantity)
+
+                    //quantity
+                    val quantity = if (state.quantity == 0) "" else state.quantity.toString()
+                    if (binding.tvInputQuantity.text.toString() != quantity) {
+                        binding.tvInputQuantity.setText(quantity)
                     }
+
                     if (binding.tvInputOther.text.toString() != state.other) {
                         binding.tvInputOther.setText(state.other)
                     }
@@ -315,68 +421,71 @@ class CalendarFragment : Fragment() {
                             .into(binding.imgClinic)
                     }
 
+                    //nền thay đổi theo click
+                    val groundColor = ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_checked), // đang chọn
+                            intArrayOf(-android.R.attr.state_checked) //bình thường
+                        ),
+                        intArrayOf(
+                            ContextCompat.getColor(requireContext(), R.color.colorPrimary), //đã click
+                            ContextCompat.getColor(requireContext(), R.color.colorBackground) //chưa click
+                        )
+                    )
+
+                    //màu text thay đổi theo click
+                    val textColors = ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_checked),
+                            intArrayOf(-android.R.attr.state_checked)
+                        ),
+                        intArrayOf(
+                            ContextCompat.getColor(requireContext(), R.color.colorBackground), //đã click
+                            ContextCompat.getColor(requireContext(), R.color.colorPrimary) //chưa click
+                        )
+                    )
+
+                    //màu viền thay đổi theo click
+                    val strokeColorState = ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_checked),
+                            intArrayOf(-android.R.attr.state_checked)
+                        ),
+                        intArrayOf(
+                            ContextCompat.getColor(requireContext(), R.color.colorPrimary), //đã click
+                            ContextCompat.getColor(requireContext(), R.color.colorPrimary)  //chưa click
+                        )
+                    )
+
                     //Service
-                    binding.btnService.removeAllViews()
-                    state.services.forEach { servieName ->
-                        val chip = com.google.android.material.chip.Chip(requireContext()).apply {
-                            text = servieName.name
-                            id = servieName.id
+                    if (binding.btnService.isEmpty() && state.services.isNotEmpty()) {
+                        state.services.forEach { serviceName ->
+                            val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                                text = serviceName.name
+                                id = serviceName.id
 
-                            //cho phép bấm chọn
-                            isClickable = true
-                            isCheckable = true
-                            chipStrokeWidth = 3f
+                                //cho phép bấm chọn
+                                isClickable = true
+                                isCheckable = true
+                                chipStrokeWidth = 3f
 
-                            //nền thay đổi theo click
-                            val groundColor = ColorStateList(
-                                arrayOf(
-                                    intArrayOf(android.R.attr.state_checked), // đang chọn
-                                    intArrayOf(-android.R.attr.state_checked) //bình thường
-                                ),
-                                intArrayOf(
-                                    ContextCompat.getColor(context, R.color.colorPrimary), //đã click
-                                    ContextCompat.getColor(context, R.color.colorBackground) //chưa click
-                                )
-                            )
-                            chipBackgroundColor = groundColor
+                                // Chỉ việc gọi lại biến đã tạo ở trên, không khởi tạo lại
+                                chipBackgroundColor = groundColor
+                                setTextColor(textColors)
+                                chipStrokeColor = strokeColorState
 
-                            //màu text thay đổi theo click
-                            val textColors = ColorStateList(
-                                arrayOf(
-                                    intArrayOf(android.R.attr.state_checked),
-                                    intArrayOf(-android.R.attr.state_checked)
-                                ),
-                                intArrayOf(
-                                    ContextCompat.getColor(context, R.color.colorBackground), //đã click
-                                    ContextCompat.getColor(context, R.color.colorPrimary) //chưa click
-                                )
-                            )
-                            setTextColor(textColors)
-
-                            //màu viền thay đổi theo click
-                            val strokeColorState = ColorStateList(
-                                arrayOf(
-                                    intArrayOf(android.R.attr.state_checked),
-                                    intArrayOf(-android.R.attr.state_checked)
-                                ),
-                                intArrayOf(
-                                    ContextCompat.getColor(context, R.color.colorPrimary), //đã click
-                                    ContextCompat.getColor(context, R.color.colorPrimary)  //chưa click
-                                )
-                            )
-                            chipStrokeColor = strokeColorState
-
-                            //người dùng click để báo về viewmodel
-                            setOnCheckedChangeListener { button, isChecked ->
-                                if (isChecked) {
-
-                                }
-                                else {
-
+                                //người dùng click để báo về viewmodel
+                                setOnCheckedChangeListener { button, isChecked ->
+                                    if (isChecked) {
+                                        viewModel.onServiceOpen(serviceName.id)
+                                    }
+                                    else {
+                                        viewModel.onServiceClose(serviceName.id)
+                                    }
                                 }
                             }
+                            binding.btnService.addView(chip)
                         }
-                        binding.btnService.addView(chip)
                     }
 
 
@@ -441,11 +550,11 @@ class CalendarFragment : Fragment() {
                                 }
                             )
                         }
-                        is CalendarEvent.NavigationConfirmAppointment -> {
+                        is CalendarEvent.NavigationSuccessAppointment -> {
                             findNavController().navigate(
-                                R.id.confirmAppointmentFragment,
+                                R.id.successAppointFragment,
                                 Bundle().apply {
-                                    putInt("id", event.id)
+                                    putInt("clinicId", event.id)
                                 }
                             )
                         }

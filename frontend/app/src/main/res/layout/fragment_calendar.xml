@@ -185,13 +185,27 @@
 
                 <TextView
                     style="@style/Chu3"
+                    android:id="@+id/tvPhoneError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorError"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:visibility="gone"
+                    android:drawablePadding="2dp"
+                    app:drawableStartCompat="@drawable/warning"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputPhone"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    style="@style/Chu3"
                     android:id="@+id/tvAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Địa chỉ"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_16sdp"
-                    app:layout_constraintTop_toBottomOf="@id/tvInputPhone"
+                    app:layout_constraintTop_toBottomOf="@id/tvPhoneError"
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <EditText
@@ -230,7 +244,8 @@
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:hint="Nhập số lượng thú cưng muốn khám"
                     android:paddingHorizontal="@dimen/_16sdp"
-                    android:inputType="number"
+                    android:inputType="number|textNoSuggestions"
+                    android:importantForAutofill="no"
                     android:textColor="@color/colorTextSub"
                     android:textColorHint="@color/colorTextContent"
                     app:layout_constraintTop_toBottomOf="@id/tvQuantity"/>
@@ -416,7 +431,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvServiceError">
 
                 <TextView
-                    style="@style/Nut3"
+                    style="@style/TieuDe2"
                     android:id="@+id/btnClinicRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -430,7 +445,7 @@
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
-                    style="@style/Nut3"
+                    style="@style/TieuDe2"
                     android:id="@+id/btnHomeRoom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -505,7 +520,7 @@
 
             <TextView
                 style="@style/Chu3"
-                android:id="@+id/calendarError"
+                android:id="@+id/tvCalendarError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -524,7 +539,7 @@
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/calendarError">
+                app:layout_constraintTop_toBottomOf="@id/tvCalendarError">
 
                 <ImageView
                     android:id="@+id/btnBackCalendarStart"
@@ -663,7 +678,7 @@
 
             <TextView
                 style="@style/Chu3"
-                android:id="@+id/timeError"
+                android:id="@+id/tvTimeError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""

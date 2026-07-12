@@ -31,7 +31,7 @@ class ConfirmAppointmentViewModel(
     fun onInformationBookingAPI(id: Int) {
         viewModelScope.launch {
             val request = TakeBookingRequest(id)
-            val result = repository.takeBook(request)
+            val result = repository.takeBooking(request)
 
             when (result) {
                 is DataResult.Success -> {

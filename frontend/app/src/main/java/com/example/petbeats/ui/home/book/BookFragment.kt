@@ -78,12 +78,15 @@ class BookFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         checkLocationPermissionAndStartSearch()
 
-        setOnClick()
-
 
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapter
 
+
+        viewModel.onBookingList()
+
+
+        setOnClick()
         stateData()
         eventData()
     }
@@ -135,7 +138,7 @@ class BookFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    adapter.submitList(state.list)
+                    adapter.submitList(state.listBook)
                 }
             }
         }

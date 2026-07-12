@@ -9,6 +9,10 @@ enum class ErrorTarget {
     GENERAL,
 
 
-    //Search
-
+    //Calendar
+    PHONE,
+    INFORMATION,
+    CALENDAR,
+    SERVICE,
+    TIME
 }

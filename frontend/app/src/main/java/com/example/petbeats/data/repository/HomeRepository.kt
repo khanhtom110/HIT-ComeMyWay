@@ -52,7 +52,7 @@ class HomeRepository(
         }
     }
 
-    suspend fun takeBook(request: TakeBookingRequest): DataResult<TakeBookingResponse> {
+    suspend fun takeBooking(request: TakeBookingRequest): DataResult<TakeBookingResponse> {
         return safeApiCall {
             apiHome.takeBooking(
                 clinicId = request.clinicId

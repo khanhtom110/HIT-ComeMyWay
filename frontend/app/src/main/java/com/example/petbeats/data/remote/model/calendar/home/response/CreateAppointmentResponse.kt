@@ -13,6 +13,6 @@ data class CreateAppointmentResponse (
     val petQuantity: Int,
     val appointmentDate: String,
     val appointmentTime: String,
-    val services: List<String>,
+    val services: List<ServiceItem>,
     val status: String
 )
