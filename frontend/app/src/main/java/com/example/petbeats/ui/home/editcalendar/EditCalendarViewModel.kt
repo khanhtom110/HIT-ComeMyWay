@@ -1,31 +1,33 @@
-package com.example.petbeats.ui.home.calendar
+package com.example.petbeats.ui.home.editcalendar
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.ErrorTarget
 import com.example.petbeats.data.repository.HomeRepository
+import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CalendarViewModel(
+class EditCalendarViewModel(
     private val repository: HomeRepository
 ): ViewModel() {
-    private var _state = MutableStateFlow(CalendarState())
+    private var _state = MutableStateFlow(EditCalendarState())
     val state = _state.asStateFlow()
 
-    private var _event = MutableSharedFlow< CalendarEvent>()
+    private var _event = MutableSharedFlow<EditCalendarEvent>()
     val event = _event.asSharedFlow()
 
-    fun informationClick(id: Int) {
+    fun informationClick(id: Int, cliniId: Int) {
         viewModelScope.launch {
-            _event.emit(CalendarEvent.NavigationInformationRoom(id))
+            _event.emit(EditCalendarEvent.NavigationConfirmAppointment(id, cliniId))
         }
     }
 
@@ -131,7 +133,7 @@ class CalendarViewModel(
     }
 
 
-    fun onCalendarClick(clinicId: Int) {
+    fun onCalendarClick(id: Int, clinicId: Int) {
         viewModelScope.launch {
             if (_state.value.isDog) {
                 _state.value = _state.value.copy(petType = "Chó")
@@ -165,14 +167,15 @@ class CalendarViewModel(
 
             Log.d("TEST_CASE", "name: ${name}, phone: ${phone}, bookingType ${bookingType}, address: ${address}, quantity: ${quantity}, petType: ${petType}, petCondition: ${petCondition}, date: ${date}, appointmentTime: ${appointmentTime}, service: ${service}")
 
+            val id = AppointmentIdRequest(id)
             val request = CreateAppointmentRequest(clinicId,name, phone, bookingType, address, quantity, petType, petCondition, date, appointmentTime, service)
-            val result = repository.createAppointment(request)
+            val result = repository.editAppointment(id, request)
 
             when (result) {
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPhone = false, isInformation = false, isService = false, isCalendar = false, isTime = false)
 
-                    _event.emit(CalendarEvent.NavigationSuccessAppointment(result.data.id))
+                    _event.emit(EditCalendarEvent.NavigationSuccessAppointment(result.data.id))
                 }
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
@@ -195,6 +198,46 @@ class CalendarViewModel(
                 }
             }
 
+        }
+    }
+
+    fun onAppointmentShow(id: Int) {
+        viewModelScope.launch {
+            val request = AppointmentIdRequest(id)
+            val result = repository.takeAppointmentId(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val data = result.data
+
+                    //time
+                    val time = data.appointmentTime.split(":")
+                    val hour = time.getOrNull(0) ?: "00"
+                    val minute = time.getOrNull(1) ?: "00"
+
+                    // lấy danh sách id để hiển thị lên chip
+                    val selectedServiceIds = data.services.map { it.id }
+
+                    _state.value = _state.value.copy(
+                        name = data.fullName,
+                        phone = data.phone,
+                        bookingType = data.bookingType,
+                        address = data.homeAddress,
+                        petType = data.petType,
+                        state = data.petCondition,
+                        quantity = data.petQuantity,
+                        appointmentDate = data.appointmentDate,
+                        appointmentTime = data.appointmentTime,
+
+                        hour = hour,
+                        minute = minute,
+                        selectService = selectedServiceIds
+                    )
+                }
+                is DataResult.Error -> {
+                    return@launch
+                }
+            }
         }
     }
 }

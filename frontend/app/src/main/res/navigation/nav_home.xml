@@ -85,9 +85,15 @@
         android:name="com.example.petbeats.ui.home.confirmappointment.ConfirmAppointmentFragment"
         android:label="confirmAppointmentFragment">
         <action
-            android:id="@+id/confirmAppointment_calendar"
-            app:destination="@+id/calendarFragment"
-            app:popUpTo="@id/calendarFragment"
+            android:id="@+id/confirmAppointment_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/confirmAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 
@@ -121,5 +127,15 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/editCalendarFragment"
+        android:name="com.example.petbeats.ui.home.editcalendar.EditCalendarFragment"
+        android:label="editCalendarFragment">
+        <action
+            android:id="@+id/editCalendar_confirm"
+            app:destination="@+id/confirmAppointmentFragment"
+            app:popUpTo="@id/confirmAppointmentFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>

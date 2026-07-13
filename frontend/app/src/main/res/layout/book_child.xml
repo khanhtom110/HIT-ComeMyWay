@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/colorBackground">
 
@@ -9,8 +11,7 @@
         android:id="@+id/image_click"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:paddingBottom="@dimen/_10sdp"
         android:background="@drawable/ground_book_child">
 
@@ -48,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            style="@style/Chu3"
+            style="@style/Chu2"
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

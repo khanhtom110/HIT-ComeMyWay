@@ -22,6 +22,7 @@ import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentBookBinding
 import com.example.petbeats.ui.home.book.adapter.BookAdapter
+import com.example.petbeats.ui.home.historyBook.HistoryBookEvent
 import kotlinx.coroutines.launch
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -72,12 +73,11 @@ class BookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = BookAdapter()
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         checkLocationPermissionAndStartSearch()
 
+        clickListBook()
 
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapter
@@ -94,6 +94,12 @@ class BookFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun clickListBook() {
+        adapter = BookAdapter { id, clinicId ->
+            viewModel.itemClickBookAppointment(id, clinicId)
+        }
     }
 
     private fun checkLocationPermissionAndStartSearch() {
@@ -132,6 +138,9 @@ class BookFragment : Fragment() {
         binding.search.setOnClickListener {
             viewModel.searchClick()
         }
+        binding.buttonAll.setOnClickListener {
+            viewModel.historyBookClick()
+        }
     }
 
     private fun stateData() {
@@ -151,6 +160,18 @@ class BookFragment : Fragment() {
                     when (event) {
                         is BookEvent.NavigationSearch -> {
                             findNavController().navigate(R.id.searchFragment)
+                        }
+                        is BookEvent.NavigationHistoryBook -> {
+                            findNavController().navigate(R.id.historyBookFragment)
+                        }
+                        is BookEvent.NavigationBookingAppointment -> {
+                            findNavController().navigate(
+                                R.id.confirmAppointmentFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                    putInt("clinicId", event.clinicId)
+                                }
+                            )
                         }
                     }
                 }

@@ -56,6 +56,7 @@ interface ApiHome {
 
     @POST(ApiConstants.EDITAPPOINTMENT)
     suspend fun editAppointment(
+        @Path("appointmentId") id: Int,
         @Body request: CreateAppointmentRequest
     ): ApiResponse<CreateAppointmentResponse>
 

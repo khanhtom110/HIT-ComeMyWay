@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.calendar.CalendarFragment">
+    tools:context=".ui.home.editcalendar.EditCalendarFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -285,7 +286,7 @@
                     android:layout_marginStart="@dimen/_70sdp"
                     app:layout_constraintTop_toBottomOf="@id/tvTypePet"
                     app:layout_constraintStart_toStartOf="parent"/>
-                
+
                 <ImageView
                     android:id="@+id/btnDog"
                     android:layout_width="@dimen/_14sdp"

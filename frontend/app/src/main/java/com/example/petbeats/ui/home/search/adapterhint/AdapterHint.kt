@@ -28,7 +28,6 @@ class AdapterHint(
         val name: TextView = itemView.findViewById(R.id.nameRoom)
         val thumbnailUrl: ImageView = itemView.findViewById(R.id.image)
         val address: TextView = itemView.findViewById(R.id.address)
-        val click: TextView = itemView.findViewById(R.id.nameRoom)
         val distance: TextView = itemView.findViewById(R.id.distance)
         val rating: TextView = itemView.findViewById(R.id.rating)
         val iconrating: ImageView = itemView.findViewById(R.id.iconRating)
@@ -46,7 +45,7 @@ class AdapterHint(
                 .into(thumbnailUrl)
 
 
-            click.setOnClickListener {
+            name.setOnClickListener {
                 onItemClick(item.id)
             }
 

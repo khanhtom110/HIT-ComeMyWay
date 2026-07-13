@@ -88,13 +88,26 @@
 
             <TextView
                 style="@style/TieuDe1"
+                android:id="@+id/stateClinic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@drawable/button_input"
+                android:layout_marginHorizontal="@dimen/_32sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="Chờ xử lý"
+                android:gravity="center"
+                android:textColor="@color/colorWarning"
+                app:layout_constraintTop_toBottomOf="@id/tvRating"/>
+
+            <TextView
+                style="@style/TieuDe1"
                 android:id="@+id/tvInformationClinic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thông tin phòng khám"
                 android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_24sdp"
-                app:layout_constraintTop_toBottomOf="@id/imgClinic"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/stateClinic"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -448,12 +461,12 @@
 
             <TextView
                 style="@style/Nut2"
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnEdit"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="@dimen/_42sdp"
                 android:background="@drawable/button_auth_white"
                 android:layout_marginTop="@dimen/_16sdp"
-                android:text="Hủy"
+                android:text="Chỉnh sửa"
                 android:gravity="center"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginStart="@dimen/_15sdp"
@@ -469,14 +482,14 @@
                 android:layout_height="@dimen/_42sdp"
                 android:background="@drawable/button_auth_blue"
                 android:layout_marginTop="@dimen/_16sdp"
-                android:text="Xác nhận đặt lịch"
+                android:text="Đặt lịch khám mới"
                 android:gravity="center"
                 android:textColor="@color/colorBackground"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 app:layout_constraintTop_toBottomOf="@id/boxInformationHome"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnCancel"/>
+                app:layout_constraintStart_toEndOf="@id/btnEdit"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

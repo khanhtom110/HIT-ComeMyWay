@@ -41,9 +41,17 @@ object ErrorUtils {
                 Pair(ErrorTarget.PHONE, "Số điện thoại không đúng định dạng")
             }
 
+            //Quantity
+            "At least one pet quantity" -> {
+                Pair(ErrorTarget.QUANTITY, "Số lượng tối thiểu là 1 thú cưng")
+            }
+
             //Service
             "At least one service must be selected." -> {
                 Pair(ErrorTarget.SERVICE, "Phải chọn ít nhất một dịch vụ.")
+            }
+            "Invalid value for field 'bookingType'. Accepted values are: [AT_CLINIC, AT_HOME]" -> {
+                Pair(ErrorTarget.SERVICE, "Vui lòng chọn 1 nơi để khám")
             }
 
             //Calendar
@@ -72,13 +80,14 @@ object ErrorUtils {
                 Pair(ErrorTarget.GENERAL, "Gửi email thất bại. Vui lòng thử lại sau.")
             "An unexpected system error occurred. Please try again later." ->
                 Pair(ErrorTarget.GENERAL, "Lỗi hệ thống. Vui lòng thử lại sau.")
-
             "The request is invalid or malformed." ->
                 Pair(ErrorTarget.GENERAL, "Vui lòng nhập đầy đủ thông tin")
             "Too many request. Please try again after 1 minute." ->
                 Pair(ErrorTarget.GENERAL, "Có quá nhiều yêu cầu. Làm ơn hãy thử lại sau 1 phút")
             "Invalid username, email, or password." ->
                 Pair(ErrorTarget.GENERAL, "Tài khoản hoặc mật khẩu không chính xác.")
+            "Appointment does not exist" ->
+                Pair(ErrorTarget.GENERAL, "Cuộc hẹn không tồn tại.")
 
             //Be trả lỗi lạ
             null -> Pair(ErrorTarget.GENERAL, "Lỗi không xác định.")

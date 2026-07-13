@@ -1,8 +1,8 @@
-package com.example.petbeats.ui.home.calendar
+package com.example.petbeats.ui.home.editcalendar
 
 import com.example.petbeats.data.remote.model.calendar.home.response.ServiceItem
 
-data class CalendarState (
+data class EditCalendarState (
     //information
     val name: String = "",
     val phone: String = "",
@@ -56,4 +56,4 @@ data class CalendarState (
     val calendarError: String = "",
     val timeError: String = "",
     val quantityError: String = ""
-    )
+)

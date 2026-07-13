@@ -1,11 +1,13 @@
 package com.example.petbeats.ui.home.confirmappointment
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.HomeRepository
+import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,16 +23,28 @@ class ConfirmAppointmentViewModel(
     private val _event = MutableSharedFlow<ConfirmAppointmentEvent>()
     val event = _event.asSharedFlow()
 
-    fun calendarClick(id: Int) {
+    fun bookClick() {
         viewModelScope.launch {
-            _event.emit(ConfirmAppointmentEvent.NavigationCalendar(id))
+            _event.emit(ConfirmAppointmentEvent.NavigationHomeAppointment)
+        }
+    }
+
+    fun searchClick() {
+        viewModelScope.launch {
+            _event.emit(ConfirmAppointmentEvent.NavigationSearch)
+        }
+    }
+
+    fun onEditAppointmentClick(id: Int, clinicId: Int) {
+        viewModelScope.launch {
+            _event.emit(ConfirmAppointmentEvent.NavigationEditAppointment(id, clinicId))
         }
     }
 
     //api này tự động lấy id của màn calendar và gắn id cho service(người dùng click) và hiển thị thông tin lên giao diện
-    fun onInformationBookingAPI(id: Int) {
+    fun onInformationBookingAPI(clinicId: Int) {
         viewModelScope.launch {
-            val request = TakeBookingRequest(id)
+            val request = TakeBookingRequest(clinicId)
             val result = repository.takeBooking(request)
 
             when (result) {
@@ -42,7 +56,8 @@ class ConfirmAppointmentViewModel(
                         name = data.name,
                         status = data.isOperating,
                         rating = data.rating,
-                        services = data.services
+                        phoneClinic = data.phone,
+                        clinicAddress = data.address
                     )
                 }
                 is DataResult.Error -> {
@@ -62,29 +77,34 @@ class ConfirmAppointmentViewModel(
                 is DataResult.Success -> {
                     val data = result.data
 
+                    val mapStatus = when (data.status) {
+                        "PENDING" -> BookChildState.PENDING
+                        "SUCCESS" -> BookChildState.SUCCESS
+                        "REFUSE" -> BookChildState.REFUSE
+                        else -> BookChildState.PENDING
+                    }
+
                     _state.value = _state.value.copy(
                         fullName = data.fullName,
-                        phoneUser = data.phoneUser,
-                        phoneClinic = data.phoneClinic,
+                        phoneUser = data.phone,
+                        bookingType = data.bookingType,
                         homeAddress = data.homeAddress,
                         petType = data.petType,
                         petCondition = data.petCondition,
                         petQuantity = data.petQuantity,
                         appointmentDate = data.appointmentDate,
                         appointmentTime = data.appointmentTime,
+                        services = data.services,
+                        state = mapStatus
                     )
                 }
                 is DataResult.Error -> {
+                    Log.d("TEST", "lỗi trả: ${result.target} và message ${result.message}")
+
                     _state.value = _state.value.copy()
                     return@launch
                 }
             }
-        }
-    }
-
-    fun onConfirmAppointment() {
-        viewModelScope.launch {
-            _event.emit(ConfirmAppointmentEvent.NavigationSuccessAppointment)
         }
     }
 }

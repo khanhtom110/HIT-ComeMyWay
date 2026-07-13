@@ -1,42 +1,48 @@
-package com.example.petbeats.ui.home.calendar
+package com.example.petbeats.ui.home.editcalendar
 
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.petbeats.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentCalendarBinding
-import kotlinx.coroutines.launch
-import androidx.core.content.ContextCompat
-import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
+import com.example.petbeats.databinding.FragmentEditCalendarBinding
+import com.example.petbeats.ui.home.calendar.CalendarEvent
+import com.example.petbeats.ui.home.calendar.CalendarViewModel
+import com.example.petbeats.ui.home.calendar.CalendarViewModelFactory
+import com.example.petbeats.ui.home.calendar.DayViewContainer
 import com.example.petbeats.ui.home.calendar.adapter.TimePagerAdapter
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.MonthDayBinder
-import java.time.YearMonth
+import kotlinx.coroutines.launch
 import java.time.LocalDate
-import androidx.core.view.isEmpty
+import java.time.YearMonth
+import kotlin.getValue
 
-
-class CalendarFragment : Fragment() {
-    private var _binding: FragmentCalendarBinding ?= null
+class EditCalendarFragment : Fragment() {
+    private var _binding: FragmentEditCalendarBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: CalendarViewModel by viewModels {
-        CalendarViewModelFactory(
+    private val viewModel: EditCalendarViewModel by viewModels {
+        EditCalendarViewModelFactory(
             HomeRepository(
                 RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
             )
@@ -47,17 +53,19 @@ class CalendarFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        _binding = FragmentEditCalendarBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val clinicId = arguments?.getInt("clinicId") ?: 0
         val id = arguments?.getInt("id") ?: 0
-        viewModel.onInformationBookingAPI(id)
+        viewModel.onInformationBookingAPI(clinicId)
+        viewModel.onAppointmentShow(id)
 
         calendar()
         setupTime()
@@ -190,7 +198,8 @@ class CalendarFragment : Fragment() {
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
             val id = arguments?.getInt("id") ?: 0
-            viewModel.informationClick(id)
+            val clinicId = arguments?.getInt("clinicId") ?: 0
+            viewModel.informationClick(id, clinicId)
         }
 
 
@@ -216,11 +225,12 @@ class CalendarFragment : Fragment() {
 
 
         binding.btnBooking.setOnClickListener {
-            val clinicId = arguments?.getInt("id") ?: 0
+            val clinicId = arguments?.getInt("clinicId") ?: 0
+            val appointmentId = arguments?.getInt("id") ?: 0
 
             getSelectTime()
 
-            viewModel.onCalendarClick(clinicId)
+            viewModel.onCalendarClick(appointmentId, clinicId)
         }
 
 
@@ -282,12 +292,6 @@ class CalendarFragment : Fragment() {
                     }
                     else {
                         binding.tvInputOther.setBackgroundResource(R.drawable.ground_information)
-                    }
-                    if (state.isInputState) {
-                        binding.tvInputState.setBackgroundResource(R.drawable.button_input_errol)
-                    }
-                    else {
-                        binding.tvInputState.setBackgroundResource(R.drawable.ground_information)
                     }
                     if (state.isClinic) {
                         binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
@@ -491,6 +495,14 @@ class CalendarFragment : Fragment() {
                             binding.btnService.addView(chip)
                         }
                     }
+                    if (!binding.btnService.isEmpty()) {
+                        for (i in 0 until binding.btnService.childCount) {
+                            val chip = binding.btnService.getChildAt(i) as? com.google.android.material.chip.Chip
+                            if (chip != null) {
+                                chip.isChecked = state.selectService.contains(chip.id)
+                            }
+                        }
+                    }
 
 
 
@@ -536,6 +548,94 @@ class CalendarFragment : Fragment() {
                         val other = ContextCompat.getColor(requireContext(),R.color.colorTextContent)
                         binding.tvOther.setTextColor(other)
                     }
+
+
+                    //Kiểm tra editCalendar
+
+                    //Phòng khám, Tại nhà
+                    if (state.bookingType == "AT_CLINIC") {
+                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
+                        binding.btnClinicRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
+                    } else {
+                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child)
+                        binding.btnClinicRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    }
+
+                    if (state.bookingType == "AT_HOME") {
+                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
+                        binding.btnHomeRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
+                    } else {
+                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child)
+                        binding.btnHomeRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    }
+
+                    //Chó, Mèo, Khác
+                    if (state.petType == "Chó") {
+                        binding.btnDog.setBackgroundResource(R.drawable.icon_open)
+                    } else {
+                        binding.btnDog.setBackgroundResource(R.drawable.icon_close)
+                    }
+                    if (state.petType == "Mèo") {
+                        binding.btnCat.setBackgroundResource(R.drawable.icon_open)
+                    } else {
+                        binding.btnCat.setBackgroundResource(R.drawable.icon_close)
+                    }
+                    if (state.petType.isNotEmpty() && state.petType != "Chó" && state.petType != "Mèo") {
+                        binding.btnOther.setBackgroundResource(R.drawable.icon_open)
+                        binding.tvInputOther.visibility = View.VISIBLE
+
+                        if (binding.tvInputOther.text.toString() != state.petType) {
+                            binding.tvInputOther.setText(state.petType)
+                        }
+                    }
+                    else {
+                        binding.btnOther.setBackgroundResource(R.drawable.icon_close)
+                        binding.tvInputOther.visibility = View.GONE
+                    }
+
+                    //calendar
+                    if (state.appointmentDate.isNotEmpty() && selectedDate?.toString() != state.appointmentDate) {
+                        try {
+                            val fetchedDate = LocalDate.parse(state.appointmentDate)
+                            val previousDate = selectedDate
+
+                            // Cập nhật biến selectedDate toàn cục của Fragment
+                            selectedDate = fetchedDate
+
+                            // 1. Tự động cuộn lịch tới đúng cái tháng chứa ngày đó
+                            binding.calendarView.scrollToMonth(YearMonth.from(fetchedDate))
+
+                            // 2. Bôi xanh ngày vừa lấy từ API
+                            binding.calendarView.notifyDateChanged(fetchedDate)
+
+                            // 3. Xóa màu xanh ở ngày cũ (nếu có)
+                            if (previousDate != null) {
+                                binding.calendarView.notifyDateChanged(previousDate)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("EditCalendar", "Lỗi parse ngày API: ${e.message}")
+                        }
+                    }
+
+                    //time
+                    if (state.hour.isNotEmpty()) {
+                        val hour = state.hour.toIntOrNull() ?: 0
+
+                        if (binding.vpTimeOpen.currentItem != hour) {
+                            binding.vpTimeOpen.setCurrentItem(hour, false)
+                        }
+                    }
+                    if (state.minute.isNotEmpty()) {
+                        if (state.minute == "30") {
+                            binding.vpTimeClose.currentItem = 1
+                        }
+                        else {
+                            binding.vpTimeClose.currentItem = 0
+                        }
+
+
+                    }
+
                 }
             }
         }
@@ -546,15 +646,17 @@ class CalendarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        is CalendarEvent.NavigationInformationRoom -> {
+
+                        is EditCalendarEvent.NavigationConfirmAppointment -> {
                             findNavController().navigate(
-                                R.id.calendar_informationRoom,
+                                R.id.editCalendar_confirm,
                                 Bundle().apply {
                                     putInt("id", event.id)
+                                    putInt("clinicId", event.clinicId)
                                 }
                             )
                         }
-                        is CalendarEvent.NavigationSuccessAppointment -> {
+                        is EditCalendarEvent.NavigationSuccessAppointment -> {
                             findNavController().navigate(
                                 R.id.successAppointFragment,
                                 Bundle().apply {
@@ -567,4 +669,5 @@ class CalendarFragment : Fragment() {
             }
         }
     }
+
 }

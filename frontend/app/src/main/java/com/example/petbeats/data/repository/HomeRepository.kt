@@ -1,6 +1,5 @@
 package com.example.petbeats.data.repository
 
-import android.util.Log
 import com.example.petbeats.core.base.BaseRepository
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.api.ApiHome
@@ -9,14 +8,12 @@ import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequ
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
-import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.remote.model.calendar.home.response.AppointmentIdResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.ClinicIdResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.CreateAppointmentResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.LocationResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.SearchResponse
-import com.example.petbeats.data.remote.model.calendar.home.response.SuggestResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.TakeAppointmentResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.TakeBookingResponse
 
@@ -72,9 +69,9 @@ class HomeRepository(
         }
     }
 
-    suspend fun editAppointment(request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
+    suspend fun editAppointment(id: AppointmentIdRequest, request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
         return safeApiCall {
-            apiHome.editAppointment(request)
+            apiHome.editAppointment(id = id.id, request)
         }
     }
 

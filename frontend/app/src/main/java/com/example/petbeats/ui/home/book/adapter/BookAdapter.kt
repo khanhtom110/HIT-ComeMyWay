@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.petbeats.R
 
-class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
+class BookAdapter(
+    private val onItemClick: (Int, Int) -> Unit
+): ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.book_child, holder, false)
         return ViewHolder(view)
@@ -20,7 +22,7 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBook = getItem(position)
 
-        holder.bind(currentBook)
+        holder.bind(currentBook, onItemClick)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -31,7 +33,7 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
         val time: TextView = itemView.findViewById(R.id.time)
         val status: TextView = itemView.findViewById(R.id.status)
 
-        fun bind(item: BookChild) {
+        fun bind(item: BookChild, onItemClick: (Int, Int) -> Unit) {
             nameRoom.text = item.nameClinic
             address.text = item.address
             date.text = "${item.calendar}-"
@@ -56,6 +58,10 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
                     status.text = "Từ chối"
                     status.setTextColor(Color.parseColor("#CC0900"))
                 }
+            }
+
+            nameRoom.setOnClickListener {
+                onItemClick(item.id, item.clinicId)
             }
         }
     }

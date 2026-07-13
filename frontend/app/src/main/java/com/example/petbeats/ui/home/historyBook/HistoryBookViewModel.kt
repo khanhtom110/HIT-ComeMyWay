@@ -1,50 +1,41 @@
-package com.example.petbeats.ui.home.book
+package com.example.petbeats.ui.home.historyBook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
-import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
-import com.example.petbeats.data.remote.model.calendar.home.response.TakeBookingResponse
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.book.adapter.BookChild
 import com.example.petbeats.ui.home.book.adapter.BookChildState
-import com.example.petbeats.ui.home.historyBook.HistoryBookEvent
-import com.example.petbeats.ui.home.search.adapterhint.HintChild
+import com.example.petbeats.ui.home.search.SearchEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.collections.map
 
-class BookViewModel(
+class HistoryBookViewModel(
     private val repository: HomeRepository
 ): ViewModel() {
-    private val _state = MutableStateFlow(BookState())
+    private val _state = MutableStateFlow(HistoryBookState())
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<BookEvent>()
+    private val _event = MutableSharedFlow<HistoryBookEvent>()
     val event = _event.asSharedFlow()
-    
-    fun searchClick() {
-        viewModelScope.launch {
-            _event.emit(BookEvent.NavigationSearch)
-        }
-    }
 
-    fun historyBookClick() {
+    fun bookClick() {
         viewModelScope.launch {
-            _event.emit(BookEvent.NavigationHistoryBook)
+            _event.emit(HistoryBookEvent.NavigationBook)
         }
     }
 
     fun itemClickBookAppointment(id: Int, clinicId: Int) {
         viewModelScope.launch {
-            _event.emit(BookEvent.NavigationBookingAppointment(id, clinicId))
+            _event.emit(HistoryBookEvent.NavigationBookingAppointment(id, clinicId))
         }
     }
 
-    fun onBookingList() {
+
+    fun onHistoryBookingList() {
         viewModelScope.launch {
             val result = repository.takeAppointment()
 

@@ -1,10 +1,13 @@
 package com.example.petbeats.ui.home.confirmappointment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +19,7 @@ import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentConfirmAppointmentBinding
+import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -44,7 +48,8 @@ class ConfirmAppointmentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getInt("id") ?: 0
-        viewModel.onInformationBookingAPI(id)
+        val clinicId = arguments?.getInt("clinicId") ?: 0
+        viewModel.onInformationBookingAPI(clinicId)
         viewModel.onInformationAppointment(id)
 
         setOnClick()
@@ -59,13 +64,18 @@ class ConfirmAppointmentFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
-            val id = arguments?.getInt("id") ?: 0
+            viewModel.bookClick()
+        }
 
-            viewModel.calendarClick(id)
+        binding.btnEdit.setOnClickListener {
+            val id = arguments?.getInt("id") ?: 0
+            val clinicId = arguments?.getInt("clinicId") ?: 0
+
+            viewModel.onEditAppointmentClick(id, clinicId)
         }
 
         binding.btnBooking.setOnClickListener {
-            viewModel.onConfirmAppointment()
+            viewModel.searchClick()
         }
     }
 
@@ -85,8 +95,34 @@ class ConfirmAppointmentFragment : Fragment() {
                     binding.tvInputStatusHome.text = state.petCondition
                     binding.tvInputTypeServiceHome.text = state.bookingType
                     binding.tvInputDayHome.text = state.appointmentDate
-                    binding.tvInputTimeHome.text = state.appointmentTime
+                    binding.tvInputTimeHome.text = state.appointmentTime.take(5)
                     binding.tvRating.text = "đánh giá ${state.rating}/5"
+
+
+                    binding.tvInputIncludeHome.text = if (state.services.isEmpty()) {
+                        "Không có dịch vụ"
+                    }
+                    else {
+                        state.services.joinToString(separator = ", ") { serviceItem ->
+                            serviceItem.name
+                        }
+                    }
+
+                    //check state clinic
+                    when (state.state) {
+                        BookChildState.PENDING -> {
+                            binding.stateClinic.text = "Chờ xử lý"
+                            binding.stateClinic.setTextColor(Color.parseColor("#F7C120"))
+                        }
+                        BookChildState.SUCCESS -> {
+                            binding.stateClinic.text = "Đặt lịch thành công"
+                            binding.stateClinic.setTextColor(Color.parseColor("#00FF0B"))
+                        }
+                        BookChildState.REFUSE -> {
+                            binding.stateClinic.text = "Từ chối"
+                            binding.stateClinic.setTextColor(Color.parseColor("#CC0900"))
+                        }
+                    }
 
                     if (state.status) {
                         binding.tvStatus.text = "Đang hoạt động"
@@ -110,16 +146,20 @@ class ConfirmAppointmentFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-                        is ConfirmAppointmentEvent.NavigationCalendar -> {
+                        is ConfirmAppointmentEvent.NavigationHomeAppointment -> {
+                            findNavController().navigate(R.id.confirmAppointment_book)
+                        }
+                        is ConfirmAppointmentEvent.NavigationEditAppointment -> {
                             findNavController().navigate(
-                                R.id.confirmAppointment_calendar,
+                                R.id.editCalendarFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
+                                    putInt("clinicId", event.clinicId)
                                 }
                             )
                         }
-                        is ConfirmAppointmentEvent.NavigationSuccessAppointment -> {
-                            findNavController().navigate(R.id.successAppointFragment)
+                        is ConfirmAppointmentEvent.NavigationSearch -> {
+                            findNavController().navigate(R.id.confirmAppointment_search)
                         }
                     }
                 }

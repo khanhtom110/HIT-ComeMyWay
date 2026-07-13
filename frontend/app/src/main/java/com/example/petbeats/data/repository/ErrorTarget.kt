@@ -11,6 +11,7 @@ enum class ErrorTarget {
 
     //Calendar
     PHONE,
+    QUANTITY,
     INFORMATION,
     CALENDAR,
     SERVICE,
