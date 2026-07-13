@@ -113,14 +113,29 @@ class ConfirmAppointmentFragment : Fragment() {
                         BookChildState.PENDING -> {
                             binding.stateClinic.text = "Chờ xử lý"
                             binding.stateClinic.setTextColor(Color.parseColor("#F7C120"))
+
+                            //button edit
+                            binding.btnEdit.isEnabled = true
+                            binding.btnEdit.setBackgroundResource(R.drawable.button_auth_white)
+                            binding.btnEdit.setTextColor(Color.parseColor("#486BF3"))
                         }
                         BookChildState.SUCCESS -> {
                             binding.stateClinic.text = "Đặt lịch thành công"
                             binding.stateClinic.setTextColor(Color.parseColor("#00FF0B"))
+
+                            //button edit
+                            binding.btnEdit.isEnabled = false
+                            binding.btnEdit.setBackgroundResource(R.drawable.button_close)
+                            binding.btnEdit.setTextColor(Color.parseColor("#FAFCFF"))
                         }
-                        BookChildState.REFUSE -> {
+                        BookChildState.CANCELLED -> {
                             binding.stateClinic.text = "Từ chối"
                             binding.stateClinic.setTextColor(Color.parseColor("#CC0900"))
+
+                            //button edit
+                            binding.btnEdit.isEnabled = false
+                            binding.btnEdit.setBackgroundResource(R.drawable.button_close)
+                            binding.btnEdit.setTextColor(Color.parseColor("#FAFCFF"))
                         }
                     }
 

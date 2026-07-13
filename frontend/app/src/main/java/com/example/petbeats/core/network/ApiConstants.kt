@@ -25,6 +25,7 @@ object ApiConstants {
     const val EDITAPPOINTMENT = "/api/v1/user/appointments/update/{appointmentId}"
     const val TAKEBOOKING = "/api/v1/public/clinics/{clinicId}/booking"
     const val TAKEAPPOINTMENTID = "/api/v1/user/appointments/detail/{id}"
+    const val CANCELAPPOINTMENT = "/api/v1/user/appointments/cancel/{appointmentId}"
 
 
 }

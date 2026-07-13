@@ -78,6 +78,12 @@
             app:destination="@+id/informationRoomFragment"
             app:popUpTo="@id/informationRoomFragment"
             app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/calendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -135,6 +141,12 @@
             android:id="@+id/editCalendar_confirm"
             app:destination="@+id/confirmAppointmentFragment"
             app:popUpTo="@id/confirmAppointmentFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/editCalendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 

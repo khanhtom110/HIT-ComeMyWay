@@ -1,6 +1,7 @@
 package com.example.petbeats.data.remote.model.calendar.home.response
 
 data class TakeBookingResponse (
+    val id: Int,
     val thumbnailUrl: String,
     val name: String,
     val phone: String,

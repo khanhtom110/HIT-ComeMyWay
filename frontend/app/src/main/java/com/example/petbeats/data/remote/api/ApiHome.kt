@@ -2,6 +2,7 @@ package com.example.petbeats.data.remote.api
 
 import com.example.petbeats.core.network.ApiConstants
 import com.example.petbeats.core.network.ApiResponse
+import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
@@ -65,4 +66,8 @@ interface ApiHome {
         @Path("id") id: Int
     ): ApiResponse<AppointmentIdResponse>
 
+    @POST(ApiConstants.CANCELAPPOINTMENT)
+    suspend fun cancelAppointment(
+        @Path("appointmentId") id: Int
+    ): ApiResponse<AppointmentIdResponse>
 }

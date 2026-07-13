@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.ErrorTarget
@@ -195,6 +196,26 @@ class CalendarViewModel(
                 }
             }
 
+        }
+    }
+
+    fun onCancelAppointment() {
+        viewModelScope.launch {
+            val id = _state.value.id
+
+            Log.d("TEST_API", "id: $id")
+
+            val request = AppointmentIdRequest(id)
+            val result = repository.cancelAppointment(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(CalendarEvent.NavigationNextRoom)
+                }
+                is DataResult.Error -> {
+                    return@launch
+                }
+            }
         }
     }
 }

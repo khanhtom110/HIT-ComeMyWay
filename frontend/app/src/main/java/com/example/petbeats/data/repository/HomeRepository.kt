@@ -71,13 +71,23 @@ class HomeRepository(
 
     suspend fun editAppointment(id: AppointmentIdRequest, request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
         return safeApiCall {
-            apiHome.editAppointment(id = id.id, request)
+            apiHome.editAppointment(
+                id = id.id, request
+            )
         }
     }
 
     suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentIdResponse> {
         return safeApiCall {
             apiHome.takeAppointmentId(
+                id = request.id
+            )
+        }
+    }
+
+    suspend fun cancelAppointment(request: AppointmentIdRequest): DataResult<AppointmentIdResponse> {
+        return safeApiCall {
+            apiHome.cancelAppointment(
                 id = request.id
             )
         }

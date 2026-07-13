@@ -241,6 +241,10 @@ class CalendarFragment : Fragment() {
         binding.btnHomeRoom.setOnClickListener {
             viewModel.onHomeClick()
         }
+
+        binding.btnCancel.setOnClickListener {
+            viewModel.onCancelAppointment()
+        }
     }
 
     private fun stateData() {
@@ -561,6 +565,9 @@ class CalendarFragment : Fragment() {
                                     putInt("clinicId", event.id)
                                 }
                             )
+                        }
+                        is CalendarEvent.NavigationNextRoom -> {
+                            findNavController().navigate(R.id.editCalendar_book)
                         }
                     }
                 }

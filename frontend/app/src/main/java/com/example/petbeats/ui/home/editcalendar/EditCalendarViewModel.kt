@@ -10,6 +10,7 @@ import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingR
 import com.example.petbeats.data.repository.ErrorTarget
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.book.adapter.BookChildState
+import com.example.petbeats.ui.home.calendar.CalendarEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -86,6 +87,7 @@ class EditCalendarViewModel(
                     val data = result.data
 
                     _state.value = _state.value.copy(
+                        id = data.id,
                         thumbnailUrl = data.thumbnailUrl,
                         tittle = data.name,
                         isOperating = data.isOperating,
@@ -219,6 +221,7 @@ class EditCalendarViewModel(
                     val selectedServiceIds = data.services.map { it.id }
 
                     _state.value = _state.value.copy(
+                        id = data.id,
                         name = data.fullName,
                         phone = data.phone,
                         bookingType = data.bookingType,
@@ -235,6 +238,25 @@ class EditCalendarViewModel(
                     )
                 }
                 is DataResult.Error -> {
+                    return@launch
+                }
+            }
+        }
+    }
+
+    fun onCancelAppointment() {
+        viewModelScope.launch {
+            val id = _state.value.id
+
+            val request = AppointmentIdRequest(id)
+            val result = repository.cancelAppointment(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(EditCalendarEvent.NavigationNextRoom)
+                }
+                is DataResult.Error -> {
+                    Log.d("TEST_API", "lỗi: ${result.target}, message: ${result.message}")
                     return@launch
                 }
             }

@@ -251,6 +251,10 @@ class EditCalendarFragment : Fragment() {
         binding.btnHomeRoom.setOnClickListener {
             viewModel.onHomeClick()
         }
+
+        binding.btnCancel.setOnClickListener {
+            viewModel.onCancelAppointment()
+        }
     }
 
     private fun stateData() {
@@ -602,13 +606,13 @@ class EditCalendarFragment : Fragment() {
                             // Cập nhật biến selectedDate toàn cục của Fragment
                             selectedDate = fetchedDate
 
-                            // 1. Tự động cuộn lịch tới đúng cái tháng chứa ngày đó
+                            // Tự động cuộn lịch tới đúng cái tháng chứa ngày đó
                             binding.calendarView.scrollToMonth(YearMonth.from(fetchedDate))
 
-                            // 2. Bôi xanh ngày vừa lấy từ API
+                            // Bôi xanh ngày vừa lấy từ API
                             binding.calendarView.notifyDateChanged(fetchedDate)
 
-                            // 3. Xóa màu xanh ở ngày cũ (nếu có)
+                            // Xóa màu xanh ở ngày cũ (nếu có)
                             if (previousDate != null) {
                                 binding.calendarView.notifyDateChanged(previousDate)
                             }
@@ -646,7 +650,6 @@ class EditCalendarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     when (event) {
-
                         is EditCalendarEvent.NavigationConfirmAppointment -> {
                             findNavController().navigate(
                                 R.id.editCalendar_confirm,
@@ -663,6 +666,9 @@ class EditCalendarFragment : Fragment() {
                                     putInt("clinicId", event.id)
                                 }
                             )
+                        }
+                        is EditCalendarEvent.NavigationNextRoom -> {
+                            findNavController().navigate(R.id.editCalendar_book)
                         }
                     }
                 }
