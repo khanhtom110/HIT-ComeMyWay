@@ -85,6 +85,8 @@ class EditCalendarFragment : Fragment() {
     }
 
     private fun calendar() {
+        val today = LocalDate.now()
+
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View): DayViewContainer {
                 return DayViewContainer(view)
@@ -94,19 +96,26 @@ class EditCalendarFragment : Fragment() {
                 container.textView.text = data.date.dayOfMonth.toString()
 
                 //Ngày thuộc tháng hiện tại thì chữ đen, tháng trước/sau thì chữ xám
-                if (data.position == DayPosition.MonthDate) {
-                    container.textView.setTextColor(Color.parseColor("#181818"))
-                } else {
+                if (data.position != DayPosition.MonthDate || data.date.isBefore(today)) {
                     container.textView.setTextColor(Color.parseColor("#A7A7B4"))
+                } else {
+                    container.textView.setTextColor(Color.parseColor("#181818"))
                 }
 
                 //click thì hiện background xanh, chữ xanh
                 if (data.date == selectedDate) {
-                    container.textView.setBackgroundResource(R.drawable.ground_book_child)
-                    container.textView.setTextColor(Color.parseColor("#486BF3"))
+                    container.textView.setBackgroundResource(R.drawable.ground_book_child_blue)
+                    container.textView.setTextColor(Color.parseColor("#FAFCFF"))
                 } else {
                     container.textView.background = null
                 }
+
+                //background của ngày hôm nay
+                if (data.date == today) {
+                    container.textView.setBackgroundResource(R.drawable.ground_book_child)
+                    container.textView.setTextColor(Color.parseColor("#486BF3"))
+                }
+
 
                 //Lắng nghe sự kiện click
                 container.view.setOnClickListener {
@@ -141,7 +150,6 @@ class EditCalendarFragment : Fragment() {
 
         //Hiển thị ngày tháng hiện tại
         if (selectedDate == null) {
-            val today = LocalDate.now()
             selectedDate = today
             viewModel.onDateSelect(today.toString())
             binding.calendarView.notifyDateChanged(today)
@@ -442,6 +450,7 @@ class EditCalendarFragment : Fragment() {
                         binding.tvQuantityError.visibility = View.GONE
                     }
                     binding.tvQuantityError.text = state.quantityError
+
 
 
 

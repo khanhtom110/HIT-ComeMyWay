@@ -248,8 +248,10 @@ class EditCalendarViewModel(
                         isOther = isOtherApi,
                         isInputOther = isOtherApi,
 
+                        other = if (isOtherApi) data.petType else "",
+
                         isClinic = isClinicApi,
-                        isHome = isHomeApi
+                        isHome = isHomeApi,
                     )
                 }
                 is DataResult.Error -> {
