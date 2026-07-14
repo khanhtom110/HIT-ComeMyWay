@@ -36,7 +36,7 @@ public class AppointmentController {
   @Operation(summary = "Lấy các lịch hẹn của người dùng",
       description = "Trả về danh sách lịch hẹn của người dùng")
   @GetMapping(UrlConstant.Appointment.GET_APPOINTMENT)
-  public ResponseEntity<ApiResponse<List<AppointmentDisplayResponse>>> getAppointmen() {
+  public ResponseEntity<ApiResponse<List<AppointmentDisplayResponse>>> getAppointment() {
     List<AppointmentDisplayResponse> response = appointmentService.getUserAppointment();
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

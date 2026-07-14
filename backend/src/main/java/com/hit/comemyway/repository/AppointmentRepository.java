@@ -19,6 +19,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
       JOIN FETCH a.clinic
       LEFT JOIN FETCH a.services
       WHERE a.user.id = :userId
+      ORDER BY a.updatedAt DESC
       """)
   List<Appointment> findByUserId(@Param("userId") Long userId);
 
