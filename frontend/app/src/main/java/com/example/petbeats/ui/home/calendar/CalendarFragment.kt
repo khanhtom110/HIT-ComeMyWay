@@ -1,12 +1,15 @@
 package com.example.petbeats.ui.home.calendar
 
+import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,6 +23,7 @@ import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.petbeats.ui.home.calendar.adapter.TimePagerAdapter
@@ -30,6 +34,7 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import java.time.YearMonth
 import java.time.LocalDate
 import androidx.core.view.isEmpty
+import com.example.petbeats.databinding.LayoutPopupDialogBinding
 
 
 class CalendarFragment : Fragment() {
@@ -72,6 +77,8 @@ class CalendarFragment : Fragment() {
     }
 
     private fun calendar() {
+        val today = LocalDate.now()
+
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View): DayViewContainer {
                 return DayViewContainer(view)
@@ -81,18 +88,24 @@ class CalendarFragment : Fragment() {
                 container.textView.text = data.date.dayOfMonth.toString()
 
                 //Ngày thuộc tháng hiện tại thì chữ đen, tháng trước/sau thì chữ xám
-                if (data.position == DayPosition.MonthDate) {
-                    container.textView.setTextColor(Color.parseColor("#181818"))
-                } else {
+                if (data.position != DayPosition.MonthDate || data.date.isBefore(today)) {
                     container.textView.setTextColor(Color.parseColor("#A7A7B4"))
+                } else {
+                    container.textView.setTextColor(Color.parseColor("#181818"))
                 }
 
                 //click thì hiện background xanh, chữ xanh
                 if (data.date == selectedDate) {
-                    container.textView.setBackgroundResource(R.drawable.ground_book_child)
-                    container.textView.setTextColor(Color.parseColor("#486BF3"))
+                    container.textView.setBackgroundResource(R.drawable.ground_book_child_blue)
+                    container.textView.setTextColor(Color.parseColor("#FAFCFF"))
                 } else {
                     container.textView.background = null
+                }
+
+                //background của ngày hôm nay
+                if (data.date == today) {
+                    container.textView.setBackgroundResource(R.drawable.ground_book_child)
+                    container.textView.setTextColor(Color.parseColor("#486BF3"))
                 }
 
                 //Lắng nghe sự kiện click
@@ -128,7 +141,6 @@ class CalendarFragment : Fragment() {
 
         //Hiển thị ngày tháng hiện tại
         if (selectedDate == null) {
-            val today = LocalDate.now()
             selectedDate = today
             viewModel.onDateSelect(today.toString())
             binding.calendarView.notifyDateChanged(today)
@@ -216,11 +228,21 @@ class CalendarFragment : Fragment() {
 
 
         binding.btnBooking.setOnClickListener {
-            val clinicId = arguments?.getInt("id") ?: 0
+            val clinicId = arguments?.getInt("clinicId") ?: 0
+            val id = arguments?.getInt("id") ?: 0
+
+            Log.d("TESTCAL", "clinicId: ${clinicId}, id: $id")
 
             getSelectTime()
 
-            viewModel.onCalendarClick(clinicId)
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn đặt lịch khám này không?",
+                leftButton = "Huỷ",
+                rightButton = "Xác nhận",
+                onRightButtonClick = {
+                    viewModel.onCalendarClick(id, clinicId)
+                }
+            )
         }
 
 
@@ -243,8 +265,50 @@ class CalendarFragment : Fragment() {
         }
 
         binding.btnCancel.setOnClickListener {
-            viewModel.onCancelAppointment()
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn huỷ lịch khám này không?",
+                leftButton = "Huỷ lịch",
+                rightButton = "Quay lại",
+                onLeftButtonClick = {
+                    viewModel.onCancelAppointment()
+                }
+            )
         }
+    }
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
     }
 
     private fun stateData() {
@@ -562,7 +626,8 @@ class CalendarFragment : Fragment() {
                             findNavController().navigate(
                                 R.id.successAppointFragment,
                                 Bundle().apply {
-                                    putInt("clinicId", event.id)
+                                    putInt("clinicId", event.clinicId)
+                                    putInt("id", event.id)
                                 }
                             )
                         }

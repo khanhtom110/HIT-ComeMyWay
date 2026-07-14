@@ -53,7 +53,7 @@ class CalendarViewModel(
     }
 
     fun onOtherChange(other: String) {
-        _state.value = _state.value.copy(other = other, isInputOther = true, isOther = false)
+        _state.value = _state.value.copy(other = other, isInputOther = false)
     }
 
     fun onStateChange(state: String) {
@@ -61,7 +61,7 @@ class CalendarViewModel(
     }
 
     fun onDogClick() {
-        _state.value = _state.value.copy(isDog = true, isCat = false, isOther = false)
+        _state.value = _state.value.copy(isDog = true, isCat = false, isInputOther = false)
     }
 
     fun onCatClick() {
@@ -139,7 +139,7 @@ class CalendarViewModel(
     }
 
 
-    fun onCalendarClick(clinicId: Int) {
+    fun onCalendarClick(id: Int, clinicId: Int) {
         viewModelScope.launch {
             if (_state.value.isDog) {
                 _state.value = _state.value.copy(petType = "Chó")
@@ -180,7 +180,7 @@ class CalendarViewModel(
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPhone = false, isInformation = false, isService = false, isCalendar = false, isTime = false)
 
-                    _event.emit(CalendarEvent.NavigationSuccessAppointment(result.data.id))
+                    _event.emit(CalendarEvent.NavigationSuccessAppointment(id, clinicId))
                 }
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")

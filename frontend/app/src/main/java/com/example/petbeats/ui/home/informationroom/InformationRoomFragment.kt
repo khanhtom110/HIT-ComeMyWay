@@ -102,9 +102,8 @@ class InformationRoomFragment : Fragment() {
         }
 
         binding.btnBooking.setOnClickListener {
-            val id = arguments?.getInt("id") ?: 0
-
-            viewModel.calendarClick(id)
+            val clinicId = arguments?.getInt("id") ?: 0
+            viewModel.calendarClick(clinicId)
         }
     }
 
@@ -190,6 +189,7 @@ class InformationRoomFragment : Fragment() {
                             findNavController().navigate(
                                 R.id.calendarFragment,
                                 Bundle().apply {
+                                    putInt("clinicId", event.clinicId)
                                     putInt("id", event.id)
                                 }
                             )

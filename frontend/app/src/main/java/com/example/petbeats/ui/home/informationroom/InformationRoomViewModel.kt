@@ -29,9 +29,11 @@ class InformationRoomViewModel(
         }
     }
 
-    fun calendarClick(id: Int) {
+    fun calendarClick(clinicId: Int) {
+        val id = _state.value.id
+
         viewModelScope.launch {
-            _event.emit(InformationRoomEvent.NavigationCalendar(id))
+            _event.emit(InformationRoomEvent.NavigationCalendar(id, clinicId))
         }
     }
 
@@ -40,11 +42,11 @@ class InformationRoomViewModel(
     }
 
 
-    fun onInformationList(id: Int) {
+    fun onInformationList(clinicId: Int) {
         viewModelScope.launch {
             val latitude = _state.value.latitude
             val longitude = _state.value.longitude
-            val request = ClinicIdRequest(id = id, latitude, longitude)
+            val request = ClinicIdRequest(id = clinicId, latitude, longitude)
             val result = repository.clinicid(request)
 
             when (result) {
@@ -52,6 +54,7 @@ class InformationRoomViewModel(
                     val data = result.data
 
                     _state.value = _state.value.copy(
+                        id = data.id,
                         thumbnailUrl = data.thumbnailUrl,
                         name = data.name,
                         isOperating = data.isOperating,

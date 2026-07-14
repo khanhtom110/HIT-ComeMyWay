@@ -29,4 +29,10 @@ class SuccessAppointmentViewModel(
             _event.emit(SuccessAppointmentEvent.NavigationSearch)
         }
     }
+
+    fun confirmClick(id: Int, clinicId: Int) {
+        viewModelScope.launch {
+            _event.emit(SuccessAppointmentEvent.NavigationConfirm(id, clinicId))
+        }
+    }
 }

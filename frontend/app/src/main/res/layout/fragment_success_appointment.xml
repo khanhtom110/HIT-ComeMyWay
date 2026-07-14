@@ -79,7 +79,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/boxInformationClinic"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_260sdp"
+                android:layout_height="@dimen/_230sdp"
                 android:background="@drawable/ground_information"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
@@ -177,6 +177,16 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/btnDetail"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:background="@drawable/bottom_detail"
+                android:layout_marginBottom="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnNewBooking"/>
+
 
             <TextView
                 style="@style/Nut2"
@@ -188,7 +198,7 @@
                 android:text="Đặt lịch khám mới"
                 android:gravity="center"
                 android:textColor="@color/colorBackground"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_25sdp"
                 app:layout_constraintTop_toBottomOf="@id/boxInformationClinic"/>
 
             <TextView

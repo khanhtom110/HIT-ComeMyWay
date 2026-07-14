@@ -49,7 +49,7 @@ class EditCalendarViewModel(
     }
 
     fun onOtherChange(other: String) {
-        _state.value = _state.value.copy(other = other, isInputOther = true, isOther = false)
+        _state.value = _state.value.copy(other = other, isInputOther = true, isOther = true)
     }
 
     fun onStateChange(state: String) {
@@ -87,7 +87,6 @@ class EditCalendarViewModel(
                     val data = result.data
 
                     _state.value = _state.value.copy(
-                        id = data.id,
                         thumbnailUrl = data.thumbnailUrl,
                         tittle = data.name,
                         isOperating = data.isOperating,
@@ -170,14 +169,14 @@ class EditCalendarViewModel(
             Log.d("TEST_CASE", "name: ${name}, phone: ${phone}, bookingType ${bookingType}, address: ${address}, quantity: ${quantity}, petType: ${petType}, petCondition: ${petCondition}, date: ${date}, appointmentTime: ${appointmentTime}, service: ${service}")
 
             val id = AppointmentIdRequest(id)
-            val request = CreateAppointmentRequest(clinicId,name, phone, bookingType, address, quantity, petType, petCondition, date, appointmentTime, service)
+            val request = CreateAppointmentRequest(clinicId = clinicId,name, phone, bookingType, address, quantity, petType, petCondition, date, appointmentTime, service)
             val result = repository.editAppointment(id, request)
 
             when (result) {
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPhone = false, isInformation = false, isService = false, isCalendar = false, isTime = false)
 
-                    _event.emit(EditCalendarEvent.NavigationSuccessAppointment(result.data.id))
+                    _event.emit(EditCalendarEvent.NavigationSuccessAppointment(result.data.id, clinicId))
                 }
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
@@ -220,6 +219,14 @@ class EditCalendarViewModel(
                     // lấy danh sách id để hiển thị lên chip
                     val selectedServiceIds = data.services.map { it.id }
 
+
+                    val isDogApi = data.petType == "Chó"
+                    val isCatApi = data.petType == "Mèo"
+                    val isOtherApi = data.petType.isNotEmpty() && !isDogApi && !isCatApi
+
+                    val isClinicApi = data.bookingType == "AT_CLINIC"
+                    val isHomeApi = data.bookingType == "AT_HOME"
+
                     _state.value = _state.value.copy(
                         id = data.id,
                         name = data.fullName,
@@ -234,7 +241,15 @@ class EditCalendarViewModel(
 
                         hour = hour,
                         minute = minute,
-                        selectService = selectedServiceIds
+                        selectService = selectedServiceIds,
+
+                        isDog = isDogApi,
+                        isCat = isCatApi,
+                        isOther = isOtherApi,
+                        isInputOther = isOtherApi,
+
+                        isClinic = isClinicApi,
+                        isHome = isHomeApi
                     )
                 }
                 is DataResult.Error -> {

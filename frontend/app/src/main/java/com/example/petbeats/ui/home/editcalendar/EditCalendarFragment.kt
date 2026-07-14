@@ -346,7 +346,7 @@ class EditCalendarFragment : Fragment() {
                         binding.tvInputAddress.setBackgroundResource(R.drawable.ground_information)
                     }
                     if (state.isInputOther) {
-                        binding.tvInputOther.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvInputOther.setBackgroundResource(R.drawable.ground_information)
                     }
                     else {
                         binding.tvInputOther.setBackgroundResource(R.drawable.ground_information)
@@ -608,49 +608,6 @@ class EditCalendarFragment : Fragment() {
                     }
 
 
-                    //Kiểm tra editCalendar
-
-                    //Phòng khám, Tại nhà
-                    if (state.bookingType == "AT_CLINIC") {
-                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
-                        binding.btnClinicRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
-                    } else {
-                        binding.btnClinicRoom.setBackgroundResource(R.drawable.ground_book_child)
-                        binding.btnClinicRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-                    }
-
-                    if (state.bookingType == "AT_HOME") {
-                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child_blue)
-                        binding.btnHomeRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorBackground))
-                    } else {
-                        binding.btnHomeRoom.setBackgroundResource(R.drawable.ground_book_child)
-                        binding.btnHomeRoom.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-                    }
-
-                    //Chó, Mèo, Khác
-                    if (state.petType == "Chó") {
-                        binding.btnDog.setBackgroundResource(R.drawable.icon_open)
-                    } else {
-                        binding.btnDog.setBackgroundResource(R.drawable.icon_close)
-                    }
-                    if (state.petType == "Mèo") {
-                        binding.btnCat.setBackgroundResource(R.drawable.icon_open)
-                    } else {
-                        binding.btnCat.setBackgroundResource(R.drawable.icon_close)
-                    }
-                    if (state.petType.isNotEmpty() && state.petType != "Chó" && state.petType != "Mèo") {
-                        binding.btnOther.setBackgroundResource(R.drawable.icon_open)
-                        binding.tvInputOther.visibility = View.VISIBLE
-
-                        if (binding.tvInputOther.text.toString() != state.petType) {
-                            binding.tvInputOther.setText(state.petType)
-                        }
-                    }
-                    else {
-                        binding.btnOther.setBackgroundResource(R.drawable.icon_close)
-                        binding.tvInputOther.visibility = View.GONE
-                    }
-
                     //calendar
                     if (state.appointmentDate.isNotEmpty() && selectedDate?.toString() != state.appointmentDate) {
                         try {
@@ -717,7 +674,8 @@ class EditCalendarFragment : Fragment() {
                             findNavController().navigate(
                                 R.id.successAppointFragment,
                                 Bundle().apply {
-                                    putInt("clinicId", event.id)
+                                    putInt("clinicId", event.clinicId)
+                                    putInt("id", event.id)
                                 }
                             )
                         }

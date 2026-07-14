@@ -1,7 +1,7 @@
 package com.example.petbeats.data.remote.model.calendar.home.response
 
 data class ClinicIdResponse (
-    val clinicId: Int,
+    val id: Int,
     val thumbnailUrl: String,
     val name: String,
     val isOperating: Boolean,

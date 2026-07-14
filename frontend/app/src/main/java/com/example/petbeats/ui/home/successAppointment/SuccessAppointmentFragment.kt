@@ -64,6 +64,13 @@ class SuccessAppointmentFragment : Fragment() {
         binding.btnHome.setOnClickListener {
             viewModel.bookingClick()
         }
+
+        binding.btnDetail.setOnClickListener {
+            val clinicId = arguments?.getInt("clinicId") ?: 0
+            val id = arguments?.getInt("id") ?: 0
+
+            viewModel.confirmClick(id, clinicId)
+        }
     }
 
     private fun stateData() {
@@ -85,7 +92,16 @@ class SuccessAppointmentFragment : Fragment() {
                             findNavController().navigate(R.id.successAppointment_search)
                         }
                         is SuccessAppointmentEvent.NavigationBooking -> {
-                            findNavController().navigate(R.id.successAppointment_booking,)
+                            findNavController().navigate(R.id.successAppointment_booking)
+                        }
+                        is SuccessAppointmentEvent.NavigationConfirm -> {
+                            findNavController().navigate(
+                                R.id.confirmAppointmentFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                    putInt("clinicId", event.clinicId)
+                                }
+                            )
                         }
                     }
                 }
