@@ -1,13 +1,16 @@
 package com.example.petbeats.ui.home.editcalendar
 
+import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
@@ -24,6 +27,7 @@ import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.databinding.FragmentCalendarBinding
 import com.example.petbeats.databinding.FragmentEditCalendarBinding
+import com.example.petbeats.databinding.LayoutPopupDialogBinding
 import com.example.petbeats.ui.home.calendar.CalendarEvent
 import com.example.petbeats.ui.home.calendar.CalendarViewModel
 import com.example.petbeats.ui.home.calendar.CalendarViewModelFactory
@@ -37,6 +41,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.getValue
+import androidx.core.graphics.drawable.toDrawable
 
 class EditCalendarFragment : Fragment() {
     private var _binding: FragmentEditCalendarBinding ?= null
@@ -230,7 +235,14 @@ class EditCalendarFragment : Fragment() {
 
             getSelectTime()
 
-            viewModel.onCalendarClick(appointmentId, clinicId)
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn đặt lịch khám này không?",
+                leftButton = "Huỷ",
+                rightButton = "Xác nhận",
+                onRightButtonClick = {
+                    viewModel.onCalendarClick(appointmentId, clinicId)
+                }
+            )
         }
 
 
@@ -253,8 +265,50 @@ class EditCalendarFragment : Fragment() {
         }
 
         binding.btnCancel.setOnClickListener {
-            viewModel.onCancelAppointment()
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn huỷ lịch khám này không?",
+                leftButton = "Huỷ lịch",
+                rightButton = "Quay lại",
+                onLeftButtonClick = {
+                    viewModel.onCancelAppointment()
+                }
+            )
         }
+    }
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
     }
 
     private fun stateData() {

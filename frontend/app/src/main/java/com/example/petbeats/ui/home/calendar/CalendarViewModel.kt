@@ -30,6 +30,12 @@ class CalendarViewModel(
         }
     }
 
+    fun onCancelAppointment() {
+        viewModelScope.launch {
+            _event.emit(CalendarEvent.NavigationNextRoom)
+        }
+    }
+
     fun onNameChange(name: String) {
         _state.value = _state.value.copy(name = name, isName = false)
     }
@@ -85,6 +91,7 @@ class CalendarViewModel(
                     val data = result.data
 
                     _state.value = _state.value.copy(
+                        id = data.id,
                         thumbnailUrl = data.thumbnailUrl,
                         tittle = data.name,
                         isOperating = data.isOperating,
@@ -196,26 +203,6 @@ class CalendarViewModel(
                 }
             }
 
-        }
-    }
-
-    fun onCancelAppointment() {
-        viewModelScope.launch {
-            val id = _state.value.id
-
-            Log.d("TEST_API", "id: $id")
-
-            val request = AppointmentIdRequest(id)
-            val result = repository.cancelAppointment(request)
-
-            when (result) {
-                is DataResult.Success -> {
-                    _event.emit(CalendarEvent.NavigationNextRoom)
-                }
-                is DataResult.Error -> {
-                    return@launch
-                }
-            }
         }
     }
 }

@@ -275,20 +275,21 @@
                     app:layout_constraintTop_toBottomOf="@id/tvTitleServices" />
 
                 <TextView
-                    style="@style/Nut2"
                     android:id="@+id/btnLocate"
+                    style="@style/Nut2"
                     android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_42sdp"
-                    android:background="@drawable/button_auth_white"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:text="Đường đi"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
                     android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginBottom="@dimen/_15sdp"
-                    app:layout_constraintTop_toBottomOf="@id/service"
+                    android:background="@drawable/button_auth_white"
+                    android:gravity="center"
+                    android:text="Đường đi"
+                    android:textColor="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/service"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     style="@style/Nut2"

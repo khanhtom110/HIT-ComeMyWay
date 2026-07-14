@@ -567,7 +567,7 @@ class CalendarFragment : Fragment() {
                             )
                         }
                         is CalendarEvent.NavigationNextRoom -> {
-                            findNavController().navigate(R.id.editCalendar_book)
+                            findNavController().navigate(R.id.calendar_book)
                         }
                     }
                 }
