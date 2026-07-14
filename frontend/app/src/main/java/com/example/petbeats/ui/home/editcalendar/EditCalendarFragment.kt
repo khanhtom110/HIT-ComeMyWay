@@ -102,7 +102,7 @@ class EditCalendarFragment : Fragment() {
                     container.textView.setTextColor(Color.parseColor("#181818"))
                 }
 
-                //click thì hiện background xanh, chữ xanh
+                //click thì hiện background xanh, chữ trắng
                 if (data.date == selectedDate) {
                     container.textView.setBackgroundResource(R.drawable.ground_book_child_blue)
                     container.textView.setTextColor(Color.parseColor("#FAFCFF"))
@@ -120,7 +120,7 @@ class EditCalendarFragment : Fragment() {
                 //Lắng nghe sự kiện click
                 container.view.setOnClickListener {
                     // Chỉ cho phép click vào ngày của tháng hiện tại
-                    if (data.position == DayPosition.MonthDate) {
+                    if (data.position == DayPosition.MonthDate && data.date.isAfter(today)) {
                         val currentSelection = selectedDate
                         // click lại vào ngày đang chọn bỏ chọn ô đó
                         if (currentSelection == data.date) {

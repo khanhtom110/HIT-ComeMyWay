@@ -103,13 +103,14 @@
                     android:layout_width="@dimen/_13sdp"
                     android:layout_height="@dimen/_17sdp"
                     android:src="@drawable/locate"
-                    android:layout_marginTop="@dimen/_9sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginStart="@dimen/_16sdp"
                     app:layout_constraintTop_toBottomOf="@id/tittle"
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
                     style="@style/Chu2"
+                    android:id="@+id/tvAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="83 Giải Phóng, P. Đồng Tâm"
@@ -125,10 +126,10 @@
                     android:src="@drawable/line"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginHorizontal="@dimen/_16sdp"
-                    app:layout_constraintTop_toBottomOf="@id/locate"/>
+                    app:layout_constraintTop_toBottomOf="@id/tvAddress"/>
 
                 <ImageView
-                    android:id="@+id/time"
+                    android:id="@+id/image_time"
                     android:layout_width="@dimen/_13sdp"
                     android:layout_height="@dimen/_17sdp"
                     android:src="@drawable/time"
@@ -137,14 +138,30 @@
                     app:layout_constraintTop_toBottomOf="@id/line"
                     app:layout_constraintStart_toStartOf="parent"/>
 
+
                 <TextView
                     style="@style/Chu2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10/07/2026 - 09:30"
-                    android:layout_marginStart="@dimen/_35sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    app:layout_constraintTop_toTopOf="@id/time"/>
+                    android:text="25/06/2026 -"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    app:layout_constraintTop_toTopOf="@id/image_time"
+                    app:layout_constraintBottom_toBottomOf="@id/image_time"
+                    app:layout_constraintStart_toEndOf="@id/image_time"/>
+
+                <TextView
+                    style="@style/Chu2"
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9:00"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    app:layout_constraintTop_toTopOf="@id/date"
+                    app:layout_constraintBottom_toBottomOf="@id/date"
+                    app:layout_constraintStart_toEndOf="@id/date"/>
 
                 <ImageView
                     android:id="@+id/lineTime"

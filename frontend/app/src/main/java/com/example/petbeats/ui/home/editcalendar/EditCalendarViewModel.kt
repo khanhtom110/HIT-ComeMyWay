@@ -169,7 +169,19 @@ class EditCalendarViewModel(
             Log.d("TEST_CASE", "name: ${name}, phone: ${phone}, bookingType ${bookingType}, address: ${address}, quantity: ${quantity}, petType: ${petType}, petCondition: ${petCondition}, date: ${date}, appointmentTime: ${appointmentTime}, service: ${service}")
 
             val id = AppointmentIdRequest(id)
-            val request = CreateAppointmentRequest(clinicId = clinicId,name, phone, bookingType, address, quantity, petType, petCondition, date, appointmentTime, service)
+            val request = CreateAppointmentRequest(
+                clinicId = clinicId,
+                fullName = name,
+                phone = phone,
+                bookingType =  bookingType,
+                homeAddress = address,
+                petQuantity = quantity,
+                petType = petType,
+                petCondition = petCondition,
+                appointmentDate = date,
+                appointmentTime = appointmentTime,
+                serviceIds = service
+            )
             val result = repository.editAppointment(id, request)
 
             when (result) {

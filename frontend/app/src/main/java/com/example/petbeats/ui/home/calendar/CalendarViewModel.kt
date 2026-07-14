@@ -180,7 +180,7 @@ class CalendarViewModel(
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPhone = false, isInformation = false, isService = false, isCalendar = false, isTime = false)
 
-                    _event.emit(CalendarEvent.NavigationSuccessAppointment(id, clinicId))
+                    _event.emit(CalendarEvent.NavigationSuccessAppointment(result.data.id, clinicId))
                 }
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")

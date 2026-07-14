@@ -2,7 +2,11 @@ package com.example.petbeats.ui.home.successAppointment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petbeats.core.base.DataResult
+import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.HomeRepository
+import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -33,6 +37,50 @@ class SuccessAppointmentViewModel(
     fun confirmClick(id: Int, clinicId: Int) {
         viewModelScope.launch {
             _event.emit(SuccessAppointmentEvent.NavigationConfirm(id, clinicId))
+        }
+    }
+
+    fun onSuccessInformation(id: Int, clinicId: Int) {
+        viewModelScope.launch {
+            val clinicId = AppointmentIdRequest(clinicId)
+            val id = TakeBookingRequest(id)
+            val resultClinicId = repository.takeAppointmentId(clinicId)
+            val resultId = repository.takeBooking(id)
+
+            when (resultClinicId) {
+                is DataResult.Success -> {
+                    val data = resultClinicId.data
+
+                    val mapStatus = when (data.status) {
+                        "PENDING" -> BookChildState.PENDING
+                        "SUCCESS" -> BookChildState.SUCCESS
+                        "CANCELLED" -> BookChildState.CANCELLED
+                        else -> BookChildState.PENDING
+                    }
+
+                    _state.value = _state.value.copy(
+                        status = mapStatus,
+                        date = "${data.appointmentDate} -",
+                        time = data.appointmentTime
+                    )
+                }
+                is DataResult.Error ->  {
+                    return@launch
+                }
+            }
+
+            when (resultId) {
+                is DataResult.Success -> {
+                    val data = resultId.data
+
+                    _state.value = _state.value.copy(
+                        address = data.address
+                    )
+                }
+                is DataResult.Error -> {
+                    return@launch
+                }
+            }
         }
     }
 }

@@ -72,7 +72,8 @@ class HomeRepository(
     suspend fun editAppointment(id: AppointmentIdRequest, request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
         return safeApiCall {
             apiHome.editAppointment(
-                id = id.id, request
+                id = id.id,
+                request = request
             )
         }
     }

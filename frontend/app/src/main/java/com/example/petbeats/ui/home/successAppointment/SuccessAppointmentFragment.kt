@@ -1,5 +1,6 @@
 package com.example.petbeats.ui.home.successAppointment
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,11 +15,8 @@ import com.example.petbeats.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentResultSearchBinding
 import com.example.petbeats.databinding.FragmentSuccessAppointmentBinding
-import com.example.petbeats.ui.home.confirmappointment.ConfirmAppointmentEvent
-import com.example.petbeats.ui.home.resultsearch.ResultSearchViewModel
-import com.example.petbeats.ui.home.resultsearch.ResultSearchViewModelFactory
+import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -45,6 +43,10 @@ class SuccessAppointmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val clinicId = arguments?.getInt("clinicId") ?: 0
+        val id = arguments?.getInt("id") ?: 0
+        viewModel.onSuccessInformation(id, clinicId)
 
         setOnClick()
         stateData()
@@ -77,7 +79,31 @@ class SuccessAppointmentFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect {  state ->
+                    if (binding.tvAddress.text.toString() != state.address) {
+                        binding.tvAddress.text = state.address
+                    }
+                    if (binding.date.text.toString() != state.date) {
+                        binding.date.text = state.date
+                    }
+                    if (binding.time.toString() != state.time) {
+                        binding.time.text = state.time
+                    }
 
+                    //check state clinic
+                    when (state.status) {
+                        BookChildState.PENDING -> {
+                            binding.stateClinic.text = "Chờ xử lý"
+                            binding.stateClinic.setTextColor(Color.parseColor("#F7C120"))
+                        }
+                        BookChildState.SUCCESS -> {
+                            binding.stateClinic.text = "Đặt lịch thành công"
+                            binding.stateClinic.setTextColor(Color.parseColor("#00FF0B"))
+                        }
+                        BookChildState.CANCELLED -> {
+                            binding.stateClinic.text = "Từ chối"
+                            binding.stateClinic.setTextColor(Color.parseColor("#CC0900"))
+                        }
+                    }
                 }
             }
         }

@@ -111,7 +111,7 @@ class CalendarFragment : Fragment() {
                 //Lắng nghe sự kiện click
                 container.view.setOnClickListener {
                     // Chỉ cho phép click vào ngày của tháng hiện tại
-                    if (data.position == DayPosition.MonthDate) {
+                    if (data.position == DayPosition.MonthDate && data.date.isAfter(today)) {
                         val currentSelection = selectedDate
                         // click lại vào ngày đang chọn bỏ chọn ô đó
                         if (currentSelection == data.date) {
