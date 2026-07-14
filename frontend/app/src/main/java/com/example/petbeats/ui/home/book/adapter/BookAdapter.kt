@@ -55,7 +55,7 @@ class BookAdapter(
                     status.setTextColor(Color.parseColor("#00FF0B"))
                 }
                 BookChildState.CANCELLED -> {
-                    status.text = "Từ chối"
+                    status.text = "Đã hủy"
                     status.setTextColor(Color.parseColor("#CC0900"))
                 }
             }
