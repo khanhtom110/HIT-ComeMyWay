@@ -8,11 +8,12 @@ object ErrorUtils {
             //Username
             "Username already exists. Please choose a different one." ->
                 Pair(ErrorTarget.NAME, "Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.")
-            "Username must be 4-120 characters long and contain only letters, numbers, and underscores." -> Pair(
-                ErrorTarget.NAME, "Tên đăng nhập chỉ được chứa chữ, số và dấu gạch dưới.")
-            "Username length is invalid. It must be between 4 and 120 characters." -> Pair(
-                ErrorTarget.NAME, "Tên người dùng không hợp lệ. Tên người dùng phải có độ \ndài từ 4 đến 120 ký tự.")
-
+            "Username must be 4-120 characters long and contain only letters, numbers, and underscores." ->
+                Pair(ErrorTarget.NAME, "Tên đăng nhập chỉ được chứa chữ, số và dấu gạch dưới.")
+            "Username length is invalid. It must be between 4 and 120 characters." ->
+                Pair(ErrorTarget.NAME, "Tên người dùng không hợp lệ. Tên người dùng phải có độ \ndài từ 4 đến 120 ký tự.")
+            "Fullname must be 4-120 characters long." ->
+                Pair(ErrorTarget.NAME, "Họ và tên phải có độ dài từ 4 đến 120 ký tự.")
 
             //Email
             "Email already exists. Please use another email or log in." ->

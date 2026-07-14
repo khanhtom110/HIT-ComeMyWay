@@ -341,12 +341,6 @@ class EditCalendarFragment : Fragment() {
 
 
                     //check state input
-                    if (state.isName) {
-                        binding.tvInputName.setBackgroundResource(R.drawable.button_input_errol)
-                    }
-                    else {
-                        binding.tvInputName.setBackgroundResource(R.drawable.ground_information)
-                    }
                     if (state.isAddress) {
                         binding.tvInputAddress.setBackgroundResource(R.drawable.button_input_errol)
                     }
@@ -386,6 +380,22 @@ class EditCalendarFragment : Fragment() {
 
 
                     //check error
+                    if (state.isName) {
+                        binding.tvInputName.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvNameError.visibility = View.VISIBLE
+
+                        val nameError = ContextCompat.getColor(requireContext(),R.color.colorError)
+                        binding.tvInputName.setTextColor(nameError)
+                    }
+                    else {
+                        binding.tvInputName.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvNameError.visibility = View.GONE
+
+                        val nameSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
+                        binding.tvInputName.setTextColor(nameSub)
+                    }
+                    binding.tvNameError.text = state.nameError
+
                     if (state.isPhone) {
                         binding.tvInputPhone.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvPhoneError.visibility = View.VISIBLE

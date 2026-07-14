@@ -56,5 +56,6 @@ data class EditCalendarState (
     val serviceError: String = "",
     val calendarError: String = "",
     val timeError: String = "",
-    val quantityError: String = ""
+    val quantityError: String = "",
+    val nameError: String = ""
 )

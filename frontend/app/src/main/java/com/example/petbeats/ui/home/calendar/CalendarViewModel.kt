@@ -185,12 +185,14 @@ class CalendarViewModel(
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
                     _state.value = _state.value.copy(
+                        isName = (result.target == ErrorTarget.NAME),
                         isPhone = (result.target == ErrorTarget.PHONE),
                         isQuantity = (result.target == ErrorTarget.QUANTITY),
                         isInformation = (result.target == ErrorTarget.INFORMATION || result.target == ErrorTarget.GENERAL),
                         isService = (result.target == ErrorTarget.SERVICE || result.target == ErrorTarget.GENERAL),
                         isCalendar = (result.target == ErrorTarget.CALENDAR || result.target == ErrorTarget.GENERAL),
                         isTime = (result.target == ErrorTarget.TIME || result.target == ErrorTarget.GENERAL),
+                        nameError = if (result.target == ErrorTarget.NAME || result.target == ErrorTarget.GENERAL) result.message else "",
                         phoneError = if (result.target == ErrorTarget.PHONE || result.target == ErrorTarget.GENERAL) result.message else "",
                         quantityError = if(result.target == ErrorTarget.QUANTITY) result.message else "",
                         informationError = if (result.target == ErrorTarget.INFORMATION || result.target == ErrorTarget.GENERAL) result.message else "",

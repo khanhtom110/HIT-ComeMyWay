@@ -116,8 +116,7 @@
                     android:text="83 Giải Phóng, P. Đồng Tâm"
                     android:layout_marginStart="@dimen/_35sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
-                    app:layout_constraintTop_toTopOf="@id/locate"
-                    app:layout_constraintBottom_toBottomOf="@id/locate"/>
+                    app:layout_constraintTop_toTopOf="@id/locate" />
 
                 <ImageView
                     android:id="@+id/line"
@@ -148,7 +147,6 @@
                     android:textColor="@color/colorTextSub"
                     android:layout_marginStart="@dimen/_4sdp"
                     app:layout_constraintTop_toTopOf="@id/image_time"
-                    app:layout_constraintBottom_toBottomOf="@id/image_time"
                     app:layout_constraintStart_toEndOf="@id/image_time"/>
 
                 <TextView

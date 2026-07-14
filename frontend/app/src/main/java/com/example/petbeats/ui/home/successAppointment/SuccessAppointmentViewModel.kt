@@ -42,10 +42,10 @@ class SuccessAppointmentViewModel(
 
     fun onSuccessInformation(id: Int, clinicId: Int) {
         viewModelScope.launch {
-            val clinicId = AppointmentIdRequest(clinicId)
-            val id = TakeBookingRequest(id)
-            val resultClinicId = repository.takeAppointmentId(clinicId)
-            val resultId = repository.takeBooking(id)
+            val id = AppointmentIdRequest(id)
+            val clinicId = TakeBookingRequest(clinicId)
+            val resultClinicId = repository.takeAppointmentId(id)
+            val resultId = repository.takeBooking(clinicId)
 
             when (resultClinicId) {
                 is DataResult.Success -> {

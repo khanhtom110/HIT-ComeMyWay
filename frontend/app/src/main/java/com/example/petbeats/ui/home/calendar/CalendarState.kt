@@ -51,6 +51,7 @@ data class CalendarState (
     val appointmentTime: String = "",
 
     //Error
+    val nameError: String = "",
     val phoneError: String = "",
     val informationError: String = "",
     val serviceError: String = "",
