@@ -671,7 +671,7 @@
                 android:layout_height="@dimen/_44sdp"
                 android:background="@drawable/ground_book_child"
                 android:layout_marginEnd="@dimen/_28sdp"
-                app:layout_constraintTop_toTopOf="@id/tvStarTime"
+                app:layout_constraintTop_toBottomOf="@id/tvTimeError"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <androidx.viewpager2.widget.ViewPager2

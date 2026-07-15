@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.sharepreference.TokenManager
-import com.example.petbeats.databinding.FragmentPetBinding
+import com.example.VetPet.databinding.FragmentPetBinding
 
 
 

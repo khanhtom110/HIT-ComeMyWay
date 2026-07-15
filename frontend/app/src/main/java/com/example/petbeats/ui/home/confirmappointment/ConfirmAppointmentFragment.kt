@@ -12,13 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.petbeats.R
+import com.example.VetPet.R
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentConfirmAppointmentBinding
+import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.example.petbeats.ui.home.book.adapter.BookChildState
 import kotlinx.coroutines.launch
 import kotlin.getValue

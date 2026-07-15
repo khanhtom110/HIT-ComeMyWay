@@ -14,12 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.api.ApiAuth
 import com.example.petbeats.data.repository.AuthRepository
 import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.example.petbeats.databinding.FragmentLoginBinding
+import com.example.VetPet.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import com.example.petbeats.ui.home.activitymain.HomeActivity

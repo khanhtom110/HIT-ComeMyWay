@@ -27,5 +27,7 @@ object ApiConstants {
     const val TAKEAPPOINTMENTID = "/api/v1/user/appointments/detail/{id}"
     const val CANCELAPPOINTMENT = "/api/v1/user/appointments/cancel/{appointmentId}"
 
+    //Notify
+    const val FIREBASE = "/api/v1/user/device-token"
 
 }

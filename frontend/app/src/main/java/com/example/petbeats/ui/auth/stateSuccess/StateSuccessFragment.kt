@@ -10,8 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
-import com.example.petbeats.databinding.FragmentStateSuccessBinding
+import com.example.VetPet.R
+import com.example.VetPet.databinding.FragmentStateSuccessBinding
 import kotlinx.coroutines.launch
 
 

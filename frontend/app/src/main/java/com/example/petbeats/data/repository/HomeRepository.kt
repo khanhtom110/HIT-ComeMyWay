@@ -6,6 +6,7 @@ import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.DeviceTokenFireBaseRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
@@ -91,6 +92,12 @@ class HomeRepository(
             apiHome.cancelAppointment(
                 id = request.id
             )
+        }
+    }
+
+    suspend fun deviceToken(request: DeviceTokenFireBaseRequest): DataResult<Any> {
+        return safeApiCall {
+            apiHome.deviceToken(request)
         }
     }
 

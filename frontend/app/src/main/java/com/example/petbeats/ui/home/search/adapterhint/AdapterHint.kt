@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
+import com.example.VetPet.R
 
 class AdapterHint(
     private val onItemClick: (Int) -> Unit
 ): ListAdapter<HintChild, AdapterHint.ViewHolder>(HintDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.hint_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_hint_child, holder, false)
         return ViewHolder(view)
     }
 

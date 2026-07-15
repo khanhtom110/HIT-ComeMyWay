@@ -1,22 +1,32 @@
 package com.example.petbeats.ui.home.successAppointment
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.PackageManagerCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentSuccessAppointmentBinding
+import com.example.VetPet.databinding.FragmentSuccessAppointmentBinding
 import com.example.petbeats.ui.home.book.adapter.BookChildState
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -32,6 +42,31 @@ class SuccessAppointmentFragment : Fragment() {
         )
     }
 
+    //Khởi tạo launch xin quyền notify
+    private val requestPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            getAndSendFirebaseToken()
+        }
+        else {
+            Toast.makeText(requireContext(), "Bạn đã từ chối quyền truy cập", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getAndSendFirebaseToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+
+            val token = task.result
+
+            Log.d("TOKEN_SEND", "token: $token")
+            viewModel.sendDeviceToken(token)
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +78,9 @@ class SuccessAppointmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Kiểm tra xem đã được cấp quyền chưa, có rồi thì tự động lấy token
+        checkNotifyPermission()
 
         val clinicId = arguments?.getInt("clinicId") ?: 0
         val id = arguments?.getInt("id") ?: 0
@@ -57,6 +95,31 @@ class SuccessAppointmentFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun checkNotifyPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { //tiramu: tên mã của android13
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    getAndSendFirebaseToken()
+                }
+
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+
+                else -> {
+                    requestPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
+        else {
+            getAndSendFirebaseToken()
+        }
+    }
+
 
     private fun setOnClick() {
         binding.btnNewBooking.setOnClickListener {

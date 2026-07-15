@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.petbeats.R
+import com.example.VetPet.R
 
 class TimePagerAdapter(
     private val itemClick: List<String>

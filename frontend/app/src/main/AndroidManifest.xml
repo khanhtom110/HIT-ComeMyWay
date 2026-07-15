@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!--Xin quyền notify-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,13 +24,13 @@
         android:theme="@style/Theme.PetBeats"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.home.activitymain.HomeActivity"
+            android:name="com.example.petbeats.ui.home.activitymain.HomeActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false">
 
         </activity>
         <activity
-            android:name=".ui.auth.activitymain.AuthActivity"
+            android:name="com.example.petbeats.ui.auth.activitymain.AuthActivity"
             android:exported="true">
 
             <intent-filter>
@@ -36,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.splash_onboarding.splash.SplashActivity"
+            android:name="com.example.petbeats.ui.splash_onboarding.splash.SplashActivity"
             android:exported="false"/>
     </application>
 

@@ -9,13 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
+import com.example.VetPet.R
 
 class BookAdapter(
     private val onItemClick: (Int, Int) -> Unit
 ): ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.book_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_book_child, holder, false)
         return ViewHolder(view)
     }
 

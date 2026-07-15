@@ -1,9 +1,11 @@
 package com.example.petbeats.ui.home.successAppointment
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.DeviceTokenFireBaseRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
 import com.example.petbeats.data.repository.HomeRepository
 import com.example.petbeats.ui.home.book.adapter.BookChildState
@@ -39,6 +41,14 @@ class SuccessAppointmentViewModel(
             _event.emit(SuccessAppointmentEvent.NavigationConfirm(id, clinicId))
         }
     }
+
+    fun sendDeviceToken(token: String) {
+        viewModelScope.launch {
+            val request = DeviceTokenFireBaseRequest(token)
+            repository.deviceToken(request)
+        }
+    }
+
 
     fun onSuccessInformation(id: Int, clinicId: Int) {
         viewModelScope.launch {

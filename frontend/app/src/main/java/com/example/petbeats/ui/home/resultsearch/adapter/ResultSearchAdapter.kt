@@ -9,10 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
-import com.example.petbeats.ui.home.book.adapter.BookAdapter.ViewHolder
-import com.example.petbeats.ui.home.book.adapter.BookChild
-import com.example.petbeats.ui.home.book.adapter.BookChildState
+import com.example.VetPet.R
 
 class ResultSearchAdapter(
     private val onItemClick: (Int) -> Unit

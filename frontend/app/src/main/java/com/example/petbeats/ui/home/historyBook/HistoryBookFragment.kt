@@ -11,16 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentBookBinding
-import com.example.petbeats.databinding.FragmentHistoryBookBinding
-import com.example.petbeats.ui.home.book.BookViewModel
-import com.example.petbeats.ui.home.book.BookViewModelFactory
+import com.example.VetPet.databinding.FragmentHistoryBookBinding
 import com.example.petbeats.ui.home.book.adapter.BookAdapter
-import com.example.petbeats.ui.home.search.adapterhint.AdapterHint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 

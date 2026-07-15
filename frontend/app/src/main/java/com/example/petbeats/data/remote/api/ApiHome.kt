@@ -2,16 +2,13 @@ package com.example.petbeats.data.remote.api
 
 import com.example.petbeats.core.network.ApiConstants
 import com.example.petbeats.core.network.ApiResponse
-import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
-import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
-import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.DeviceTokenFireBaseRequest
 import com.example.petbeats.data.remote.model.calendar.home.response.AppointmentIdResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.ClinicIdResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.CreateAppointmentResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.LocationResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.SearchResponse
-import com.example.petbeats.data.remote.model.calendar.home.response.SuggestResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.TakeAppointmentResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.TakeBookingResponse
 import retrofit2.http.Body
@@ -70,4 +67,10 @@ interface ApiHome {
     suspend fun cancelAppointment(
         @Path("appointmentId") id: Int
     ): ApiResponse<AppointmentIdResponse>
+
+    @POST(ApiConstants.FIREBASE)
+    suspend fun deviceToken(
+        @Body request: DeviceTokenFireBaseRequest
+    ): ApiResponse<Any>
+
 }

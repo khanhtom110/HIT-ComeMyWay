@@ -10,8 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
-import com.example.petbeats.databinding.FragmentHomeBinding
+import com.example.VetPet.R
+import com.example.VetPet.databinding.FragmentHomeBinding
 import com.example.petbeats.ui.auth.login.LoginFragment
 import kotlinx.coroutines.launch
 

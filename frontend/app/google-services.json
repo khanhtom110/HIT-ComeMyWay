@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875132598094",
+    "project_id": "nguyentiendat-ce198",
+    "storage_bucket": "nguyentiendat-ce198.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875132598094:android:a2a63f357c8bc64bdf901f",
+        "android_client_info": {
+          "package_name": "com.example.VetPet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRWTSnn3l7RVC-HZ2-uXqS8kG3ecEdLtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

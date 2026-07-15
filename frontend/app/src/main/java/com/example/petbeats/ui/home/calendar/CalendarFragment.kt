@@ -16,11 +16,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentCalendarBinding
+import com.example.VetPet.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -34,7 +34,7 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import java.time.YearMonth
 import java.time.LocalDate
 import androidx.core.view.isEmpty
-import com.example.petbeats.databinding.LayoutPopupDialogBinding
+import com.example.VetPet.databinding.LayoutPopupDialogBinding
 
 
 class CalendarFragment : Fragment() {

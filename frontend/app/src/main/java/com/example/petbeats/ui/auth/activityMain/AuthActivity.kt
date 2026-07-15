@@ -2,7 +2,7 @@ package com.example.petbeats.ui.auth.activitymain
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.petbeats.R
+import com.example.VetPet.R
 
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
