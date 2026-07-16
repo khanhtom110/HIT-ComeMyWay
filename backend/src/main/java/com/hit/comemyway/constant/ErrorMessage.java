@@ -87,6 +87,7 @@ public final class ErrorMessage {
     private Clinic() {}
 
     public static final String CLINIC_NOT_EXISTED = "Clinic does not exist";
+    public static final String REJECT_REASON = "Reject reason must be under 500 characters";
   }
 
   // Appointment Errors
@@ -109,5 +110,7 @@ public final class ErrorMessage {
     public static final String MIN_ONE_PET_QUANTITY = "At least one pet quantity";
     public static final String ONLY_PENDING_CAN_BE_CANCELLED =
         "Only pending appointments can be cancelled.";
+    public static final String ACTION_ONLY_FOR_PENDING =
+        "Action allowed only for pending appointments.";
   }
 }

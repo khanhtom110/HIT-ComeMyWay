@@ -13,6 +13,7 @@ public final class CommonConstant {
   public static final class Clinic {
     public static final int NAME_LENGTH = 120;
     public static final int THUMBNAIL_LENGTH = 500;
+    public static final int REJECT_REASON_LENGTH = 500;
   }
 
 }

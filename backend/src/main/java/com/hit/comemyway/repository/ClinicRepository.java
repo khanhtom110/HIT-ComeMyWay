@@ -71,4 +71,12 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
   );
 
   List<Clinic> findByStatusOrderByRatingDesc(Boolean status, Pageable pageable);
+
+  @Query("""
+      SELECT c
+      FROM Clinic c
+      JOIN FETCH c.user u
+      WHERE u.username = :username
+      """)
+  Optional<Clinic> findByUsername(@Param("username") String username);
 }

@@ -70,4 +70,7 @@ public class Appointment extends BaseEntity {
   @Column(name = "is_notified", nullable = false)
   @Builder.Default
   private Boolean isNotified = false;
+
+  @Column(name = "reject_reason")
+  private String rejectReason;
 }
