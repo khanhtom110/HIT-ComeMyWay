@@ -4,5 +4,5 @@
     <corners android:radius="@dimen/_8sdp"/>
     <stroke
         android:width="@dimen/_1sdp"
-        android:color="@color/colorTextButtonHome"/>
+        android:color="@color/colorPrimary"/>
 </shape>

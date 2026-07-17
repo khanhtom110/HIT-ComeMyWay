@@ -72,5 +72,82 @@
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.petbeats.ui.home.calendar.CalendarFragment"
-        android:label="calendarFragment"/>
+        android:label="calendarFragment">
+        <action
+            android:id="@+id/calendar_informationRoom"
+            app:destination="@+id/informationRoomFragment"
+            app:popUpTo="@id/informationRoomFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/calendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmAppointmentFragment"
+        android:name="com.example.petbeats.ui.home.confirmappointment.ConfirmAppointmentFragment"
+        android:label="confirmAppointmentFragment">
+        <action
+            android:id="@+id/confirmAppointment_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/confirmAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/successAppointFragment"
+        android:name="com.example.petbeats.ui.home.successAppointment.SuccessAppointmentFragment"
+        android:label="successAppointFragment">
+
+        <action
+            android:id="@+id/successAppointment_booking"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/successAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyBookFragment"
+        android:name="com.example.petbeats.ui.home.historyBook.HistoryBookFragment"
+        android:label="historyBookFragment">
+
+        <action
+            android:id="@+id/historyBook_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editCalendarFragment"
+        android:name="com.example.petbeats.ui.home.editcalendar.EditCalendarFragment"
+        android:label="editCalendarFragment">
+        <action
+            android:id="@+id/editCalendar_confirm"
+            app:destination="@+id/confirmAppointmentFragment"
+            app:popUpTo="@id/confirmAppointmentFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/editCalendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
 </navigation>

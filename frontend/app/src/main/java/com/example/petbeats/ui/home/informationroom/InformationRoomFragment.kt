@@ -16,16 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentBookBinding
-import com.example.petbeats.databinding.FragmentInformationRoomBinding
-import com.example.petbeats.databinding.FragmentResultSearchBinding
-import com.example.petbeats.ui.home.book.BookViewModel
-import com.example.petbeats.ui.home.book.BookViewModelFactory
-import com.example.petbeats.ui.home.book.adapter.BookAdapter
+import com.example.VetPet.databinding.FragmentInformationRoomBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
@@ -102,7 +97,8 @@ class InformationRoomFragment : Fragment() {
         }
 
         binding.btnBooking.setOnClickListener {
-            viewModel.calendarClick()
+            val clinicId = arguments?.getInt("id") ?: 0
+            viewModel.calendarClick(clinicId)
         }
     }
 
@@ -185,7 +181,13 @@ class InformationRoomFragment : Fragment() {
                             findNavController().popBackStack()
                         }
                         is InformationRoomEvent.NavigationCalendar -> {
-                            findNavController().navigate(R.id.calendarFragment)
+                            findNavController().navigate(
+                                R.id.calendarFragment,
+                                Bundle().apply {
+                                    putInt("clinicId", event.clinicId)
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }

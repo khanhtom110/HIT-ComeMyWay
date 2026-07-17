@@ -17,7 +17,17 @@ object ApiConstants {
     //Search
     const val LOCATION = "/api/v1/public/suggestions/location"
     const val CLINICID = "/api/v1/public/clinics/{clinicId}"
-    const val SUGGEST = "/api/v1/public/clinics/suggestions"
     const val SEARCH = "/api/v1/public/clinics/search"
+
+
+    //Calendar
+    const val CREATAPPOINTMENT = "/api/v1/user/appointments"
+    const val EDITAPPOINTMENT = "/api/v1/user/appointments/update/{appointmentId}"
+    const val TAKEBOOKING = "/api/v1/public/clinics/{clinicId}/booking"
+    const val TAKEAPPOINTMENTID = "/api/v1/user/appointments/detail/{id}"
+    const val CANCELAPPOINTMENT = "/api/v1/user/appointments/cancel/{appointmentId}"
+
+    //Notify
+    const val FIREBASE = "/api/v1/user/device-token"
 
 }

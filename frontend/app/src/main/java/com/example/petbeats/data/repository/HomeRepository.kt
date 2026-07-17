@@ -1,17 +1,22 @@
 package com.example.petbeats.data.repository
 
-import android.util.Log
 import com.example.petbeats.core.base.BaseRepository
 import com.example.petbeats.core.base.DataResult
 import com.example.petbeats.data.remote.api.ApiHome
+import com.example.petbeats.data.remote.model.calendar.home.request.AppointmentIdRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.ClinicIdRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.CreateAppointmentRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.DeviceTokenFireBaseRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.model.calendar.home.request.SearchRequest
-import com.example.petbeats.data.remote.model.calendar.home.request.SuggestRequest
+import com.example.petbeats.data.remote.model.calendar.home.request.TakeBookingRequest
+import com.example.petbeats.data.remote.model.calendar.home.response.AppointmentIdResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.ClinicIdResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.CreateAppointmentResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.LocationResponse
 import com.example.petbeats.data.remote.model.calendar.home.response.SearchResponse
-import com.example.petbeats.data.remote.model.calendar.home.response.SuggestResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.TakeAppointmentResponse
+import com.example.petbeats.data.remote.model.calendar.home.response.TakeBookingResponse
 
 class HomeRepository(
     private val apiHome: ApiHome
@@ -44,4 +49,56 @@ class HomeRepository(
             )
         }
     }
+
+    suspend fun takeBooking(request: TakeBookingRequest): DataResult<TakeBookingResponse> {
+        return safeApiCall {
+            apiHome.takeBooking(
+                clinicId = request.clinicId
+            )
+        }
+    }
+
+    suspend fun takeAppointment(): DataResult<List<TakeAppointmentResponse>> {
+        return safeApiCall {
+            apiHome.takeAppointment()
+        }
+    }
+
+    suspend fun createAppointment(request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
+        return safeApiCall {
+            apiHome.createAppointment(request)
+        }
+    }
+
+    suspend fun editAppointment(id: AppointmentIdRequest, request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
+        return safeApiCall {
+            apiHome.editAppointment(
+                id = id.id,
+                request = request
+            )
+        }
+    }
+
+    suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentIdResponse> {
+        return safeApiCall {
+            apiHome.takeAppointmentId(
+                id = request.id
+            )
+        }
+    }
+
+    suspend fun cancelAppointment(request: AppointmentIdRequest): DataResult<AppointmentIdResponse> {
+        return safeApiCall {
+            apiHome.cancelAppointment(
+                id = request.id
+            )
+        }
+    }
+
+    suspend fun deviceToken(request: DeviceTokenFireBaseRequest): DataResult<Any> {
+        return safeApiCall {
+            apiHome.deviceToken(request)
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.petbeats.ui.home.informationroom
 import android.accessibilityservice.GestureDescription
 
 data class InformationRoomState (
+    val id: Int = 0,
     val thumbnailUrl: String = "",
     val name: String = "",
     val isOperating: Boolean = false,

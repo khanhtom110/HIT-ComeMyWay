@@ -1,17 +1,12 @@
 package com.example.petbeats.ui.home.activitymain
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.petbeats.R
-import com.example.petbeats.databinding.ActivityHomeBinding
+import com.example.VetPet.R
+import com.example.VetPet.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -53,6 +48,15 @@ class HomeActivity : AppCompatActivity() {
                     binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
                 R.id.calendarFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.successAppointFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.confirmAppointmentFragment -> {
+                    binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
+                }
+                R.id.editCalendarFragment -> {
                     binding.bottomNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
             }

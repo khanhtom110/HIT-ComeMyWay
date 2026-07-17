@@ -9,10 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
-import com.example.petbeats.ui.home.book.adapter.BookAdapter.ViewHolder
-import com.example.petbeats.ui.home.book.adapter.BookChild
-import com.example.petbeats.ui.home.book.adapter.BookChildState
+import com.example.VetPet.R
 
 class ResultSearchAdapter(
     private val onItemClick: (Int) -> Unit
@@ -44,8 +41,8 @@ class ResultSearchAdapter(
             distance.text = "${item.distance} km"
             rating.text = "Đánh giá: ${item.rating}/5"
             address.text = item.address
-            openTime.text = "${item.openTime.take(5)}AM -"
-            closeTime.text = "${item.closeTime.take(5)}PM"
+            openTime.text = "${item.openTime.take(5)} -"
+            closeTime.text = "${item.closeTime.take(5)}"
 
 
             if (item.isOperating) {

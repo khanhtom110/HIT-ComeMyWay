@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.petbeats.R
+import com.example.VetPet.R
 
 class AdapterHistory(
     private val onItemClick: (String) -> Unit
 ): ListAdapter<HistoryChild, AdapterHistory.ViewHolder>(HistoryDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.history_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_history_child, holder, false)
         return ViewHolder(view)
     }
 

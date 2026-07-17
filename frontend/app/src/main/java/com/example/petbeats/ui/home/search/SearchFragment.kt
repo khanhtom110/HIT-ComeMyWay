@@ -16,20 +16,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
-import com.example.petbeats.data.remote.model.calendar.home.request.LocationRequest
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentBookBinding
-import com.example.petbeats.databinding.FragmentSearchBinding
+import com.example.VetPet.databinding.FragmentSearchBinding
 import com.example.petbeats.ui.home.search.adapterhint.AdapterHint
 import com.example.petbeats.ui.home.search.adapterhistory.AdapterHistory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {

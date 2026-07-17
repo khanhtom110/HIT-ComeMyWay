@@ -13,14 +13,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import com.example.petbeats.R
+import com.example.VetPet.R
 import com.example.petbeats.data.local.database.AppDatabase
 import com.example.petbeats.data.remote.api.ApiHome
 import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.petbeats.data.remote.sharepreference.TokenManager
 import com.example.petbeats.data.repository.HomeRepository
-import com.example.petbeats.databinding.FragmentHistoryListAllBinding
-import com.example.petbeats.ui.home.search.SearchEvent
+import com.example.VetPet.databinding.FragmentHistoryListAllBinding
 import com.example.petbeats.ui.home.search.adapterhistory.AdapterHistory
 import kotlinx.coroutines.launch
 

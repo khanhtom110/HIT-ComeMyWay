@@ -1,13 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
-
     alias(libs.plugins.ksp)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.petbeats"
+    namespace = "com.example.VetPet"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
@@ -17,8 +17,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.petbeats"
-        minSdk = 29
+        applicationId = "com.example.VetPet"
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+//    implementation(libs.firebase.messaging.ktx) // Đã xóa: Google đã khai tử bản -ktx, chuyển sang dùng bản gốc kết hợp Firebase BoM.
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,4 +80,15 @@ dependencies {
 
     //thư viện lấy ảnh mạng
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Thư viện Calendar (phiên bản dành cho Android View)
+    implementation("com.kizitonwose.calendar:view:2.10.1")
+
+    // Hỗ trợ Java 8 API cho các thiết bị Android cũ (minSdk < 26)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    //Khai báo Firebase BoM (Quản lý phiên bản tự động)
+    implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-messaging")
 }

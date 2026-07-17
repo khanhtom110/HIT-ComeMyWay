@@ -9,42 +9,41 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.petbeats.R
+import com.example.VetPet.R
 
-class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
+class BookAdapter(
+    private val onItemClick: (Int, Int) -> Unit
+): ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.book_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_book_child, holder, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBook = getItem(position)
 
-        holder.bind(currentBook)
+        holder.bind(currentBook, onItemClick)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val nameRoom: TextView = itemView.findViewById(R.id.nameRoom)
         val image: ImageView = itemView.findViewById(R.id.image)
-        val action: TextView = itemView.findViewById(R.id.action)
-        val rating: TextView = itemView.findViewById(R.id.rating)
         val address: TextView = itemView.findViewById(R.id.address)
+        val date: TextView = itemView.findViewById(R.id.date)
         val time: TextView = itemView.findViewById(R.id.time)
         val status: TextView = itemView.findViewById(R.id.status)
 
-        fun bind(item: BookChild) {
-            nameRoom.text = item.roomName
-            action.text = item.action
-            rating.text = "Đánh giá: ${item.rating}/5"
+        fun bind(item: BookChild, onItemClick: (Int, Int) -> Unit) {
+            nameRoom.text = item.nameClinic
             address.text = item.address
-            time.text = item.time
+            date.text = "${item.calendar} -"
+            time.text = item.time.take(5)
 
 
             Glide.with(itemView.context)
-                .load(item.image)
+                .load(item.thumbnailUrl)
                 .circleCrop()
                 .into(image)
-
 
             when(item.status) {
                 BookChildState.PENDING -> {
@@ -55,10 +54,14 @@ class BookAdapter: ListAdapter<BookChild, BookAdapter.ViewHolder>(BookDiffCallba
                     status.text = "Đặt lịch thành công"
                     status.setTextColor(Color.parseColor("#00FF0B"))
                 }
-                BookChildState.REFUSE -> {
+                BookChildState.CANCELLED -> {
                     status.text = "Từ chối"
                     status.setTextColor(Color.parseColor("#CC0900"))
                 }
+            }
+
+            nameRoom.setOnClickListener {
+                onItemClick(item.id, item.clinicId)
             }
         }
     }
