@@ -1,27 +1,37 @@
 package com.hit.comemyway.service;
 
 import com.hit.comemyway.constant.ErrorMessage;
+import com.hit.comemyway.dto.request.CompleteClinicProfileRequest;
 import com.hit.comemyway.dto.response.*;
+import com.hit.comemyway.entity.AccountStatus;
 import com.hit.comemyway.entity.Clinic;
+import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.ClinicRepository;
+import com.hit.comemyway.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ClinicService {
+  private final UserRepository userRepository;
   private final ClinicRepository clinicRepository;
   private final SearchClinicsService searchClinicsService;
+  private final MapService mapService;
+  private final ImageUploadService imageUploadService;
   private static final double ONE_LATITUDE = 111.045;
   private static final int NUMBER_OSRM = 15;
 
@@ -220,6 +230,34 @@ public class ClinicService {
     LocalTime now = LocalTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
     boolean isOperating = isOperating(clinic, now);
     return ClinicBookingResponse.from(clinic, isOperating);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public CompleteClinicProfileResponse completeClinicProfile(CompleteClinicProfileRequest request) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
+
+    user.setStatus(AccountStatus.ACTIVE);
+
+    Clinic clinic = Clinic.builder().user(user).name(request.name()).address(request.address())
+        .phone(request.phone()).mapLink(request.mapLink()).description(request.description())
+        .latitude(coordinates.get("latitude")).longitude(coordinates.get("longitude"))
+        .closeTime(request.closeTime()).openTime(request.openTime())
+        .thumbnailUrl(request.thumbnailUrl()).build();
+
+    List<com.hit.comemyway.entity.Service> services =
+        request.services().stream().map(serviceName -> com.hit.comemyway.entity.Service.builder()
+            .name(serviceName).clinic(clinic).build()).toList();
+
+    clinic.setServices(services);
+
+    clinicRepository.save(clinic);
+
+    return CompleteClinicProfileResponse.from(clinic);
   }
 }
 

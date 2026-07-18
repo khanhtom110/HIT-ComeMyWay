@@ -6,9 +6,16 @@ import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.RejectAppointmentRequest;
 import com.hit.comemyway.dto.response.AppointmentResponse;
 import com.hit.comemyway.service.AppointmentService;
+import com.hit.comemyway.dto.request.*;
+import com.hit.comemyway.dto.response.*;
+import com.hit.comemyway.service.ClinicService;
+import com.hit.comemyway.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +26,8 @@ import java.util.List;
 @RequestMapping(ApiPath.API_V1)
 @Tag(name = "Clinic Controller", description = "Các API nghiệp vụ của phòng khám")
 public class ClinicController {
+  private final ClinicService clinicService;
+  private final UserService userService;
   private final AppointmentService appointmentService;
 
 
@@ -45,6 +54,25 @@ public class ClinicController {
       @PathVariable Long appointmentId, @RequestBody RejectAppointmentRequest request) {
     AppointmentResponse response =
         appointmentService.rejectAppointmentStatus(appointmentId, request.rejectReason());
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Lưu thông tin phòng khám",
+      description = "Lưu thông tin khi phòng khám lần đầu đăng nhập vào app")
+  @PostMapping(UrlConstant.Clinic.COMPLETE_PROFILE)
+  public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> completeProfile(
+      @RequestBody CompleteClinicProfileRequest request) {
+    CompleteClinicProfileResponse response = clinicService.completeClinicProfile(request);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Đổi mật khẩu",
+      description = "Đổi mật khẩu cho phòng khám khi đăng nhập lần đầu")
+  @PostMapping(UrlConstant.Clinic.CHANGE_PASSWORD)
+  public ResponseEntity<ApiResponse<UserResponse>> changeFirstTimePassword(
+      @Valid @RequestBody ChangePasswordRequest request) {
+    UserResponse response = userService.changeFirstTimePassword(request);
+
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }
