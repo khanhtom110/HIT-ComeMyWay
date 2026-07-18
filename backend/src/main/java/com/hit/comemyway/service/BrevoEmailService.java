@@ -22,7 +22,7 @@ public class BrevoEmailService {
   @Value("${brevo.sender.email}")
   private String senderEmail;
 
-  public void sendOtpEmail(String toEmail, String subject, String htmlContent) {
+  public void sendEmail(String toEmail, String subject, String htmlContent) {
     RestTemplate restTemplate = new RestTemplate();
     String url = "https://api.brevo.com/v3/smtp/email";
 

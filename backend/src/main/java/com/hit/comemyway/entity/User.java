@@ -43,4 +43,8 @@ public class User extends BaseEntity {
 
   @Column(nullable = true)
   private String deviceToken;
+
+  @Column(nullable = true)
+  @Enumerated(EnumType.STRING)
+  private AccountStatus status;
 }

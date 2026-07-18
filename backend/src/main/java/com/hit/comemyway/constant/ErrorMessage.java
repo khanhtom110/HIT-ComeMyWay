@@ -88,6 +88,8 @@ public final class ErrorMessage {
 
     public static final String CLINIC_NOT_EXISTED = "Clinic does not exist";
     public static final String REJECT_REASON = "Reject reason must be under 500 characters";
+    public static final String MIN_ONE_SERVICE = "At least one service must be ";
+    public static final String INVALID_THUMBNAIL = "Please upload a valid image file.";
   }
 
   // Appointment Errors
