@@ -193,4 +193,56 @@ public class AppointmentService {
 
     return AppointmentResponse.from(updatedAppointment);
   }
+
+  @Transactional(readOnly = true)
+  public List<AppointmentResponse> getPendingStatusAppointment() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Clinic clinic = clinicRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    List<Appointment> appointments = appointmentRepository
+        .findPendingAppointmentsByClinicId(clinic.getId(), BookingStatus.PENDING);
+
+    return appointments.stream().map(AppointmentResponse::from).toList();
+  }
+
+  @Transactional
+  public AppointmentResponse confirmAppointmentStatus(Long appointmentId) {
+    Appointment appointment = getAppointmentByOwnerClinic(appointmentId);
+
+    if (appointment.getStatus() != BookingStatus.PENDING) {
+      throw new AppException(400, ErrorMessage.Appointment.ACTION_ONLY_FOR_PENDING);
+    }
+
+    appointment.setStatus(BookingStatus.CONFIRMED);
+    return AppointmentResponse.from(appointment);
+  }
+
+  @Transactional
+  public AppointmentResponse rejectAppointmentStatus(Long appointmentId, String rejectReason) {
+    Appointment appointment = getAppointmentByOwnerClinic(appointmentId);
+
+    if (appointment.getStatus() != BookingStatus.PENDING) {
+      throw new AppException(400, ErrorMessage.Appointment.ACTION_ONLY_FOR_PENDING);
+    }
+
+    appointment.setStatus(BookingStatus.REJECTED);
+    appointment.setRejectReason(rejectReason);
+    return AppointmentResponse.from(appointment);
+  }
+
+  private Appointment getAppointmentByOwnerClinic(Long appointmentId) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Clinic clinic = clinicRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    Appointment appointment = appointmentRepository.findById(appointmentId)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Appointment.APPOINTMENT_NOT_EXISTED));
+
+    if (!appointment.getClinic().getId().equals(clinic.getId())) {
+      throw new AppException(403, ErrorMessage.FORBIDDEN);
+    }
+
+    return appointment;
+  }
 }

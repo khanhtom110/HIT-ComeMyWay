@@ -1,6 +1,7 @@
 package com.hit.comemyway.repository;
 
 import com.hit.comemyway.entity.Appointment;
+import com.hit.comemyway.entity.BookingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -48,4 +49,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
       WHERE a.id = :id
       """)
   Optional<Appointment> findByIdWithUserAndClinic(@Param("id") Long id);
+
+  @Query("""
+          SELECT a
+          FROM Appointment a
+          JOIN a.clinic c
+          WHERE a.status = :status
+              AND c.id = :clinicId
+          ORDER BY a.appointmentDate ASC ,a.appointmentTime ASC
+      """)
+  List<Appointment> findPendingAppointmentsByClinicId(@Param("clinicId") Long clinicId,
+      @Param("status") BookingStatus status);
 }

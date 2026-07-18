@@ -63,7 +63,11 @@ public class UrlConstant {
     private static final String PREFIX = "/clinic";
 
     public static final String GET_DETAIL = PREFIX + "/{clinicId}";
-    public static final String GET_ALL = PREFIX;
+    public static final String GET_APPOINTMENT_PENDING = PREFIX + "/appointments/pending";
+    public static final String POST_APPOINTMENT_CONFIRMED =
+        PREFIX + "/appointments/{appointmentId}/confirm";
+    public static final String POST_APPOINTMENT_REJECTED =
+        PREFIX + "/appointments/{appointmentId}/reject";
 
     private Clinic() {}
   }

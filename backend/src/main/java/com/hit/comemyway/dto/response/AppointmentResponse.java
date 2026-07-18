@@ -1,5 +1,6 @@
 package com.hit.comemyway.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hit.comemyway.entity.Appointment;
 import com.hit.comemyway.entity.BookingStatus;
 import com.hit.comemyway.entity.BookingType;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public record AppointmentResponse(
+@JsonInclude(JsonInclude.Include.NON_NULL)public record AppointmentResponse(
 //@formatter:off
         @Schema(description = "ID lịch hẹn", example = "1")
         Long id,
@@ -51,7 +52,11 @@ public record AppointmentResponse(
         List<ServiceResponse> services,
 
         @Schema(description = "Trạng thái lịch hẹn", example = "PENDING")
-        BookingStatus status) {
+        BookingStatus status,
+
+        @Schema(description = "Lý do từ chối lịch hẹn")
+        String rejectReason
+        ) {
     public static AppointmentResponse from(Appointment appointment) {
         return new AppointmentResponse(
                 appointment.getId(),
@@ -69,7 +74,8 @@ public record AppointmentResponse(
                 appointment.getServices().stream()
                            .map(ServiceResponse::from)
                            .toList(),
-                appointment.getStatus()
+                appointment.getStatus(),
+                appointment.getRejectReason()
         );
     }
 }
