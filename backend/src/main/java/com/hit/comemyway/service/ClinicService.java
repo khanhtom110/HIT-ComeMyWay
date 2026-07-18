@@ -243,18 +243,7 @@ public class ClinicService {
       throw new AppException(400, ErrorMessage.Clinic.CLINIC_PROFILE_ALREADY_DONE);
     }
 
-    LocalTime open = request.openTime();
-    LocalTime close = request.closeTime();
-
-    // 1. Kiểm tra bằng nhau
-    if (open.equals(close)) {
-      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
-    }
-
-    // 2. Nếu phòng khám muốn mở cửa qua đêm
-    if (open.isAfter(close)) {
-      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
-    }
+    checkClinicOperatingTime(request.openTime(),request.closeTime());
 
     Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
 
@@ -270,11 +259,56 @@ public class ClinicService {
         request.services().stream().map(serviceName -> com.hit.comemyway.entity.Service.builder()
             .name(serviceName).clinic(clinic).build()).toList();
 
-    clinic.setServices(services);
+    clinic.getServices().addAll(services);
 
     clinicRepository.save(clinic);
 
     return CompleteClinicProfileResponse.from(clinic);
+  }
+
+  @Transactional
+  public CompleteClinicProfileResponse updateClinicProfile(CompleteClinicProfileRequest request){
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    Clinic clinic = clinicRepository.findByUsername(username)
+            .orElseThrow(()->new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    checkClinicOperatingTime(request.openTime(),request.closeTime());
+
+    Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
+
+    clinic.setName(request.name());
+    clinic.setAddress(request.address());
+    clinic.setPhone(request.phone());
+    clinic.setMapLink(request.mapLink());
+    clinic.setDescription(request.description());
+    clinic.setLatitude(coordinates.get("latitude"));
+    clinic.setLongitude(coordinates.get("longitude"));
+    clinic.setCloseTime(request.closeTime());
+    clinic.setOpenTime(request.openTime());
+    clinic.setThumbnailUrl(request.thumbnailUrl());
+
+    clinic.getServices().clear();
+
+    List<com.hit.comemyway.entity.Service> services =
+            request.services().stream().map(serviceName -> com.hit.comemyway.entity.Service.builder()
+                    .name(serviceName).clinic(clinic).build()).toList();
+
+    clinic.getServices().addAll(services);
+
+    return CompleteClinicProfileResponse.from(clinic);
+  }
+
+  private void checkClinicOperatingTime(LocalTime open, LocalTime close){
+    // 1. Kiểm tra bằng nhau
+    if (open.equals(close)) {
+      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
+    }
+
+    // 2. Nếu phòng khám muốn mở cửa qua đêm
+    if (open.isAfter(close)) {
+      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
+    }
   }
 }
 

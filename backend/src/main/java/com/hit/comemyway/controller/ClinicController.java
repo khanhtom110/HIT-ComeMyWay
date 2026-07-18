@@ -57,12 +57,21 @@ public class ClinicController {
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 
-  @Operation(summary = "Lưu thông tin phòng khám",
+  @Operation(summary = "Lưu thông tin phòng khám lần đầu tiên",
       description = "Lưu thông tin khi phòng khám lần đầu đăng nhập vào app")
   @PostMapping(UrlConstant.Clinic.COMPLETE_PROFILE)
   public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> completeProfile(
       @Valid @RequestBody CompleteClinicProfileRequest request) {
     CompleteClinicProfileResponse response = clinicService.completeClinicProfile(request);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Thay đổi thông tin phòng khám nếu cần",
+      description = "Thay đổi thông tin phòng khám nếu cần")
+  @PostMapping(UrlConstant.Clinic.UPDATE_PROFILE)
+  public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> updateProfile(
+      @Valid @RequestBody CompleteClinicProfileRequest request) {
+    CompleteClinicProfileResponse response = clinicService.updateClinicProfile(request);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 
