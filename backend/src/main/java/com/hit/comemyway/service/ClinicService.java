@@ -243,7 +243,7 @@ public class ClinicService {
       throw new AppException(400, ErrorMessage.Clinic.CLINIC_PROFILE_ALREADY_DONE);
     }
 
-    checkClinicOperatingTime(request.openTime(),request.closeTime());
+    checkClinicOperatingTime(request.openTime(), request.closeTime());
 
     Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
 
@@ -267,13 +267,13 @@ public class ClinicService {
   }
 
   @Transactional
-  public CompleteClinicProfileResponse updateClinicProfile(CompleteClinicProfileRequest request){
+  public CompleteClinicProfileResponse updateClinicProfile(CompleteClinicProfileRequest request) {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
     Clinic clinic = clinicRepository.findByUsername(username)
-            .orElseThrow(()->new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
 
-    checkClinicOperatingTime(request.openTime(),request.closeTime());
+    checkClinicOperatingTime(request.openTime(), request.closeTime());
 
     Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
 
@@ -291,15 +291,15 @@ public class ClinicService {
     clinic.getServices().clear();
 
     List<com.hit.comemyway.entity.Service> services =
-            request.services().stream().map(serviceName -> com.hit.comemyway.entity.Service.builder()
-                    .name(serviceName).clinic(clinic).build()).toList();
+        request.services().stream().map(serviceName -> com.hit.comemyway.entity.Service.builder()
+            .name(serviceName).clinic(clinic).build()).toList();
 
     clinic.getServices().addAll(services);
 
     return CompleteClinicProfileResponse.from(clinic);
   }
 
-  private void checkClinicOperatingTime(LocalTime open, LocalTime close){
+  private void checkClinicOperatingTime(LocalTime open, LocalTime close) {
     // 1. Kiểm tra bằng nhau
     if (open.equals(close)) {
       throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
