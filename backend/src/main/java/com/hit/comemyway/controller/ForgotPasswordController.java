@@ -7,6 +7,7 @@ import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.ForgotPasswordRequest;
 import com.hit.comemyway.dto.request.ResetPasswordRequest;
 import com.hit.comemyway.dto.request.VerifyOtpRequest;
+import com.hit.comemyway.dto.response.ForgotPasswordResponse;
 import com.hit.comemyway.service.ForgotPasswordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -34,11 +35,11 @@ public class ForgotPasswordController {
   @PostMapping(UrlConstant.Auth.FORGOT_PASSWORD)
   @Operation(summary = "Yêu cầu khôi phục mật khẩu",
       description = "Tạo và gửi mã OTP gồm 6 chữ số đến địa chỉ email đã đăng ký của người dùng.")
-  public ResponseEntity<ApiResponse<Void>> sendOtp(
+  public ResponseEntity<ApiResponse<ForgotPasswordResponse>> sendOtp(
       @Valid @RequestBody ForgotPasswordRequest request) {
-    String message = forgotPasswordService.sendOtpForgotPassword(request.email());
+    ForgotPasswordResponse response = forgotPasswordService.sendOtpForgotPassword(request.email());
 
-    return ResponseEntity.ok(ApiResponse.ok(message, null));
+    return ResponseEntity.ok(ApiResponse.ok(SuccessMessage.Auth.SEND_OTP_SUCCESS, response));
   }
 
   @PostMapping(UrlConstant.Auth.VERIFY_OTP)
