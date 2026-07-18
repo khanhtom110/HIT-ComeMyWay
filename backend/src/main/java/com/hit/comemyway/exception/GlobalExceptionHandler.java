@@ -101,6 +101,12 @@ public class GlobalExceptionHandler {
         .body(ApiResponse.error(400, customMessage));
   }
 
+  @ExceptionHandler(value = IllegalArgumentException.class)
+  public ResponseEntity<ApiResponse<Void>> handlingIllegalArgumentException(
+      IllegalArgumentException e) {
+    return ResponseEntity.badRequest().body(ApiResponse.error(400, e.getMessage()));
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
     log.error("Lỗi hệ thống nghiêm trọng: ", ex);

@@ -61,7 +61,7 @@ public class ClinicController {
       description = "Lưu thông tin khi phòng khám lần đầu đăng nhập vào app")
   @PostMapping(UrlConstant.Clinic.COMPLETE_PROFILE)
   public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> completeProfile(
-      @RequestBody CompleteClinicProfileRequest request) {
+      @Valid @RequestBody CompleteClinicProfileRequest request) {
     CompleteClinicProfileResponse response = clinicService.completeClinicProfile(request);
     return ResponseEntity.ok(ApiResponse.ok(response));
   }

@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -31,7 +31,6 @@ public record CompleteClinicProfileRequest(
         @Pattern(regexp = CommonConstant.PHONE_REGEX, message = ErrorMessage.INVALID_FORMAT_PHONE)
         String phone,
 
-        @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
         @Schema(description = "Mô tả chi tiết phòng khám", example = "Phòng khám thú y uy tín hàng đầu với trang thiết bị hiện đại")
         String description,
 
@@ -39,16 +38,17 @@ public record CompleteClinicProfileRequest(
         @Schema(description = "URL ảnh đại diện", example = "https://example.com/clinic.jpg")
         String thumbnailUrl,
 
-        @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
+        @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
         @Schema(description = "Giờ mở cửa", example = "08:00")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime openTime,
 
-        @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
+        @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
         @Schema(description = "Giờ đóng cửa", example = "21:00")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime closeTime,
 
-        @NotBlank(message = ErrorMessage.NOT_BLANK_FIELD)
+        @NotNull(message = ErrorMessage.NOT_BLANK_FIELD)
         @Schema(description = "DS dịch vụ", example = "[\"Tiêm phòng\", \"Phẫu thuật\"]")
+        @Size(min = 1, message = ErrorMessage.Appointment.MIN_ONE_SERVICE)
         List<String> services) {}

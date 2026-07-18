@@ -33,6 +33,7 @@ public final class ErrorMessage {
   public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
   public static final String INVALID_FORMAT_CONDITION =
       "Condition must be under 1000 characters long.";
+  public static final String INVALID_PARAMETER = "The provided parameter is invalid";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
   // Authentication Errors (Auth)
@@ -87,9 +88,12 @@ public final class ErrorMessage {
     private Clinic() {}
 
     public static final String CLINIC_NOT_EXISTED = "Clinic does not exist";
+    public static final String CLINIC_PROFILE_ALREADY_DONE = "Clinic profile already done";
     public static final String REJECT_REASON = "Reject reason must be under 500 characters";
     public static final String MIN_ONE_SERVICE = "At least one service must be ";
     public static final String INVALID_THUMBNAIL = "Please upload a valid image file.";
+    public static final String INVALID_WORKING_HOURS =
+        "Opening time must be earlier than closing time";
   }
 
   // Appointment Errors

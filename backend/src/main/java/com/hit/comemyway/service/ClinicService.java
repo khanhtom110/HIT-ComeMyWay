@@ -239,6 +239,23 @@ public class ClinicService {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
+    if (clinicRepository.existsByUser(user)) {
+      throw new AppException(400, ErrorMessage.Clinic.CLINIC_PROFILE_ALREADY_DONE);
+    }
+
+    LocalTime open = request.openTime();
+    LocalTime close = request.closeTime();
+
+    // 1. Kiểm tra bằng nhau
+    if (open.equals(close)) {
+      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
+    }
+
+    // 2. Nếu phòng khám muốn mở cửa qua đêm
+    if (open.isAfter(close)) {
+      throw new AppException(400, ErrorMessage.Clinic.INVALID_WORKING_HOURS);
+    }
+
     Map<String, Double> coordinates = mapService.extractCoordinates(request.mapLink());
 
     user.setStatus(AccountStatus.ACTIVE);

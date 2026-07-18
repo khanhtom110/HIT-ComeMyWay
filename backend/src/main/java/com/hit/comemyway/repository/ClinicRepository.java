@@ -2,6 +2,7 @@ package com.hit.comemyway.repository;
 
 import com.hit.comemyway.dto.response.ClinicSuggestionResponse;
 import com.hit.comemyway.entity.Clinic;
+import com.hit.comemyway.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -79,4 +80,6 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
       WHERE u.username = :username
       """)
   Optional<Clinic> findByUsername(@Param("username") String username);
+
+  boolean existsByUser(User user);
 }
