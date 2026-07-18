@@ -56,7 +56,8 @@ public class Clinic extends BaseEntity {
   @Builder.Default
   private Boolean status = true;
 
-  @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY, cascade = CascadeType.ALL,
+      orphanRemoval = true)
   @BatchSize(size = 20)
   @Builder.Default
   private List<Service> services = new ArrayList<>();

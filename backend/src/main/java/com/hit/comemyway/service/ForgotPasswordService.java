@@ -1,14 +1,13 @@
 package com.hit.comemyway.service;
 
 import com.hit.comemyway.constant.ErrorMessage;
-import com.hit.comemyway.constant.SuccessMessage;
 import com.hit.comemyway.dto.request.ResetPasswordRequest;
+import com.hit.comemyway.dto.response.ForgotPasswordResponse;
+import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class ForgotPasswordService {
           + "</strong></p>"
           + "<p>Mã này sẽ hết hạn sau 5 phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>";
 
-      brevoEmailService.sendOtpEmail(email, subject, htmlContent);
+      brevoEmailService.sendEmail(email, subject, htmlContent);
 
     } catch (Exception e) {
       System.err
@@ -44,17 +43,17 @@ public class ForgotPasswordService {
     }
   }
 
-  public String sendOtpForgotPassword(String email) {
-    if (!userRepository.existsByEmail(email)) {
-      throw new AppException(404, ErrorMessage.User.USER_NOT_EXISTED);
-    }
+  public ForgotPasswordResponse sendOtpForgotPassword(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
     String otp = String.format("%06d", new Random().nextInt(1000000));
 
     redisTemplate.opsForValue().set("OTP:" + email, otp, 5, TimeUnit.MINUTES);
 
     this.sendOtpEmail(email, otp);
-    return SuccessMessage.Auth.SEND_OTP_SUCCESS;
+
+    return new ForgotPasswordResponse(user.getRole());
   }
 
   public String verifyOtp(String email, String userInputOtp) {

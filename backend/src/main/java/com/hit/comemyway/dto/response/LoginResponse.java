@@ -1,5 +1,7 @@
 package com.hit.comemyway.dto.response;
 
+import com.hit.comemyway.entity.AccountStatus;
+import com.hit.comemyway.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record LoginResponse(
@@ -11,6 +13,12 @@ public record LoginResponse(
         String refreshToken,
 
         @Schema(description = "Id người dùng")
-        Long userId
+        Long userId,
+
+        @Schema(description = "Vai trò")
+        Role role,
+
+        @Schema(description = "Trạng thái tài khoản")
+        AccountStatus accountStatus
 ) {
 }

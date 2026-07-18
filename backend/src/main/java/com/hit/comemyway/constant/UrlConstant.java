@@ -47,6 +47,7 @@ public class UrlConstant {
     public static final String CREATE_USER = PREFIX + "/create-user";
     public static final String UPDATE_USER = PREFIX + "/update-user/{userId}";
     public static final String DELETE_USER = PREFIX + "/delete-user/{userId}";
+    public static final String CREATE_CLINIC = PREFIX + "/create-clinic";
 
     private Admin() {}
   }
@@ -63,6 +64,10 @@ public class UrlConstant {
     private static final String PREFIX = "/clinic";
 
     public static final String GET_DETAIL = PREFIX + "/{clinicId}";
+    public static final String GET_ALL = PREFIX;
+    public static final String COMPLETE_PROFILE = PREFIX + "/complete-profile";
+    public static final String UPDATE_PROFILE = PREFIX + "/update-profile";
+    public static final String CHANGE_PASSWORD = PREFIX + "/change-password";
     public static final String GET_APPOINTMENT_PENDING = PREFIX + "/appointments/pending";
     public static final String POST_APPOINTMENT_CONFIRMED =
         PREFIX + "/appointments/{appointmentId}/confirm";
