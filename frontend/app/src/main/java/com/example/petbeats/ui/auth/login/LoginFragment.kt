@@ -22,7 +22,7 @@ import com.example.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.VetPet.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
-import com.example.petbeats.ui.home.activitymain.HomeActivity
+import com.example.petbeats.ui.home_user.activitymain.HomeActivity
 
 
 class LoginFragment : Fragment() {
@@ -173,6 +173,12 @@ class LoginFragment : Fragment() {
 
                             val intent = Intent(requireContext(), HomeActivity::class.java)
                             startActivity(intent)
+                        }
+                        is LoginEvent.NavigationClinic -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+
+                            findNavController().navigate(R.id.homeFragment)
                         }
                     }
                 }

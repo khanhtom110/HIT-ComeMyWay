@@ -54,11 +54,6 @@ class LoginViewModel(
             val name = _state.value.name.trim()
             val password = _state.value.password.trim()
 
-//            if (password.length < 7) {
-//                _state.value = _state.value.copy(isName = false,isPassword = true, nameError = "", passwordError = "Mật khẩu chưa đủ mạnh (cần chữ hoa, chữ thường, số và \nký tự đặc biệt).")
-//                return@launch
-//            }
-
 
             val request = LoginRequest(name, password)
             val result = repository.loginUser(request)
@@ -72,9 +67,26 @@ class LoginViewModel(
                     val refreshToken = result.data.refreshToken ?: ""
 
                     val userId = result.data.userId
+                    val roles = result.data.role
+                    val accountStatus = result.data.accountStatus
 
 
-                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                    //check role
+                    if (roles == "USER") {
+                        _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                    }
+                    else {
+                        _event.emit(LoginEvent.NavigationClinic(accessToken, refreshToken))
+                    }
+
+                    //check accountStatus
+                    if (accountStatus == "ACTIVE") {
+
+                    }
+                    else {
+
+                    }
+
                 }
 
                 is DataResult.Error -> {

@@ -6,27 +6,27 @@
 
     <fragment
         android:id="@+id/bookFragment"
-        android:name="com.example.petbeats.ui.home.book.BookFragment"
+        android:name="com.example.petbeats.ui.home_user.book.BookFragment"
         android:label="bookFragment"/>
 
     <fragment
         android:id="@+id/newsFragment"
-        android:name="com.example.petbeats.ui.home.news.NewsFragment"
+        android:name="com.example.petbeats.ui.home_user.news.NewsFragment"
         android:label="newsFragmnet"/>
 
     <fragment
         android:id="@+id/locketFragment"
-        android:name="com.example.petbeats.ui.home.locket.LocketFragment"
+        android:name="com.example.petbeats.ui.home_user.locket.LocketFragment"
         android:label="locketFragment"/>
 
     <fragment
         android:id="@+id/petFragment"
-        android:name="com.example.petbeats.ui.home.pet.PetFragment"
+        android:name="com.example.petbeats.ui.home_user.pet.PetFragment"
         android:label="petFragment"/>
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.petbeats.ui.home.search.SearchFragment"
+        android:name="com.example.petbeats.ui.home_user.search.SearchFragment"
         android:label="searchFragment">
         <action
             android:id="@+id/search_book"
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/resultSearchFragment"
-        android:name="com.example.petbeats.ui.home.resultsearch.ResultSearchFragment"
+        android:name="com.example.petbeats.ui.home_user.resultsearch.ResultSearchFragment"
         android:label="resultSearch">
         <action
             android:id="@+id/resultSearch_search"
@@ -54,13 +54,13 @@
 
     <fragment
         android:id="@+id/informationRoomFragment"
-        android:name="com.example.petbeats.ui.home.informationroom.InformationRoomFragment"
+        android:name="com.example.petbeats.ui.home_user.informationroom.InformationRoomFragment"
         android:label="informationRoomFragment">
     </fragment>
 
     <fragment
         android:id="@+id/historyListAllFragment"
-        android:name="com.example.petbeats.ui.home.historylistall.HistoryListAllFragment"
+        android:name="com.example.petbeats.ui.home_user.historylistall.HistoryListAllFragment"
         android:label="historyListAllFragment">
         <action
             android:id="@+id/historyListAll_Search"
@@ -71,7 +71,7 @@
 
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.example.petbeats.ui.home.calendar.CalendarFragment"
+        android:name="com.example.petbeats.ui.home_user.calendar.CalendarFragment"
         android:label="calendarFragment">
         <action
             android:id="@+id/calendar_informationRoom"
@@ -88,7 +88,7 @@
 
     <fragment
         android:id="@+id/confirmAppointmentFragment"
-        android:name="com.example.petbeats.ui.home.confirmappointment.ConfirmAppointmentFragment"
+        android:name="com.example.petbeats.ui.home_user.confirmappointment.ConfirmAppointmentFragment"
         android:label="confirmAppointmentFragment">
         <action
             android:id="@+id/confirmAppointment_book"
@@ -105,7 +105,7 @@
 
     <fragment
         android:id="@+id/successAppointFragment"
-        android:name="com.example.petbeats.ui.home.successAppointment.SuccessAppointmentFragment"
+        android:name="com.example.petbeats.ui.home_user.successAppointment.SuccessAppointmentFragment"
         android:label="successAppointFragment">
 
         <action
@@ -123,7 +123,7 @@
 
     <fragment
         android:id="@+id/historyBookFragment"
-        android:name="com.example.petbeats.ui.home.historyBook.HistoryBookFragment"
+        android:name="com.example.petbeats.ui.home_user.historyBook.HistoryBookFragment"
         android:label="historyBookFragment">
 
         <action
@@ -135,7 +135,7 @@
 
     <fragment
         android:id="@+id/editCalendarFragment"
-        android:name="com.example.petbeats.ui.home.editcalendar.EditCalendarFragment"
+        android:name="com.example.petbeats.ui.home_user.editcalendar.EditCalendarFragment"
         android:label="editCalendarFragment">
         <action
             android:id="@+id/editCalendar_confirm"

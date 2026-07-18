@@ -6,4 +6,5 @@ sealed class LoginEvent {
 
     //test
     data class NavigationHome(val accessToken: String, val refreshToken: String, val userId: Int): LoginEvent()
+    data class NavigationClinic(val accessToken: String, val refreshToken: String): LoginEvent()
 }

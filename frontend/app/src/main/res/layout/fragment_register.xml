@@ -221,7 +221,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/otp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"

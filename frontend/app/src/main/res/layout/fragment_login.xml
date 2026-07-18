@@ -141,7 +141,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"

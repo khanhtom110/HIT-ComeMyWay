@@ -24,7 +24,7 @@
         android:theme="@style/Theme.PetBeats"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.petbeats.ui.home.activitymain.HomeActivity"
+            android:name="com.example.petbeats.ui.home_user.activitymain.HomeActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false">
 
