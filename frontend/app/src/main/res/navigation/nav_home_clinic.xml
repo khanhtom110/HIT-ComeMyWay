@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_home_clinic"
+    app:startDestination="@id/appointmentScheduleFragment">
+
+    <fragment
+        android:id="@+id/appointmentScheduleFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleFragment"
+        android:label="appointmentScheduleFragment"/>
+
+    <fragment
+        android:id="@+id/clinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.clinic.ClinicFragment"
+        android:label="clinicFragment"/>
+
+</navigation>

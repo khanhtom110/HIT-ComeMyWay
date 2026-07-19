@@ -1,0 +1,110 @@
+package com.vetpet.petbeats.ui.home_user.confirmappointment
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.remote.dto.calendar.home.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home.request.TakeBookingRequest
+import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class ConfirmAppointmentViewModel(
+    private val repository: HomeRepository
+): ViewModel() {
+    private val _state = MutableStateFlow(ConfirmAppointmentState())
+    val state = _state.asStateFlow()
+
+    private val _event = MutableSharedFlow<ConfirmAppointmentEvent>()
+    val event = _event.asSharedFlow()
+
+    fun bookClick() {
+        viewModelScope.launch {
+            _event.emit(ConfirmAppointmentEvent.NavigationHomeAppointment)
+        }
+    }
+
+    fun searchClick() {
+        viewModelScope.launch {
+            _event.emit(ConfirmAppointmentEvent.NavigationSearch)
+        }
+    }
+
+    fun onEditAppointmentClick(id: Int, clinicId: Int) {
+        viewModelScope.launch {
+            _event.emit(ConfirmAppointmentEvent.NavigationEditAppointment(id, clinicId))
+        }
+    }
+
+    //api này tự động lấy id của màn calendar và gắn id cho service(người dùng click) và hiển thị thông tin lên giao diện
+    fun onInformationBookingAPI(clinicId: Int) {
+        viewModelScope.launch {
+            val request = TakeBookingRequest(clinicId)
+            val result = repository.takeBooking(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val data = result.data
+
+                    _state.value = _state.value.copy(
+                        thumbnailUrl = data.thumbnailUrl,
+                        name = data.name,
+                        status = data.isOperating,
+                        rating = data.rating,
+                        phoneClinic = data.phone,
+                        clinicAddress = data.address
+                    )
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(thumbnailUrl = "", name = "", status = false, rating = 0.0, services = emptyList())
+                    return@launch
+                }
+            }
+        }
+    }
+
+    fun onInformationAppointment(id: Int) {
+        viewModelScope.launch {
+            val request = AppointmentIdRequest(id)
+            val result = repository.takeAppointmentId(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val data = result.data
+
+                    val mapStatus = when (data.status) {
+                        "PENDING" -> BookChildState.PENDING
+                        "SUCCESS" -> BookChildState.SUCCESS
+                        "CANCELLED" -> BookChildState.CANCELLED
+                        else -> BookChildState.PENDING
+                    }
+
+                    _state.value = _state.value.copy(
+                        fullName = data.fullName,
+                        phoneUser = data.phone,
+                        bookingType = data.bookingType,
+                        homeAddress = data.homeAddress,
+                        petType = data.petType,
+                        petCondition = data.petCondition,
+                        petQuantity = data.petQuantity,
+                        appointmentDate = data.appointmentDate,
+                        appointmentTime = data.appointmentTime,
+                        services = data.services,
+                        state = mapStatus
+                    )
+                }
+                is DataResult.Error -> {
+                    Log.d("TEST", "lỗi trả: ${result.target} và message ${result.message}")
+
+                    _state.value = _state.value.copy()
+                    return@launch
+                }
+            }
+        }
+    }
+}

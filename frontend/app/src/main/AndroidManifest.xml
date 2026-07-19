@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!--Xin quyền vị trí-->
+    <!-- Xin quyền vị trí -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!--Wifi-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Wifi -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--Xin quyền notify-->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Xin quyền notify -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -24,23 +19,32 @@
         android:theme="@style/Theme.PetBeats"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.petbeats.ui.home_user.activitymain.HomeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
-
-        </activity>
-        <activity
-            android:name="com.example.petbeats.ui.auth.activitymain.AuthActivity"
-            android:exported="true">
+            android:name="com.vetpet.petbeats.ui.home_clinic.activitymain.HomeClinicActivity"
+            android:exported="true" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name="com.example.petbeats.ui.splash_onboarding.splash.SplashActivity"
-            android:exported="false"/>
+            android:name="com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.auth.activitymain.AuthActivity"
+            android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.splash_onboarding.splash.SplashActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,0 +1,51 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.vetpet.petbeats.ui.auth.changesuccess_clinic.ChangeSuccessFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/logo1"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:src="@drawable/logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/ChaoMung"
+            android:id="@+id/tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vui lòng cập nhật thông tin"
+            android:textColor="@color/colorTextTitle"
+            android:layout_marginTop="@dimen/_54sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo1"/>
+
+        <TextView
+            style="@style/Chu2"
+            android:id="@+id/text_guide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cập nhật thông tin để khách hàng dễ dàng tiếp cận phòng khám của bạn."
+            android:textColor="@color/colorTextContent"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginHorizontal="@dimen/_22sdp"
+            app:layout_constraintTop_toBottomOf="@id/tittle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
