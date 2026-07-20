@@ -18,7 +18,7 @@
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/back"
+            android:src="@drawable/back_left"
             android:layout_marginTop="@dimen/_40sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -13,15 +13,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.ActivityNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.example.VetPet.databinding.FragmentCalendarBinding
 import com.example.VetPet.databinding.FragmentInformationClinicBinding
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
-import com.vetpet.petbeats.ui.home_user.calendar.CalendarViewModel
+import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.home_user.calendar.adapter.TimePagerAdapter
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -31,8 +31,8 @@ class InformationClinicFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: InformationClinicViewModel by viewModels {
         InformationClinicViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeClinicRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
             )
         )
     }
@@ -62,6 +62,7 @@ class InformationClinicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupTime()
         setOnClick()
         stateData()
         eventData()
@@ -77,6 +78,76 @@ class InformationClinicFragment : Fragment() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
+
+    private fun setupTime() {
+        val hourList = (0..23).map {
+            String.format("%02d", it)
+        }
+        val minuteList = listOf("00", "15", "30", "45")
+
+        binding.vpOpenHour.apply {
+            adapter = TimePagerAdapter(hourList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+        binding.vpOpenMinute.apply {
+            adapter = TimePagerAdapter(minuteList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+
+        binding.vpCloseHour.apply {
+            adapter = TimePagerAdapter(hourList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+        binding.vpCloseMinute.apply {
+            adapter = TimePagerAdapter(minuteList)
+            orientation = ViewPager2.ORIENTATION_VERTICAL
+        }
+    }
+
+    private fun getSelectTime() {
+        val openHourTime = binding.vpOpenHour.currentItem
+        val openMinuteTime = binding.vpOpenMinute.currentItem
+
+        val closeHourTime = binding.vpCloseHour.currentItem
+        val closeMinuteTime = binding.vpCloseMinute.currentItem
+
+        val openHour = String.format("%02d", openHourTime)
+        val openMinute = when (openMinuteTime) {
+            0 -> {
+                "00"
+            }
+            1 -> {
+                "15"
+            }
+            2 -> {
+                "30"
+            }
+            else -> {
+                "45"
+            }
+        }
+
+        val closeHour = String.format("%02d", closeHourTime)
+        val closeMinute = when (closeMinuteTime) {
+            0 -> {
+                "00"
+            }
+            1 -> {
+                "15"
+            }
+            2 -> {
+                "30"
+            }
+            else -> {
+                "45"
+            }
+        }
+
+        viewModel.onTimeOpenSelect(openHour, openMinute)
+        viewModel.onTimeCloseSelect(closeHour, closeMinute)
+
+    }
+
     private fun setOnClick() {
         binding.tvInputName.addTextChangedListener {
             viewModel.onNameChange(it.toString())
@@ -88,16 +159,19 @@ class InformationClinicFragment : Fragment() {
             viewModel.onAddressChange(it.toString())
         }
         binding.tvInputLink.addTextChangedListener {
-            viewModel.onAddressChange(it.toString())
+            viewModel.onLinkChange(it.toString())
         }
         binding.tvInputState.addTextChangedListener {
             viewModel.onStateChange(it.toString())
         }
 
 
-//        binding.btnUpdate.setOnClickListener {
-//            viewModel.onInformationClinicClick()
-//        }
+
+        binding.btnUpdate.setOnClickListener {
+            getSelectTime()
+
+            viewModel.onInformationClinicClick()
+        }
 
 
         binding.btnInstall.setOnClickListener {
@@ -112,7 +186,16 @@ class InformationClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    //check information
+
+                    //check input
+                    if (state.isAddress) {
+                        binding.tvInputAddress.setBackgroundResource(R.drawable.button_input_errol)
+                    }
+                    else {
+                        binding.tvInputAddress.setBackgroundResource(R.drawable.ground_information)
+                    }
+
+                    //check error
                     if (state.isInformation) {
                         binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvInformationError.visibility = View.VISIBLE
@@ -121,14 +204,8 @@ class InformationClinicFragment : Fragment() {
                         binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
                         binding.tvInformationError.visibility = View.GONE
                     }
+                    binding.tvInformationError.text = state.informationError
 
-                    if (binding.tvInformationError.text.toString() != state.informationError) {
-                        binding.tvInformationError.text = state.informationError
-                    }
-
-
-
-                    //check error
                     if (state.isName) {
                         binding.tvInputName.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvNameError.visibility = View.VISIBLE
@@ -160,6 +237,7 @@ class InformationClinicFragment : Fragment() {
                         binding.tvInputPhone.setTextColor(phoneSub)
                     }
                     binding.tvPhoneError.text = state.phoneError
+
                     if (state.isLink) {
                         binding.tvInputLink.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvLinkError.visibility = View.VISIBLE
@@ -176,15 +254,28 @@ class InformationClinicFragment : Fragment() {
                     }
                     binding.tvLinkError.text = state.linkError
 
-                    if (state.isInformation) {
-                        binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.tvInformationError.visibility = View.VISIBLE
+                    if (state.isTime) {
+                        binding.layoutOpenTime.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.layoutCloseTime.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvTimeError.visibility = View.VISIBLE
                     }
                     else {
-                        binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
-                        binding.tvInformationError.visibility = View.GONE
+                        binding.layoutOpenTime.setBackgroundResource(R.drawable.ground_information)
+                        binding.layoutCloseTime.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvTimeError.visibility = View.GONE
                     }
-                    binding.tvInformationError.text = state.informationError
+
+                    if (state.isService) {
+                        binding.boxService.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvServiceError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxService.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvServiceError.visibility = View.GONE
+                    }
+                    binding.tvServiceError.text = state.serviceError
+
+
 
 
 
@@ -216,7 +307,11 @@ class InformationClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when (event) {
+                        is InformationClinicEvent.NavigationInformationSuccess -> {
+                            findNavController().navigate(R.id.informationClinicSuccessFragment)
+                        }
+                    }
                 }
             }
         }

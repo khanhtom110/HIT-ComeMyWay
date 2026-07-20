@@ -12,7 +12,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_25sdp">
 
             <TextView
                 style="@style/TieuDe1"
@@ -378,7 +379,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/ground_hint_information_service"
-                    android:hint="Giới thiệu phòng khám (không bắt buộc)"
+                    android:hint="Giới thiệu phòng khám \n(không bắt buộc)"
                     android:inputType="text"
                     android:gravity="start"
                     android:paddingTop="@dimen/_8sdp"

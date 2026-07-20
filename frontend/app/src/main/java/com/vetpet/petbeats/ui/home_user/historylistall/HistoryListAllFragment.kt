@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.VetPet.R
 import com.vetpet.petbeats.data.local.database.AppDatabase
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentHistoryListAllBinding
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.AdapterHistory
 import kotlinx.coroutines.launch
@@ -30,8 +30,8 @@ class HistoryListAllFragment : Fragment() {
     private lateinit var adapterHistory: AdapterHistory
     private val viewModel: HistoryListAllViewModel by viewModels {
         HistoryListAllVIewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             ),
 
             Room.databaseBuilder(

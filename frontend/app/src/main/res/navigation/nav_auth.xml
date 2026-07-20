@@ -87,22 +87,32 @@
     </fragment>
 
     <fragment
-        android:id="@+id/splashClinic"
+        android:id="@+id/splashClinicFragment"
         android:name="com.vetpet.petbeats.ui.auth.splash_clinic.SplashClinicFragment"
-        android:label="splashClinic"/>
+        android:label="splashClinicFragment"/>
 
     <fragment
-        android:id="@+id/changePassword"
+        android:id="@+id/changePasswordFragment"
         android:name="com.vetpet.petbeats.ui.auth.changepassword_clinic.ChangePasswordFragment"
-        android:label="changePassword"/>
+        android:label="changePasswordFragment"/>
 
     <fragment
-        android:id="@+id/informationClinic"
+        android:id="@+id/changeSuccessFragment"
+        android:name="com.vetpet.petbeats.ui.auth.changesuccess_clinic.ChangeSuccessFragment"
+        android:label="changeSuccessFragment"/>
+
+    <fragment
+        android:id="@+id/loginSuccessFragment"
+        android:name="com.vetpet.petbeats.ui.auth.loginsuccess_clinic.LoginSuccessFragment"
+        android:label="loginSuccessFragment"/>
+
+    <fragment
+        android:id="@+id/informationClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.informationclinic.InformationClinicFragment"
-        android:label="informationClinic"/>
+        android:label="informationClinicFragment"/>
 
     <fragment
-        android:id="@+id/informationClinicSuccess"
+        android:id="@+id/informationClinicSuccessFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.informationclinicsuccess.InformationClinicSuccessFragment"
-        android:label="informationClinicSuccess"/>
+        android:label="informationClinicSuccessFragment"/>
 </navigation>

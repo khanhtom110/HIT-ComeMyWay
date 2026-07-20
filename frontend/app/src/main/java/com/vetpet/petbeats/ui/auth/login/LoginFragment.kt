@@ -22,6 +22,7 @@ import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.VetPet.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
+import com.vetpet.petbeats.ui.home_clinic.activitymain.HomeClinicActivity
 import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
 
 
@@ -174,11 +175,11 @@ class LoginFragment : Fragment() {
                             val intent = Intent(requireContext(), HomeActivity::class.java)
                             startActivity(intent)
                         }
-                        is LoginEvent.NavigationClinic -> {
-                            val tokenManager = TokenManager(requireContext())
-                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
-
-                            findNavController().navigate(R.id.homeFragment)
+                        is LoginEvent.NavigationChangePassword -> {
+                            findNavController().navigate(R.id.splashClinicFragment)
+                        }
+                        is LoginEvent.NavigationLoginSuccess -> {
+                            findNavController().navigate(R.id.loginSuccessFragment)
                         }
                     }
                 }

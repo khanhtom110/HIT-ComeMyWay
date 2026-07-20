@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.CreateAppointmentRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.TakeBookingRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.TakeBookingRequest
 import com.vetpet.petbeats.data.repository.ErrorTarget
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class EditCalendarViewModel(
-    private val repository: HomeRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private var _state = MutableStateFlow(EditCalendarState())
     val state = _state.asStateFlow()

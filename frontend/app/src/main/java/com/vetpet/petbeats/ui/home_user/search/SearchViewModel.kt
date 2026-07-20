@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.local.dao.HistoryDao
 import com.vetpet.petbeats.data.local.entity.HistoryEntity
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.LocationRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.LocationRequest
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.search.adapterhint.HintChild
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.HistoryChild
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val repository: HomeRepository,
+    private val repository: HomeUserRepository,
     private val historyDao: HistoryDao,
     private val tokenManager: TokenManager
 ): ViewModel() {

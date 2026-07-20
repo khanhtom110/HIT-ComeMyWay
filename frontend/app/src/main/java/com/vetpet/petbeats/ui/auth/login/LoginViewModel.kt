@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.auth.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
@@ -70,23 +71,27 @@ class LoginViewModel(
                     val roles = result.data.role
                     val accountStatus = result.data.accountStatus
 
+                    when (roles) {
+                        "USER" -> {
+                            _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                        }
 
-                    //check role
-                    if (roles == "USER") {
-                        _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                        "CLINIC" -> {
+                            Log.d("TEST_LOGIN", "result: ${result.message}, accountStatus: $accountStatus")
+
+                            when (accountStatus) {
+                                "PENDING_PASSWORD_CHANGE" -> {
+                                    _event.emit(LoginEvent.NavigationChangePassword(accessToken, refreshToken, userId))
+                                }
+                                "PENDING_PROFILE" -> {
+                                    _event.emit(LoginEvent.NavigationLoginSuccess)
+                                }
+                                else -> {
+                                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                                }
+                            }
+                        }
                     }
-                    else {
-                        _event.emit(LoginEvent.NavigationClinic(accessToken, refreshToken))
-                    }
-
-                    //check accountStatus
-                    if (accountStatus == "ACTIVE") {
-
-                    }
-                    else {
-
-                    }
-
                 }
 
                 is DataResult.Error -> {

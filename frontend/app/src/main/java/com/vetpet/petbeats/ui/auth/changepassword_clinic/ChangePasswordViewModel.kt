@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
+import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ChangePasswordViewModel(
-    private val repository: AuthRepository
+    private val repository: HomeClinicRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(ChangePasswordState())
     val state = _state.asStateFlow()
@@ -38,22 +40,22 @@ class ChangePasswordViewModel(
         _state.value = _state.value.copy(password1 = password1, isPassword1 = false)
     }
 
-    fun onChangeClick(token: String) {
+    fun onChangeClick() {
         viewModelScope.launch {
             val password = _state.value.password.trim()
             val password1 = _state.value.password1.trim()
 
 
 
-            val request = ResetPasswordRequest(token, password, password1)
-            val result = repository.resetpasswordUser(request)
+            val request = ChangePasswordRequest(password, password1)
+            val result = repository.changePassword(request)
 
 
             when (result) {
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPassword = false, isPassword1 = false, passwordError = "", passwordError1 = "")
 
-//                    _event.emit(ResetPasswordEvent.NavigationSuccess)
+                    _event.emit(ChangePasswordEvent.NavigationChangeSuccess)
                 }
 
                 is DataResult.Error -> {

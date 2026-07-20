@@ -14,7 +14,7 @@ class ResultSearchAdapter(
     private val onItemClick: (Int) -> Unit
 ): ListAdapter<ResultSearchChild, ResultSearchAdapter.ViewHolder>(ResultSearchDiffCallBack()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ResultSearchAdapter.ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.result_search_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_result_search_child, holder, false)
         return ViewHolder(view)
     }
 

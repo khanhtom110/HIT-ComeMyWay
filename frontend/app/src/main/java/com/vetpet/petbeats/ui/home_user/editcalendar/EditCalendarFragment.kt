@@ -21,9 +21,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentEditCalendarBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.ui.home_user.calendar.DayViewContainer
@@ -43,8 +43,8 @@ class EditCalendarFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: EditCalendarViewModel by viewModels {
         EditCalendarViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }

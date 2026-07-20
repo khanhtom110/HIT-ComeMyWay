@@ -28,8 +28,8 @@ object ApiConstants {
     const val UPDATEPROFILE = "/api/v1/clinic/update-profile"
     const val COMPLETEPROFILE = "/api/v1/clinic/complete-profile"
     const val CHANGEPASSWORD = "/api/v1/clinic/change-password"
-    const val REJECT = "/api/v1/clinic/appointments/{appointmentId}/reject"
-    const val CONFIRM = "/api/v1/clinic/appointments/{appointmentId}/confirm"
+    const val REJECTAPPOINTMENT = "/api/v1/clinic/appointments/{appointmentId}/reject"
+    const val CONFIRMAPPOINTMENT = "/api/v1/clinic/appointments/{appointmentId}/confirm"
     const val PENDINGAPPOINTMENT = "/api/v1/clinic/appointments/pending"
 
 

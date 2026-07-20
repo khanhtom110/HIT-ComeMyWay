@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vetpet.petbeats.data.local.dao.HistoryDao
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 
 class HistoryListAllVIewModelFactory(
-    private val repository: HomeRepository,
+    private val repository: HomeUserRepository,
     private val historyDao: HistoryDao,
     private val tokenManager: TokenManager
 ): ViewModelProvider.Factory {

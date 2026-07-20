@@ -3,8 +3,8 @@ package com.vetpet.petbeats.ui.home_user.informationroom
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.ClinicIdRequest
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.ClinicIdRequest
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class InformationRoomViewModel(
-    private val repository: HomeRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(InformationRoomState())
     val state = _state.asStateFlow()

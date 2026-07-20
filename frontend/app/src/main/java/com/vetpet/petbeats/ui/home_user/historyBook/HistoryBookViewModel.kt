@@ -3,7 +3,7 @@ package com.vetpet.petbeats.ui.home_user.historyBook
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChild
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HistoryBookViewModel(
-    private val repository: HomeRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(HistoryBookState())
     val state = _state.asStateFlow()

@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.VetPet.R
 import com.vetpet.petbeats.data.local.database.AppDatabase
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentSearchBinding
 import com.vetpet.petbeats.ui.home_user.search.adapterhint.AdapterHint
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.AdapterHistory
@@ -35,8 +35,8 @@ class SearchFragment : Fragment() {
     private lateinit var adapterHint: AdapterHint
     private val viewModel: SearchViewModel by viewModels {
         SearchViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             ),
 
             Room.databaseBuilder(

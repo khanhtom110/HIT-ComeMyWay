@@ -8,7 +8,6 @@
         android:id="@+id/tvNumber"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/colorPrimary"
-        android:gravity="center"
-        android:background="@drawable/ground_time_close" />
+        android:textColor="@color/colorTextSub"
+        android:gravity="center"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

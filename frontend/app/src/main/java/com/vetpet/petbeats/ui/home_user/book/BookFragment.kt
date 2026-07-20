@@ -17,9 +17,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.vetpet.petbeats.core.base.PermissionHelper
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentBookBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookAdapter
 import kotlinx.coroutines.launch
@@ -33,8 +33,8 @@ class BookFragment : Fragment() {
     private lateinit var adapter: BookAdapter
     private val viewModel: BookViewModel by viewModels {
         BookViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }

@@ -19,9 +19,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentSuccessAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import com.google.android.gms.tasks.OnCompleteListener
@@ -35,8 +35,8 @@ class SuccessAppointmentFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SuccessAppointmentViewModel by viewModels {
         SuccessAppointmentViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }

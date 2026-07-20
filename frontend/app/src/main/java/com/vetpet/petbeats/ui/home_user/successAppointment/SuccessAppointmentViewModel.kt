@@ -3,10 +3,10 @@ package com.vetpet.petbeats.ui.home_user.successAppointment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.DeviceTokenFireBaseRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home.request.TakeBookingRequest
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.TakeBookingRequest
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SuccessAppointmentViewModel(
-    private val repository: HomeRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(SuccessAppointmentState())
     val state = _state.asStateFlow()

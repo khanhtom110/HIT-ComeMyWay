@@ -31,7 +31,7 @@
             android:id="@+id/back"
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_16sdp"
-            android:src="@drawable/back"
+            android:src="@drawable/back_left"
             android:layout_marginStart="@dimen/_6sdp"
             app:layout_constraintTop_toTopOf="@id/search"
             app:layout_constraintBottom_toBottomOf="@id/search"

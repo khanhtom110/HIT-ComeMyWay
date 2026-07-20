@@ -15,9 +15,6 @@ import kotlinx.coroutines.launch
 
 
 class ChangeSuccessFragment : Fragment() {
-    private var _binding: FragmentChangeSuccessBinding? = null
-    private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,13 +28,7 @@ class ChangeSuccessFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.informationClinic)
+            findNavController().navigate(R.id.loginFragment)
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

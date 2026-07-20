@@ -13,9 +13,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.VetPet.R
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import kotlinx.coroutines.launch
@@ -27,8 +27,8 @@ class ConfirmAppointmentFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ConfirmAppointmentViewModel by viewModels {
         ConfirmAppointmentViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }

@@ -15,9 +15,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentResultSearchBinding
 import com.vetpet.petbeats.ui.home_user.resultsearch.adapter.ResultSearchAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -31,8 +31,8 @@ class ResultSearchFragment : Fragment() {
     private lateinit var adapter: ResultSearchAdapter
     private val viewModel: ResultSearchViewModel by viewModels {
         ResultSearchViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }

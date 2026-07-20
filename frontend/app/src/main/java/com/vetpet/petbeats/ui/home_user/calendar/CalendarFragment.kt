@@ -17,9 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiHome
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
@@ -42,8 +42,8 @@ class CalendarFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: CalendarViewModel by viewModels {
         CalendarViewModelFactory(
-            HomeRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiHome::class.java)
+            HomeUserRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             )
         )
     }
@@ -315,22 +315,6 @@ class CalendarFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
 
-                    //check information
-                    if (state.isInformation) {
-                        binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.tvInformationError.visibility = View.VISIBLE
-                    }
-                    else {
-                        binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
-                        binding.tvInformationError.visibility = View.GONE
-                    }
-
-
-                    if (binding.tvInformationError.text.toString() != state.informationError) {
-                        binding.tvInformationError.text = state.informationError
-                    }
-
-
                     //check state input
                     if (state.isAddress) {
                         binding.tvInputAddress.setBackgroundResource(R.drawable.button_input_errol)
@@ -377,6 +361,16 @@ class CalendarFragment : Fragment() {
 
 
                     //check error
+                    if (state.isInformation) {
+                        binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.tvInformationError.visibility = View.VISIBLE
+                    }
+                    else {
+                        binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
+                        binding.tvInformationError.visibility = View.GONE
+                    }
+                    binding.tvInformationError.text = state.informationError
+
                     if (state.isName) {
                         binding.tvInputName.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvNameError.visibility = View.VISIBLE
@@ -408,16 +402,6 @@ class CalendarFragment : Fragment() {
                         binding.tvInputPhone.setTextColor(phoneSub)
                     }
                     binding.tvPhoneError.text = state.phoneError
-
-                    if (state.isInformation) {
-                        binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.tvInformationError.visibility = View.VISIBLE
-                    }
-                    else {
-                        binding.boxInformation.setBackgroundResource(R.drawable.ground_information)
-                        binding.tvInformationError.visibility = View.GONE
-                    }
-                    binding.tvInformationError.text = state.informationError
 
                     if (state.isService) {
                         binding.boxService.setBackgroundResource(R.drawable.button_input_errol)

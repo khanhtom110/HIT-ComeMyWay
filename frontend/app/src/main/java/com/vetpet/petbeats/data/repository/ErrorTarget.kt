@@ -9,11 +9,14 @@ enum class ErrorTarget {
     GENERAL,
 
 
-    //Calendar
+    //User
     PHONE,
     QUANTITY,
     INFORMATION,
     CALENDAR,
     SERVICE,
-    TIME
+    TIME,
+
+    //Clinic
+    LINK
 }
