@@ -2,16 +2,17 @@ package com.vetpet.petbeats.data.repository
 
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.api.ApiAuth
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ForgotPasswordRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.LoginRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.LoginResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.OtpRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.OtpResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.RegisterRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.RegisterResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.LoginResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RegisterRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.RegisterResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
 
 class AuthRepository(
     private val apiAuth: ApiAuth
@@ -29,7 +30,7 @@ class AuthRepository(
         }
     }
 
-    suspend fun forgotpasswordUser(request: ForgotPasswordRequest): DataResult<RegisterResponse> {
+    suspend fun forgotPasswordUser(request: ForgotPasswordRequest): DataResult<ForgotPasswordResponse> {
         return safeApiCall {
             apiAuth.forgotpassword(request)
         }

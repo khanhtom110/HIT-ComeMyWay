@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.core.base
 
+import android.util.Log
 import com.vetpet.petbeats.core.network.ApiResponse
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.utils.ErrorUtils.getErrorTargetAndMessage
@@ -14,6 +15,9 @@ abstract class BaseRepository {
             val response = apiCall()
             DataResult.Success<T>(data = response.data as T, message = getErrorTargetAndMessage(response.message).second)
         } catch (e: HttpException) {
+            Log.e("SAFE_API", "HTTP ${e.code()}", e)
+            Log.e("SAFE_API", "Body = ${e.response()?.errorBody()?.string()}")
+
             val errorMessage = try {
                 val errorBody = e.response()?.errorBody()?.string()
 

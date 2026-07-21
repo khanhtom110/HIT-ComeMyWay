@@ -43,6 +43,10 @@ class ForgotPasswordClinicFragment : Fragment() {
             viewModel.loginClick()
         }
 
+        binding.login.setOnClickListener {
+            viewModel.loginClick()
+        }
+
         binding.vector.setOnClickListener {
             viewModel.forgotClick()
         }
@@ -57,7 +61,7 @@ class ForgotPasswordClinicFragment : Fragment() {
                             findNavController().navigate(R.id.forgotClinic_forgot)
                         }
                         is ForgotPasswordClinicEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.forgotPassword_login)
+                            findNavController().navigate(R.id.forgotClinic_login)
                         }
                     }
                 }

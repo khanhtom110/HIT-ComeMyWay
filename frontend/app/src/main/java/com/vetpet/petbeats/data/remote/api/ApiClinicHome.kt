@@ -2,17 +2,16 @@ package com.vetpet.petbeats.data.remote.api
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ChangePasswordRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ProfileRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ReasonRejectRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.response.ChangePasswordResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.response.ProfileResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.AppointmentIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface ApiClinicHome {
     @POST(ApiConstants.UPDATEPROFILE)

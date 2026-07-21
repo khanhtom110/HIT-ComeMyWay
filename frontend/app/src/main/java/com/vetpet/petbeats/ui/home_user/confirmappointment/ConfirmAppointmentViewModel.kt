@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.TakeBookingRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -77,6 +77,8 @@ class ConfirmAppointmentViewModel(
                 is DataResult.Success -> {
                     val data = result.data
 
+                    Log.d("TEST_API", "id: $id, data: ${data.fullName}, message: ${result.message}")
+
                     val mapStatus = when (data.status) {
                         "PENDING" -> BookChildState.PENDING
                         "SUCCESS" -> BookChildState.SUCCESS
@@ -99,7 +101,7 @@ class ConfirmAppointmentViewModel(
                     )
                 }
                 is DataResult.Error -> {
-                    Log.d("TEST", "lỗi trả: ${result.target} và message ${result.message}")
+                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
 
                     _state.value = _state.value.copy()
                     return@launch

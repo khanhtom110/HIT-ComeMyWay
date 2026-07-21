@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.annotation.meta.When
 
 class ForgotPasswordViewModel(
     private val repository: AuthRepository
@@ -37,13 +38,23 @@ class ForgotPasswordViewModel(
 
 
             val request = ForgotPasswordRequest(email)
-            val result = repository.forgotpasswordUser(request)
+            val result = repository.forgotPasswordUser(request)
+
 
             when (result) {
                 is DataResult.Success -> {
+                    val roles = result.data.role
                     _state.value = _state.value.copy(isEmail = false, emailError = "")
 
-                    _event.emit(ForgotPasswordEvent.NavigationOTPSendEmail(email))
+                    when (roles) {
+                        "USER" -> {
+                            _event.emit(ForgotPasswordEvent.NavigationOTPSendEmail(email))
+                        }
+                        "CLINIC" -> {
+                            _event.emit(ForgotPasswordEvent.NavigationForgotClinicSuccess)
+                        }
+                    }
+
                 }
 
                 is DataResult.Error -> {

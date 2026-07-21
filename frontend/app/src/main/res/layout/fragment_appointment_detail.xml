@@ -143,7 +143,7 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:textColor="@color/colorTextSub"
                 app:layout_constraintTop_toTopOf="@id/tvTime"
-                app:layout_constraintBottom_toBottomOf="tvTime"
+                app:layout_constraintBottom_toBottomOf="@id/tvTime"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
@@ -167,7 +167,7 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:textColor="@color/colorTextSub"
                 app:layout_constraintTop_toTopOf="@id/tvService"
-                app:layout_constraintBottom_toBottomOf="tvService"
+                app:layout_constraintBottom_toBottomOf="@id/tvService"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
@@ -191,7 +191,7 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:textColor="@color/colorTextSub"
                 app:layout_constraintTop_toTopOf="@id/tvInclude"
-                app:layout_constraintBottom_toBottomOf="tvInclude"
+                app:layout_constraintBottom_toBottomOf="@id/tvInclude"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

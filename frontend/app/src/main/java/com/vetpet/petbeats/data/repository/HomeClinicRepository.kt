@@ -3,13 +3,13 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ChangePasswordRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ProfileRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ReasonRejectRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.response.ChangePasswordResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.response.ProfileResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.AppointmentIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 
 class HomeClinicRepository(
     private val apiClinicHome: ApiClinicHome

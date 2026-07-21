@@ -3,20 +3,20 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.ClinicIdRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.CreateAppointmentRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.DeviceTokenFireBaseRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.LocationRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.SearchRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.TakeBookingRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.AppointmentIdResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.ClinicIdResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.CreateAppointmentResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.LocationResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.SearchResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.TakeAppointmentResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.TakeBookingResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LocationRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
 
 class HomeUserRepository(
     private val apiUserHome: ApiUserHome

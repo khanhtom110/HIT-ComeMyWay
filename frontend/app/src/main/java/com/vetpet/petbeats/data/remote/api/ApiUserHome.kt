@@ -2,15 +2,15 @@ package com.vetpet.petbeats.data.remote.api
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.CreateAppointmentRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.request.DeviceTokenFireBaseRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.AppointmentIdResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.ClinicIdResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.CreateAppointmentResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.LocationResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.SearchResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.TakeAppointmentResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.TakeBookingResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

@@ -21,7 +21,7 @@ object ApiConstants {
     const val CREATAPPOINTMENT = "/api/v1/user/appointments"
     const val EDITAPPOINTMENT = "/api/v1/user/appointments/update/{appointmentId}"
     const val CANCELAPPOINTMENT = "/api/v1/user/appointments/cancel/{appointmentId}"
-    const val TAKEAPPOINTMENTID = "/api/v1/user/appointments/detail/{appointmentId}"
+    const val TAKEAPPOINTMENTID = "/api/v1/user/appointments/detail/{id}"
 
 
     //ClinicController
@@ -42,10 +42,6 @@ object ApiConstants {
 
     //User
     const val FIREBASE = "/api/v1/user/device-token"
-
-
-    //Admin
-    const val CREATECLINIC = "/api/v1/admin/create-clinic"
 
 
 }

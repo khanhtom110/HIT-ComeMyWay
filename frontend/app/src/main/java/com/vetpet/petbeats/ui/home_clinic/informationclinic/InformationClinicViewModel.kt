@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ProfileRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import kotlinx.coroutines.flow.MutableSharedFlow

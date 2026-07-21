@@ -2,16 +2,17 @@ package com.vetpet.petbeats.data.remote.api
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.LogoutRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.RefreshTokenRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ForgotPasswordRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.LoginRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.LoginResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.OtpRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.OtpResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.RegisterRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.response.RegisterResponse
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.LoginResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RegisterRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.RegisterResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -27,7 +28,7 @@ interface ApiAuth {
     suspend fun logout(@Body request: LogoutRequest): ApiResponse<Nothing>
 
     @POST(ApiConstants.FORGOTPASSWORD)
-    suspend fun forgotpassword(@Body request: ForgotPasswordRequest): ApiResponse<Nothing>
+    suspend fun forgotpassword(@Body request: ForgotPasswordRequest): ApiResponse<ForgotPasswordResponse>
 
     @POST(ApiConstants.RESETOTP)
     suspend fun resetotp(@Body request: OtpRequest): ApiResponse<OtpResponse>

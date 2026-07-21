@@ -1,7 +1,5 @@
 package com.vetpet.petbeats.ui.home_clinic.informationclinic
 
-import com.vetpet.petbeats.data.remote.dto.calendar.home_user.response.ServiceItem
-
 data class InformationClinicState (
     //image
     val image: String = "",

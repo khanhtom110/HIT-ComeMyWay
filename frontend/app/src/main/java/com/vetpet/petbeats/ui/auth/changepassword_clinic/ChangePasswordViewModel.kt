@@ -1,14 +1,12 @@
 package com.vetpet.petbeats.ui.auth.changepassword_clinic
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.ResetPasswordRequest
-import com.vetpet.petbeats.data.remote.dto.calendar.home_clinic.request.ChangePasswordRequest
-import com.vetpet.petbeats.data.repository.AuthRepository
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -55,10 +53,18 @@ class ChangePasswordViewModel(
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(isPassword = false, isPassword1 = false, passwordError = "", passwordError1 = "")
 
-                    _event.emit(ChangePasswordEvent.NavigationChangeSuccess)
+                    Log.d("TEST_CASE", "message: ${result.message}")
+
+                    when (result.data.status) {
+                        "PENDING_PASSWORD_CHANGE" -> {
+                            _event.emit(ChangePasswordEvent.NavigationChangeSuccess)
+                        }
+                    }
                 }
 
                 is DataResult.Error -> {
+                    Log.d("TEST_CASE", "message: ${result.message}, target = ${result.target}")
+
                     _state.value = _state.value.copy(
                         isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
                         isPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),

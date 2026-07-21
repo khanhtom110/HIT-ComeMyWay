@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
-import com.vetpet.petbeats.data.remote.dto.calendar.auth.request.LoginRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

@@ -116,7 +116,7 @@
                         android:text="2"
                         android:layout_marginEnd="@dimen/_16sdp"
                         app:layout_constraintTop_toTopOf="@id/tvWait"
-                        app:layout_constraintBottom_toBottomOf="tvWait"
+                        app:layout_constraintBottom_toBottomOf="@id/tvWait"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
@@ -138,7 +138,7 @@
                         android:text="1"
                         android:layout_marginEnd="@dimen/_16sdp"
                         app:layout_constraintTop_toTopOf="@id/tvReceive"
-                        app:layout_constraintBottom_toBottomOf="tvReceive"
+                        app:layout_constraintBottom_toBottomOf="@id/tvReceive"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
@@ -160,7 +160,7 @@
                         android:text="0"
                         android:layout_marginEnd="@dimen/_16sdp"
                         app:layout_constraintTop_toTopOf="@id/tvRefuse"
-                        app:layout_constraintBottom_toBottomOf="tvRefuse"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRefuse"
                         app:layout_constraintEnd_toEndOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
