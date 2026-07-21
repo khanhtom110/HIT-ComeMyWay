@@ -5,56 +5,80 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.VetPet.R
+import com.example.VetPet.databinding.FragmentAppointmentScheduleBinding
+import com.example.VetPet.databinding.FragmentScheduleListBinding
+import com.example.VetPet.databinding.FragmentScheduleTodayBinding
+import com.vetpet.petbeats.data.remote.api.ApiClinicHome
+import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
+import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleViewModel
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleViewModelFactory
+import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModel
+import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModelFactory
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ScheduleTodayFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ScheduleTodayFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private var _binding: FragmentScheduleTodayBinding ?= null
+    private val binding get() = _binding!!
+    private val viewModel: ScheduleTodayViewModel by viewModels {
+        ScheduleTodayViewModelFactory(
+            HomeClinicRepository(
+                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
+            )
+        )
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule_today, container, false)
+        _binding = FragmentScheduleTodayBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ScheduleTodayFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ScheduleTodayFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setOnClick()
+        stateData()
+        eventData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setOnClick() {
+
+    }
+
+    private fun stateData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+
                 }
             }
+        }
     }
+
+    private fun eventData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+
+                }
+            }
+        }
+    }
+
 }
