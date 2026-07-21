@@ -6,6 +6,8 @@ import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.ChangePasswordRequest;
 import com.hit.comemyway.dto.request.CreateClinicAccountRequest;
 import com.hit.comemyway.dto.request.DeviceTokenRequest;
+import com.hit.comemyway.dto.request.UpdateUserRequest;
+import com.hit.comemyway.dto.response.UpdateUserResponse;
 import com.hit.comemyway.dto.response.UserResponse;
 import com.hit.comemyway.service.AppointmentReminderService;
 import com.hit.comemyway.service.UserService;
@@ -15,10 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,5 +35,19 @@ public class UserController {
     userService.updateDeviceToken(request.deviceToken());
 
     return ResponseEntity.ok(ApiResponse.ok(null));
+  }
+
+  @Operation(summary = "Lấy thông tin user để cập nhật")
+  @GetMapping(UrlConstant.User.GET_PROFILE)
+  public ResponseEntity<ApiResponse<Object>> getUserInformation() {
+    return ResponseEntity.ok(ApiResponse.ok(userService.getProfile()));
+  }
+
+  @Operation(summary = "Cập nhật thông tin user")
+  @PostMapping(UrlConstant.User.UPDATE_PROFILE)
+  public ResponseEntity<ApiResponse<UpdateUserResponse>> updateUserInformation(
+      @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id) {
+    UpdateUserResponse response = userService.updateUserProfile(request, id);
+    return ResponseEntity.ok(ApiResponse.ok(response));
   }
 }

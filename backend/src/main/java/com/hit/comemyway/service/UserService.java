@@ -3,6 +3,8 @@ package com.hit.comemyway.service;
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.ChangePasswordRequest;
 import com.hit.comemyway.dto.request.CreateClinicAccountRequest;
+import com.hit.comemyway.dto.request.UpdateUserRequest;
+import com.hit.comemyway.dto.response.UpdateUserResponse;
 import com.hit.comemyway.dto.response.UserResponse;
 import com.hit.comemyway.entity.AccountStatus;
 import com.hit.comemyway.entity.Role;
@@ -103,5 +105,27 @@ public class UserService {
     userRepository.save(user);
 
     return UserResponse.from(user);
+  }
+
+  @Transactional(readOnly = true)
+  public UpdateUserResponse getProfile() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    return UpdateUserResponse.from(user);
+  }
+
+  @Transactional
+  public UpdateUserResponse updateUserProfile(UpdateUserRequest request, Long id) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    user.setEmail(request.email());
+    user.setAvatar(request.avatar());
+    user.setHobby(request.hobby());
+
+    return UpdateUserResponse.from(user);
   }
 }

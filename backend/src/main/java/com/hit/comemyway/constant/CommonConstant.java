@@ -16,4 +16,9 @@ public final class CommonConstant {
     public static final int REJECT_REASON_LENGTH = 500;
   }
 
+  public static final class User {
+    public static final int AVATAR_LENGTH = 500;
+    public static final int HOBBY_LENGTH = 300;
+  }
+
 }

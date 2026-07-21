@@ -34,6 +34,12 @@ public class User extends BaseEntity {
   @Column(nullable = false, unique = true, length = CommonConstant.EMAIL_LENGTH)
   private String email;
 
+  @Column(name = "avatar", length = CommonConstant.User.AVATAR_LENGTH)
+  private String avatar;
+
+  @Column(name = "hobby", length = CommonConstant.User.HOBBY_LENGTH)
+  private String hobby;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Role role;
