@@ -56,15 +56,15 @@ object ErrorUtils {
             }
 
             //Calendar
-            "Appointment date cannot be in the past." -> {
+            "AppointmentChild date cannot be in the past." -> {
                 Pair(ErrorTarget.CALENDAR, "Ngày hẹn không được là ngày trong quá khứ.")
             }
 
             //Time
-            "Appointment time must be after the current time." -> {
+            "AppointmentChild time must be after the current time." -> {
                 Pair(ErrorTarget.TIME, "Thời gian hẹn phải sau thời điểm hiện tại.")
             }
-            "Appointment time must be within operating hours." -> {
+            "AppointmentChild time must be within operating hours." -> {
                 Pair(ErrorTarget.TIME, "Thời gian hẹn phải nằm trong khung giờ hoạt động.")
             }
 
@@ -87,7 +87,7 @@ object ErrorUtils {
                 Pair(ErrorTarget.GENERAL, "Có quá nhiều yêu cầu. Làm ơn hãy thử lại sau 1 phút")
             "Invalid username, email, or password." ->
                 Pair(ErrorTarget.GENERAL, "Tài khoản hoặc mật khẩu không chính xác.")
-            "Appointment does not exist" ->
+            "AppointmentChild does not exist" ->
                 Pair(ErrorTarget.GENERAL, "Cuộc hẹn không tồn tại.")
 
             //Be trả lỗi lạ

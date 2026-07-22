@@ -637,7 +637,7 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginHorizontal="@dimen/_30sdp"
                     android:layout_marginBottom="@dimen/_16sdp"
-                    app:cv_dayViewResource="@layout/calendar_day_layout"
+                    app:cv_dayViewResource="@layout/layout_calendar_day"
                     app:layout_constraintTop_toBottomOf="@id/day"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

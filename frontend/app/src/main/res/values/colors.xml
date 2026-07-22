@@ -12,7 +12,6 @@
     <color name="colorSuccess">#00FF0B</color>
     <color name="colorError">#CC0900</color>
     <color name="colorWarning">#F7C120</color>
-    <color name="colorRefuse">#FFF3F1</color>
 
     <!--text-->
     <color name="colorTextTitle">#4C4C4C</color>
@@ -32,5 +31,14 @@
 
     <!--modes-->
     <color name="colorModes">#E8ECFC</color>
+
+    <!--buttonListClinic-->
+    <color name="colorWait">#FFF9F1</color>
+    <color name="colorTextWait">#F7C120</color>
+    <color name="colorReceive">#F6FFF1</color>
+    <color name="colorTextReceive">#33C75A</color>
+    <color name="colorRefuse">#FFF3F1</color>
+    <color name="colorTextRefuse">#CC0900</color>
+    
 
 </resources>

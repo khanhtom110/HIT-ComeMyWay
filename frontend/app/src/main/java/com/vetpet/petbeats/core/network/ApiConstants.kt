@@ -17,7 +17,7 @@ object ApiConstants {
     const val FORGOTPASSWORD = "/api/v1/auth/forgot-password"
 
 
-    //Appointment
+    //AppointmentChild
     const val CREATAPPOINTMENT = "/api/v1/user/appointments"
     const val EDITAPPOINTMENT = "/api/v1/user/appointments/update/{appointmentId}"
     const val CANCELAPPOINTMENT = "/api/v1/user/appointments/cancel/{appointmentId}"

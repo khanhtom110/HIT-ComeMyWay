@@ -44,7 +44,7 @@ class HomeClinicRepository(
         }
     }
 
-    suspend fun pendingAppointment(request: AppointmentIdRequest): DataResult<List<AppointmentIdResponse>> {
+    suspend fun pendingAppointment(): DataResult<List<AppointmentIdResponse>> {
         return safeApiCall {
             apiClinicHome.pendingAppointment()
         }

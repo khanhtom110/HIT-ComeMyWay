@@ -15,13 +15,14 @@
         android:label="clinicFragment"/>
 
     <fragment
-        android:id="@+id/scheduleTodayFragment"
-        android:name="com.vetpet.petbeats.ui.home_clinic.scheduletoday.ScheduleTodayFragment"
-        android:label="scheduleTodayFragment"/>
-
-    <fragment
         android:id="@+id/scheduleListFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListFragment"
-        android:label="scheduleListFragment"/>
+        android:label="scheduleListFragment">
+        <action
+            android:id="@+id/scheduleList_appointmentSchedule"
+            app:destination="@id/appointmentScheduleFragment"
+            app:popUpTo="@id/appointmentScheduleFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>
