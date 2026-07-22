@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_wait.AppointmentDetailWaitFragment">
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_receive.AppointmentDetailReceiveFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -81,11 +81,11 @@
             android:id="@+id/status"
             android:layout_width="@dimen/_125sdp"
             android:layout_height="@dimen/_25sdp"
-            android:text="Chờ xử lý"
-            android:textColor="@color/colorTextWait"
+            android:text="Tiếp nhận"
+            android:textColor="@color/colorTextReceive"
             android:layout_marginTop="@dimen/_12sdp"
             android:gravity="center"
-            android:background="@drawable/button_wait"
+            android:background="@drawable/button_receive"
             app:layout_constraintTop_toBottomOf="@id/tvTypePet"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -359,36 +359,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/tvState"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            style="@style/Nut2"
-            android:id="@+id/btnRefuse"
-            android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_42sdp"
-            android:background="@drawable/ground_refuse"
-            android:text="Từ chối"
-            android:textColor="@color/colorError"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/_16sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            style="@style/Nut2"
-            android:id="@+id/btnReceive"
-            android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_42sdp"
-            android:background="@drawable/ground_book_child_blue"
-            android:text="Tiếp nhận"
-            android:textColor="@color/colorBackground"
-            android:gravity="center"
-            android:layout_marginBottom="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

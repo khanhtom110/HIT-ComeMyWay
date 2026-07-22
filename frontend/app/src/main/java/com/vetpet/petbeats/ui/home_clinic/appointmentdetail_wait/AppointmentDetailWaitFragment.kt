@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.ui.home_clinic.appointmentdetail
+package com.vetpet.petbeats.ui.home_clinic.appointmentdetail_wait
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAppointmentDetailBinding
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
@@ -19,11 +18,11 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 
-class AppointmentDetailFragment : Fragment() {
+class AppointmentDetailWaitFragment : Fragment() {
     private var _binding: FragmentAppointmentDetailBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: AppointmentDetailViewModel by viewModels {
-        AppointmentScheduleViewModelFactory(
+    private val viewModel: AppointmentDetailWaitViewModel by viewModels {
+        AppointmentDetailWaitViewModelFactory(
             HomeClinicRepository(
                 RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
             )

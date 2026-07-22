@@ -25,4 +25,37 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/appointmentDetailWait"
+        android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_wait.AppointmentDetailWaitFragment"
+        android:label="appointmentDetailWait">
+        <action
+            android:id="@+id/wait_appointmentSchedule"
+            app:destination="@id/appointmentScheduleFragment"
+            app:popUpTo="@id/appointmentScheduleFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/appointmentDetailReceive"
+        android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_receive.AppointmentDetailReceiveFragment"
+        android:label="appointmentDetailReceive">
+        <action
+            android:id="@+id/receive_appointmentSchedule"
+            app:destination="@id/appointmentScheduleFragment"
+            app:popUpTo="@id/appointmentScheduleFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/appointmentDetailRefuse"
+        android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetai_refuse.AppointmentDetailRefuseFragment"
+        android:label="appointmentDetailRefuse">
+        <action
+            android:id="@+id/refuse_appointmentSchedule"
+            app:destination="@id/appointmentScheduleFragment"
+            app:popUpTo="@id/appointmentScheduleFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
 </navigation>

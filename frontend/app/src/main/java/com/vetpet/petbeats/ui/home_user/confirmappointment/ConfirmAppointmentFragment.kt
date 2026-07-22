@@ -107,7 +107,7 @@ class ConfirmAppointmentFragment : Fragment() {
                     }
 
                     //check state clinic
-                    when (state.state) {
+                    when (state.status) {
                         BookChildState.PENDING -> {
                             binding.stateClinic.text = "Chờ xử lý"
                             binding.stateClinic.setTextColor(Color.parseColor("#F7C120"))
@@ -137,7 +137,7 @@ class ConfirmAppointmentFragment : Fragment() {
                         }
                     }
 
-                    if (state.status) {
+                    if (state.state) {
                         binding.tvStatus.text = "Đang hoạt động"
                     } else {
                         binding.tvStatus.text = "Không hoạt động"

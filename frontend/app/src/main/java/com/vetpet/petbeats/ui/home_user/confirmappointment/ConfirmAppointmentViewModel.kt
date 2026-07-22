@@ -54,14 +54,14 @@ class ConfirmAppointmentViewModel(
                     _state.value = _state.value.copy(
                         thumbnailUrl = data.thumbnailUrl,
                         name = data.name,
-                        status = data.isOperating,
+                        state = data.isOperating,
                         rating = data.rating,
                         phoneClinic = data.phone,
                         clinicAddress = data.address
                     )
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(thumbnailUrl = "", name = "", status = false, rating = 0.0, services = emptyList())
+                    _state.value = _state.value.copy(thumbnailUrl = "", name = "", state = false, rating = 0.0, services = emptyList())
                     return@launch
                 }
             }
@@ -97,7 +97,7 @@ class ConfirmAppointmentViewModel(
                         appointmentDate = data.appointmentDate,
                         appointmentTime = data.appointmentTime,
                         services = data.services,
-                        state = mapStatus
+                        status = mapStatus
                     )
                 }
                 is DataResult.Error -> {

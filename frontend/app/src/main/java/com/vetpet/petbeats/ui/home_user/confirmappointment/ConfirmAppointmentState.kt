@@ -8,7 +8,7 @@ data class ConfirmAppointmentState (
     val clinicAddress: String = "",
     val thumbnailUrl: String = "",
     val rating: Double = 0.0,
-    val state: BookChildState = BookChildState.PENDING,
+    val status: BookChildState = BookChildState.PENDING,
     val fullName: String = "",
     val phoneUser: String = "",
     val phoneClinic: String = "",
@@ -20,5 +20,5 @@ data class ConfirmAppointmentState (
     val appointmentDate: String = "",
     val appointmentTime: String = "",
     val services: List<ServiceItem> = emptyList(),
-    val status: Boolean = false
+    val state: Boolean = false
 )
