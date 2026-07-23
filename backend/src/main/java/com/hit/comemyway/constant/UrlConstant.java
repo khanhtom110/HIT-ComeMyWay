@@ -74,6 +74,8 @@ public class UrlConstant {
         PREFIX + "/appointments/{appointmentId}/confirm";
     public static final String POST_APPOINTMENT_REJECTED =
         PREFIX + "/appointments/{appointmentId}/reject";
+    public static final String GET_APPOINTMENT_COMFIRMED = PREFIX + "/appointments/comfirmed";
+    public static final String GET_APPOINTMENT_REJECTED = PREFIX + "/appointments/rejected";
 
     private Clinic() {}
   }

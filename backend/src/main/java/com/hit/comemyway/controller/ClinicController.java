@@ -39,6 +39,23 @@ public class ClinicController {
     return ResponseEntity.ok(ApiResponse.ok(responses));
   }
 
+  @Operation(summary = "Lấy lịch hẹn đã duyệt",
+      description = "Hiển thị danh sách lịch hẹn đã duyệt")
+  @GetMapping(UrlConstant.Clinic.GET_APPOINTMENT_COMFIRMED)
+  public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getConfirmedStatusAppointment() {
+    List<AppointmentResponse> responses = appointmentService.getCofirmedStatusAppointment();
+    return ResponseEntity.ok(ApiResponse.ok(responses));
+  }
+
+  @Operation(summary = "Lấy lịch hẹn đang đã từ chối",
+      description = "Hiển thị danh sách lịch hẹn đã từ chối")
+  @GetMapping(UrlConstant.Clinic.GET_APPOINTMENT_REJECTED)
+  public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getRejectedStatusAppointment() {
+    List<AppointmentResponse> responses = appointmentService.getRejectedStatusAppointment();
+    return ResponseEntity.ok(ApiResponse.ok(responses));
+  }
+
+
   @Operation(summary = "Duyệt lịch hẹn", description = "Phòng khám duyệt lịch hẹn của người dùng")
   @PostMapping(UrlConstant.Clinic.POST_APPOINTMENT_CONFIRMED)
   public ResponseEntity<ApiResponse<AppointmentResponse>> changeConfirmStatusAppointment(

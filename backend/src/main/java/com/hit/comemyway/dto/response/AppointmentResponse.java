@@ -21,6 +21,9 @@ import java.util.List;
         @Schema(description = "ID phòng khám", example = "45")
         Long clinicId,
 
+        @Schema(description = "Ảnh đại diện", example = "https://example.com/user.jpg")
+        String avatar,
+
         @Schema(description = "Họ và tên", example = "Nguyễn Công Phượng")
         String fullName,
 
@@ -62,6 +65,7 @@ import java.util.List;
                 appointment.getId(),
                 appointment.getUser().getId(),
                 appointment.getClinic().getId(),
+                appointment.getUser().getAvatar(),
                 appointment.getFullName(),
                 appointment.getPhone(),
                 appointment.getBookingType(),
