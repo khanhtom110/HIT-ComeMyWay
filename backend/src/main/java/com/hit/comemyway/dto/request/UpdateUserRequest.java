@@ -12,7 +12,7 @@ public record UpdateUserRequest(
         @Schema(description = "Địa chỉ email cá nhân", example = "khanhn.nv@gmail.com")
         String email,
 
-        @Schema(description = "Ảnh đại diện", example = "PENDING_PASSWORD_CHANGE")
+        @Schema(description = "Ảnh đại diện", example = "https://example.com/user.jpg")
         String avatar,
 
         @Schema(description = "Sở thích")

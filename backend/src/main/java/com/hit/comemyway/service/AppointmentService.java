@@ -206,6 +206,30 @@ public class AppointmentService {
     return appointments.stream().map(AppointmentResponse::from).toList();
   }
 
+  @Transactional(readOnly = true)
+  public List<AppointmentResponse> getCofirmedStatusAppointment() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Clinic clinic = clinicRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    List<Appointment> appointments = appointmentRepository
+        .findPendingAppointmentsByClinicId(clinic.getId(), BookingStatus.CONFIRMED);
+
+    return appointments.stream().map(AppointmentResponse::from).toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<AppointmentResponse> getRejectedStatusAppointment() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Clinic clinic = clinicRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    List<Appointment> appointments = appointmentRepository
+        .findPendingAppointmentsByClinicId(clinic.getId(), BookingStatus.REJECTED);
+
+    return appointments.stream().map(AppointmentResponse::from).toList();
+  }
+
   @Transactional
   public AppointmentResponse confirmAppointmentStatus(Long appointmentId) {
     Appointment appointment = getAppointmentByOwnerClinic(appointmentId);
