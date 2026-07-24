@@ -6,7 +6,7 @@ data class AppointmentListClinicResponse (
     val id: Int,
     val userId: Int,
     val clinicId: Int,
-    val avatar: String,
+    val avatar: String?,
     val fullName: String,
     val phone: String,
     val bookingType: String,

@@ -56,10 +56,10 @@ interface ApiClinicHome {
     @GET(ApiConstants.CONFIRMAPPOINTMENTGET)
     suspend fun confirmAppointment(): ApiResponse<List<AppointmentListClinicResponse>>
 
-    @GET(ApiConstants.TAKEAPPOINTMENTID)
+    @GET(ApiConstants.TAKEAPPOINTMENTIDCLINIC)
     suspend fun takeAppointmentId(
         @Path("id") id: Int
-    ): ApiResponse<AppointmentIdResponse>
+    ): ApiResponse<AppointmentListClinicResponse>
 
     @Multipart
     @POST(ApiConstants.UPLOAD)

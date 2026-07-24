@@ -45,8 +45,7 @@ class AppointmentDetailRefuseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getInt("id") ?: 0
-        val reason = arguments?.getString("reason") ?: ""
-        viewModel.onAppointmentDetailReceive(id, reason)
+        viewModel.onAppointmentDetailRefuse(id)
 
         setOnClick()
         stateData()
@@ -105,7 +104,7 @@ class AppointmentDetailRefuseFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailRefuseEvent.NavigationAppointmentSchedule -> {
-                            findNavController().navigate(R.id.receive_appointmentSchedule)
+                            findNavController().navigate(R.id.refuse_appointmentSchedule)
                         }
                     }
                 }

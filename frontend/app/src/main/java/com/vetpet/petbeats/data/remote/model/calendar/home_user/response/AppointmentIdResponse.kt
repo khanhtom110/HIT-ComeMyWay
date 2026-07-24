@@ -14,5 +14,6 @@ data class AppointmentIdResponse (
     val appointmentDate: String,
     val appointmentTime: String,
     val services: List<ServiceItem>,
-    val status: String
+    val status: String,
+    val rejectReason: String
 )

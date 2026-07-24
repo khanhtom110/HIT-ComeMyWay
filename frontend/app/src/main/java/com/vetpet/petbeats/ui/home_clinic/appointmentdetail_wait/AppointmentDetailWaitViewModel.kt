@@ -67,7 +67,7 @@ class AppointmentDetailWaitViewModel(
 
 
 
-    fun onAppointmentDetailReceive(id: Int) {
+    fun onAppointmentDetail(id: Int) {
         viewModelScope.launch {
             val request = AppointmentIdRequest(id)
             val result = repositoryClinic.takeAppointmentId(request)
@@ -85,6 +85,7 @@ class AppointmentDetailWaitViewModel(
 
                     _state.value = _state.value.copy(
                         status = mapStatus,
+                        imgPet = data.avatar.orEmpty(),
                         day = data.appointmentDate,
                         time = data.appointmentTime,
                         quantity = data.petQuantity,

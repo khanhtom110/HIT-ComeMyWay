@@ -56,7 +56,7 @@ class AppointmentDetailWaitFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getInt("id") ?: 0
-        viewModel.onAppointmentDetailReceive(id)
+        viewModel.onAppointmentDetail(id)
 
         setOnClick()
         stateData()
@@ -211,7 +211,7 @@ class AppointmentDetailWaitFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailWaitEvent.NavigationAppointmentSchedule -> {
-                            findNavController().navigate(R.id.receive_appointmentSchedule)
+                            findNavController().navigate(R.id.wait_appointmentSchedule)
                         }
                         is AppointmentDetailWaitEvent.NavigationDetailReceive -> {
                             findNavController().navigate(

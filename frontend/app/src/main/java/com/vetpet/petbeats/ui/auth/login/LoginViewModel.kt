@@ -95,6 +95,7 @@ class LoginViewModel(
                 }
 
                 is DataResult.Error -> {
+                    Log.d("TEST_LOGIN", "result: ${result.message}")
                     _state.value = _state.value.copy(
                         isName = (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL),
                         isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),

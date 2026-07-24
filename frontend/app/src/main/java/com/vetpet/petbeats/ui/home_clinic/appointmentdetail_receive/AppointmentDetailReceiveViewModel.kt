@@ -46,6 +46,7 @@ class AppointmentDetailReceiveViewModel(
 
                     _state.value = _state.value.copy(
                         status = mapStatus,
+                        imgPet = data.avatar.orEmpty(),
                         day = data.appointmentDate,
                         time = data.appointmentTime,
                         quantity = data.petQuantity,

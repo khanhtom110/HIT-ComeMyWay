@@ -221,7 +221,7 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:textColor="@color/colorTextSub"
-                app:layout_constraintTop_toBottomOf="@id/tvService"
+                app:layout_constraintTop_toBottomOf="@id/numbService"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
@@ -234,7 +234,6 @@
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:textColor="@color/colorTextSub"
                 app:layout_constraintTop_toTopOf="@id/tvInclude"
-                app:layout_constraintBottom_toBottomOf="@id/tvInclude"
                 app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -64,7 +64,7 @@ class HomeClinicRepository(
         }
     }
 
-    suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentIdResponse> {
+    suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentListClinicResponse> {
         return safeApiCall {
             apiClinicHome.takeAppointmentId(
                 id = request.id

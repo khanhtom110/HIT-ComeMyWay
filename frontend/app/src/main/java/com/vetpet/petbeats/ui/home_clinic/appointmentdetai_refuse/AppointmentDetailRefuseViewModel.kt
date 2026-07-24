@@ -29,10 +29,10 @@ class AppointmentDetailRefuseViewModel(
         }
     }
 
-    fun onAppointmentDetailReceive(id: Int, reason: String) {
+    fun onAppointmentDetailRefuse(id: Int) {
         viewModelScope.launch {
-            val requestReason = ReasonRejectRequest(reason)
-            val result = repository.rejectAppointment(id, requestReason)
+            val requestId = AppointmentIdRequest(id)
+            val result = repository.takeAppointmentId(requestId)
 
             when(result) {
                 is DataResult.Success -> {
@@ -47,6 +47,7 @@ class AppointmentDetailRefuseViewModel(
 
                     _state.value = _state.value.copy(
                         status = mapStatus,
+                        imgPet = data.avatar.orEmpty(),
                         day = data.appointmentDate,
                         time = data.appointmentTime,
                         quantity = data.petQuantity,
