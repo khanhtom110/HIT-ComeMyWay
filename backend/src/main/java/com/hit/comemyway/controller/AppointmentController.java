@@ -48,10 +48,20 @@ public class AppointmentController {
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 
-  @Operation(summary = "Lấy chi tiết 1 lịch hẹn",
-      description = "Trả về thông tin chi tiết 1 lịch hẹn")
+  @Operation(summary = "Lấy chi tiết 1 lịch hẹn của người dùng",
+      description = "Trả về thông tin chi tiết 1 lịch hẹn của phòng khám")
   @GetMapping(UrlConstant.Appointment.GET_DETAIL)
   public ResponseEntity<ApiResponse<AppointmentResponse>> getAppointmentDetail(
+      @Parameter(description = "ID của lịch hẹn", required = true)
+      @PathVariable Long appointmentId) {
+    AppointmentResponse response = appointmentService.getAppointmentDetail(appointmentId);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Lấy chi tiết 1 lịch hẹn của phòng khám",
+      description = "Trả về thông tin chi tiết 1 lịch hẹn của phòng khám")
+  @GetMapping(UrlConstant.Appointment.CLINIC_GET_DETAIL)
+  public ResponseEntity<ApiResponse<AppointmentResponse>> getClinicAppointmentDetail(
       @Parameter(description = "ID của lịch hẹn", required = true)
       @PathVariable Long appointmentId) {
     AppointmentResponse response = appointmentService.getAppointmentDetail(appointmentId);
