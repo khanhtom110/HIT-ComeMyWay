@@ -31,9 +31,8 @@ class AppointmentDetailRefuseViewModel(
 
     fun onAppointmentDetailReceive(id: Int, reason: String) {
         viewModelScope.launch {
-            val requestId = AppointmentIdRequest(id)
             val requestReason = ReasonRejectRequest(reason)
-            val result = repository.rejectAppointment(requestId, requestReason)
+            val result = repository.rejectAppointment(id, requestReason)
 
             when(result) {
                 is DataResult.Success -> {
@@ -41,8 +40,8 @@ class AppointmentDetailRefuseViewModel(
 
                     val mapStatus = when (data.status) {
                         "PENDING" -> BookChildState.PENDING
-                        "SUCCESS" -> BookChildState.SUCCESS
-                        "CANCELLED" -> BookChildState.CANCELLED
+                        "CONFIRMED" -> BookChildState.CONFIRMED
+                        "REJECTED" -> BookChildState.REJECTED
                         else -> BookChildState.PENDING
                     }
 

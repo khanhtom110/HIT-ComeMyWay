@@ -73,7 +73,7 @@ class LoginViewModel(
 
                     when (roles) {
                         "USER" -> {
-                            _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                            _event.emit(LoginEvent.NavigationUserHome(accessToken, refreshToken, userId))
                         }
 
                         "CLINIC" -> {
@@ -84,10 +84,10 @@ class LoginViewModel(
                                     _event.emit(LoginEvent.NavigationChangePassword(accessToken, refreshToken, userId))
                                 }
                                 "PENDING_PROFILE" -> {
-                                    _event.emit(LoginEvent.NavigationLoginSuccess)
+                                    _event.emit(LoginEvent.NavigationLoginSuccess(accessToken, refreshToken, userId))
                                 }
                                 else -> {
-                                    _event.emit(LoginEvent.NavigationHome(accessToken, refreshToken, userId))
+                                    _event.emit(LoginEvent.NavigationClinicHome(accessToken, refreshToken, userId))
                                 }
                             }
                         }

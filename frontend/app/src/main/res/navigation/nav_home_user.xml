@@ -20,9 +20,9 @@
         android:label="locketFragment"/>
 
     <fragment
-        android:id="@+id/petFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.pet.PetFragment"
-        android:label="petFragment"/>
+        android:id="@+id/settingUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
+        android:label="settingUserFragment"/>
 
     <fragment
         android:id="@+id/searchFragment"

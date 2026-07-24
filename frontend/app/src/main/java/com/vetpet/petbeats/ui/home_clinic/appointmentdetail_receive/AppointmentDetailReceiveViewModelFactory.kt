@@ -8,6 +8,6 @@ class AppointmentDetailReceiveViewModelFactory(
     private val repository: HomeClinicRepository
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AppointmentDetailReceiveViewModelFactory(repository) as T
+        return AppointmentDetailReceiveViewModel(repository) as T
     }
 }

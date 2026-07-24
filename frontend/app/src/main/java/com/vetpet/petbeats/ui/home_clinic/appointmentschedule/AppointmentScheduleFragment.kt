@@ -1,10 +1,13 @@
 package com.vetpet.petbeats.ui.home_clinic.appointmentschedule
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,18 +19,23 @@ import com.example.VetPet.databinding.FragmentAppointmentScheduleBinding
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseReceiveAdapter
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
 import kotlinx.coroutines.launch
 import kotlin.getValue
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import com.example.VetPet.databinding.LayoutPopupDialogBinding
+import com.example.VetPet.databinding.LayoutPopupReasonBinding
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
 
 
 class AppointmentScheduleFragment : Fragment() {
     private var _binding: FragmentAppointmentScheduleBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterWait: AppointmentWaitAdapter
-    private lateinit var adapterRefuseReceive: AppointmentRefuseReceiveAdapter
+    private lateinit var adapterRefuse: AppointmentRefuseAdapter
+    private lateinit var adapterReceive: AppointmentReceiveAdapter
     private val viewModel: AppointmentScheduleViewModel by viewModels {
         AppointmentScheduleViewModelFactory(
             HomeClinicRepository(
@@ -67,13 +75,42 @@ class AppointmentScheduleFragment : Fragment() {
 
     private fun clickList() {
         adapterWait = AppointmentWaitAdapter(
-            onDetailClick = { id -> viewModel.itemDetailClick(id) },
-            onRefuseClick = { id -> viewModel.itemRefuseClick(id) },
-            onReceiveClick = { id -> viewModel.itemReceiveClick(id) }
+            onDetailClick = { id -> viewModel.itemDetailClick(id)},
+
+            onRefuseClick = { id ->
+                showPopupDialog(
+                    message = "Từ chối lịch khám?",
+                    leftButton = "Quay lại",
+                    rightButton = "Từ chối",
+                    onRightButtonClick = {
+                        showPopupReason(
+                            leftButton = "Quay lại",
+                            rightButton = "Từ chối",
+                            onRightButtonClick = { reason ->
+                                viewModel.itemRefuseClick(id, reason)
+                            }
+                        )
+                    }
+                ) },
+
+
+            onReceiveClick = { id ->
+                showPopupDialog(
+                    message = "Tiếp nhận lịch khám?",
+                    leftButton = "Quay lại",
+                    rightButton = "Tiếp nhận",
+                    onRightButtonClick = {
+                        viewModel.itemReceiveClick(id)
+                    }
+                ) },
         )
 
-        adapterRefuseReceive = AppointmentRefuseReceiveAdapter { id ->
-            viewModel.itemDetailClick(id)
+        adapterReceive = AppointmentReceiveAdapter { id ->
+            viewModel.receiveClick(id)
+        }
+
+        adapterRefuse = AppointmentRefuseAdapter { id ->
+            viewModel.refuseClick(id)
         }
     }
 
@@ -95,6 +132,76 @@ class AppointmentScheduleFragment : Fragment() {
             viewModel.onReceiveClick()
         }
 
+    }
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
+    }
+
+    private fun showPopupReason(
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: ((String) -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupReasonBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            val reason = dialogBinding.tvDialogTitle.text.toString()
+
+            dialog.dismiss()
+            onRightButtonClick?.invoke(reason)
+        }
+
+        dialog.show()
     }
 
     private fun stateData() {
@@ -132,8 +239,8 @@ class AppointmentScheduleFragment : Fragment() {
                         binding.btnRefuse.setTextColor(clinic)
 
 
-                        binding.recycle.adapter = adapterRefuseReceive
-                        adapterRefuseReceive.submitList(state.listAppointmentChild)
+                        binding.recycle.adapter = adapterRefuse
+                        adapterRefuse.submitList(state.listAppointmentChild)
 
 
                         viewModel.onAppointmentRefuseList()
@@ -154,8 +261,8 @@ class AppointmentScheduleFragment : Fragment() {
                         binding.btnReceive.setTextColor(clinic)
 
 
-                        binding.recycle.adapter = adapterRefuseReceive
-                        adapterRefuseReceive.submitList(state.listAppointmentChild)
+                        binding.recycle.adapter = adapterReceive
+                        adapterReceive.submitList(state.listAppointmentChild)
 
 
                         viewModel.onAppointmentReceiveList()
@@ -181,6 +288,24 @@ class AppointmentScheduleFragment : Fragment() {
                     when (event) {
                         is AppointmentScheduleEvent.NavigationScheduleList -> {
                             findNavController().navigate(R.id.scheduleListFragment)
+                        }
+                        is AppointmentScheduleEvent.NavigationDetail -> {
+                            findNavController().navigate(R.id.appointmentDetailWait)
+                        }
+                        is AppointmentScheduleEvent.NavigationDetailReceive -> {
+                            findNavController().navigate(
+                                R.id.appointmentDetailReceive,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
+                        }
+                        is AppointmentScheduleEvent.NavigationDetailRefuse -> {
+                            findNavController().navigate(R.id.appointmentDetailRefuse,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }

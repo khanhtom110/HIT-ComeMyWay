@@ -5,12 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/colorBackground"
     app:cardCornerRadius="@dimen/_12sdp"
-    app:cardElevation="4dp">
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ground_book_child"
+        android:layout_marginHorizontal="@dimen/_2sdp"
+        android:layout_marginVertical="@dimen/_2sdp"
         android:paddingBottom="@dimen/_16sdp">
 
         <ImageView

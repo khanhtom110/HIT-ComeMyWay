@@ -51,8 +51,8 @@ class BookViewModel(
                     val showList = apiDataList.map { list ->
                         val mapStatus = when (list.status) {
                             "PENDING" -> BookChildState.PENDING
-                            "SUCCESS" -> BookChildState.SUCCESS
-                            "CANCELLED" -> BookChildState.CANCELLED
+                            "CONFIRMED" -> BookChildState.CONFIRMED
+                            "REJECTED" -> BookChildState.REJECTED
                             else -> BookChildState.PENDING
                         }
 

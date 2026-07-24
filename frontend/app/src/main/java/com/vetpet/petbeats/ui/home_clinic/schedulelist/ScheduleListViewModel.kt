@@ -1,9 +1,13 @@
 package com.vetpet.petbeats.ui.home_clinic.schedulelist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleEvent
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentChild
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,13 +46,44 @@ class ScheduleListViewModel(
 
 
     fun itemDetailClick(id: Int) {
-
+        viewModelScope.launch {
+            _event.emit(ScheduleListEvent.NavigationDetail(id))
+        }
     }
     fun itemReceiveClick(id: Int) {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val result = repository.confirmAppointment(id)
 
+                when (result) {
+                    is DataResult.Success -> {
+                        Log.d("API", "Success")
+                        _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
+                    }
+                    is DataResult.Error -> {
+                        Log.e("API", result.message )
+                        return@launch
+                    }
+                }
+            }
+        }
     }
-    fun itemRefuseClick(id: Int) {
+    fun itemRefuseClick(id: Int, reason: String) {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val requestReason = ReasonRejectRequest(reason)
+                val result = repository.rejectAppointment(id, requestReason)
 
+                when (result) {
+                    is DataResult.Success -> {
+                        _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
+                    }
+                    is DataResult.Error -> {
+                        return@launch
+                    }
+                }
+            }
+        }
     }
 
 
@@ -64,7 +99,7 @@ class ScheduleListViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,
@@ -86,7 +121,7 @@ class ScheduleListViewModel(
     //Api hiển thị refuse list
     fun onAppointmentRefuseList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repository.rejectAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -95,7 +130,7 @@ class ScheduleListViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,
@@ -116,7 +151,7 @@ class ScheduleListViewModel(
     //Api hiển thị receive list
     fun onAppointmentReceiveList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repository.confirmAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -125,7 +160,7 @@ class ScheduleListViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,

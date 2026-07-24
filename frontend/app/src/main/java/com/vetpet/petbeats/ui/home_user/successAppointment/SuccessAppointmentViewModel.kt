@@ -62,8 +62,8 @@ class SuccessAppointmentViewModel(
 
                     val mapStatus = when (data.status) {
                         "PENDING" -> BookChildState.PENDING
-                        "SUCCESS" -> BookChildState.SUCCESS
-                        "CANCELLED" -> BookChildState.CANCELLED
+                        "CONFIRMED" -> BookChildState.CONFIRMED
+                        "REJECTED" -> BookChildState.REJECTED
                         else -> BookChildState.PENDING
                     }
 

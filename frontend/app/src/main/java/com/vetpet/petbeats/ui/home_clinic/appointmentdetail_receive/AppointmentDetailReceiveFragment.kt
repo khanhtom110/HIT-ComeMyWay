@@ -12,13 +12,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.example.VetPet.databinding.FragmentAppointmentDetailBinding
 import com.example.VetPet.databinding.FragmentAppointmentDetailReceiveBinding
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.home_clinic.appointmentdetail_wait.AppointmentDetailWaitViewModel
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 

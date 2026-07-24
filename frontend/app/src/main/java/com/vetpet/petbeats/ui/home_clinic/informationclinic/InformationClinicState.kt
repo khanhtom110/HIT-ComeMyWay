@@ -1,9 +1,10 @@
 package com.vetpet.petbeats.ui.home_clinic.informationclinic
 
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ServiceItem
+
 data class InformationClinicState (
     //image
     val image: String = "",
-
     val isImage: Boolean = false,
 
     //information
@@ -26,13 +27,17 @@ data class InformationClinicState (
     val isInputState: Boolean = false,
 
     //Service
-    val bookingType: String = "",
-
     val isService: Boolean = false,
     val isClinic: Boolean = false,
     val isHome: Boolean = false,
-    val services: List<String> = emptyList(),
-    val selectService: List<Int> = emptyList(),
+
+    val services: List<String> = listOf(
+        "Spa", "Làm đẹp", "Tiêm phòng", "Triệt sản", "Phẫu thuật", "Tẩy giun"
+    ),
+    val selectService: List<String> = emptyList(),
+
+    val isFormVisible: Boolean = false,
+    val inputCount: Int = 1,
 
 
     //Error

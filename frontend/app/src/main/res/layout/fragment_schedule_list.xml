@@ -123,14 +123,6 @@
                 android:layout_marginHorizontal="@dimen/_8sdp"
                 app:layout_constraintTop_toBottomOf="@id/btnWait"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_4sdp"
-                app:layout_constraintTop_toBottomOf="@id/line"/>
-
             <TextView
                 style="@style/Chu2"
                 android:layout_width="wrap_content"
@@ -141,6 +133,15 @@
                 app:layout_constraintTop_toBottomOf="@id/line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/line"/>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

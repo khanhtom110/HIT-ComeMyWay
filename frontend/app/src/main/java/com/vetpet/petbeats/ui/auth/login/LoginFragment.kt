@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -167,7 +168,7 @@ class LoginFragment : Fragment() {
                         is LoginEvent.NavigationRegister -> {
                             findNavController().navigate(R.id.registerFragment)
                         }
-                        is LoginEvent.NavigationHome -> {
+                        is LoginEvent.NavigationUserHome -> {
                             val tokenManager = TokenManager(requireContext())
                             tokenManager.saveTokens(event.accessToken, event.refreshToken)
                             tokenManager.saveUserId(event.userId)
@@ -176,10 +177,26 @@ class LoginFragment : Fragment() {
                             startActivity(intent)
                         }
                         is LoginEvent.NavigationChangePassword -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+                            tokenManager.saveUserId(event.userId)
+
                             findNavController().navigate(R.id.splashClinicFragment)
                         }
                         is LoginEvent.NavigationLoginSuccess -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+                            tokenManager.saveUserId(event.userId)
+
                             findNavController().navigate(R.id.loginSuccessFragment)
+                        }
+                        is LoginEvent.NavigationClinicHome -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+                            tokenManager.saveUserId(event.userId)
+
+                            val intent = Intent(requireContext(), HomeClinicActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }

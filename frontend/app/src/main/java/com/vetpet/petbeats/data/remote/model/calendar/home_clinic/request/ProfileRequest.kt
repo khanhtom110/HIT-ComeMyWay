@@ -1,5 +1,7 @@
 package com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request
 
+import com.google.gson.annotations.SerializedName
+
 
 data class ProfileRequest (
     val name: String,
@@ -7,6 +9,7 @@ data class ProfileRequest (
     val mapLink: String,
     val phone: String,
     val description: String,
+    @SerializedName("thumbnailUrl")
     val thumbnailUrl: String,
     val openTime: String,
     val closeTime: String,

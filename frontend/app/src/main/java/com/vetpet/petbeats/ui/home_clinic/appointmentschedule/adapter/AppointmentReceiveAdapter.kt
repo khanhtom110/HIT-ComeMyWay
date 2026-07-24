@@ -9,17 +9,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter.ViewHolder
 
-class AppointmentRefuseReceiveAdapter(
+class AppointmentReceiveAdapter(
     private val onDetailClick: (Int) -> (Unit)
-): ListAdapter<AppointmentChild, AppointmentRefuseReceiveAdapter.ViewHolder>(AppointmentDiffCallback()) {
-    override fun onCreateViewHolder(holder: ViewGroup, position: Int): AppointmentRefuseReceiveAdapter.ViewHolder {
+): ListAdapter<AppointmentChild, AppointmentReceiveAdapter.ViewHolder>(AppointmentDiffCallback()) {
+    override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.item_refuse_receive_appointment, holder, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AppointmentRefuseReceiveAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBook = getItem(position)
 
         holder.bind(currentBook, onDetailClick)

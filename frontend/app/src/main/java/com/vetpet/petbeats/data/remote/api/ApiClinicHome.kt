@@ -1,17 +1,24 @@
 package com.vetpet.petbeats.data.remote.api
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.AppointmentListClinicResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiClinicHome {
     @POST(ApiConstants.UPDATEPROFILE)
@@ -29,17 +36,35 @@ interface ApiClinicHome {
         @Body request: ChangePasswordRequest
     ): ApiResponse<ChangePasswordResponse>
 
-    @POST(ApiConstants.REJECTAPPOINTMENT)
+    @POST(ApiConstants.REJECTAPPOINTMENTPOST)
     suspend fun rejectAppointment(
-        @Body requestId: AppointmentIdRequest,
+        @Path("appointmentId") appointmentId: Int,
         @Body requestReason: ReasonRejectRequest
-    ): ApiResponse<AppointmentIdResponse>
+    ): ApiResponse<AppointmentListClinicResponse>
 
-    @POST(ApiConstants.CONFIRMAPPOINTMENT)
+    @POST(ApiConstants.CONFIRMAPPOINTMENTPOST)
     suspend fun confirmAppointment(
-        @Body requestId: AppointmentIdRequest,
+        @Path("appointmentId") appointmentId: Int
+    ): ApiResponse<AppointmentListClinicResponse>
+
+    @GET(ApiConstants.PENDINGAPPOINTMENTGET)
+    suspend fun pendingAppointment(): ApiResponse<List<AppointmentListClinicResponse>>
+
+    @GET(ApiConstants.REJECTAPPOINTMENTGET)
+    suspend fun rejectAppointment(): ApiResponse<List<AppointmentListClinicResponse>>
+
+    @GET(ApiConstants.CONFIRMAPPOINTMENTGET)
+    suspend fun confirmAppointment(): ApiResponse<List<AppointmentListClinicResponse>>
+
+    @GET(ApiConstants.TAKEAPPOINTMENTID)
+    suspend fun takeAppointmentId(
+        @Path("id") id: Int
     ): ApiResponse<AppointmentIdResponse>
 
-    @GET(ApiConstants.PENDINGAPPOINTMENT)
-    suspend fun pendingAppointment(): ApiResponse<List<AppointmentIdResponse>>
+    @Multipart
+    @POST(ApiConstants.UPLOAD)
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part
+    ): ApiResponse<String>
+
 }

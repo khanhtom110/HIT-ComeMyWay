@@ -117,7 +117,7 @@ class ConfirmAppointmentFragment : Fragment() {
                             binding.btnEdit.setBackgroundResource(R.drawable.button_auth_white)
                             binding.btnEdit.setTextColor(Color.parseColor("#486BF3"))
                         }
-                        BookChildState.SUCCESS -> {
+                        BookChildState.CONFIRMED -> {
                             binding.stateClinic.text = "Đặt lịch thành công"
                             binding.stateClinic.setTextColor(Color.parseColor("#00FF0B"))
 
@@ -126,7 +126,7 @@ class ConfirmAppointmentFragment : Fragment() {
                             binding.btnEdit.setBackgroundResource(R.drawable.button_close)
                             binding.btnEdit.setTextColor(Color.parseColor("#FAFCFF"))
                         }
-                        BookChildState.CANCELLED -> {
+                        BookChildState.REJECTED -> {
                             binding.stateClinic.text = "Từ chối"
                             binding.stateClinic.setTextColor(Color.parseColor("#CC0900"))
 

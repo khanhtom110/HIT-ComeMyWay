@@ -157,11 +157,11 @@ class SuccessAppointmentFragment : Fragment() {
                             binding.stateClinic.text = "Chờ xử lý"
                             binding.stateClinic.setTextColor(Color.parseColor("#F7C120"))
                         }
-                        BookChildState.SUCCESS -> {
+                        BookChildState.CONFIRMED -> {
                             binding.stateClinic.text = "Đặt lịch thành công"
                             binding.stateClinic.setTextColor(Color.parseColor("#00FF0B"))
                         }
-                        BookChildState.CANCELLED -> {
+                        BookChildState.REJECTED -> {
                             binding.stateClinic.text = "Từ chối"
                             binding.stateClinic.setTextColor(Color.parseColor("#CC0900"))
                         }

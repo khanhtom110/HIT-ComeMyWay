@@ -1,11 +1,15 @@
 package com.vetpet.petbeats.ui.home_clinic.schedulelist
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +18,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentScheduleListBinding
+import com.example.VetPet.databinding.LayoutPopupDialogBinding
+import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseReceiveAdapter
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -27,7 +33,7 @@ class ScheduleListFragment : Fragment() {
     private var _binding: FragmentScheduleListBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterWait: AppointmentWaitAdapter
-    private lateinit var adapterRefuseReceive: AppointmentRefuseReceiveAdapter
+    private lateinit var adapterRefuseReceive: AppointmentRefuseAdapter
     private val viewModel: ScheduleListViewModel by viewModels {
         ScheduleListViewModelFactory(
             HomeClinicRepository(
@@ -65,12 +71,37 @@ class ScheduleListFragment : Fragment() {
     private fun clickList() {
         adapterWait = AppointmentWaitAdapter(
             onDetailClick = { id -> viewModel.itemDetailClick(id) },
-            onRefuseClick = { id -> viewModel.itemRefuseClick(id) },
-            onReceiveClick = { id -> viewModel.itemReceiveClick(id) }
+
+            onRefuseClick = { id ->
+                showPopupDialog(
+                    message = "Từ chối lịch khám?",
+                    leftButton = "Quay lại",
+                    rightButton = "Từ chối",
+                    onRightButtonClick = {
+                        showPopupReason(
+                            leftButton = "Quay lại",
+                            rightButton = "Từ chối",
+                            onRightButtonClick = { reason ->
+                                viewModel.itemRefuseClick(id, reason)
+                            }
+                        )
+                    }
+                ) },
+
+
+            onReceiveClick = { id ->
+                showPopupDialog(
+                    message = "Tiếp nhận lịch khám?",
+                    leftButton = "Quay lại",
+                    rightButton = "Tiếp nhận",
+                    onRightButtonClick = {
+                        viewModel.itemReceiveClick(id)
+                    }
+                ) },
         )
 
-        adapterRefuseReceive = AppointmentRefuseReceiveAdapter { id ->
-            viewModel.itemDetailClick(id)
+        adapterRefuseReceive = AppointmentRefuseAdapter { id ->
+            viewModel.itemReceiveClick(id)
         }
     }
 
@@ -89,6 +120,76 @@ class ScheduleListFragment : Fragment() {
         binding.btnReceive.setOnClickListener {
             viewModel.onReceiveClick()
         }
+    }
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
+    }
+
+    private fun showPopupReason(
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: ((String) -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupReasonBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            val reason = dialogBinding.tvDialogTitle.text.toString()
+
+            dialog.dismiss()
+            onRightButtonClick?.invoke(reason)
+        }
+
+        dialog.show()
     }
 
     private fun stateData() {
@@ -173,6 +274,15 @@ class ScheduleListFragment : Fragment() {
                     when (event) {
                         is ScheduleListEvent.NavigationAppointmentSchedule -> {
                             findNavController().navigate(R.id.scheduleList_appointmentSchedule)
+                        }
+                        is ScheduleListEvent.NavigationDetail -> {
+                            findNavController().navigate(R.id.appointmentDetailWait)
+                        }
+                        is ScheduleListEvent.NavigationDetailReceive -> {
+                            findNavController().navigate(R.id.appointmentDetailReceive)
+                        }
+                        is ScheduleListEvent.NavigationDetailRefuse -> {
+                            findNavController().navigate(R.id.appointmentDetailRefuse)
                         }
                     }
                 }

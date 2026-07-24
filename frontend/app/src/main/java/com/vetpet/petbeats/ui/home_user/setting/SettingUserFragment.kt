@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.ui.home_user.pet
+package com.vetpet.petbeats.ui.home_user.setting
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,12 +9,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.example.VetPet.databinding.FragmentPetBinding
+import com.example.VetPet.databinding.FragmentSettingUserBinding
 
 
 
-class PetFragment : Fragment() {
-    private var _binding: FragmentPetBinding ?= null
+class SettingUserFragment : Fragment() {
+    private var _binding: FragmentSettingUserBinding ?= null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,7 +22,7 @@ class PetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentPetBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingUserBinding.inflate(inflater, container, false)
         return binding.root
     }
 

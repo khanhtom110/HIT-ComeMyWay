@@ -55,11 +55,7 @@ class ChangePasswordViewModel(
 
                     Log.d("TEST_CASE", "message: ${result.message}")
 
-                    when (result.data.status) {
-                        "PENDING_PASSWORD_CHANGE" -> {
-                            _event.emit(ChangePasswordEvent.NavigationChangeSuccess)
-                        }
-                    }
+                    _event.emit(ChangePasswordEvent.NavigationChangeSuccess)
                 }
 
                 is DataResult.Error -> {

@@ -1,9 +1,13 @@
 package com.vetpet.petbeats.ui.home_clinic.appointmentschedule
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentChild
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChild
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
@@ -15,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlin.Int
 
 class AppointmentScheduleViewModel(
-    private val repository: HomeClinicRepository
+    private val repositoryClinic: HomeClinicRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(AppointmentScheduleState())
     val state = _state.asStateFlow()
@@ -26,6 +30,18 @@ class AppointmentScheduleViewModel(
     fun scheduleList() {
         viewModelScope.launch {
             _event.emit(AppointmentScheduleEvent.NavigationScheduleList)
+        }
+    }
+
+
+    fun receiveClick(id: Int) {
+        viewModelScope.launch {
+            _event.emit(AppointmentScheduleEvent.NavigationDetailReceive(id))
+        }
+    }
+    fun refuseClick(id: Int) {
+        viewModelScope.launch {
+            _event.emit(AppointmentScheduleEvent.NavigationDetailRefuse(id))
         }
     }
 
@@ -45,14 +61,42 @@ class AppointmentScheduleViewModel(
 
     fun itemDetailClick(id: Int) {
         viewModelScope.launch {
-
+            _event.emit(AppointmentScheduleEvent.NavigationDetail(id))
         }
     }
     fun itemReceiveClick(id: Int) {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val result = repositoryClinic.confirmAppointment(id)
 
+                when (result) {
+                    is DataResult.Success -> {
+                        _event.emit(AppointmentScheduleEvent.NavigationDetailReceive(id))
+                    }
+                    is DataResult.Error -> {
+                        return@launch
+                    }
+                }
+            }
+        }
     }
-    fun itemRefuseClick(id: Int) {
+    fun itemRefuseClick(id: Int, reason: String) {
 
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val requestReason = ReasonRejectRequest(reason)
+                val result = repositoryClinic.rejectAppointment(id, requestReason)
+
+                when (result) {
+                    is DataResult.Success -> {
+                        _event.emit(AppointmentScheduleEvent.NavigationDetailRefuse(id))
+                    }
+                    is DataResult.Error -> {
+                        return@launch
+                    }
+                }
+            }
+        }
     }
 
 
@@ -60,7 +104,7 @@ class AppointmentScheduleViewModel(
     //Api hiển thị wait list
     fun onAppointmentWaitList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repositoryClinic.pendingAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -69,7 +113,7 @@ class AppointmentScheduleViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,
@@ -91,7 +135,7 @@ class AppointmentScheduleViewModel(
     //Api hiển thị refuse list
     fun onAppointmentRefuseList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repositoryClinic.rejectAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -100,7 +144,7 @@ class AppointmentScheduleViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,
@@ -121,7 +165,7 @@ class AppointmentScheduleViewModel(
     //Api hiển thị receive list
     fun onAppointmentReceiveList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repositoryClinic.confirmAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -130,7 +174,7 @@ class AppointmentScheduleViewModel(
                     val showList = apiDataList.map { list ->
                         AppointmentChild(
                             id = list.id,
-                            image = list.petType,
+                            image = list.avatar,
                             petName = list.petType,
                             user = list.fullName,
                             clinic = list.bookingType,
