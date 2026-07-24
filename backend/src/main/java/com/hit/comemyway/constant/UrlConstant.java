@@ -81,13 +81,17 @@ public class UrlConstant {
   }
 
   public static class Appointment {
-    private static final String PREFIX = "/user/appointments";
+    private static final String USE_PREFIX = "/user/appointments";
 
-    public static final String CREATE_APPOINTMENT = PREFIX;
-    public static final String GET_APPOINTMENT = PREFIX;
-    public static final String GET_DETAIL = PREFIX + "/detail/{appointmentId}";
-    public static final String UPDATE_APPOINTMENT = PREFIX + "/update/{appointmentId}";
-    public static final String CANCEL_APPOINTMENT = PREFIX + "/cancel/{appointmentId}";
+    private static final String CLINIC_PREFIX = "/clinic/appointments";
+
+    public static final String CREATE_APPOINTMENT = USE_PREFIX;
+    public static final String GET_APPOINTMENT = USE_PREFIX;
+    public static final String GET_DETAIL = USE_PREFIX + "/detail/{appointmentId}";
+    public static final String UPDATE_APPOINTMENT = USE_PREFIX + "/update/{appointmentId}";
+    public static final String CANCEL_APPOINTMENT = USE_PREFIX + "/cancel/{appointmentId}";
+
+    public static final String CLINIC_GET_DETAIL = CLINIC_PREFIX + "/detail/{appointmentId}";
 
     private Appointment() {}
   }
