@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_clinic.appointmentdetail_receive
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
@@ -57,6 +58,8 @@ class AppointmentDetailReceiveViewModel(
                     )
                 }
                 is DataResult.Error -> {
+                    Log.d("BUGG", "message:${result.message}")
+
                     _state.value = _state.value.copy()
                     return@launch
                 }

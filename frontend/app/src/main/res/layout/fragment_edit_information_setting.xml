@@ -1,49 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment">
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/iconEdit"
-            android:layout_width="@dimen/_17sdp"
-            android:layout_height="@dimen/_17sdp"
-            android:src="@drawable/icon_edit"
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/back_left"
             android:layout_marginTop="@dimen/_40sdp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             style="@style/TieuDe1"
-            android:id="@id/tvInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thông tin cá nhân"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_11sdp"
-            app:layout_constraintTop_toBottomOf="@id/iconEdit"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/btnEdit"
-            style="@style/TieuDe1"
-            android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:background="@drawable/button_all"
-            android:gravity="center"
-            android:text="Chỉnh sửa"
-            android:textColor="@color/colorTextButtonHome"
-            app:layout_constraintTop_toBottomOf="@id/iconEdit"
+            android:text="Chỉnh sửa thông tin cá nhân"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintTop_toTopOf="@id/btnBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,8 +39,8 @@
             android:layout_marginHorizontal="@dimen/_12sdp"
             android:layout_marginVertical="@dimen/_8sdp"
             android:paddingBottom="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/tvInformation">
-            
+            app:layout_constraintTop_toBottomOf="@id/btnBack">
+
             <ImageView
                 android:id="@+id/imgPet"
                 android:layout_width="@dimen/_60sdp"
@@ -66,6 +51,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+            <TextView
+                style="@style/Nut3"
+                android:id="@+id/btnUploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tải ảnh lên"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/imgPet"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 style="@style/Chu3"
@@ -75,7 +71,7 @@
                 android:text="Họ và tên"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginStart="@dimen/_16sdp"
-                app:layout_constraintTop_toBottomOf="@id/imgPet"
+                app:layout_constraintTop_toBottomOf="@id/btnUploadImage"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <EditText
@@ -216,92 +212,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            style="@style/TieuDe1"
-            android:id="@+id/tvSecurity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bảo mật"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_11sdp"
-            app:layout_constraintTop_toBottomOf="@id/boxInformation"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/boxSecurity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ground_information"
-            android:layout_marginHorizontal="@dimen/_12sdp"
-            android:layout_marginVertical="@dimen/_8sdp"
-            android:paddingBottom="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/tvSecurity">
-
-            <TextView
-                style="@style/Chu3"
-                android:id="@+id/tvPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mật khẩu"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginStart="@dimen/_16sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <EditText
-                style="@style/Chu3"
-                android:id="@+id/tvInputPassword"
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_36sdp"
-                android:background="@drawable/tittle_search"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginHorizontal="@dimen/_10sdp"
-                android:hint="Nhập số điện thoại của bạn"
-                android:paddingHorizontal="@dimen/_16sdp"
-                android:inputType="textPassword"
-                android:textColor="@color/colorTextSub"
-                android:textColorHint="@color/colorTextContent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPassword"/>
-            
-            <ImageView
-                android:layout_width="@dimen/_46sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:src="@drawable/icon_edit_second"
-                android:layout_marginEnd="@dimen/_10sdp"
-                app:layout_constraintTop_toTopOf="@id/tvInputPassword"
-                app:layout_constraintBottom_toBottomOf="@id/tvInputPassword"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <TextView
-                style="@style/Chu3"
-                android:id="@+id/tvPasswordError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/colorError"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:visibility="gone"
-                android:drawablePadding="2dp"
-                app:drawableStartCompat="@drawable/warning"
-                app:layout_constraintTop_toBottomOf="@id/tvInputPassword"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/btnLogOut"
+            android:id="@+id/btnUpdate"
             style="@style/Nut2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button_auth_white"
+            android:background="@drawable/button_auth_blue"
             android:gravity="center"
-            android:text="Đăng xuất"
-            android:textColor="@color/colorPrimary"
+            android:text="Cập nhật"
+            android:textColor="@color/colorBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/boxSecurity" />
+            app:layout_constraintTop_toBottomOf="@id/boxInformation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -29,7 +29,6 @@ class SettingUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setOnClick()
     }
 
     override fun onDestroyView() {
@@ -38,22 +37,7 @@ class SettingUserFragment : Fragment() {
     }
 
     private fun setOnClick() {
-        binding.logout.setOnClickListener {
-            performLogout()
-        }
-    }
 
-    private fun performLogout() {
-        // 1. Xóa sạch Token trong máy
-        val tokenManager = TokenManager(requireContext())
-        tokenManager.clearTokens()
-
-
-        val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.nav_home_user, true)
-            .build()
-
-        findNavController().navigate(R.id.loginFragment, null, navOptions)
     }
 
 }
