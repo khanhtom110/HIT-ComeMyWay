@@ -3,10 +3,7 @@ package com.hit.comemyway.controller;
 import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ApiPath;
 import com.hit.comemyway.constant.UrlConstant;
-import com.hit.comemyway.dto.request.ChangePasswordRequest;
-import com.hit.comemyway.dto.request.CreateClinicAccountRequest;
-import com.hit.comemyway.dto.request.DeviceTokenRequest;
-import com.hit.comemyway.dto.request.UpdateUserRequest;
+import com.hit.comemyway.dto.request.*;
 import com.hit.comemyway.dto.response.UpdateUserResponse;
 import com.hit.comemyway.dto.response.UserResponse;
 import com.hit.comemyway.service.AppointmentReminderService;
@@ -49,5 +46,13 @@ public class UserController {
       @Valid @RequestBody UpdateUserRequest request, @PathVariable Long id) {
     UpdateUserResponse response = userService.updateUserProfile(request, id);
     return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Cập nhật mật khẩu user")
+  @PostMapping(UrlConstant.User.CHANGE_PASSWORD)
+  public ResponseEntity<ApiResponse<Void>> updateUserPassword(
+      @Valid @RequestBody ChangeUserPasswordRequest request) {
+    userService.updateUserPassword(request);
+    return ResponseEntity.ok(ApiResponse.ok(null));
   }
 }
