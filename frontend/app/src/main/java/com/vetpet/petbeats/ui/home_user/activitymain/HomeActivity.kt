@@ -1,6 +1,7 @@
 package com.vetpet.petbeats.ui.home_user.activitymain
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -19,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
 
         setupController()
         setupBottomNav()
+        changeColorDestination()
         hideDestination()
     }
 
@@ -31,7 +33,7 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomUserNav.setupWithNavController(navController)
     }
 
-    private fun hideDestination() {
+    private fun changeColorDestination() {
         navController.addOnDestinationChangedListener { controller, destination, bundle ->
             // Fix lỗi không hiện màu ở Bottom Nav
             when (destination.id) {
@@ -59,6 +61,18 @@ class HomeActivity : AppCompatActivity() {
                 R.id.editCalendarFragment -> {
                     binding.bottomUserNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
+            }
+        }
+    }
+
+    private fun hideDestination() {
+        //4.Dặn dò ẩn/hiện thanh điều hướng tùy theo màn hình
+        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+            if (destination.id == R.id.forgotPasswordFragment) {
+                binding.bottomUserNav.visibility = View.GONE // Nếu đích đến là màn hình Máy tính -> Giấu thanh điều hướng đi
+            }
+            else {
+                binding.bottomUserNav.visibility = View.VISIBLE // Nếu là các màn hình khác (Home, Blog) -> Hiện thanh điều hướng lên
             }
         }
     }

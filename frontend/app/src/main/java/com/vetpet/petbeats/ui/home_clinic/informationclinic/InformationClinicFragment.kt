@@ -413,6 +413,7 @@ class InformationClinicFragment : Fragment() {
                         binding.layoutCloseTime.setBackgroundResource(R.drawable.ground_information)
                         binding.tvTimeError.visibility = View.GONE
                     }
+                    binding.tvTimeError.text = state.timeError
 
                     if (state.isService) {
                         binding.boxService.setBackgroundResource(R.drawable.button_input_errol)

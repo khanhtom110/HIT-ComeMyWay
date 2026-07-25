@@ -86,9 +86,16 @@ object ErrorUtils {
             "Too many request. Please try again after 1 minute." ->
                 Pair(ErrorTarget.GENERAL, "Có quá nhiều yêu cầu. Làm ơn hãy thử lại sau 1 phút")
             "Invalid username, email, or password." ->
-                Pair(ErrorTarget.GENERAL, "Tài khoản hoặc mật khẩu không chính xác.")
+                Pair(ErrorTarget.GENERAL, "Tên người dùng, email hoặc mật khẩu không \nhợp lệ.")
             "AppointmentChild does not exist" ->
                 Pair(ErrorTarget.GENERAL, "Cuộc hẹn không tồn tại.")
+            "Appointment does not exist" -> {
+                Pair(ErrorTarget.GENERAL, "Lịch hẹn không tồn tại.")
+            }
+            "Clinic profile already done" -> {
+                Pair(ErrorTarget.GENERAL, "Hồ sơ phòng khám đã hoàn tất.")
+            }
+
 
             //Be trả lỗi lạ
             null -> Pair(ErrorTarget.GENERAL, "Lỗi không xác định.")

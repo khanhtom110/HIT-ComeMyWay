@@ -160,7 +160,7 @@ class ConfirmAppointmentFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is ConfirmAppointmentEvent.NavigationHomeAppointment -> {
-                            findNavController().navigate(R.id.confirmAppointment_book)
+                            findNavController().popBackStack()
                         }
                         is ConfirmAppointmentEvent.NavigationEditAppointment -> {
                             findNavController().navigate(

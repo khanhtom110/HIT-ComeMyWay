@@ -24,9 +24,6 @@ interface ApiAuth {
     @POST(ApiConstants.REGISTER)
     suspend fun register(@Body request: RegisterRequest): ApiResponse<RegisterResponse>
 
-    @POST(ApiConstants.LOGOUT)
-    suspend fun logout(@Body request: LogoutRequest): ApiResponse<Nothing>
-
     @POST(ApiConstants.FORGOTPASSWORD)
     suspend fun forgotpassword(@Body request: ForgotPasswordRequest): ApiResponse<ForgotPasswordResponse>
 

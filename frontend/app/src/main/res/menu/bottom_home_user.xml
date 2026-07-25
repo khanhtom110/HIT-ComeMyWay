@@ -7,8 +7,8 @@
 
     <item
         android:id="@+id/newsFragment"
-        android:icon="@drawable/news"
-        android:title="Tin tức"/>
+        android:icon="@drawable/icon_chatbot"
+        android:title="Tìm hiểu"/>
 
     <item
         android:id="@+id/locketFragment"
@@ -16,8 +16,8 @@
         android:title="Locket"/>
 
     <item
-        android:id="@+id/petFragment"
+        android:id="@+id/settingUserFragment"
         android:icon="@drawable/pet"
-        android:title="Pet"/>
+        android:title="Cài đặt"/>
 
 </menu>

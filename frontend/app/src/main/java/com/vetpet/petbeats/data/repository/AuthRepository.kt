@@ -53,10 +53,4 @@ class AuthRepository(
             apiAuth.resetpassword(request)
         }
     }
-
-    suspend fun logoutUser(request: LogoutRequest): DataResult<Nothing> {
-        return safeApiCall {
-            apiAuth.logout(request)
-        }
-    }
 }

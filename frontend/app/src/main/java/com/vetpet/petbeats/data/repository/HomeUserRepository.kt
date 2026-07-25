@@ -3,6 +3,9 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
@@ -10,6 +13,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTo
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LocationRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
@@ -17,6 +21,8 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.Locatio
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
+import okhttp3.MultipartBody
 
 class HomeUserRepository(
     private val apiUserHome: ApiUserHome
@@ -101,4 +107,36 @@ class HomeUserRepository(
         }
     }
 
+    suspend fun updateProfile(id: Int, request: UpdateProfileRequest): DataResult<UpdateProfileResponse> {
+        return safeApiCall {
+            apiUserHome.updateProfile(
+                id = id,
+                request = request
+            )
+        }
+    }
+
+    suspend fun profile(): DataResult<UpdateProfileResponse> {
+        return safeApiCall {
+            apiUserHome.profile()
+        }
+    }
+
+    suspend fun logoutUser(request: LogoutRequest): DataResult<Unit> {
+        return safeApiCall {
+            apiUserHome.logout(request)
+        }
+    }
+
+    suspend fun resetpasswordUser(request: ResetPasswordRequest): DataResult<Nothing> {
+        return safeApiCall {
+            apiUserHome.resetpassword(request)
+        }
+    }
+
+    suspend fun onUploadImage(file: MultipartBody.Part): DataResult<String> {
+        return  safeApiCall {
+            apiUserHome.uploadImage(file)
+        }
+    }
 }

@@ -65,7 +65,6 @@ class ResetPasswordViewModel(
 //            }
 
 
-
             val request = ResetPasswordRequest(token, password, password1)
             val result = repository.resetpasswordUser(request)
 

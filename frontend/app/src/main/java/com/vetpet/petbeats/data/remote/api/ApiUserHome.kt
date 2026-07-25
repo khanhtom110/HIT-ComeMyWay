@@ -2,8 +2,11 @@ package com.vetpet.petbeats.data.remote.api
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
@@ -11,9 +14,13 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.Locatio
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -73,4 +80,24 @@ interface ApiUserHome {
         @Body request: DeviceTokenFireBaseRequest
     ): ApiResponse<Any>
 
+    @POST(ApiConstants.UPDATEPROFILEUSER)
+    suspend fun updateProfile(
+        @Path("id") id: Int,
+        @Body request: UpdateProfileRequest
+    ): ApiResponse<UpdateProfileResponse>
+
+    @GET(ApiConstants.PROFILEUSER)
+    suspend fun profile(): ApiResponse<UpdateProfileResponse>
+
+    @POST(ApiConstants.LOGOUT)
+    suspend fun logout(@Body request: LogoutRequest): ApiResponse<Unit>
+
+    @POST(ApiConstants.RESETPASSWORD)
+    suspend fun resetpassword(@Body request: ResetPasswordRequest): ApiResponse<Nothing>
+
+    @Multipart
+    @POST(ApiConstants.UPLOAD)
+    suspend fun uploadImage(
+        @Part file: MultipartBody.Part
+    ): ApiResponse<String>
 }

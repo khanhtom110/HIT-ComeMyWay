@@ -83,13 +83,19 @@ class AppointmentDetailWaitViewModel(
                         else -> BookChildState.PENDING
                     }
 
+                    val bookingType = when(data.bookingType) {
+                        "AT_HOME" -> "Khám tại nhà"
+                        "AT_CLINIC" -> "Khám tại phòng khám"
+                        else -> data.bookingType
+                    }
+
                     _state.value = _state.value.copy(
                         status = mapStatus,
                         imgPet = data.avatar.orEmpty(),
                         day = data.appointmentDate,
                         time = data.appointmentTime,
                         quantity = data.petQuantity,
-                        bookingType = data.bookingType,
+                        bookingType = bookingType,
                         services = data.services,
                         fullName = data.fullName,
                         phone = data.phone,

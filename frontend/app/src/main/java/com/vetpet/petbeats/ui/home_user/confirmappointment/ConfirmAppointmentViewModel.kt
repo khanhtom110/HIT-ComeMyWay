@@ -86,10 +86,16 @@ class ConfirmAppointmentViewModel(
                         else -> BookChildState.PENDING
                     }
 
+                    val bookingType = when(data.bookingType) {
+                        "AT_HOME" -> "Khám tại nhà"
+                        "AT_CLINIC" -> "Khám tại phòng khám"
+                        else -> data.bookingType
+                    }
+
                     _state.value = _state.value.copy(
                         fullName = data.fullName,
                         phoneUser = data.phone,
-                        bookingType = data.bookingType,
+                        bookingType = bookingType,
                         homeAddress = data.homeAddress,
                         petType = data.petType,
                         petCondition = data.petCondition,

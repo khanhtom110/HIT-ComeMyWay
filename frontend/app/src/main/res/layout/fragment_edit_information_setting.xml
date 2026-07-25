@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnBack">
 
             <ImageView
-                android:id="@+id/imgPet"
+                android:id="@+id/imgLibrary"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_60sdp"
                 android:src="@drawable/image_test"
@@ -59,7 +59,7 @@
                 android:text="Tải ảnh lên"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="@dimen/_4sdp"
-                app:layout_constraintTop_toBottomOf="@id/imgPet"
+                app:layout_constraintTop_toBottomOf="@id/imgLibrary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -180,7 +180,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvInputAddress"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <EditText
+            <TextView
                 style="@style/Chu3"
                 android:id="@+id/tvInputEmail"
                 android:layout_width="match_parent"
@@ -188,26 +188,11 @@
                 android:background="@drawable/tittle_search_blue"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:hint="Nhập số email của bạn"
+                android:text="Nhập số email của bạn"
                 android:paddingHorizontal="@dimen/_16sdp"
-                android:inputType="textEmailAddress"
+                android:gravity="center_vertical"
                 android:textColor="@color/colorTextSub"
-                android:textColorHint="@color/colorTextContent"
                 app:layout_constraintTop_toBottomOf="@id/tvEmail"/>
-
-            <TextView
-                style="@style/Chu3"
-                android:id="@+id/tvEmailError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/colorError"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:visibility="gone"
-                android:drawablePadding="2dp"
-                app:drawableStartCompat="@drawable/warning"
-                app:layout_constraintTop_toBottomOf="@id/tvInputEmail"
-                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

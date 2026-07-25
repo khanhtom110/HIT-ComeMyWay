@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.data.remote.interceptor
 
+import android.util.Log
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.remote.api.ApiAuth
@@ -14,6 +15,8 @@ class TokenAuthenticator(
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val refreshToken = tokenManager.getRefreshToken()
+
+        Log.d("TOKEN", "RefreshToken = ${refreshToken}Token")
 
         if (refreshToken.isNullOrEmpty()) {
             return null

@@ -150,4 +150,44 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@id/settingUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
+        android:label="settingUserFragment"/>
+
+
+    <fragment
+        android:id="@+id/editInformationFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
+        android:label="editInformationFragment">
+        <action
+            android:id="@+id/editInformation_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
+        android:label="editPasswordFragment">
+        <action
+            android:id="@+id/editPassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordFragment"
+        android:label="forgotPasswordFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordFragment"
+        android:label="resetPasswordFragment">
+    </fragment>
+
 </navigation>
