@@ -2,6 +2,7 @@ package com.hit.comemyway.service;
 
 import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.ChangePasswordRequest;
+import com.hit.comemyway.dto.request.ChangeUserPasswordRequest;
 import com.hit.comemyway.dto.request.CreateClinicAccountRequest;
 import com.hit.comemyway.dto.request.UpdateUserRequest;
 import com.hit.comemyway.dto.response.UpdateUserResponse;
@@ -11,6 +12,7 @@ import com.hit.comemyway.entity.Role;
 import com.hit.comemyway.entity.User;
 import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -127,5 +129,29 @@ public class UserService {
     user.setHobby(request.hobby());
 
     return UpdateUserResponse.from(user);
+  }
+
+  @Transactional
+  public void updateUserPassword(ChangeUserPasswordRequest request) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+      throw new AppException(400, ErrorMessage.Auth.INVALID_PASSWORD);
+    }
+
+    if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+      throw new AppException(400, ErrorMessage.Auth.PASSWORD_SAME_AS_OLD);
+    }
+
+    if (!request.newPassword().equals(request.confirmPassword())) {
+      throw new AppException(400, ErrorMessage.PASSWORD_MISMATCH);
+    }
+
+    user.setPassword(passwordEncoder.encode(request.newPassword()));
+
+    userRepository.save(user);
   }
 }
