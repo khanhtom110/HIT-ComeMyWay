@@ -10,9 +10,9 @@
         android:label="bookFragment"/>
 
     <fragment
-        android:id="@+id/newsFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.chatbot.NewsFragment"
-        android:label="newsFragmnet"/>
+        android:id="@+id/chatbotFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.chatbot.ChatBotFragment"
+        android:label="chatbotFragmnet"/>
 
     <fragment
         android:id="@+id/locketFragment"

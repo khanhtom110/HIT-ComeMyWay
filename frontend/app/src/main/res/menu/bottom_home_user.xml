@@ -6,7 +6,7 @@
         android:title="Đặt lịch"/>
 
     <item
-        android:id="@+id/newsFragment"
+        android:id="@+id/chatbotFragment"
         android:icon="@drawable/icon_chatbot"
         android:title="Tìm hiểu"/>
 
