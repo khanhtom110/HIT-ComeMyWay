@@ -33,33 +33,29 @@ class AppointmentDetailWaitViewModel(
 
     fun itemReceiveClick(id: Int) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                val result = repositoryClinic.confirmAppointment(id)
+            val result = repositoryClinic.confirmAppointment(id)
 
-                when (result) {
-                    is DataResult.Success -> {
-                        _event.emit(AppointmentDetailWaitEvent.NavigationDetailReceive(id))
-                    }
-                    is DataResult.Error -> {
-                        return@launch
-                    }
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(AppointmentDetailWaitEvent.NavigationDetailReceive(id))
+                }
+                is DataResult.Error -> {
+                    return@launch
                 }
             }
         }
     }
     fun itemRefuseClick(id: Int, reason: String) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                val requestReason = ReasonRejectRequest(reason)
-                val result = repositoryClinic.rejectAppointment(id, requestReason)
+            val requestReason = ReasonRejectRequest(reason)
+            val result = repositoryClinic.rejectAppointment(id, requestReason)
 
-                when (result) {
-                    is DataResult.Success -> {
-                        _event.emit(AppointmentDetailWaitEvent.NavigationDetailRefuse(id))
-                    }
-                    is DataResult.Error -> {
-                        return@launch
-                    }
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(AppointmentDetailWaitEvent.NavigationDetailRefuse(id))
+                }
+                is DataResult.Error -> {
+                    return@launch
                 }
             }
         }

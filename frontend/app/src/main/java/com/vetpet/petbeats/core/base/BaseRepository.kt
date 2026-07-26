@@ -5,6 +5,7 @@ import com.vetpet.petbeats.core.network.ApiResponse
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.utils.ErrorUtils.getErrorTargetAndMessage
 import com.google.gson.JsonParser
+import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -45,6 +46,8 @@ abstract class BaseRepository {
             DataResult.Error(target = errorMessage.first, message = errorMessage.second)
         } catch (e: IOException) {
             DataResult.Error(target = ErrorTarget.GENERAL, message = "Không có kết nối mạng. Vui lòng kiểm tra lại")
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             DataResult.Error(target = ErrorTarget.GENERAL, message = "Đã có lỗi bất ngờ xảy ra: ${e.message}")
         }

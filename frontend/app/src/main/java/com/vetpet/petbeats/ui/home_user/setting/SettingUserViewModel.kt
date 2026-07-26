@@ -24,8 +24,10 @@ class SettingUserViewModel(
     val event = _event.asSharedFlow()
 
     fun editInformationClick() {
+        val id = _state.value.id
+
         viewModelScope.launch {
-            _event.emit(SettingUserEvent.NavigationEditInformationSetting)
+            _event.emit(SettingUserEvent.NavigationEditInformationSetting(id))
         }
     }
     fun editPasswordClick() {
@@ -46,7 +48,10 @@ class SettingUserViewModel(
 
                     _state.value = _state.value.copy(
                         id = data.id,
-                        image = data.avatar,
+                        name = data.fullName.orEmpty(),
+                        phone = data.phone.orEmpty(),
+                        address = data.homeAddress.orEmpty(),
+                        image = data.avatar.orEmpty(),
                         email = data.email,
                     )
                 }

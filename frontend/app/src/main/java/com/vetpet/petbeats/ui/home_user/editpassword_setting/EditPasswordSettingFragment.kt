@@ -35,7 +35,6 @@ class EditPasswordSettingFragment : Fragment() {
             HomeUserRepository(
                 RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
             ),
-            TokenManager(requireContext())
         )
     }
 
@@ -179,10 +178,10 @@ class EditPasswordSettingFragment : Fragment() {
                         binding.passwordError.text = state.passwordError
                     }
                     if (binding.passwordNewError.text.toString() != state.passwordError) {
-                        binding.passwordNewError.text = state.passwordError
+                        binding.passwordNewError.text = state.passwordNewError
                     }
                     if (binding.passwordNewError1.text.toString() != state.passwordError) {
-                        binding.passwordNewError1.text = state.passwordError
+                        binding.passwordNewError1.text = state.passwordNewError
                     }
 
 

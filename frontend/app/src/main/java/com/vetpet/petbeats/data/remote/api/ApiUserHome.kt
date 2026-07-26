@@ -4,6 +4,7 @@ import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
@@ -92,12 +93,12 @@ interface ApiUserHome {
     @POST(ApiConstants.LOGOUT)
     suspend fun logout(@Body request: LogoutRequest): ApiResponse<Unit>
 
-    @POST(ApiConstants.RESETPASSWORD)
-    suspend fun resetpassword(@Body request: ResetPasswordRequest): ApiResponse<Nothing>
-
     @Multipart
     @POST(ApiConstants.UPLOAD)
     suspend fun uploadImage(
         @Part file: MultipartBody.Part
     ): ApiResponse<String>
+
+    @POST(ApiConstants.CHANGEPASSWORDUSER)
+    suspend fun changePasswordUser(@Body request: ChangePasswordUserRequest): ApiResponse<Any>
 }

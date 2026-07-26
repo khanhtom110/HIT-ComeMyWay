@@ -396,7 +396,6 @@ Vui lòng chọn sang khám tại phòng khám hoặc chọn loại dịch vụ 
                     android:layout_marginStart="@dimen/_130sdp"
                     android:textColor="@color/colorTextContent"
                     app:layout_constraintTop_toTopOf="@id/tvState"
-                    app:layout_constraintBottom_toBottomOf="@id/tvState"
                     app:layout_constraintEnd_toEndOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -14,4 +14,5 @@ data class EditPasswordSettingState (
     val isNewPassword1: Boolean = false,
 
     val passwordError: String = "",
+    val passwordNewError: String = "",
 )

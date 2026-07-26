@@ -52,5 +52,5 @@ object ApiConstants {
     const val UPDATEPROFILEUSER = "/api/v1/user/update-profile/{id}"
     const val UPLOAD = "/api/v1/media/upload"
     const val PROFILEUSER = "/api/v1/user/profile"
-
+    const val CHANGEPASSWORDUSER = "/api/v1/user/change-password"
 }

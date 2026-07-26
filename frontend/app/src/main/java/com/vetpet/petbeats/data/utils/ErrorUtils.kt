@@ -30,6 +30,9 @@ object ErrorUtils {
                 Pair(ErrorTarget.PASSWORD, "Mật khẩu xác nhận không khớp.")
             "New password must be different from the current password." ->
                 Pair(ErrorTarget.PASSWORD, "Mật khẩu mới phải khác mật khẩu hiện tại.")
+            "Invalid password." -> {
+                Pair(ErrorTarget.PASSWORD, "Mật khẩu không hợp lệ.")
+            }
 
             //Otp
             "The provided OTP is invalid. Please check and try again." ->

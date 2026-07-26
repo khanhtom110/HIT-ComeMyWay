@@ -136,10 +136,9 @@ class EditInformationSettingFragment : Fragment() {
         binding.imgLibrary.setOnClickListener {
             openGallery()
         }
-        binding.btnUpdate.setOnClickListener {
-            val id = arguments?.getInt("id") ?: 0
 
-            viewModel.onInformationClick(id)
+        val id = arguments?.getInt("id") ?: 0
+        binding.btnUpdate.setOnClickListener {
             viewModel.onProfile(id)
         }
     }

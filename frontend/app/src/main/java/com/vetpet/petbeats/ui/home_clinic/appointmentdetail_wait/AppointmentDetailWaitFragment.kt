@@ -70,6 +70,8 @@ class AppointmentDetailWaitFragment : Fragment() {
 
 
     private fun setOnClick() {
+        val id = arguments?.getInt("id") ?: 0
+
         binding.btnBack.setOnClickListener {
             viewModel.appointmentScheduleClick()
         }

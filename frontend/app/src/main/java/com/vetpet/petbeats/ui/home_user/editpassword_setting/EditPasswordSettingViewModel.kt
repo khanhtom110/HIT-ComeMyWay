@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.repository.HomeUserRepository
@@ -15,8 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class EditPasswordSettingViewModel(
-    private val repository: HomeUserRepository,
-    private val tokenManager: TokenManager
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(EditPasswordSettingState())
     val state = _state.asStateFlow()
@@ -68,9 +68,8 @@ class EditPasswordSettingViewModel(
             val newPassword = _state.value.newPassword.trim()
             val newPassword1 = _state.value.newPassword1.trim()
 
-            val accessToken = tokenManager.getAccessToken()
-            val request = ResetPasswordRequest(accessToken, newPassword, newPassword1)
-            val result = repository.resetpasswordUser(request)
+            val request = ChangePasswordUserRequest(password, newPassword, newPassword1)
+            val result = repository.changePasswordUser(request)
 
 
             when (result) {
@@ -82,9 +81,11 @@ class EditPasswordSettingViewModel(
 
                 is DataResult.Error -> {
                     _state.value = _state.value.copy(
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
                         isNewPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
                         isNewPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
                         passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordNewError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
                     )
                     return@launch
                 }

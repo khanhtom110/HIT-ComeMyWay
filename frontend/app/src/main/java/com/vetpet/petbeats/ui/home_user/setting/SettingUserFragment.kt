@@ -100,7 +100,12 @@ class SettingUserFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is SettingUserEvent.NavigationEditInformationSetting -> {
-                            findNavController().navigate(R.id.editInformationFragment)
+                            findNavController().navigate(
+                                R.id.editInformationFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                         is SettingUserEvent.NavigationEditPasswordSetting -> {
                             findNavController().navigate(R.id.editPasswordFragment)

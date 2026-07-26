@@ -7,6 +7,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
@@ -128,15 +129,15 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun resetpasswordUser(request: ResetPasswordRequest): DataResult<Nothing> {
-        return safeApiCall {
-            apiUserHome.resetpassword(request)
-        }
-    }
-
     suspend fun onUploadImage(file: MultipartBody.Part): DataResult<String> {
         return  safeApiCall {
             apiUserHome.uploadImage(file)
+        }
+    }
+
+    suspend fun changePasswordUser(request: ChangePasswordUserRequest): DataResult<Any> {
+        return safeApiCall {
+            apiUserHome.changePasswordUser(request)
         }
     }
 }

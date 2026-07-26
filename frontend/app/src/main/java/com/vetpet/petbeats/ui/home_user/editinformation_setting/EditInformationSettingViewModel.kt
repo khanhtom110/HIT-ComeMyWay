@@ -75,9 +75,13 @@ class EditInformationSettingViewModel(
     fun onProfile(id: Int) {
         viewModelScope.launch {
             val image = _state.value.image
+            val name = _state.value.name
+            val phone = _state.value.phone
+            val address = _state.value.address
             val email = _state.value.email
 
-            val requestProfile = UpdateProfileRequest( email, image, "không có")
+
+            val requestProfile = UpdateProfileRequest(name, phone, address, email, image, "Khong co")
             val result = repository.updateProfile(id, requestProfile)
 
             when(result) {
@@ -86,30 +90,6 @@ class EditInformationSettingViewModel(
                 }
                 is DataResult.Error -> {
                     Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
-                    return@launch
-                }
-            }
-        }
-    }
-    fun onInformationClick(id: Int) {
-        viewModelScope.launch {
-            val request = AppointmentIdRequest(id)
-            val result = repository.takeAppointmentId(request)
-
-            when (result) {
-                is DataResult.Success -> {
-                    _state.value = _state.value.copy(isName = false, isPhone = false)
-
-                    _event.emit(EditInformationSettingEvent.NavigationSetting)
-                }
-                is DataResult.Error -> {
-                    Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
-                    _state.value = _state.value.copy(
-                        isName = (result.target == ErrorTarget.NAME || result.target == ErrorTarget.GENERAL),
-                        isPhone = (result.target == ErrorTarget.PHONE || result.target == ErrorTarget.GENERAL),
-                        nameError = if (result.target == ErrorTarget.NAME || result.target == ErrorTarget.GENERAL) result.message else "",
-                        phoneError = if (result.target == ErrorTarget.PHONE || result.target == ErrorTarget.GENERAL) result.message else "",
-                    )
                     return@launch
                 }
             }
@@ -128,7 +108,10 @@ class EditInformationSettingViewModel(
 
                     _state.value = _state.value.copy(
                         id = data.id,
-                        image = data.avatar,
+                        name = data.fullName.orEmpty(),
+                        phone = data.phone.orEmpty(),
+                        address = data.homeAddress.orEmpty(),
+                        image = data.avatar.orEmpty(),
                         email = data.email,
                     )
                 }
