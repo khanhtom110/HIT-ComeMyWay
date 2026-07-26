@@ -23,6 +23,7 @@ import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
 import kotlinx.coroutines.launch
@@ -33,7 +34,8 @@ class ScheduleListFragment : Fragment() {
     private var _binding: FragmentScheduleListBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterWait: AppointmentWaitAdapter
-    private lateinit var adapterRefuseReceive: AppointmentRefuseAdapter
+    private lateinit var adapterRefuse: AppointmentRefuseAdapter
+    private lateinit var adapterReceive: AppointmentReceiveAdapter
     private val viewModel: ScheduleListViewModel by viewModels {
         ScheduleListViewModelFactory(
             HomeClinicRepository(
@@ -100,8 +102,12 @@ class ScheduleListFragment : Fragment() {
                 ) },
         )
 
-        adapterRefuseReceive = AppointmentRefuseAdapter { id ->
-            viewModel.itemReceiveClick(id)
+        adapterReceive = AppointmentReceiveAdapter { id ->
+            viewModel.receiveClick(id)
+        }
+
+        adapterRefuse = AppointmentRefuseAdapter { id ->
+            viewModel.refuseClick(id)
         }
     }
 
@@ -227,8 +233,8 @@ class ScheduleListFragment : Fragment() {
                         binding.btnRefuse.setTextColor(clinic)
 
 
-                        binding.recycle.adapter = adapterRefuseReceive
-                        adapterRefuseReceive.submitList(state.listAppointmentChild)
+                        binding.recycle.adapter = adapterRefuse
+                        adapterRefuse.submitList(state.listAppointmentChild)
 
 
                         viewModel.onAppointmentRefuseList()
@@ -249,8 +255,8 @@ class ScheduleListFragment : Fragment() {
                         binding.btnReceive.setTextColor(clinic)
 
 
-                        binding.recycle.adapter = adapterRefuseReceive
-                        adapterRefuseReceive.submitList(state.listAppointmentChild)
+                        binding.recycle.adapter = adapterReceive
+                        adapterReceive.submitList(state.listAppointmentChild)
 
 
                         viewModel.onAppointmentReceiveList()
@@ -276,13 +282,28 @@ class ScheduleListFragment : Fragment() {
                             findNavController().navigate(R.id.scheduleList_appointmentSchedule)
                         }
                         is ScheduleListEvent.NavigationDetail -> {
-                            findNavController().navigate(R.id.appointmentDetailWait)
+                            findNavController().navigate(
+                                R.id.appointmentDetailWait,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                         is ScheduleListEvent.NavigationDetailReceive -> {
-                            findNavController().navigate(R.id.appointmentDetailReceive)
+                            findNavController().navigate(
+                                R.id.appointmentDetailReceive,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                         is ScheduleListEvent.NavigationDetailRefuse -> {
-                            findNavController().navigate(R.id.appointmentDetailRefuse)
+                            findNavController().navigate(
+                                R.id.appointmentDetailRefuse,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }

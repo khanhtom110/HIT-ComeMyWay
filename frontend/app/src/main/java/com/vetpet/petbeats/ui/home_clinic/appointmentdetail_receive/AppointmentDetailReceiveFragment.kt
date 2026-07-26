@@ -102,7 +102,7 @@ class AppointmentDetailReceiveFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailReceiveEvent.NavigationAppointmentSchedule -> {
-                            findNavController().navigate(R.id.receive_appointmentSchedule)
+                            findNavController().popBackStack()
                         }
                     }
                 }

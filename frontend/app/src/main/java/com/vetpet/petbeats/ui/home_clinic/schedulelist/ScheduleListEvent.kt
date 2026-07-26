@@ -7,5 +7,5 @@ sealed class ScheduleListEvent {
 
     data class NavigationDetail(val id: Int): ScheduleListEvent()
     data class NavigationDetailReceive(val id: Int): ScheduleListEvent()
-    data class NavigationDetailRefuse(val id: Int, val reason: String): ScheduleListEvent()
+    data class NavigationDetailRefuse(val id: Int): ScheduleListEvent()
 }

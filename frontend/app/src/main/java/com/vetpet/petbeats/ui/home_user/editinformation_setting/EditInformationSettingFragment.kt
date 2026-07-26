@@ -115,7 +115,14 @@ class EditInformationSettingFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
-            viewModel.settingClick()
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn quay lại không?",
+                leftButton = "Quay lại",
+                rightButton = "Tiếp tục",
+                onLeftButtonClick = {
+                    viewModel.settingClick()
+                }
+            )
         }
 
 
@@ -144,14 +151,7 @@ class EditInformationSettingFragment : Fragment() {
 
         val id = arguments?.getInt("id") ?: 0
         binding.btnUpdate.setOnClickListener {
-            showPopupDialog(
-                message = "Bạn có chắc chắn muốn cập nhật không?",
-                leftButton = "Quay lại",
-                rightButton = "Tiếp tục",
-                onRightButtonClick = {
-                    viewModel.onProfile(id)
-                }
-            )
+            viewModel.onProfile(id)
         }
     }
 

@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ScheduleListViewModel(
-    private val repository: HomeClinicRepository
+    private val repositoryClinic: HomeClinicRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(ScheduleListState())
     val state = _state.asStateFlow()
@@ -34,6 +34,19 @@ class ScheduleListViewModel(
 
 
 
+    fun receiveClick(id: Int) {
+        viewModelScope.launch {
+            _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
+        }
+    }
+    fun refuseClick(id: Int) {
+        viewModelScope.launch {
+            _event.emit(ScheduleListEvent.NavigationDetailRefuse(id))
+        }
+    }
+
+
+
     fun onWaitClick() {
         _state.value = _state.value.copy(isWait = true, isRefuse = false, isReceive = false)
     }
@@ -45,6 +58,7 @@ class ScheduleListViewModel(
     }
 
 
+
     fun itemDetailClick(id: Int) {
         viewModelScope.launch {
             _event.emit(ScheduleListEvent.NavigationDetail(id))
@@ -52,45 +66,40 @@ class ScheduleListViewModel(
     }
     fun itemReceiveClick(id: Int) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                val result = repository.confirmAppointment(id)
+            val result = repositoryClinic.confirmAppointment(id)
 
-                when (result) {
-                    is DataResult.Success -> {
-                        Log.d("API", "Success")
-                        _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
-                    }
-                    is DataResult.Error -> {
-                        Log.e("API", result.message )
-                        return@launch
-                    }
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
+                }
+                is DataResult.Error -> {
+                    return@launch
                 }
             }
         }
     }
     fun itemRefuseClick(id: Int, reason: String) {
         viewModelScope.launch {
-            viewModelScope.launch {
-                val requestReason = ReasonRejectRequest(reason)
-                val result = repository.rejectAppointment(id, requestReason)
+            val requestReason = ReasonRejectRequest(reason)
+            val result = repositoryClinic.rejectAppointment(id, requestReason)
 
-                when (result) {
-                    is DataResult.Success -> {
-                        _event.emit(ScheduleListEvent.NavigationDetailReceive(id))
-                    }
-                    is DataResult.Error -> {
-                        return@launch
-                    }
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(ScheduleListEvent.NavigationDetailRefuse(id))
+                }
+                is DataResult.Error -> {
+                    return@launch
                 }
             }
         }
     }
 
 
+
     //Api hiển thị wait list
     fun onAppointmentWaitList() {
         viewModelScope.launch {
-            val result = repository.pendingAppointment()
+            val result = repositoryClinic.pendingAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -121,7 +130,7 @@ class ScheduleListViewModel(
     //Api hiển thị refuse list
     fun onAppointmentRefuseList() {
         viewModelScope.launch {
-            val result = repository.rejectAppointment()
+            val result = repositoryClinic.rejectAppointment()
 
             when (result) {
                 is DataResult.Success -> {
@@ -151,7 +160,7 @@ class ScheduleListViewModel(
     //Api hiển thị receive list
     fun onAppointmentReceiveList() {
         viewModelScope.launch {
-            val result = repository.confirmAppointment()
+            val result = repositoryClinic.confirmAppointment()
 
             when (result) {
                 is DataResult.Success -> {

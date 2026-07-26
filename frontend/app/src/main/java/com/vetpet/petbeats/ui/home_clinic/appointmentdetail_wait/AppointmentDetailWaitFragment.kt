@@ -213,7 +213,7 @@ class AppointmentDetailWaitFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailWaitEvent.NavigationAppointmentSchedule -> {
-                            findNavController().navigate(R.id.wait_appointmentSchedule)
+                            findNavController().popBackStack()
                         }
                         is AppointmentDetailWaitEvent.NavigationDetailReceive -> {
                             findNavController().navigate(

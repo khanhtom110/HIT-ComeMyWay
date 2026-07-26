@@ -81,7 +81,6 @@ class AppointmentScheduleViewModel(
         }
     }
     fun itemRefuseClick(id: Int, reason: String) {
-
         viewModelScope.launch {
             viewModelScope.launch {
                 val requestReason = ReasonRejectRequest(reason)
