@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/newsFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.news.NewsFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.chatbot.NewsFragment"
         android:label="newsFragmnet"/>
 
     <fragment

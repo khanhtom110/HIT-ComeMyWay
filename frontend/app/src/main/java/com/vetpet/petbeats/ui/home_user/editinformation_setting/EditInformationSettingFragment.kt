@@ -1,15 +1,19 @@
 package com.vetpet.petbeats.ui.home_user.editinformation_setting
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,6 +24,7 @@ import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditInformationSettingBinding
 import com.example.VetPet.databinding.FragmentEditPasswordSettingBinding
+import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
@@ -139,9 +144,53 @@ class EditInformationSettingFragment : Fragment() {
 
         val id = arguments?.getInt("id") ?: 0
         binding.btnUpdate.setOnClickListener {
-            viewModel.onProfile(id)
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn cập nhật không?",
+                leftButton = "Quay lại",
+                rightButton = "Tiếp tục",
+                onRightButtonClick = {
+                    viewModel.onProfile(id)
+                }
+            )
         }
     }
+
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
+    }
+
 
     private fun stateData() {
         lifecycleScope.launch {
