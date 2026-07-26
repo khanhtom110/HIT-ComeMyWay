@@ -8,6 +8,15 @@ public record UpdateUserResponse(
         @Schema(description = "Mã định danh duy nhất", example = "1")
         Long id,
 
+        @Schema(description = "Họ và tên", example = "Nguyễn Công Phượng")
+        String fullName,
+
+        @Schema(description = "Số điện thoại", example = "0912345678")
+        String phone,
+
+        @Schema(description = "Địa chỉ nhà", example = "Số 1, đường Nhổn, Hà Nội")
+        String homeAddress,
+
         @Schema(description = "Địa chỉ email cá nhân", example = "khanhn.nv@gmail.com")
         String email,
 
@@ -20,6 +29,9 @@ public record UpdateUserResponse(
     public static UpdateUserResponse from(User user) {
         return new UpdateUserResponse(
                 user.getId(),
+                user.getFullName(),
+                user.getPhone(),
+                user.getHomeAddress(),
                 user.getEmail(),
                 user.getAvatar(),
                 user.getHobby()

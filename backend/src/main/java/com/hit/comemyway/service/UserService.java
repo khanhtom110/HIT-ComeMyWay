@@ -124,6 +124,9 @@ public class UserService {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
+    user.setFullName(request.fullName());
+    user.setPhone(request.phone());
+    user.setHomeAddress(request.homeAddress());
     user.setEmail(request.email());
     user.setAvatar(request.avatar());
     user.setHobby(request.hobby());

@@ -26,6 +26,7 @@ public final class ErrorMessage {
       "Username must be 4-120 characters long and contain only letters, numbers, and underscores.";
   public static final String INVALID_FORMAT_FULLNAME = "Fullname must be 4-120 characters long.";
   public static final String INVALID_FORMAT_PHONE = "Invalid phone number format";
+  public static final String INVALID_FORMAT_ADDRESS = "Address must not exceed 255 characters";
   public static final String INVALID_FORMAT_PASSWORD =
       "Password must be 8-120 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.";
   public static final String INVALID_USERNAME_LENGTH =
