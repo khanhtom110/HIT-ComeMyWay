@@ -5,13 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentChatbotBinding
 import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 
@@ -40,6 +45,7 @@ class ChatbotFragment : Fragment() {
 
         setOnClick()
         stateData()
+        eventData()
     }
 
     override fun onDestroyView() {
@@ -48,11 +54,72 @@ class ChatbotFragment : Fragment() {
     }
 
     private fun setOnClick() {
+        binding.editAskChat.addTextChangedListener {
+            viewModel.onChatUserChange(it.toString())
+        }
 
+        binding.btnPushMessage.setOnClickListener {
+            viewModel.onChatBot()
+        }
     }
 
     private fun stateData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { state ->
+                    if (state.isChatUser) {
+                        binding.editAskChat.setBackgroundResource(R.drawable.button_input)
+                        binding.note.setImageResource(R.drawable.note_blue)
+                        binding.btnPushMessage.setImageResource(R.drawable.up_blue)
+                    }
+                    else {
+                        binding.editAskChat.setBackgroundResource(R.drawable.tittle_search)
+                        binding.note.setImageResource(R.drawable.note)
+                        binding.btnPushMessage.setImageResource(R.drawable.up)
+                    }
 
+                    if (state.isLogo) {
+                        binding.logo.visibility = View.GONE
+                        binding.textLogo.visibility = View.GONE
+                    }
+
+
+
+
+                    //Check input
+                    if (binding.editAskChat.text.toString() != state.chatUser) {
+                        binding.editAskChat.setText(state.chatUser)
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun eventData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+//                    if (event.isEmpty()) {
+//                        binding.groupEmptyState.visibility = View.VISIBLE
+//                        binding.rvChat.visibility = View.GONE
+//                    } else {
+//                        binding.groupEmptyState.visibility = View.GONE
+//                        binding.rvChat.visibility = View.VISIBLE
+//                    }
+//
+//                    // Đẩy dữ liệu vào RecyclerView
+//                    // chatAdapter.submitList(history)
+//
+//                    // Tự động cuộn xuống cuối cùng
+//                    if (history.isNotEmpty()) {
+//                        binding.rvChat.post {
+//                            binding.rvChat.smoothScrollToPosition(history.size - 1)
+//                        }
+//                    }
+                }
+            }
+        }
     }
 
 }

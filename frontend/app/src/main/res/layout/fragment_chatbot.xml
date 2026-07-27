@@ -12,6 +12,7 @@
 
         <TextView
             style="@style/TieuDe1"
+            android:id="@+id/tvHello"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chat với VetPet"
@@ -34,6 +35,7 @@
 
         <TextView
             style="@style/HienThiAI"
+            android:id="@+id/textLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thú cưng của bạn đang gặp \nvấn đề gì?"
@@ -44,35 +46,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvHello"
+            app:layout_constraintBottom_toTopOf="@id/editAskChat"/>
+
         <ImageView
             android:id="@+id/note"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:src="@drawable/note"
-            android:layout_marginBottom="@dimen/_30sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/editAskChat"
+            app:layout_constraintEnd_toStartOf="@id/editAskChat"
+            app:layout_constraintTop_toTopOf="@id/editAskChat" />
 
         <EditText
-            android:id="@+id/editAskChat"
             style="@style/Chu1"
+            android:id="@+id/editAskChat"
             android:layout_width="@dimen/_240sdp"
-            android:layout_height="@dimen/_44sdp"
-            android:layout_marginStart="12dp"
+            android:layout_height="@dimen/_40sdp"
             android:background="@drawable/tittle_search"
             android:hint="Hỏi câu bất kì"
             android:inputType="text"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_45sdp"
             android:textColor="@color/colorTextSub"
             android:textColorHint="@color/colorTextContent"
-            app:layout_constraintBottom_toBottomOf="@id/note"
-            app:layout_constraintStart_toEndOf="@id/note"
-            app:layout_constraintTop_toTopOf="@id/note"
-            app:layout_constraintVertical_bias="0.451" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
+            android:id="@+id/btnPushMessage"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/up"
