@@ -8,6 +8,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenR
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
@@ -23,6 +24,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchR
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.ChatResponse
 import okhttp3.MultipartBody
 
 class HomeUserRepository(
@@ -138,6 +140,12 @@ class HomeUserRepository(
     suspend fun changePasswordUser(request: ChangePasswordUserRequest): DataResult<Any> {
         return safeApiCall {
             apiUserHome.changePasswordUser(request)
+        }
+    }
+
+    suspend fun chatBot(request: ChatRequest): DataResult<ChatResponse> {
+        return safeApiCall {
+            apiUserHome.chatBot(request)
         }
     }
 }

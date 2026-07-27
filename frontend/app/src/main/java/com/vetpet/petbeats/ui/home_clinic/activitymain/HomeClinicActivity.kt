@@ -40,6 +40,18 @@ class HomeClinicActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, destination, bundle ->
             // Fix lỗi không hiện màu ở Bottom Nav
             when (destination.id) {
+                R.id.scheduleListFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailWait -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailReceive -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailRefuse -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
 
             }
         }

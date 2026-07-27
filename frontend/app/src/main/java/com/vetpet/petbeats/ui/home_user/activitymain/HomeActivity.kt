@@ -61,6 +61,15 @@ class HomeActivity : AppCompatActivity() {
                 R.id.editCalendarFragment -> {
                     binding.bottomUserNav.menu.findItem(R.id.bookFragment)?.isChecked = true
                 }
+
+
+
+                R.id.editInformationFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.settingUserFragment)?.isChecked = true
+                }
+                R.id.editPasswordFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.settingUserFragment)?.isChecked = true
+                }
             }
         }
     }

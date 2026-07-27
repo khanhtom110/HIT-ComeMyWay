@@ -3,7 +3,7 @@ package com.vetpet.petbeats.core.network
 object ApiConstants {
 
     //Servers
-    const val BASE_URL = "https://hit-comemyway-api.onrender.com/"
+    const val BASE_URL = "http://56.10.63.38/"
 
 
     //Authentication
@@ -53,4 +53,9 @@ object ApiConstants {
     const val UPLOAD = "/api/v1/media/upload"
     const val PROFILEUSER = "/api/v1/user/profile"
     const val CHANGEPASSWORDUSER = "/api/v1/user/change-password"
+
+
+    //Chatbot
+    const val CHATBOT = "/api/v1/chat"
+
 }
