@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.ui.home_user.editpassword_setting
+package com.vetpet.petbeats.ui.home_user.edit_password_setting
 
 data class EditPasswordSettingState (
     val password: String = "",

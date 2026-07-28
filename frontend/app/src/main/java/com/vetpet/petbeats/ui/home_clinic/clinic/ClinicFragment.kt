@@ -5,10 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentClinicBinding
 import com.example.VetPet.databinding.FragmentScheduleListBinding
@@ -17,6 +20,7 @@ import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModel
 import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModelFactory
+import com.vetpet.petbeats.ui.home_user.chatbot.ChatbotEvent
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -55,6 +59,12 @@ class ClinicFragment : Fragment() {
     }
 
     private fun setOnClick() {
+        binding.btnEdit.setOnClickListener {
+            viewModel.editInformationClick()
+        }
+        binding.btnPassword.setOnClickListener {
+            viewModel.editPasswordClick()
+        }
 
     }
 
@@ -62,6 +72,19 @@ class ClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
+                    //Check input
+                    binding.tvInputName.text = state.name
+                    binding.tvInputPhone.text = state.phone
+                    binding.tvInputAddress.text = state.address
+                    binding.tvInputLink.text = state.link
+                    binding.tvInputTime.text = state.time
+                    binding.tvInputState.text = state.state
+
+                    if (state.image.isNotEmpty()) {
+                        Glide.with(requireContext())
+                            .load(state.image)
+                            .into(binding.imgLibrary)
+                    }
 
                 }
             }
@@ -72,7 +95,14 @@ class ClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when (event) {
+                        is ClinicEvent.NavigationEditInformation -> {
+                            findNavController().navigate(R.id.editInformationClinicFragment)
+                        }
+                        is ClinicEvent.NavigationEditPassword -> {
+                            findNavController().navigate(R.id.editPasswordClinicFragment)
+                        }
+                    }
                 }
             }
         }

@@ -158,7 +158,7 @@
 
     <fragment
         android:id="@+id/editInformationFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_information_setting.EditInformationSettingFragment"
         android:label="editInformationFragment">
         <action
             android:id="@+id/editInformation_setting"
@@ -169,7 +169,7 @@
 
     <fragment
         android:id="@+id/editPasswordFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingFragment"
         android:label="editPasswordFragment">
         <action
             android:id="@+id/editPassword_setting"
