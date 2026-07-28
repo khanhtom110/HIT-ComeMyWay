@@ -18,8 +18,8 @@ class ChatbotViewModel(
     private val _state = MutableStateFlow(ChatbotState())
     val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<List<ChatbotEvent>>()
-    val event = _event.asSharedFlow()
+    private val _event = MutableStateFlow<List<ChatbotEvent>>(emptyList())
+    val event = _event.asStateFlow()
 
 
 
@@ -32,27 +32,29 @@ class ChatbotViewModel(
         val chatUser = _state.value.chatUser
 
 
-        val currentList = mutableListOf<ChatbotEvent>()
+        val currentList = _event.value.toMutableList()
         currentList.add(ChatbotEvent.UserMessage(chatUser))
         currentList.add(ChatbotEvent.BotTyping)
 
-        _state.value = _state.value.copy(chatUser = "", isChatUser = false, isLogo = true)
+
+        _event.value = currentList
 
 
-//        viewModelScope.launch {
-//            val request = ChatRequest(chatUser)
-//            val result = repository.chatBot(request)
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//
-//
-//
-//                }
-//                is DataResult.Error -> {
-//
-//                }
-//            }
-//        }
+        viewModelScope.launch {
+            val request = ChatRequest(chatUser)
+            val result = repository.chatBot(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(chatUser = "", isChatUser = false, isLogo = true)
+
+
+                }
+                is DataResult.Error -> {
+                    currentList.add(ChatbotEvent.BotMessage("Xin lỗi, vì đã xảy ra lỗi kết nối"))
+                }
+            }
+            _event.value = currentList
+        }
     }
 }
