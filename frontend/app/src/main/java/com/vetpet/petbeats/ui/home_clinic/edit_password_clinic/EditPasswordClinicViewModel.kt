@@ -59,35 +59,35 @@ class EditPasswordClinicViewModel(
 
 
 
-//    fun onEditPasswordClick() {
-//        viewModelScope.launch {
-//            val password = _state.value.password.trim()
-//            val newPassword = _state.value.newPassword.trim()
-//            val newPassword1 = _state.value.newPassword1.trim()
-//
-//            val request = ChangePasswordUserRequest(password, newPassword, newPassword1)
-//            val result = repository.changePasswordUser(request)
-//
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//                    _state.value = _state.value.copy(isPassword = false, isNewPassword = false, isNewPassword1 = false, passwordError = "")
-//
-//                    _event.emit(EditPasswordClinicEvent.NavigationClinic)
-//                }
-//
-//                is DataResult.Error -> {
-//                    _state.value = _state.value.copy(
-//                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
-//                        isNewPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
-//                        isNewPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
-//                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
-//                        passwordNewError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
-//                    )
-//                    return@launch
-//                }
-//            }
-//        }
-//    }
+    fun onEditPasswordClick() {
+        viewModelScope.launch {
+            val password = _state.value.password.trim()
+            val newPassword = _state.value.newPassword.trim()
+            val newPassword1 = _state.value.newPassword1.trim()
+
+            val request = ChangePasswordUserRequest(password, newPassword, newPassword1)
+            val result = repository.changePasswordUser(request)
+
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isPassword = false, isNewPassword = false, isNewPassword1 = false, passwordError = "")
+
+                    _event.emit(EditPasswordClinicEvent.NavigationClinic)
+                }
+
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        isNewPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        isNewPassword1 = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordNewError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                    )
+                    return@launch
+                }
+            }
+        }
+    }
 
 }

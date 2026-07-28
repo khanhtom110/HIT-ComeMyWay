@@ -181,55 +181,55 @@ class EditInformationClinicViewModel(
     }
 
 
-//    fun onInformation() {
-//        viewModelScope.launch {
-//            viewModelScope.launch {
-//                val result = repository.profile()
-//
-//                when (result) {
-//                    is DataResult.Success -> {
-//                        val data = result.data
-//
-//                        _state.value = _state.value.copy(
-//                            id = data.id,
-//                            image = data.avatar.orEmpty(),
-//                            name = data.fullName.orEmpty(),
-//                            phone = data.phone.orEmpty(),
-//                            address = data.homeAddress.orEmpty(),
-//
-//
-//                            email = data.email,
-//                        )
-//                    }
-//                    is DataResult.Error -> {
-//                        Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
-//
-//                        _state.value = _state.value.copy()
-//                        return@launch
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//
-//
-//    fun onLogoutClick() {
-//        viewModelScope.launch {
-//            val refreshToken = tokenManager.getRefreshToken() ?: ""
-//
-//            val request = LogoutRequest(refreshToken)
-//            val result = repository.logoutUser(request)
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//                    _event.emit(SettingUserEvent.NavigationLogin)
-//                }
-//                is DataResult.Error -> {
-//                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
-//                    return@launch
-//                }
-//            }
-//        }
-//    }
+    fun onInformation() {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val result = repository.profile()
+
+                when (result) {
+                    is DataResult.Success -> {
+                        val data = result.data
+
+                        _state.value = _state.value.copy(
+                            id = data.id,
+                            image = data.avatar.orEmpty(),
+                            name = data.fullName.orEmpty(),
+                            phone = data.phone.orEmpty(),
+                            address = data.homeAddress.orEmpty(),
+
+
+                            email = data.email,
+                        )
+                    }
+                    is DataResult.Error -> {
+                        Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
+
+                        _state.value = _state.value.copy()
+                        return@launch
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    fun onLogoutClick() {
+        viewModelScope.launch {
+            val refreshToken = tokenManager.getRefreshToken() ?: ""
+
+            val request = LogoutRequest(refreshToken)
+            val result = repository.logoutUser(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _event.emit(SettingUserEvent.NavigationLogin)
+                }
+                is DataResult.Error -> {
+                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
+                    return@launch
+                }
+            }
+        }
+    }
 }
