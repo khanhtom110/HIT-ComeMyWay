@@ -83,5 +83,7 @@ public interface ClinicRepository extends JpaRepository<Clinic, Long> {
 
   boolean existsByUser(User user);
 
+  Optional<Clinic> findByUser(User user);
+
   List<Clinic> findByServices_NameContainingIgnoreCase(String detectedService);
 }
