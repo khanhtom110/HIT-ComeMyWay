@@ -16,6 +16,7 @@ import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import com.vetpet.petbeats.ui.home_user.chatbot.adapter.ChatbotAdapter
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -23,6 +24,7 @@ import kotlin.getValue
 class ChatbotFragment : Fragment() {
     private var _binding: FragmentChatbotBinding ?= null
     private val binding get() = _binding!!
+    private lateinit var chatbotAdapter: ChatbotAdapter
     private val viewModel: ChatbotViewModel by viewModels {
         ChatbotViewModelFactory(
             HomeUserRepository(
@@ -42,6 +44,9 @@ class ChatbotFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        chatbotAdapter = ChatbotAdapter()
+        binding.recycle.adapter = chatbotAdapter
 
         setOnClick()
         stateData()
@@ -100,23 +105,15 @@ class ChatbotFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-//                    if (event.isEmpty()) {
-//                        binding.groupEmptyState.visibility = View.VISIBLE
-//                        binding.rvChat.visibility = View.GONE
-//                    } else {
-//                        binding.groupEmptyState.visibility = View.GONE
-//                        binding.rvChat.visibility = View.VISIBLE
-//                    }
-//
-//                    // Đẩy dữ liệu vào RecyclerView
-//                    // chatAdapter.submitList(history)
-//
-//                    // Tự động cuộn xuống cuối cùng
-//                    if (history.isNotEmpty()) {
-//                        binding.rvChat.post {
-//                            binding.rvChat.smoothScrollToPosition(history.size - 1)
-//                        }
-//                    }
+                    // Đẩy dữ liệu vào RecyclerView
+                     chatbotAdapter.submitList(event)
+
+                    // Tự động cuộn xuống cuối cùng
+                    if (event.isNotEmpty()) {
+                        binding.recycle.post {
+                            binding.recycle.smoothScrollToPosition(event.size - 1)
+                        }
+                    }
                 }
             }
         }
