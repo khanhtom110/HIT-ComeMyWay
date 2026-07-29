@@ -69,6 +69,7 @@ public class UrlConstant {
     public static final String GET_ALL = PREFIX;
     public static final String COMPLETE_PROFILE = PREFIX + "/complete-profile";
     public static final String UPDATE_PROFILE = PREFIX + "/update-profile";
+    public static final String GET_PROFILE = PREFIX + "/profile";
     public static final String CHANGE_PASSWORD = PREFIX + "/change-password";
     public static final String GET_APPOINTMENT_PENDING = PREFIX + "/appointments/pending";
     public static final String POST_APPOINTMENT_CONFIRMED =
