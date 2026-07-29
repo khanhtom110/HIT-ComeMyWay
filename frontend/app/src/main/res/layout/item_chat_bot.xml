@@ -21,6 +21,8 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
+            style="@style/Chu3"
+            android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ground_chat_bot"
@@ -30,7 +32,6 @@
             android:paddingHorizontal="@dimen/_16sdp"
             android:gravity="start"
             app:layout_constraintStart_toEndOf="@id/logoChat"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constrainedWidth="true"/>
 
