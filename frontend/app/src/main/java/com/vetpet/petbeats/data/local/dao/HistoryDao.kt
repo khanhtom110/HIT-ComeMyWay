@@ -1,0 +1,20 @@
+package com.vetpet.petbeats.data.local.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.vetpet.petbeats.data.local.entity.HistoryEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface HistoryDao {
+    //Nếu chữ tồn tại rồi thì cập nhật thời gian chữ đó
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHistory(history: HistoryEntity)
+
+    // Lấy danh sách lịch sử
+    @Query("SELECT * FROM User WHERE userId = :currentUserId ORDER BY id DESC")
+    fun listHistory(currentUserId: Int): Flow<List<HistoryEntity>>
+
+}

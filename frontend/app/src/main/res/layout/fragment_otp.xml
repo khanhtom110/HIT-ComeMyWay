@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.auth.otp.OtpFragment">
+    tools:context="com.vetpet.petbeats.ui.auth.otp.OtpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:id="@+id/vector"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/back"
+            android:src="@drawable/back_left"
             android:layout_marginTop="@dimen/_35sdp"
             android:layout_marginStart="@dimen/_16sdp"
             app:layout_constraintTop_toTopOf="parent"
@@ -158,7 +158,7 @@
             app:layout_constraintTop_toBottomOf="@id/input3" />
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/verify"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"

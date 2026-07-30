@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
-    tools:context=".ui.auth.login.LoginFragment">
+    tools:context="com.vetpet.petbeats.ui.auth.login.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"

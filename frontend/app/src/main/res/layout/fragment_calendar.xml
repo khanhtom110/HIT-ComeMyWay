@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.calendar.CalendarFragment">
+    tools:context="com.vetpet.petbeats.ui.home_user.calendar.CalendarFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/back"
+                android:src="@drawable/back_left"
                 android:layout_marginTop="@dimen/_40sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -636,7 +636,7 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginHorizontal="@dimen/_30sdp"
                     android:layout_marginBottom="@dimen/_16sdp"
-                    app:cv_dayViewResource="@layout/calendar_day_layout"
+                    app:cv_dayViewResource="@layout/layout_calendar_day"
                     app:layout_constraintTop_toBottomOf="@id/day"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -34,6 +34,12 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="HienThiAI">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+
     <style name="Chu1">
         <item name="fontFamily">@font/roboto_condensed_regular</item>
         <item name="android:textSize">18sp</item>
