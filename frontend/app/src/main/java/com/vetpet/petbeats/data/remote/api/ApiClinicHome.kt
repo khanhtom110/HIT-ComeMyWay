@@ -58,6 +58,9 @@ interface ApiClinicHome {
     @GET(ApiConstants.CONFIRMAPPOINTMENTGET)
     suspend fun confirmAppointment(): ApiResponse<List<AppointmentListClinicResponse>>
 
+    @GET(ApiConstants.GETPROFILE)
+    suspend fun getProfile(): ApiResponse<ProfileResponse>
+
     @GET(ApiConstants.TAKEAPPOINTMENTIDCLINIC)
     suspend fun takeAppointmentId(
         @Path("id") id: Int

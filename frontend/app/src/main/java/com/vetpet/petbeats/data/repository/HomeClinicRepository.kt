@@ -65,6 +65,12 @@ class HomeClinicRepository(
         }
     }
 
+    suspend fun getProfile(): DataResult<ProfileResponse> {
+        return safeApiCall {
+            apiClinicHome.getProfile()
+        }
+    }
+
     suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentListClinicResponse> {
         return safeApiCall {
             apiClinicHome.takeAppointmentId(
