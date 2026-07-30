@@ -25,6 +25,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbot
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -97,7 +98,10 @@ interface ApiUserHome {
     suspend fun profile(): ApiResponse<UpdateProfileResponse>
 
     @POST(ApiConstants.LOGOUT)
-    suspend fun logout(@Body request: LogoutRequest): ApiResponse<Unit>
+    suspend fun logout(
+        @Header("Authorization") token: String,
+        @Body request: LogoutRequest
+    ): ApiResponse<Unit>
 
     @Multipart
     @POST(ApiConstants.UPLOAD)

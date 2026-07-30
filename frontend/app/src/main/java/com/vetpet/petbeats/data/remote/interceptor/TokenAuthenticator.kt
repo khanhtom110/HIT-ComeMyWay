@@ -16,8 +16,6 @@ class TokenAuthenticator(
     override fun authenticate(route: Route?, response: Response): Request? {
         val refreshToken = tokenManager.getRefreshToken()
 
-        Log.d("TOKEN", "RefreshToken = ${refreshToken}Token")
-
         if (refreshToken.isNullOrEmpty()) {
             return null
         }
@@ -31,13 +29,12 @@ class TokenAuthenticator(
                 val newToken = refreshResponse.body()
 
                 if (newToken != null) {
-                    // 1. Cứu thành công! Lưu ngay cặp token mới vào máy
                     tokenManager.saveTokens(newToken.accessToken, newToken.refreshToken)
 
-                    // 2. Nhét cái vé Access Token MỚI vào lại cái API vừa bị tạch
+                    // Nhét cái vé Access Token MỚI vào lại cái API vừa bị tạch
                     return response.request()?.newBuilder()
                         ?.header("Authorization", "Bearer ${newToken.accessToken}")
-                        ?.build() // Trả về request mới, hệ thống sẽ tự động gọi lại API đó!
+                        ?.build() // Trả về request mới, hệ thống sẽ tự động gọi lại API đó
                 }
                 else {
                     tokenManager.clearTokens()

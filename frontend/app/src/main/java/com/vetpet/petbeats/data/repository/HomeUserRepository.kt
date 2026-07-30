@@ -129,9 +129,9 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun logoutUser(request: LogoutRequest): DataResult<Unit> {
+    suspend fun logoutUser(token: String, request: LogoutRequest): DataResult<Unit> {
         return safeApiCall {
-            apiUserHome.logout(request)
+            apiUserHome.logout(token, request)
         }
     }
 
