@@ -232,6 +232,19 @@ public class ClinicService {
     return ClinicBookingResponse.from(clinic, isOperating);
   }
 
+  @Transactional(readOnly = true)
+  public CompleteClinicProfileResponse getClinicProfile() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    Clinic clinic = clinicRepository.findByUser(user)
+        .orElseThrow(() -> new AppException(400, ErrorMessage.Clinic.CLINIC_NOT_EXISTED));
+
+    return CompleteClinicProfileResponse.from(clinic);
+  }
+
   @Transactional(rollbackFor = Exception.class)
   public CompleteClinicProfileResponse completeClinicProfile(CompleteClinicProfileRequest request) {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();

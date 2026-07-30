@@ -1,0 +1,13 @@
+package com.vetpet.petbeats.ui.auth.forgotpassword_user
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.vetpet.petbeats.data.repository.AuthRepository
+
+class ForgotPasswordViewModelFactory(
+    private val repository: AuthRepository
+): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ForgotPasswordViewModel(repository) as T
+    }
+}

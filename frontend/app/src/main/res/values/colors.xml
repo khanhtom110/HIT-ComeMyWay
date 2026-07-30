@@ -32,4 +32,13 @@
     <!--modes-->
     <color name="colorModes">#E8ECFC</color>
 
+    <!--buttonListClinic-->
+    <color name="colorWait">#FFF9F1</color>
+    <color name="colorTextWait">#F7C120</color>
+    <color name="colorReceive">#F6FFF1</color>
+    <color name="colorTextReceive">#33C75A</color>
+    <color name="colorRefuse">#FFF3F1</color>
+    <color name="colorTextRefuse">#CC0900</color>
+    
+
 </resources>

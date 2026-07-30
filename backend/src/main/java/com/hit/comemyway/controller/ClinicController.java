@@ -55,7 +55,6 @@ public class ClinicController {
     return ResponseEntity.ok(ApiResponse.ok(responses));
   }
 
-
   @Operation(summary = "Duyệt lịch hẹn", description = "Phòng khám duyệt lịch hẹn của người dùng")
   @PostMapping(UrlConstant.Clinic.POST_APPOINTMENT_CONFIRMED)
   public ResponseEntity<ApiResponse<AppointmentResponse>> changeConfirmStatusAppointment(
@@ -80,6 +79,13 @@ public class ClinicController {
   public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> completeProfile(
       @Valid @RequestBody CompleteClinicProfileRequest request) {
     CompleteClinicProfileResponse response = clinicService.completeClinicProfile(request);
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Lấy thông tin phòng khám", description = "Lấy thông tin phòng khám")
+  @GetMapping(UrlConstant.Clinic.GET_PROFILE)
+  public ResponseEntity<ApiResponse<CompleteClinicProfileResponse>> getCLinicProfile() {
+    CompleteClinicProfileResponse response = clinicService.getClinicProfile();
     return ResponseEntity.ok(ApiResponse.ok(response));
   }
 

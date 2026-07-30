@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.home.search.SearchFragment">
+    tools:context="com.vetpet.petbeats.ui.home_user.search.SearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:id="@+id/back"
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_16sdp"
-            android:src="@drawable/back"
+            android:src="@drawable/back_left"
             android:layout_marginStart="@dimen/_6sdp"
             app:layout_constraintTop_toTopOf="@id/search"
             app:layout_constraintBottom_toBottomOf="@id/search"

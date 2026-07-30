@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".ui.home.book.BookFragment">
+    tools:context="com.vetpet.petbeats.ui.home_user.book.BookFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:layout_height="@dimen/_140sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_8sdp"
-            android:src="@drawable/logo1"
+            android:src="@drawable/logo2"
             app:layout_constraintTop_toBottomOf="@id/title1" />
 
         <TextView

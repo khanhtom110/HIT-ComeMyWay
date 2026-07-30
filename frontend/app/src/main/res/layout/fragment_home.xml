@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
-    tools:context=".ui.auth.home.HomeFragment">
+    tools:context="com.vetpet.petbeats.ui.auth.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
         <TextView
-            style="@style/Nut3"
+            style="@style/Nut2"
             android:id="@+id/register"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
