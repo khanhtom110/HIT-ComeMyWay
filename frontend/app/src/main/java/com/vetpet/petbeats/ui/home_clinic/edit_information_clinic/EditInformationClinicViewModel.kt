@@ -211,25 +211,4 @@ class EditInformationClinicViewModel(
             }
         }
     }
-
-
-
-    fun onLogoutClick() {
-        viewModelScope.launch {
-            val refreshToken = tokenManager.getRefreshToken() ?: ""
-
-            val request = LogoutRequest(refreshToken)
-            val result = repository.logoutUser(request)
-
-            when (result) {
-                is DataResult.Success -> {
-                    _event.emit(SettingUserEvent.NavigationLogin)
-                }
-                is DataResult.Error -> {
-                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
-                    return@launch
-                }
-            }
-        }
-    }
 }

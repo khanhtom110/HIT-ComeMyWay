@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
@@ -15,6 +16,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.Appoint
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -66,5 +68,11 @@ interface ApiClinicHome {
     suspend fun uploadImage(
         @Part file: MultipartBody.Part
     ): ApiResponse<String>
+
+    @POST(ApiConstants.LOGOUT)
+    suspend fun logout(
+        @Header("Authorization") token: String,
+        @Body request: LogoutRequest
+    ): ApiResponse<Unit>
 
 }

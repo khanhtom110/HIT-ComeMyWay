@@ -486,7 +486,7 @@ class EditInformationClinicFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is EditInformationClinicEvent.NavigationClinic -> {
-                            findNavController().navigate(R.id.edit_clinic)
+                            findNavController().navigate(R.id.editInformation_clinic)
                         }
                     }
                 }
