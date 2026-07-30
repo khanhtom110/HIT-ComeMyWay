@@ -139,6 +139,8 @@ class EditInformationClinicViewModel(
             val state = _state.value.state
             val service = _state.value.selectService
 
+            Log.d("TEST_CASE", "image: $image, name: $name, phone: $phone, address: $address, link: $link, openTime: $openTime, closeTime: $closeTime, state: $state, service: $service")
+
             val request = ProfileRequest(
                 name = name,
                 address = address,
@@ -158,7 +160,7 @@ class EditInformationClinicViewModel(
                     _event.emit(EditInformationClinicEvent.NavigationClinic)
                 }
                 is DataResult.Error -> {
-                    Log.d("TEST_CASE", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
+                    Log.d("TEST_CASE1", "Mã lỗi: ${result.target} - Lý do: ${result.message}")
                     _state.value = _state.value.copy(
                         isName = (result.target == ErrorTarget.NAME || result.target == ErrorTarget.GENERAL),
                         isPhone = (result.target == ErrorTarget.PHONE || result.target == ErrorTarget.GENERAL),
@@ -184,7 +186,7 @@ class EditInformationClinicViewModel(
     fun onInformation() {
         viewModelScope.launch {
             viewModelScope.launch {
-                val result = repository.profile()
+                val result = repository.getProfile()
 
                 when (result) {
                     is DataResult.Success -> {
@@ -192,13 +194,15 @@ class EditInformationClinicViewModel(
 
                         _state.value = _state.value.copy(
                             id = data.id,
-                            image = data.avatar.orEmpty(),
-                            name = data.fullName.orEmpty(),
-                            phone = data.phone.orEmpty(),
-                            address = data.homeAddress.orEmpty(),
-
-
-                            email = data.email,
+                            image = data.thumbnailUrl,
+                            name = data.name,
+                            phone = data.phone,
+                            address = data.address,
+                            link = data.mapLink,
+                            openTime = data.openTime,
+                            closeTime = data.closeTime,
+                            state = data.description,
+                            selectService = data.services,
                         )
                     }
                     is DataResult.Error -> {

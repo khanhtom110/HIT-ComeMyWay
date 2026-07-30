@@ -8,6 +8,7 @@ data class EditInformationClinicState (
     val isImage: Boolean = false,
 
     //information
+    val id: Int = 0,
     val name: String = "",
     val phone: String = "",
     val address: String = "",
@@ -16,6 +17,8 @@ data class EditInformationClinicState (
     val openMinute: String = "",
     val closeHour: String = "",
     val closeMinute: String = "",
+    val openTime: String = "",
+    val closeTime: String = "",
     val state: String = "",
 
     val isInformation: Boolean = false,

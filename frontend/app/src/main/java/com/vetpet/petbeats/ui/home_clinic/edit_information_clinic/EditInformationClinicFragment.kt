@@ -94,6 +94,7 @@ class EditInformationClinicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.onInformation()
 
         setupTime()
         setOnClick()
@@ -348,6 +349,8 @@ class EditInformationClinicFragment : Fragment() {
                         binding.tvInputAddress.setBackgroundResource(R.drawable.ground_information)
                     }
 
+
+
                     //check error
                     if (state.isInformation) {
                         binding.boxInformation.setBackgroundResource(R.drawable.button_input_errol)
@@ -452,6 +455,13 @@ class EditInformationClinicFragment : Fragment() {
                     if (binding.tvInputLink.text.toString() != state.link) {
                         binding.tvInputLink.setText(state.link)
                     }
+
+                    if (state.image.isNotEmpty()) {
+                        Glide.with(requireContext())
+                            .load(state.image)
+                            .into(binding.imgLibrary)
+                    }
+
 
 
                     //service
