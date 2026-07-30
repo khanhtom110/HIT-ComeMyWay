@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="@dimen/_120sdp"
-            android:layout_height="@dimen/_120sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
             android:src="@drawable/logo_chatbot_ground"
             android:layout_marginBottom="@dimen/_80sdp"
             app:layout_constraintStart_toStartOf="parent"
