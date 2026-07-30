@@ -1,0 +1,31 @@
+package com.hit.comemyway.repository;
+
+import com.hit.comemyway.entity.PetLocket;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface PetLocketRepository extends JpaRepository<PetLocket, Long> {
+  // Lay danh sach cua tat ca
+  @Query("""
+          SELECT p
+          FROM PetLocket p
+          JOIN FETCH p.user
+          WHERE p.user.id IN :targetUserIds
+          ORDER BY p.createdAt DESC
+      """)
+  Slice<PetLocket> findFeedByTargetUserIds(@Param("targetUserIds") List<Long> targetUserIds,
+      Pageable pageable);
+
+  // Lay cua mot user
+  Slice<PetLocket> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
+  // Dem so bai dang
+  long countByUserId(Long userId);
+}
