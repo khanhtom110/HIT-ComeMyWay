@@ -7,6 +7,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswor
 import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class EditResetpasswordSettingViewModel(
-    private val repository: AuthRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(EditResetpasswordSettingState())
     val state = _state.asStateFlow()

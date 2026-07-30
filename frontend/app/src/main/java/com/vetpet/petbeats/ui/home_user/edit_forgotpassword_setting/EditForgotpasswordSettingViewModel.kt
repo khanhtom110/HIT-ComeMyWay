@@ -6,6 +6,7 @@ import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordEvent
 import com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.annotation.meta.When
 
 class EditForgotpasswordSettingViewModel(
-    private val repository: AuthRepository
+    private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(EditForgotpasswordSettingState())
     val state = _state.asStateFlow()

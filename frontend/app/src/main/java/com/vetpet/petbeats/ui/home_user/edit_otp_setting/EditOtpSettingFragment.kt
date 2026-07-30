@@ -17,8 +17,10 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditOtpSettingBinding
 import com.example.VetPet.databinding.FragmentOtpBinding
 import com.vetpet.petbeats.data.remote.api.ApiAuth
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
 import com.vetpet.petbeats.data.repository.AuthRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.auth.otp.OtpEvent
 import com.vetpet.petbeats.ui.auth.otp.OtpViewModel
 import com.vetpet.petbeats.ui.auth.otp.OtpViewModelFactory
@@ -32,8 +34,8 @@ class EditOtpSettingFragment : Fragment() {
     private var countDownTimer: CountDownTimer ?= null
     private val viewModel: EditOtpSettingViewModel by viewModels {
         EditOtpSettingViewModelFactory(
-            AuthRepository(
-                retrofit.create(ApiAuth::class.java)
+            HomeUserRepository(
+                retrofit.create(ApiUserHome::class.java)
             )
         )
     }

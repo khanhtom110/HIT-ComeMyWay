@@ -18,8 +18,10 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditResetpasswordSettingBinding
 import com.example.VetPet.databinding.FragmentResetPasswordBinding
 import com.vetpet.petbeats.data.remote.api.ApiAuth
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
 import com.vetpet.petbeats.data.repository.AuthRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordEvent
 import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordViewModel
 import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordViewModelFactory
@@ -32,8 +34,8 @@ class EditResetpasswordSettingFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: EditResetpasswordSettingViewModel by viewModels {
         EditResetpasswordSettingViewModelFactory(
-            AuthRepository(
-                retrofit.create(ApiAuth::class.java)
+            HomeUserRepository(
+                retrofit.create(ApiUserHome::class.java)
             )
         )
     }
@@ -192,7 +194,7 @@ class EditResetpasswordSettingFragment : Fragment() {
                         }
 
                         is EditResetpasswordSettingEvent.NavigationEditpasswordSuccess -> {
-                            findNavController().navigate(R.id.stateSuccessFragment)
+                            findNavController().navigate(R.id.editPasswordSuccessSettingFragment)
                         }
 
                         is EditResetpasswordSettingEvent.NavigationSetting -> {

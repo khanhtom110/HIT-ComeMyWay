@@ -15,8 +15,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditForgotpasswordSettingBinding
 import com.vetpet.petbeats.data.remote.api.ApiAuth
+import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
 import com.vetpet.petbeats.data.repository.AuthRepository
+import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -26,8 +28,8 @@ class EditForgotpasswordSettingFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: EditForgotpasswordSettingViewModel by viewModels {
         EditForgotpasswordSettingViewModelFactory(
-            AuthRepository(
-                retrofit.create(ApiAuth::class.java)
+            HomeUserRepository(
+                retrofit.create(ApiUserHome::class.java)
             )
         )
     }

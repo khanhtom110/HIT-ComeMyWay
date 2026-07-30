@@ -3,9 +3,13 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
@@ -146,6 +150,26 @@ class HomeUserRepository(
     suspend fun chatBot(request: ChatRequest): DataResult<ChatResponse> {
         return safeApiCall {
             apiUserHome.chatBot(request)
+        }
+    }
+
+
+
+    suspend fun forgotPasswordUser(request: ForgotPasswordRequest): DataResult<ForgotPasswordResponse> {
+        return safeApiCall {
+            apiUserHome.forgotpassword(request)
+        }
+    }
+
+    suspend fun resetOtpUser(request: OtpRequest): DataResult<OtpResponse> {
+        return safeApiCall {
+            apiUserHome.resetotp(request)
+        }
+    }
+
+    suspend fun resetpasswordUser(request: ResetPasswordRequest): DataResult<Nothing> {
+        return safeApiCall {
+            apiUserHome.resetpassword(request)
         }
     }
 }
