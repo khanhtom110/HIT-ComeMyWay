@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.ui.home_user.editpassword_setting
+package com.vetpet.petbeats.ui.home_user.edit_password_setting
 
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -16,13 +16,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditPasswordSettingBinding
-import com.example.VetPet.databinding.FragmentSettingUserBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.home_user.setting.SettingUserViewModel
-import com.vetpet.petbeats.ui.home_user.setting.SettingUserViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -210,7 +206,7 @@ class EditPasswordSettingFragment : Fragment() {
                             findNavController().navigate(R.id.editPassword_setting)
                         }
                         is EditPasswordSettingEvent.NavigationForgotPassword -> {
-                            findNavController().navigate(R.id.forgotPasswordFragment)
+                            findNavController().navigate(R.id.editForgotpasswordSettingFragment)
                         }
                     }
                 }
