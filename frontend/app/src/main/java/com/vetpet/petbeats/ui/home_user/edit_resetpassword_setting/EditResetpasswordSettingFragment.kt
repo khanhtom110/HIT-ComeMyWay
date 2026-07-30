@@ -16,15 +16,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditResetpasswordSettingBinding
-import com.example.VetPet.databinding.FragmentResetPasswordBinding
-import com.vetpet.petbeats.data.remote.api.ApiAuth
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
-import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordEvent
-import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordViewModel
-import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
