@@ -35,6 +35,39 @@ class ClinicViewModel(
         }
     }
 
+    fun onInformation() {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                val result = repository.getProfile()
+
+                when (result) {
+                    is DataResult.Success -> {
+                        val data = result.data
+
+                        _state.value = _state.value.copy(
+                            id = data.id,
+                            image = data.thumbnailUrl,
+                            name = data.name,
+                            phone = data.phone,
+                            address = data.address,
+                            link = data.mapLink,
+                            openTime = data.openTime,
+                            closeTime = data.closeTime,
+                            state = data.description,
+                            services = data.services,
+                        )
+                    }
+                    is DataResult.Error -> {
+                        Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
+
+                        _state.value = _state.value.copy()
+                        return@launch
+                    }
+                }
+            }
+        }
+    }
+
 
     fun onLogoutClick() {
         viewModelScope.launch {

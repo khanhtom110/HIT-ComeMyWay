@@ -7,7 +7,8 @@ data class ClinicState (
     val phone: String = "",
     val address: String = "",
     val link: String = "",
-    val time: String = "",
+    val openTime: String = "",
+    val closeTime: String = "",
     val state: String = "",
     val services: List<String> = emptyList()
 )
