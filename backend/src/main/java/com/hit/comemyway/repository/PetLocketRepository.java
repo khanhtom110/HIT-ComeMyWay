@@ -18,14 +18,21 @@ public interface PetLocketRepository extends JpaRepository<PetLocket, Long> {
           FROM PetLocket p
           JOIN FETCH p.user
           WHERE p.user.id IN :targetUserIds
-          ORDER BY p.createdAt DESC
+            AND (:lastPostId IS NULL OR p.id < :lastPostId)
+          ORDER BY p.id DESC
       """)
   Slice<PetLocket> findFeedByTargetUserIds(@Param("targetUserIds") List<Long> targetUserIds,
-      Pageable pageable);
+      @Param("lastPostId") Long lastPostId, Pageable pageable);
 
-  // Lay cua mot user
-  Slice<PetLocket> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+  @Query("""
+      SELECT p
+      FROM PetLocket p
+      JOIN FETCH p.user
+      WHERE p.user.id = :userId
+        AND (:lastPostId IS NULL OR p.id < :lastPostId)
+      ORDER BY p.id DESC
+      """)
+  Slice<PetLocket> findMyPostsByCursor(@Param("userId") Long userId,
+      @Param("lastPostId") Long lastPostId, Pageable pageable);
 
-  // Dem so bai dang
-  long countByUserId(Long userId);
 }

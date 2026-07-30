@@ -10,6 +10,7 @@ import com.hit.comemyway.repository.FriendshipRepository;
 import com.hit.comemyway.repository.PetLocketRepository;
 import com.hit.comemyway.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class PetLocketService {
   }
 
   @Transactional(readOnly = true)
-  public Slice<PetLocketResponse> getNewsFeed(Pageable pageable) {
+  public Slice<PetLocketResponse> getNewsFeed(Long lastPostId, int size) {
     User currentUser = securityUtils.getCurrentUser();
 
     List<Friendship> allAcceptedFriends =
@@ -47,8 +48,10 @@ public class PetLocketService {
 
     targetUserIds.add(currentUser.getId());
 
+    Pageable pageable = PageRequest.of(0, size);
+
     Slice<PetLocket> petLockets =
-        petLocketRepository.findFeedByTargetUserIds(targetUserIds, pageable);
+        petLocketRepository.findFeedByTargetUserIds(targetUserIds, lastPostId, pageable);
 
     return petLockets.map(PetLocketResponse::from);
   }
@@ -59,10 +62,11 @@ public class PetLocketService {
   }
 
   @Transactional(readOnly = true)
-  public Slice<PetLocketResponse> getMyPosts(Pageable pageable) {
+  public Slice<PetLocketResponse> getMyPosts(Long lastPostId, int size) {
     User currentUser = securityUtils.getCurrentUser();
+    Pageable pageable = PageRequest.of(0, size);
     Slice<PetLocket> petLockets =
-        petLocketRepository.findByUserIdOrderByCreatedAtDesc(currentUser.getId(), pageable);
+        petLocketRepository.findMyPostsByCursor(currentUser.getId(), lastPostId, pageable);
     return petLockets.map(PetLocketResponse::from);
   }
 }
