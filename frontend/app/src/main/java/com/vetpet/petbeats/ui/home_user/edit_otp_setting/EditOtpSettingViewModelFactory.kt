@@ -1,14 +1,15 @@
-package com.vetpet.petbeats.ui.home_user.editpassword_setting
+package com.vetpet.petbeats.ui.home_user.edit_otp_setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import com.vetpet.petbeats.ui.auth.otp.OtpViewModel
 
-class EditPasswordSettingViewModelFactory(
+class EditOtpSettingViewModelFactory(
     private val repository: HomeUserRepository
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return EditPasswordSettingViewModel(repository) as T
+        return EditOtpSettingViewModel(repository) as T
     }
 }

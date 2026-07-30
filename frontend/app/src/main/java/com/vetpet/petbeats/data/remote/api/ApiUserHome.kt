@@ -2,9 +2,14 @@ package com.vetpet.petbeats.data.remote.api
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
+import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
@@ -16,9 +21,11 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchR
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.ChatResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -91,7 +98,10 @@ interface ApiUserHome {
     suspend fun profile(): ApiResponse<UpdateProfileResponse>
 
     @POST(ApiConstants.LOGOUT)
-    suspend fun logout(@Body request: LogoutRequest): ApiResponse<Unit>
+    suspend fun logout(
+        @Header("Authorization") token: String,
+        @Body request: LogoutRequest
+    ): ApiResponse<Unit>
 
     @Multipart
     @POST(ApiConstants.UPLOAD)
@@ -101,4 +111,18 @@ interface ApiUserHome {
 
     @POST(ApiConstants.CHANGEPASSWORDUSER)
     suspend fun changePasswordUser(@Body request: ChangePasswordUserRequest): ApiResponse<Any>
+
+    @POST(ApiConstants.CHATBOT)
+    suspend fun chatBot(@Body request: ChatRequest): ApiResponse<ChatResponse>
+
+
+
+    @POST(ApiConstants.FORGOTPASSWORD)
+    suspend fun forgotpassword(@Body request: ForgotPasswordRequest): ApiResponse<ForgotPasswordResponse>
+
+    @POST(ApiConstants.RESETOTP)
+    suspend fun resetotp(@Body request: OtpRequest): ApiResponse<OtpResponse>
+
+    @POST(ApiConstants.RESETPASSWORD)
+    suspend fun resetpassword(@Body request: ResetPasswordRequest): ApiResponse<Nothing>
 }

@@ -70,12 +70,16 @@ class SettingUserViewModel(
     fun onLogoutClick() {
         viewModelScope.launch {
             val refreshToken = tokenManager.getRefreshToken() ?: ""
+            val accessToken = tokenManager.getAccessToken() ?: ""
 
+            val headerToken = "Bearer $accessToken"
             val request = LogoutRequest(refreshToken)
-            val result = repository.logoutUser(request)
+
+            val result = repository.logoutUser(headerToken, request)
 
             when (result) {
                 is DataResult.Success -> {
+                    tokenManager.clearTokens()
                     _event.emit(SettingUserEvent.NavigationLogin)
                 }
                 is DataResult.Error -> {

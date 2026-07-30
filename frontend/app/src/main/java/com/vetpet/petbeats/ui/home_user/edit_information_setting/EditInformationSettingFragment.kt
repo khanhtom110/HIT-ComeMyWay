@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.ui.home_user.editinformation_setting
+package com.vetpet.petbeats.ui.home_user.edit_information_setting
 
 import android.app.Dialog
 import android.content.Context
@@ -23,13 +23,10 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditInformationSettingBinding
-import com.example.VetPet.databinding.FragmentEditPasswordSettingBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingViewModel
-import com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingViewModelFactory
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
