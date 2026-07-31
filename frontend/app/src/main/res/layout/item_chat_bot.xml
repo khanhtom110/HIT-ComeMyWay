@@ -29,10 +29,12 @@
             android:text="Chào bạn, mình rất hiểu nỗi lo lắng của bạn."
             android:textColor="@color/colorTextSub"
             android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingHorizontal="@dimen/_10sdp"
             android:gravity="start"
+            android:layout_marginEnd="@dimen/_30sdp"
             app:layout_constraintStart_toEndOf="@id/logoChat"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constrainedWidth="true"/>
 
 
