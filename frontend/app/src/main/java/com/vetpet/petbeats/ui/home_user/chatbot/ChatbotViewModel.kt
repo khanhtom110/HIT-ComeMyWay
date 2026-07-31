@@ -67,6 +67,7 @@ class ChatbotViewModel(
                     val aiMessage = data.aiResponse ?: ""
                     val clinic = data.recommendedClinics
 
+
                     if (clinic.isNullOrEmpty()) {
                         updatedList.add(ChatbotEvent.BotMessage(aiMessage))
                     } else {
