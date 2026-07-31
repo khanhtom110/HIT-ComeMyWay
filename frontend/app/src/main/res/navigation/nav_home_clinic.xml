@@ -26,7 +26,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/appointmentDetailWait"
+        android:id="@+id/appointmentDetailWaitFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_wait.AppointmentDetailWaitFragment"
         android:label="appointmentDetailWait">
         <action
@@ -37,7 +37,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/appointmentDetailReceive"
+        android:id="@+id/appointmentDetailReceiveFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetail_receive.AppointmentDetailReceiveFragment"
         android:label="appointmentDetailReceive">
         <action
@@ -48,13 +48,35 @@
     </fragment>
 
     <fragment
-        android:id="@+id/appointmentDetailRefuse"
+        android:id="@+id/appointmentDetailRefuseFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.appointmentdetai_refuse.AppointmentDetailRefuseFragment"
         android:label="appointmentDetailRefuse">
         <action
             android:id="@+id/refuse_appointmentSchedule"
             app:destination="@id/appointmentScheduleFragment"
             app:popUpTo="@id/appointmentScheduleFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editInformationClinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.edit_information_clinic.EditInformationClinicFragment"
+        android:label="editInformationClinicFragment">
+        <action
+            android:id="@+id/editInformation_clinic"
+            app:destination="@id/clinicFragment"
+            app:popUpTo="@id/clinicFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPasswordClinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.edit_password_clinic.EditPasswordClinicFragment"
+        android:label="editPasswordClinicFragment">
+        <action
+            android:id="@+id/editPassword_clinic"
+            app:destination="@id/clinicFragment"
+            app:popUpTo="@id/clinicFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 

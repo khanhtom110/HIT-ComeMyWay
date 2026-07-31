@@ -43,13 +43,13 @@ class HomeClinicActivity : AppCompatActivity() {
                 R.id.scheduleListFragment -> {
                     binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
                 }
-                R.id.appointmentDetailWait -> {
+                R.id.appointmentDetailWaitFragment -> {
                     binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
                 }
-                R.id.appointmentDetailReceive -> {
+                R.id.appointmentDetailReceiveFragment -> {
                     binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
                 }
-                R.id.appointmentDetailRefuse -> {
+                R.id.appointmentDetailRefuseFragment -> {
                     binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
                 }
 
