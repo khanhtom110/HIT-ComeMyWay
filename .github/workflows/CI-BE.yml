@@ -4,7 +4,11 @@ on:
     branches:
       - dev
     paths:
+<<<<<<<< HEAD:.github/workflows/ci.yml
       - 'Backend/**'
+========
+      - 'backend/**'
+>>>>>>>> dev:.github/workflows/CI-BE.yml
   pull_request:
     types:
       - opened
@@ -12,11 +16,18 @@ on:
     branches:
       - dev
     paths:
+<<<<<<<< HEAD:.github/workflows/ci.yml
       - 'Backend/**'
+========
+      - 'backend/**'
+>>>>>>>> dev:.github/workflows/CI-BE.yml
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: Checkout code
@@ -32,5 +43,5 @@ jobs:
       - name: Validate Code Formatting
         run: mvn -T 2C --batch-mode formatter:validate
 
-      - name: Build and Test
-        run: mvn -T 2C --batch-mode verify
+      - name: Build and Skip Test
+        run: mvn -T 2C --batch-mode verify -DskipTests

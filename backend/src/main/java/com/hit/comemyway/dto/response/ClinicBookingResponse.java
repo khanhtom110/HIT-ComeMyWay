@@ -1,0 +1,48 @@
+package com.hit.comemyway.dto.response;
+
+import com.hit.comemyway.entity.Clinic;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
+
+public record ClinicBookingResponse(
+//@formatter:off
+        @Schema(description = "ID của phòng khám", example = "1")
+        Long id,
+
+        @Schema(description = "Ảnh đại diện của phòng khám", example = "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg")
+        String thumbnailUrl,
+
+        @Schema(description = "Tên phòng khám", example = "Phòng khám thú y FunVet")
+        String name,
+
+        @Schema(description = "Số điện thoại liên hệ", example = "0383553886")
+        String phone,
+
+        @Schema(description = "Địa chỉ chi tiết", example = "83 Giải Phóng,P.Đồng Tâm")
+        String address,
+
+        @Schema(description = "Trạng thái hoạt động", example = "true")
+        Boolean isOperating,
+
+        @Schema(description = "Điểm đánh giá trung bình", example = "4.8")
+        Double rating,
+
+        @Schema(description = "Danh sách các id và tên dịch vụ", example = "[{\"id\": 1, \"name\": \"Tiêm phòng\"}, ...]")
+        List<ServiceResponse> services
+) {
+    public static ClinicBookingResponse from(Clinic clinic, Boolean isOperating){
+        return new ClinicBookingResponse(
+        clinic.getId(),
+        clinic.getThumbnailUrl(),
+        clinic.getName(),
+        clinic.getPhone(),
+        clinic.getAddress(),
+        isOperating,
+        clinic.getRating(),
+        clinic.getServices().stream()
+                .map(ServiceResponse::from)
+                .toList()
+        );
+    }
+}

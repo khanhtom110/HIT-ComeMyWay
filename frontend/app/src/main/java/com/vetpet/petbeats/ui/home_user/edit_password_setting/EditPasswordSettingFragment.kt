@@ -206,7 +206,7 @@ class EditPasswordSettingFragment : Fragment() {
                             findNavController().navigate(R.id.editPassword_setting)
                         }
                         is EditPasswordSettingEvent.NavigationForgotPassword -> {
-                            findNavController().navigate(R.id.forgotPasswordFragment)
+                            findNavController().navigate(R.id.editForgotpasswordSettingFragment)
                         }
                     }
                 }

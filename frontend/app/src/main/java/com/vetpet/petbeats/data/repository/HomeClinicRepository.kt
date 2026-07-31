@@ -3,7 +3,6 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
@@ -65,12 +64,6 @@ class HomeClinicRepository(
         }
     }
 
-    suspend fun getProfile(): DataResult<ProfileResponse> {
-        return safeApiCall {
-            apiClinicHome.getProfile()
-        }
-    }
-
     suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentListClinicResponse> {
         return safeApiCall {
             apiClinicHome.takeAppointmentId(
@@ -82,12 +75,6 @@ class HomeClinicRepository(
     suspend fun onUploadImage(file: MultipartBody.Part): DataResult<String> {
         return  safeApiCall {
             apiClinicHome.uploadImage(file)
-        }
-    }
-
-    suspend fun logoutUser(token: String, request: LogoutRequest): DataResult<Unit> {
-        return safeApiCall {
-            apiClinicHome.logout(token, request)
         }
     }
 

@@ -26,7 +26,7 @@
             android:id="@+id/logo"
             android:layout_width="@dimen/_120sdp"
             android:layout_height="@dimen/_120sdp"
-            android:src="@drawable/logo_chatbot"
+            android:src="@drawable/logo_chatbot_ground"
             android:layout_marginBottom="@dimen/_80sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,17 +47,20 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
             app:layout_constraintTop_toBottomOf="@id/tvHello"
-            app:layout_constraintBottom_toTopOf="@id/editAskChat"/>
+            app:layout_constraintBottom_toTopOf="@id/editAskChat"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <ImageView
             android:id="@+id/note"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:src="@drawable/note"
             android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="@id/editAskChat"
@@ -68,22 +71,25 @@
             style="@style/Chu1"
             android:id="@+id/editAskChat"
             android:layout_width="@dimen/_240sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="wrap_content"
             android:background="@drawable/tittle_search"
+            android:paddingVertical="@dimen/_10sdp"
             android:hint="Hỏi câu bất kì"
-            android:inputType="text"
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:scrollbars="vertical"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_45sdp"
             android:layout_marginStart="@dimen/_45sdp"
             android:textColor="@color/colorTextSub"
             android:textColorHint="@color/colorTextContent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/btnPushMessage"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:src="@drawable/up"
             android:layout_marginEnd="@dimen/_15sdp"
             app:layout_constraintTop_toTopOf="@id/editAskChat"
