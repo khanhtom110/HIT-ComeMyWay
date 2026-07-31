@@ -36,31 +36,37 @@ class ChatbotViewModel(
         currentList.add(ChatbotEvent.BotTyping)
 
 
-        _event.value = currentList
+        _event.value = currentList.toList()
 
 
         viewModelScope.launch {
             val request = ChatRequest(chatUser)
             val result = repository.chatBot(request)
 
+
+            val updatedList = _event.value.toMutableList()
+            updatedList.removeIf {
+                it is ChatbotEvent.BotTyping
+            }
+
             when (result) {
                 is DataResult.Success -> {
                     val data = result.data
-
                     val aiMessage = data.aiResponse ?: ""
                     val clinic = data.recommendedClinics
 
+
                     if (clinic.isNullOrEmpty()) {
-                        currentList.add(ChatbotEvent.BotMessage(aiMessage))
+                        updatedList.add(ChatbotEvent.BotMessage(aiMessage))
                     } else {
-                        currentList.add(ChatbotEvent.BotSuggest(aiMessage, clinic))
+                        updatedList.add(ChatbotEvent.BotSuggest(aiMessage, clinic))
                     }
                 }
                 is DataResult.Error -> {
-                    currentList.add(ChatbotEvent.BotMessage("Xin lỗi, vì đã xảy ra lỗi kết nối"))
+                    updatedList.add(ChatbotEvent.BotMessage("Xin lỗi, vì đã xảy ra lỗi kết nối"))
                 }
             }
-            _event.value = currentList
+            _event.value = updatedList.toList()
         }
     }
 }
