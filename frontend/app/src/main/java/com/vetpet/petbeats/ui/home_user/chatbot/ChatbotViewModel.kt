@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.RecommendClinic
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -19,10 +22,20 @@ class ChatbotViewModel(
     private val _event = MutableStateFlow<List<ChatbotEvent>>(emptyList())
     val event = _event.asStateFlow()
 
+    private val _eventReal = MutableSharedFlow<ChatbotEventReal>()
+    val eventReal = _eventReal.asSharedFlow()
+
 
 
     fun onChatUserChange(chatUser: String) {
         _state.value = _state.value.copy(chatUser = chatUser, isChatUser = chatUser.isNotEmpty())
+    }
+
+
+    fun onItemInfomation(id: Int) {
+        viewModelScope.launch {
+            _eventReal.emit(ChatbotEventReal.NavigaitonInformation(id))
+        }
     }
 
 
@@ -42,7 +55,6 @@ class ChatbotViewModel(
         viewModelScope.launch {
             val request = ChatRequest(chatUser)
             val result = repository.chatBot(request)
-
 
             val updatedList = _event.value.toMutableList()
             updatedList.removeIf {
