@@ -52,7 +52,12 @@ class HomeClinicActivity : AppCompatActivity() {
                 R.id.appointmentDetailRefuseFragment -> {
                     binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
                 }
-
+                R.id.editInformationClinicFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.clinicFragment)?.isChecked = true
+                }
+                R.id.editPasswordClinicFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.clinicFragment)?.isChecked = true
+                }
             }
         }
     }
