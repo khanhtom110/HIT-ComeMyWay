@@ -1,0 +1,83 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PetBeats" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!--thay màu background và text của thanh điều hướng trên cùng -->
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!--tắt background màu vàng khi chọn tự động điền-->
+        <item name="android:autofilledHighlight" tools:targetApi="o">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.PetBeats" parent="Base.Theme.PetBeats" />
+
+    <style name="ChaoMung">
+        <item name="fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TieuDe">
+        <item name="fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TieuDe1">
+        <item name="fontFamily">@font/roboto_semicondensed_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TieuDe2">
+        <item name="fontFamily">@font/roboto_semicondensed_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="HienThiAI">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+
+    <style name="Chu1">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Chu2">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Chu3">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Status">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ThongBao">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="Nut1">
+        <item name="fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Nut2">
+        <item name="fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Nut3">
+        <item name="fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>

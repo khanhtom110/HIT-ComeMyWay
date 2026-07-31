@@ -1,0 +1,570 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_clinic.edit_information_clinic.EditInformationClinicFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/back_left"
+                android:layout_marginTop="@dimen/_40sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TieuDe1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chỉnh sửa thông tin phòng khám"
+                android:textColor="@color/colorTextSub"
+                app:layout_constraintTop_toTopOf="@id/btnBack"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/imgLibrary"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:src="@drawable/test_image_library"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnBack"/>
+
+            <TextView
+                style="@style/Nut3"
+                android:id="@+id/btnInstall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tải ảnh lên"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgLibrary"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/btnInstall"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin phòng khám"
+                android:layout_marginStart="@dimen/_4sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvStar"
+                app:layout_constraintTop_toTopOf="@id/tvStar"
+                app:layout_constraintStart_toEndOf="@id/tvStar"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvInformationError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStar"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/boxInformation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ground_information"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvInformationError">
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tên phòng khám"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_36sdp"
+                    android:background="@drawable/tittle_search"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="Phòng khám ABC"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:inputType="text"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    app:layout_constraintTop_toBottomOf="@id/tvName"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvNameError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorError"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:visibility="gone"
+                    android:drawablePadding="2dp"
+                    app:drawableStartCompat="@drawable/warning"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputName"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Số điện thoại"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvNameError"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_36sdp"
+                    android:background="@drawable/tittle_search"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="Nhập số điện thoại phòng khám"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:inputType="phone"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPhone"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvPhoneError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorError"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:visibility="gone"
+                    android:drawablePadding="2dp"
+                    app:drawableStartCompat="@drawable/warning"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputPhone"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvPhoneError"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_36sdp"
+                    android:background="@drawable/tittle_search"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="Nhập địa chỉ phòng khám"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:inputType="text"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAddress"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ liên kết GoogleMap"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputAddress"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    style="@style/Chu3"
+                    android:id="@+id/tvInputLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_36sdp"
+                    android:background="@drawable/tittle_search"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:hint="https://www.google.com/maps/"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:inputType="text"
+                    android:importantForAutofill="no"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLink"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvLinkError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorError"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:visibility="gone"
+                    android:drawablePadding="2dp"
+                    app:drawableStartCompat="@drawable/warning"
+                    app:layout_constraintTop_toBottomOf="@id/tvInputLink"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giờ hoạt động"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvLinkError"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvTimeError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/colorError"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:visibility="gone"
+                    android:drawablePadding="2dp"
+                    app:drawableStartCompat="@drawable/warning"
+                    app:layout_constraintTop_toBottomOf="@id/tvTime"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutOpenTime"
+                    android:layout_width="@dimen/_92sdp"
+                    android:layout_height="@dimen/_34sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/ground_hint_information_service"
+                    android:layout_marginStart="@dimen/_25sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvTimeError"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpOpenHour"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        style="@style/Chu1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/colorTextSub"
+                        app:layout_constraintTop_toTopOf="@id/vpOpenMinute"
+                        app:layout_constraintBottom_toBottomOf="@id/vpOpenMinute"
+                        app:layout_constraintStart_toEndOf="@id/vpOpenHour"
+                        app:layout_constraintEnd_toStartOf="@id/vpOpenMinute"/>
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpOpenMinute"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="đến"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    app:layout_constraintStart_toEndOf="@id/layoutOpenTime"
+                    app:layout_constraintEnd_toStartOf="@id/layoutCloseTime"
+                    app:layout_constraintTop_toBottomOf="@id/tvTimeError"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCloseTime"
+                    android:layout_width="@dimen/_92sdp"
+                    android:layout_height="@dimen/_34sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/ground_hint_information_service"
+                    android:layout_marginEnd="@dimen/_25sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvTimeError"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpCloseHour"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        style="@style/Chu1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="@color/colorTextSub"
+                        app:layout_constraintTop_toTopOf="@id/vpCloseMinute"
+                        app:layout_constraintBottom_toBottomOf="@id/vpCloseMinute"
+                        app:layout_constraintStart_toEndOf="@id/vpCloseHour"
+                        app:layout_constraintEnd_toStartOf="@id/vpCloseMinute"/>
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/vpCloseMinute"
+                        android:layout_width="@dimen/_28sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    style="@style/Chu3"
+                    android:id="@+id/tvState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mô tả"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/layoutOpenTime"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <EditText
+                    android:id="@+id/tvInputState"
+                    style="@style/Chu3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/ground_hint_information_service"
+                    android:hint="Giới thiệu phòng khám \n(không bắt buộc)"
+                    android:inputType="text"
+                    android:gravity="start"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:textColor="@color/colorTextSub"
+                    android:textColorHint="@color/colorTextContent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvState" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvStarService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/boxInformation"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loại dịch vụ"
+                android:layout_marginStart="@dimen/_4sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvStarService"
+                app:layout_constraintTop_toTopOf="@id/tvStarService"
+                app:layout_constraintStart_toEndOf="@id/tvStarService"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvServiceError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvStarService"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/boxService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ground_information"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvServiceError">
+
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/btnService"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:layout_marginVertical="8dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    style="@style/TieuDe2"
+                    android:id="@+id/btnOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ground_book_child"
+                    android:text="Khác"
+                    android:textColor="@color/colorPrimary"
+                    android:padding="@dimen/_6sdp"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/btnService"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCustomService"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/btnOther">
+
+                    <TextView
+                        style="@style/Chu3"
+                        android:id="@+id/tvService"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dịch vụ"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <LinearLayout
+                        android:id="@+id/containInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:layout_marginHorizontal="@dimen/_8sdp"
+                        app:layout_constraintTop_toBottomOf="@id/tvService"/>
+
+                    <ImageView
+                        android:id="@+id/btnAddRow"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/icon_add_row"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/containInput" />
+
+                    <TextView
+                        style="@style/Nut2"
+                        android:id="@+id/btnCancel"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:background="@drawable/button_auth_white"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:text="Hủy"
+                        android:gravity="center"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/_30sdp"
+                        app:layout_constraintTop_toBottomOf="@id/btnAddRow"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        style="@style/Nut2"
+                        android:id="@+id/btnAdd"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:background="@drawable/button_auth_blue"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:text="Thêm"
+                        android:gravity="center"
+                        android:textColor="@color/colorBackground"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        app:layout_constraintTop_toBottomOf="@id/btnAddRow"
+                        app:layout_constraintStart_toEndOf="@id/btnCancel"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                style="@style/Nut2"
+                android:id="@+id/btnUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:background="@drawable/button_auth_blue"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:text="Cập nhật"
+                android:gravity="center"
+                android:textColor="@color/colorBackground"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/boxService"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</FrameLayout>

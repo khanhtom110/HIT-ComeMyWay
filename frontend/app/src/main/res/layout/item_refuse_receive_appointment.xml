@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/colorBackground"
+    app:cardCornerRadius="@dimen/_12sdp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ground_book_child"
+        android:layout_marginHorizontal="@dimen/_2sdp"
+        android:layout_marginVertical="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_16sdp">
+
+        <ImageView
+            android:id="@+id/imgPet"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/image_test"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            style="@style/Nut2"
+            android:id="@+id/tvTypePet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thú cưng yêu cầu khám: "
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toTopOf="@id/imgPet"
+            app:layout_constraintBottom_toBottomOf="@id/imgPet"
+            app:layout_constraintStart_toEndOf="@id/imgPet"/>
+
+        <TextView
+            style="@style/Nut2"
+            android:id="@+id/tvPet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chó"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toTopOf="@id/tvTypePet"
+            app:layout_constraintBottom_toBottomOf="@id/tvTypePet"
+            app:layout_constraintStart_toEndOf="@id/tvTypePet"/>
+
+        <TextView
+            style="@style/Chu3"
+            android:id="@+id/tvNameUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chủ sở hữu: Nguyễn Văn A"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="8dp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            app:drawableStartCompat="@drawable/icon_user"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPet"/>
+
+        <TextView
+            style="@style/Chu3"
+            android:id="@+id/tvNameClinic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Khám tại phòng khám"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="6dp"
+            android:drawablePadding="8dp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            app:drawableStartCompat="@drawable/icon_hospital"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNameUser"/>
+
+        <ImageView
+            android:id="@+id/image_time"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:src="@drawable/time"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_13sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvNameClinic"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/Chu2"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25/06/06 -"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toTopOf="@id/image_time"
+            app:layout_constraintBottom_toBottomOf="@id/image_time"
+            app:layout_constraintStart_toEndOf="@id/image_time"/>
+
+        <TextView
+            style="@style/Chu2"
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9:00"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintTop_toTopOf="@id/date"
+            app:layout_constraintBottom_toBottomOf="@id/date"
+            app:layout_constraintStart_toEndOf="@id/date"/>
+
+        <TextView
+            style="@style/Nut3"
+            android:id="@+id/btnDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xem chi tiết"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="@dimen/_4sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

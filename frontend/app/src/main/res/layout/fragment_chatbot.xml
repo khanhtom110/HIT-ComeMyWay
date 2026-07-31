@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.vetpet.petbeats.ui.home_user.chatbot.ChatbotFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/TieuDe1"
+            android:id="@+id/tvHello"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat với VetPet"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="@dimen/_40sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:src="@drawable/logo_chatbot"
+            android:layout_marginBottom="@dimen/_80sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            style="@style/HienThiAI"
+            android:id="@+id/textLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thú cưng của bạn đang gặp \nvấn đề gì?"
+            android:textColor="@color/colorTextSub"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvHello"
+            app:layout_constraintBottom_toTopOf="@id/editAskChat"/>
+
+        <ImageView
+            android:id="@+id/note"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/note"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/editAskChat"
+            app:layout_constraintEnd_toStartOf="@id/editAskChat"
+            app:layout_constraintTop_toTopOf="@id/editAskChat" />
+
+        <EditText
+            style="@style/Chu1"
+            android:id="@+id/editAskChat"
+            android:layout_width="@dimen/_240sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/tittle_search"
+            android:hint="Hỏi câu bất kì"
+            android:inputType="text"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_45sdp"
+            android:textColor="@color/colorTextSub"
+            android:textColorHint="@color/colorTextContent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/btnPushMessage"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/up"
+            android:layout_marginEnd="@dimen/_15sdp"
+            app:layout_constraintTop_toTopOf="@id/editAskChat"
+            app:layout_constraintBottom_toBottomOf="@id/editAskChat"
+            app:layout_constraintEnd_toEndOf="@id/editAskChat"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
