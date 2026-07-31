@@ -291,7 +291,7 @@ class AppointmentScheduleFragment : Fragment() {
                         }
                         is AppointmentScheduleEvent.NavigationDetail -> {
                             findNavController().navigate(
-                                R.id.appointmentDetailWait,
+                                R.id.appointmentDetailWaitFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
@@ -299,14 +299,14 @@ class AppointmentScheduleFragment : Fragment() {
                         }
                         is AppointmentScheduleEvent.NavigationDetailReceive -> {
                             findNavController().navigate(
-                                R.id.appointmentDetailReceive,
+                                R.id.appointmentDetailReceiveFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
                             )
                         }
                         is AppointmentScheduleEvent.NavigationDetailRefuse -> {
-                            findNavController().navigate(R.id.appointmentDetailRefuse,
+                            findNavController().navigate(R.id.appointmentDetailRefuseFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
