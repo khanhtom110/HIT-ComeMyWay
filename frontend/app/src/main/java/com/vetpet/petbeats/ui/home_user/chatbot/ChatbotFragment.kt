@@ -106,7 +106,7 @@ class ChatbotFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
                     // Đẩy dữ liệu vào RecyclerView
-                     chatbotAdapter.submitList(event)
+                     chatbotAdapter.submitList(event.toList())
 
                     // Tự động cuộn xuống cuối cùng
                     if (event.isNotEmpty()) {
