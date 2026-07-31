@@ -69,27 +69,10 @@ class ClinicViewModel(
     }
 
 
-//    fun onLogoutClick() {
-//        viewModelScope.launch {
-//            val refreshToken = tokenManager.getRefreshToken() ?: ""
-//            val accessToken = tokenManager.getAccessToken() ?: ""
-//
-//            val headerToken = "Bearer $accessToken"
-//            val request = LogoutRequest(refreshToken)
-//
-//            val result = repository.logoutUser(headerToken, request)
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//                    tokenManager.clearTokens()
-//                    _event.emit(ClinicEvent.NavigationLogin)
-//                }
-//                is DataResult.Error -> {
-//                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
-//                    return@launch
-//                }
-//            }
-//        }
-//    }
+    fun onLogoutClick() {
+        viewModelScope.launch {
+            _event.emit(ClinicEvent.NavigationLogin)
+        }
+    }
 
 }

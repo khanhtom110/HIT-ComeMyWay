@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_user.setting
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.example.VetPet.databinding.FragmentSettingUserBinding
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentViewModel
 import com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentViewModelFactory
 import kotlinx.coroutines.launch
@@ -111,7 +113,8 @@ class SettingUserFragment : Fragment() {
                             findNavController().navigate(R.id.editPasswordFragment)
                         }
                         is SettingUserEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            val intent = Intent(requireContext(), AuthActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }

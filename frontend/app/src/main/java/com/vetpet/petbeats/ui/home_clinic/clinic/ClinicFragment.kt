@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_clinic.clinic
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import com.vetpet.petbeats.ui.home_clinic.informationclinic.InformationClinicState
 import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModel
 import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModelFactory
@@ -73,9 +75,9 @@ class ClinicFragment : Fragment() {
         binding.btnPassword.setOnClickListener {
             viewModel.editPasswordClick()
         }
-//        binding.btnLogOut.setOnClickListener {
-//            viewModel.onLogoutClick()
-//        }
+        binding.btnLogOut.setOnClickListener {
+            viewModel.onLogoutClick()
+        }
 
     }
 
@@ -177,7 +179,8 @@ class ClinicFragment : Fragment() {
                             findNavController().navigate(R.id.editPasswordClinicFragment)
                         }
                         is ClinicEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            val intent = Intent(requireContext(), AuthActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                 }
