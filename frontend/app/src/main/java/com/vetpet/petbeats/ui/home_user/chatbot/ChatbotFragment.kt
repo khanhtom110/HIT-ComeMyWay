@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentChatbotBinding
 import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
@@ -45,12 +46,15 @@ class ChatbotFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        chatbotAdapter = ChatbotAdapter()
+        chatbotAdapter = ChatbotAdapter { id ->
+            viewModel.onItemInfomation(id)
+        }
         binding.recycle.adapter = chatbotAdapter
 
         setOnClick()
         stateData()
         eventData()
+        eventRealData()
     }
 
     override fun onDestroyView() {
@@ -112,6 +116,25 @@ class ChatbotFragment : Fragment() {
                     if (event.isNotEmpty()) {
                         binding.recycle.post {
                             binding.recycle.smoothScrollToPosition(event.size - 1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun eventRealData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.eventReal.collect { event ->
+                    when (event) {
+                        is ChatbotEventReal.NavigaitonInformation -> {
+                            findNavController().navigate(
+                                R.id.informationRoomFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
                         }
                     }
                 }
