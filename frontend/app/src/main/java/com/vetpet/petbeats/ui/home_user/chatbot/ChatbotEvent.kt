@@ -12,4 +12,6 @@ sealed class ChatbotEvent {
 
     //Trạng thái chờ
     object BotTyping: ChatbotEvent()
+
+
 }

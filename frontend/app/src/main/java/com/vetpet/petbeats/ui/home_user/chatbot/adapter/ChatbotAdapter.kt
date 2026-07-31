@@ -9,9 +9,12 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.ItemChatBotBinding
 import com.example.VetPet.databinding.ItemChatBotTypingBinding
 import com.example.VetPet.databinding.ItemChatUserBinding
+import com.vetpet.petbeats.ui.home_user.book.adapter.BookAdapter
 import com.vetpet.petbeats.ui.home_user.chatbot.ChatbotEvent
 
-class ChatbotAdapter: ListAdapter<ChatbotEvent, RecyclerView.ViewHolder>(ChatbotDiffcallback()) {
+class ChatbotAdapter(
+    private val onItemClick: (Int) -> Unit
+): ListAdapter<ChatbotEvent, RecyclerView.ViewHolder>(ChatbotDiffcallback()) {
 
     companion object {
         private const val VIEW_TYPE_USER = 1
@@ -46,7 +49,7 @@ class ChatbotAdapter: ListAdapter<ChatbotEvent, RecyclerView.ViewHolder>(Chatbot
             }
             VIEW_TYPE_BOT_SUGGEST -> {
                 val binding = ItemChatBotBinding.inflate(LayoutInflater.from(holder.context), holder, false)
-                BotViewHolder(binding)
+                BotSuggestViewHolder(binding)
             }
             else -> throw IllegalArgumentException("Không có kiểu view này")
         }
@@ -70,6 +73,9 @@ class ChatbotAdapter: ListAdapter<ChatbotEvent, RecyclerView.ViewHolder>(Chatbot
             is BotTypingViewHolder -> {
                 holder.bind()
             }
+            is BotSuggestViewHolder -> {
+                holder.bind(currentItem as ChatbotEvent.BotSuggest)
+            }
         }
     }
 
@@ -88,9 +94,25 @@ class ChatbotAdapter: ListAdapter<ChatbotEvent, RecyclerView.ViewHolder>(Chatbot
         }
     }
 
+    inner class BotSuggestViewHolder(private val binding: ItemChatBotBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(event: ChatbotEvent.BotSuggest) {
+            binding.tvMessage.text = event.message
+
+            binding.recycle.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(itemView.context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
+
+            val clinicAdapter = ListClinicAdapter { id ->
+                onItemClick(id)
+            }
+            binding.recycle.adapter = clinicAdapter
+            clinicAdapter.submitList(event.clinic)
+        }
+    }
+
     class BotTypingViewHolder(private val binding: ItemChatBotTypingBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind() {
 
         }
     }
+
+
 }
