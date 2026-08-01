@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.vetpet.petbeats.ui.home_user.locket.LocketFragment">
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_user.image_everybody_locket.ImageEverybodyLocketFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,13 +14,14 @@
             android:id="@+id/btnFriend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/button_friend"
+            android:src="@drawable/button_image_everybody"
             android:layout_marginTop="@dimen/_45sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/boxCamera"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/_17sdp"
@@ -30,53 +30,58 @@
             app:cardCornerRadius="@dimen/_20sdp"
             app:cardElevation="0dp"
             app:layout_constraintTop_toBottomOf="@id/btnFriend"
-            app:layout_constraintBottom_toTopOf="@id/btnCamera">
+            app:layout_constraintBottom_toTopOf="@id/tvMe">
 
-            <androidx.camera.view.PreviewView
+            <ImageView
                 android:id="@+id/camera"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:src="@drawable/background_image_locket"/>
         </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            style="@style/Chu2"
+            android:id="@+id/tvMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnCamera"/>
+
 
         <ImageView
             android:id="@+id/btnCamera"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_70sdp"
             android:src="@drawable/button_camera"
-            android:layout_marginBottom="@dimen/_24sdp"
-            app:layout_constraintBottom_toTopOf="@id/btnAll"
+            android:layout_marginBottom="@dimen/_60sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageView
-            android:id="@+id/btnImage"
-            android:layout_width="@dimen/_34sdp"
-            android:layout_height="@dimen/_34sdp"
-            android:src="@drawable/icon_image"
+            android:id="@+id/btnBin"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/icon_bin"
             android:layout_marginEnd="@dimen/_25sdp"
             app:layout_constraintTop_toTopOf="@id/btnCamera"
             app:layout_constraintBottom_toBottomOf="@id/btnCamera"
             app:layout_constraintEnd_toStartOf="@id/btnCamera"/>
 
         <ImageView
-            android:id="@+id/btnReflect"
+            android:id="@+id/btnDown"
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"
-            android:src="@drawable/icon_reflect"
+            android:src="@drawable/icon_down"
             android:layout_marginStart="@dimen/_25sdp"
             app:layout_constraintTop_toTopOf="@id/btnCamera"
             app:layout_constraintBottom_toBottomOf="@id/btnCamera"
             app:layout_constraintStart_toEndOf="@id/btnCamera"/>
-
-        <ImageView
-            android:id="@+id/btnAll"
-            android:layout_width="@dimen/_128sdp"
-            android:layout_height="@dimen/_42sdp"
-            android:src="@drawable/button_all_locket"
-            android:layout_marginBottom="@dimen/_40sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
