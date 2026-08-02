@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/modes"
-            android:layout_marginHorizontal="@dimen/_2sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginVertical="@dimen/_8sdp"
             app:layout_constraintTop_toBottomOf="@id/search"
             app:layout_constraintBottom_toBottomOf="parent">

@@ -15,16 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iconEdit"
-                android:layout_width="@dimen/_17sdp"
-                android:layout_height="@dimen/_17sdp"
-                android:src="@drawable/icon_edit"
-                android:layout_marginTop="@dimen/_40sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
             <TextView
                 style="@style/TieuDe1"
                 android:id="@id/tvInformation"
@@ -32,8 +22,8 @@
                 android:layout_height="wrap_content"
                 android:text="Thông tin cá nhân"
                 android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_11sdp"
-                app:layout_constraintTop_toBottomOf="@id/iconEdit"
+                android:layout_marginTop="@dimen/_50sdp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
@@ -41,13 +31,13 @@
                 style="@style/TieuDe1"
                 android:layout_width="@dimen/_75sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_45sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:background="@drawable/button_all"
                 android:gravity="center"
                 android:text="Chỉnh sửa"
                 android:textColor="@color/colorTextButtonHome"
-                app:layout_constraintTop_toBottomOf="@id/iconEdit"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
