@@ -22,6 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/boxCamera"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/_17sdp"
@@ -35,8 +36,46 @@
             <androidx.camera.view.PreviewView
                 android:id="@+id/camera"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/imgResult"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:src="@color/colorTextHint"/>
+
         </androidx.cardview.widget.CardView>
+
+        <EditText
+            style="@style/Chu3"
+            android:id="@+id/editFeel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_42sdp"
+            android:background="@drawable/button_input"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:textColor="@color/colorTextTitle"
+            android:textColorHint="@color/colorTextHint"
+            android:inputType="text"
+            android:hint="Bạn đang cảm thấy thế nào?"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/boxCamera"
+            app:layout_constraintStart_toStartOf="@id/boxCamera"
+            app:layout_constraintEnd_toEndOf="@id/boxCamera"/>
+
+        <ImageView
+            android:id="@+id/btn_flash"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/icon_flash_close"
+            android:layout_marginStart="@dimen/_23sdp"
+            android:layout_marginTop="@dimen/_23sdp"
+            app:layout_constraintTop_toTopOf="@id/boxCamera"
+            app:layout_constraintStart_toStartOf="@id/boxCamera"/>
 
         <ImageView
             android:id="@+id/btnCamera"
@@ -44,6 +83,17 @@
             android:layout_height="@dimen/_70sdp"
             android:src="@drawable/button_camera"
             android:layout_marginBottom="@dimen/_24sdp"
+            app:layout_constraintBottom_toTopOf="@id/btnAll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/btnCameraSend"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/icon_camera_send"
+            android:layout_marginBottom="@dimen/_24sdp"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/btnAll"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -59,6 +109,17 @@
             app:layout_constraintEnd_toStartOf="@id/btnCamera"/>
 
         <ImageView
+            android:id="@+id/btnCancel"
+            android:layout_width="@dimen/_34sdp"
+            android:layout_height="@dimen/_34sdp"
+            android:src="@drawable/icon_cancel"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/btnCameraSend"
+            app:layout_constraintBottom_toBottomOf="@id/btnCameraSend"
+            app:layout_constraintEnd_toStartOf="@id/btnCameraSend"/>
+
+        <ImageView
             android:id="@+id/btnReflect"
             android:layout_width="@dimen/_28sdp"
             android:layout_height="@dimen/_28sdp"
@@ -69,11 +130,23 @@
             app:layout_constraintStart_toEndOf="@id/btnCamera"/>
 
         <ImageView
+            android:id="@+id/btnDown"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:src="@drawable/icon_down"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/btnCameraSend"
+            app:layout_constraintBottom_toBottomOf="@id/btnCameraSend"
+            app:layout_constraintStart_toEndOf="@id/btnCameraSend"/>
+
+        <ImageView
             android:id="@+id/btnAll"
             android:layout_width="@dimen/_128sdp"
             android:layout_height="@dimen/_42sdp"
             android:src="@drawable/button_all_locket"
             android:layout_marginBottom="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

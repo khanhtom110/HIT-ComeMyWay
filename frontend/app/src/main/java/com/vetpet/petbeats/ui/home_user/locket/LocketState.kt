@@ -1,5 +1,9 @@
 package com.vetpet.petbeats.ui.home_user.locket
 
 data class LocketState (
-    val id: Int = 0
+    val message: String = "",
+
+
+    val isDown: Boolean = false,
+    val isFlash: Boolean = false,
 )

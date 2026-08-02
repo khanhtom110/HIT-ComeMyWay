@@ -70,6 +70,22 @@ class HomeActivity : AppCompatActivity() {
                 R.id.editPasswordFragment -> {
                     binding.bottomUserNav.menu.findItem(R.id.settingUserFragment)?.isChecked = true
                 }
+
+
+
+                R.id.locketFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.splashLocketFragment)?.isChecked = true
+                }
+                R.id.listFriendLocketFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.splashLocketFragment)?.isChecked = true
+                }
+                R.id.imageMeLocketFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.splashLocketFragment)?.isChecked = true
+                }
+                R.id.imageEverybodyLocketFragment -> {
+                    binding.bottomUserNav.menu.findItem(R.id.splashLocketFragment)?.isChecked = true
+                }
+
             }
         }
     }
