@@ -25,6 +25,19 @@ object ApiConstants {
     const val TAKEAPPOINTMENTIDCLINIC = "/api/v1/clinic/appointments/detail/{id}"
 
 
+    //Pet Locket
+    const val CREATEPOSTLOCKET = "/api/v1/user/locket/create-post"
+    const val GETMYLOCKET = "/api/v1/user/locket/my-posts"
+    const val GETFEEDSLOCKET = "/api/v1/user/locket/feed"
+
+
+    //Friendship
+    const val MAKEFRIENDLOCKET = "/api/v1/user/locket/reject-request/{requestId}"
+    const val SENDFRIENDLOCKET = "/api/v1/user/locket/add-friend"
+    const val ACCEPTFRIENDLOCKET = "/api/v1/user/locket/accept-request/{requestId}"
+    const val GETPENDINGFRIENDLOCKET = "/api/v1/user/locket/pending"
+    const val GETMYFRIENDLOCKET = "/api/v1/user/locket/my-friend"
+
 
     //ClinicController
     const val UPDATEPROFILE = "/api/v1/clinic/update-profile"

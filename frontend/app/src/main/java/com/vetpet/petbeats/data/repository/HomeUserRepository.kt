@@ -10,6 +10,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenR
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
@@ -20,10 +21,12 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.Location
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
@@ -172,4 +175,55 @@ class HomeUserRepository(
             apiUserHome.resetpassword(request)
         }
     }
+
+
+
+    suspend fun createPostLocket(request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
+        return safeApiCall {
+            apiUserHome.createPostLocket(request)
+        }
+    }
+
+    suspend fun getMyPostLocket(lastPostId: Int, size: Int): DataResult<MyPostLocketResponse> {
+        return safeApiCall {
+            apiUserHome.getMyPostLocket(lastPostId, size)
+        }
+    }
+
+    suspend fun getMyFeedLocket(lastPostId: Int, size: Int): DataResult<MyPostLocketResponse> {
+        return safeApiCall {
+            apiUserHome.getMyFeedLocket(lastPostId, size)
+        }
+    }
+
+    suspend fun makeFriendLocket(requestId: Int): DataResult<Any> {
+        return safeApiCall {
+            apiUserHome.makeFriendLocket(requestId)
+        }
+    }
+
+    suspend fun sendFriendLocket(request: AddFriendRequest): DataResult<AddFriendResponse> {
+        return safeApiCall {
+            apiUserHome.sendFriendLocket(request)
+        }
+    }
+
+    suspend fun acceptFriendLocket(requestId: Int): DataResult<Any> {
+        return safeApiCall {
+            apiUserHome.acceptFriendLocket(requestId)
+        }
+    }
+
+    suspend fun getPendingFriendLocket(): DataResult<AddFriendResponse> {
+        return safeApiCall {
+            apiUserHome.getPendingFriendLocket()
+        }
+    }
+
+    suspend fun getMyFriendLocket(): DataResult<AddFriendResponse> {
+        return safeApiCall {
+            apiUserHome.getMyFriendLocket()
+        }
+    }
+
 }

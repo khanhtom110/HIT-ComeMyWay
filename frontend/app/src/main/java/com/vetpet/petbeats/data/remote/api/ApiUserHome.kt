@@ -8,15 +8,18 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
@@ -125,4 +128,40 @@ interface ApiUserHome {
 
     @POST(ApiConstants.RESETPASSWORD)
     suspend fun resetpassword(@Body request: ResetPasswordRequest): ApiResponse<Nothing>
+
+
+
+    @POST(ApiConstants.CREATEPOSTLOCKET)
+    suspend fun createPostLocket(@Body request: CreateAppointmentRequest): ApiResponse<CreateAppointmentResponse>
+
+    @GET(ApiConstants.GETMYLOCKET)
+    suspend fun getMyPostLocket(
+        @Query("lastPostId") lastPostId: Int,
+        @Query("size") size: Int
+    ): ApiResponse<MyPostLocketResponse>
+
+    @GET(ApiConstants.GETFEEDSLOCKET)
+    suspend fun getMyFeedLocket(
+        @Query("lastPostId") lastPostId: Int,
+        @Query("size") size: Int
+    ): ApiResponse<MyPostLocketResponse>
+
+    @POST(ApiConstants.MAKEFRIENDLOCKET)
+    suspend fun makeFriendLocket(
+        @Path("requestId") requestId: Int
+    ): ApiResponse<Any>
+
+    @POST(ApiConstants.SENDFRIENDLOCKET)
+    suspend fun sendFriendLocket(@Body request: AddFriendRequest): ApiResponse<AddFriendResponse>
+
+    @POST(ApiConstants.ACCEPTFRIENDLOCKET)
+    suspend fun acceptFriendLocket(
+        @Path("requestId") requestId: Int
+    ): ApiResponse<Any>
+
+    @GET(ApiConstants.GETPENDINGFRIENDLOCKET)
+    suspend fun getPendingFriendLocket(): ApiResponse<AddFriendResponse>
+
+    @GET(ApiConstants.GETMYFRIENDLOCKET)
+    suspend fun getMyFriendLocket(): ApiResponse<AddFriendResponse>
 }
