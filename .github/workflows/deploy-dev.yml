@@ -60,5 +60,6 @@ jobs:
 
             # Khởi chạy bản .jar mới dưới dạng tiến trình nền
             echo "Starting new app version..."
-            nohup java -jar comemyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
-            echo "✅ Deployed Successfully!"
+            nohup java -jar commyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+            sleep 2
+            echo "Deployed Successfully!"
