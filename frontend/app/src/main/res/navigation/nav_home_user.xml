@@ -255,6 +255,13 @@
     <fragment
         android:id="@+id/listFriendLocketFragment"
         android:name="com.vetpet.petbeats.ui.home_user.list_friend_locket.ListFriendLocketFragment"
-        android:label="listFriendLocketFragment"/>
+        android:label="listFriendLocketFragment">
+
+        <action
+            android:id="@+id/listFriendLocket_locket"
+            app:destination="@id/locketFragment"
+            app:popUpTo="@id/locketFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>
