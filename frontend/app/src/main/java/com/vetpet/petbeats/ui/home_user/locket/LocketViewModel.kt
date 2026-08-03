@@ -2,6 +2,8 @@ package com.vetpet.petbeats.ui.home_user.locket
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,18 +64,43 @@ class LocketViewModel(
     }
 
 
-
-    fun onImageLocketSend(imageFile: File) {
+    fun onImageLink(imageFile: File) {
         viewModelScope.launch {
             val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageFile)
-            val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+            val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
+            val result = repository.onUploadImage(imagePart)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(linkImage = result.data)
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy()
+                }
+            }
+        }
+    }
+
+
+
+    fun onImageLocketSend() {
+        viewModelScope.launch {
+            val linkImage = _state.value.linkImage
             val message = _state.value.message
 
+            val request = CreatePostLocketRequest(linkImage, message)
+            val result = repository.createPostLocket(request)
 
-
-
-
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isSendSuccess = true, message = "")
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy()
+                    return@launch
+                }
+            }
         }
     }
 

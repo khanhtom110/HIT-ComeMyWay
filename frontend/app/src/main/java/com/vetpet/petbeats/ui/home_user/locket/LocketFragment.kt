@@ -38,6 +38,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.widget.addTextChangedListener
+import kotlinx.coroutines.delay
 import java.io.File
 import java.io.OutputStream
 
@@ -91,6 +92,7 @@ class LocketFragment : Fragment() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         checkCameraPermissionAndStart()
+
 
 
         setOnClick()
@@ -159,8 +161,9 @@ class LocketFragment : Fragment() {
             val bitmap = drawable?.bitmap
             val imageFile = bitmapToFile(bitmap)
 
+            viewModel.onImageLink(imageFile)
+            viewModel.onImageLocketSend()
 
-            viewModel.onImageLocketSend(imageFile)
         }
 
 
@@ -180,6 +183,17 @@ class LocketFragment : Fragment() {
             }
 
             viewModel.changeFlash()
+        }
+
+
+        binding.btnCameraSend.setOnClickListener {
+            viewModel.onImageLocketSend()
+
+            suspend {
+                delay(1000)
+
+                startCamera(currentLensFacing)
+            }
         }
     }
 
@@ -246,6 +260,8 @@ class LocketFragment : Fragment() {
                     binding.btnImage.visibility = View.INVISIBLE
                     binding.btnReflect.visibility = View.INVISIBLE
                     binding.btnFlash.visibility = View.INVISIBLE
+
+                    binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -356,6 +372,19 @@ class LocketFragment : Fragment() {
                     }
                     else {
                         binding.btnFlash.setImageResource(R.drawable.icon_flash_close)
+                    }
+
+                    if (state.isSendSuccess) {
+                        binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send_success)
+
+                        suspend {
+                            delay(1000)
+                            startCamera(currentLensFacing)
+                        }
+                    }
+                    else {
+                        binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send)
+
                     }
                 }
             }
