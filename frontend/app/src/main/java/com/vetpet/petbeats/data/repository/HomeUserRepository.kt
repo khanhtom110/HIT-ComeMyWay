@@ -6,7 +6,6 @@ import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
@@ -16,6 +15,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePa
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LocationRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
@@ -25,6 +25,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFrie
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
@@ -138,7 +139,7 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun onUploadImage(file: MultipartBody.Part): DataResult<String> {
+    suspend fun onUploadImage(file: MultipartBody.Part?): DataResult<String> {
         return  safeApiCall {
             apiUserHome.uploadImage(file)
         }
@@ -178,7 +179,7 @@ class HomeUserRepository(
 
 
 
-    suspend fun createPostLocket(request: CreateAppointmentRequest): DataResult<CreateAppointmentResponse> {
+    suspend fun createPostLocket(request: CreatePostLocketRequest): DataResult<CreatePostLocketResponse> {
         return safeApiCall {
             apiUserHome.createPostLocket(request)
         }
@@ -196,9 +197,9 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun makeFriendLocket(requestId: Int): DataResult<Any> {
+    suspend fun rejectFriendLocket(requestId: Int): DataResult<Any> {
         return safeApiCall {
-            apiUserHome.makeFriendLocket(requestId)
+            apiUserHome.rejectFriendLocket(requestId)
         }
     }
 
@@ -214,13 +215,13 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun getPendingFriendLocket(): DataResult<AddFriendResponse> {
+    suspend fun getPendingFriendLocket(): DataResult<List<AddFriendResponse>> {
         return safeApiCall {
             apiUserHome.getPendingFriendLocket()
         }
     }
 
-    suspend fun getMyFriendLocket(): DataResult<AddFriendResponse> {
+    suspend fun getMyFriendLocket(): DataResult<List<AddFriendResponse>> {
         return safeApiCall {
             apiUserHome.getMyFriendLocket()
         }

@@ -24,7 +24,7 @@
             style="@style/TieuDe1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thông tin phòng khám"
+            android:text="Danh sách bạn bè"
             android:textColor="@color/colorTextSub"
             app:layout_constraintTop_toTopOf="@id/btnBack"
             app:layout_constraintBottom_toBottomOf="@id/btnBack"
@@ -38,7 +38,7 @@
             android:layout_height="@dimen/_40sdp"
             android:background="@drawable/tittle_search"
             android:inputType="text"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:hint="Thêm bạn bè bằng liên kết"
             android:textColorHint="@color/colorTextContent"
@@ -63,9 +63,10 @@
             android:layout_height="0dp"
             android:background="@drawable/modes"
             android:layout_marginHorizontal="@dimen/_16sdp"
-            android:layout_marginVertical="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_25sdp"
             app:layout_constraintTop_toBottomOf="@id/search"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toTopOf="@id/btnCopy">
 
 
             <TextView
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="Danh sách bạn bè trống"
                 android:textColor="@color/colorTextContent"
-                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_45sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -83,10 +84,32 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleAddFriend"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvAddFriend"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/tvAddFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lời mời kết bạn"
                 android:layout_marginTop="@dimen/_20sdp"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/tvMyFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bạn bè của bạn"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/recycleAddFriend"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleMyFriend"
@@ -94,11 +117,25 @@
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/recycleAddFriend"
+                app:layout_constraintTop_toBottomOf="@id/tvMyFriend"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            style="@style/Nut2"
+            android:id="@+id/btnCopy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/button_auth_blue"
+            android:gravity="center"
+            android:text="Sao chép liên kết của bạn"
+            android:textColor="@color/colorBackground"
+            android:layout_marginBottom="@dimen/_30sdp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
