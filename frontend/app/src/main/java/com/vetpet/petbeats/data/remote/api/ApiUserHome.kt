@@ -12,12 +12,14 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFrien
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
@@ -109,7 +111,7 @@ interface ApiUserHome {
     @Multipart
     @POST(ApiConstants.UPLOAD)
     suspend fun uploadImage(
-        @Part file: MultipartBody.Part
+        @Part file: MultipartBody.Part?
     ): ApiResponse<String>
 
     @POST(ApiConstants.CHANGEPASSWORDUSER)
@@ -132,7 +134,7 @@ interface ApiUserHome {
 
 
     @POST(ApiConstants.CREATEPOSTLOCKET)
-    suspend fun createPostLocket(@Body request: CreateAppointmentRequest): ApiResponse<CreateAppointmentResponse>
+    suspend fun createPostLocket(@Body request: CreatePostLocketRequest): ApiResponse<CreatePostLocketResponse>
 
     @GET(ApiConstants.GETMYLOCKET)
     suspend fun getMyPostLocket(
@@ -146,8 +148,8 @@ interface ApiUserHome {
         @Query("size") size: Int
     ): ApiResponse<MyPostLocketResponse>
 
-    @POST(ApiConstants.MAKEFRIENDLOCKET)
-    suspend fun makeFriendLocket(
+    @POST(ApiConstants.REJECTFRIENDLOCKET)
+    suspend fun rejectFriendLocket(
         @Path("requestId") requestId: Int
     ): ApiResponse<Any>
 
@@ -160,8 +162,8 @@ interface ApiUserHome {
     ): ApiResponse<Any>
 
     @GET(ApiConstants.GETPENDINGFRIENDLOCKET)
-    suspend fun getPendingFriendLocket(): ApiResponse<AddFriendResponse>
+    suspend fun getPendingFriendLocket(): ApiResponse<List<AddFriendResponse>>
 
     @GET(ApiConstants.GETMYFRIENDLOCKET)
-    suspend fun getMyFriendLocket(): ApiResponse<AddFriendResponse>
+    suspend fun getMyFriendLocket(): ApiResponse<List<AddFriendResponse>>
 }

@@ -32,7 +32,7 @@ object ApiConstants {
 
 
     //Friendship
-    const val MAKEFRIENDLOCKET = "/api/v1/user/locket/reject-request/{requestId}"
+    const val REJECTFRIENDLOCKET = "/api/v1/user/locket/reject-request/{requestId}"
     const val SENDFRIENDLOCKET = "/api/v1/user/locket/add-friend"
     const val ACCEPTFRIENDLOCKET = "/api/v1/user/locket/accept-request/{requestId}"
     const val GETPENDINGFRIENDLOCKET = "/api/v1/user/locket/pending"
