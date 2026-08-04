@@ -34,6 +34,7 @@ public final class ErrorMessage {
   public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
   public static final String INVALID_FORMAT_CONDITION =
       "Condition must be under 1000 characters long.";
+  public static final String INVALID_LOCKET_LINK = "Invalid locket link";
   public static final String INVALID_PARAMETER = "The provided parameter is invalid";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
@@ -127,6 +128,8 @@ public final class ErrorMessage {
 
     public static final String CANNOT_ADD_FRIEND_TO_YOURSELF =
         "You cannot add friend to your own account.";
+    public static final String CANNOT_UNFRIEND_TO_YOURSELF =
+        "You cannot unfriend to your own account.";
     public static final String FRIEND_REQUEST_ALREADY_EXISTS =
         "Friend request already exists or you are already friends.";
     public static final String FRIEND_LIMIT_EXCEEDED =
@@ -140,5 +143,6 @@ public final class ErrorMessage {
     public static final String INVALID_FRIEND_REQUEST_STATUS =
         "This friendship is not PENDING status.";
     public static final String INVALID_LENGTH_CAPTION = "Caption must be under 50 characters long.";
+    public static final String ARE_NOT_FRIENDS = "You are not friends with this user.";
   }
 }

@@ -2,8 +2,11 @@ package com.hit.comemyway.controller;
 
 import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ApiPath;
+import com.hit.comemyway.constant.SuccessMessage;
 import com.hit.comemyway.constant.UrlConstant;
+import com.hit.comemyway.dto.request.FindFriendRequest;
 import com.hit.comemyway.dto.request.FriendRequest;
+import com.hit.comemyway.dto.response.FindFriendResponse;
 import com.hit.comemyway.dto.response.FriendResponse;
 import com.hit.comemyway.service.FriendshipService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,5 +62,20 @@ public class FriendshipController {
   public ResponseEntity<ApiResponse<List<FriendResponse>>> getMyFriend() {
     List<FriendResponse> responses = friendshipService.getAcceptedFriends();
     return ResponseEntity.ok(ApiResponse.ok(responses));
+  }
+
+  @Operation(summary = "Tìm bạn qua link locket", description = "Tìm bạn qua link locket")
+  @PostMapping(UrlConstant.Locket.FIND_FRIEND)
+  public ResponseEntity<ApiResponse<FindFriendResponse>> findFriend(
+      @Valid @RequestBody FindFriendRequest request) {
+    FindFriendResponse responses = friendshipService.findFriend(request);
+    return ResponseEntity.ok(ApiResponse.ok(responses));
+  }
+
+  @Operation(summary = "Hủy  kết bạn locket", description = "Hủy kết bạn locket")
+  @PostMapping(UrlConstant.Locket.UNFRIEND)
+  public ResponseEntity<ApiResponse<Void>> unfriend(@PathVariable Long friendId) {
+    friendshipService.unfriend(friendId);
+    return ResponseEntity.ok(ApiResponse.ok(SuccessMessage.Locket.UNFRIEND_SUCCESS, null));
   }
 }

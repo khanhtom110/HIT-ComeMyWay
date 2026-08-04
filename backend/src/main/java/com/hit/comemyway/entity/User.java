@@ -54,6 +54,9 @@ public class User extends BaseEntity {
   private String deviceToken;
 
   @Column(nullable = true)
+  private String locketCode;
+
+  @Column(nullable = true)
   @Enumerated(EnumType.STRING)
   private AccountStatus status;
 }
