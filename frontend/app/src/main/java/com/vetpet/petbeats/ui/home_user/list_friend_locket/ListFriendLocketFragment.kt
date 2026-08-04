@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,7 @@ import com.vetpet.petbeats.data.remote.api.ApiUserHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.AddFriendLocketAdapter
+import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.MakeFriendLocketAdapter
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.MyFriendLocketAdapter
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -32,6 +35,7 @@ class ListFriendLocketFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var addFriendLocketAdapter: AddFriendLocketAdapter
     private lateinit var myFriendLocketAdapter: MyFriendLocketAdapter
+    private lateinit var makeFriendLocketAdapter: MakeFriendLocketAdapter
     private val viewModel: ListFriendLocketViewModel by viewModels {
         ListFriendLocketViewModelFactory(
             HomeUserRepository(
@@ -55,15 +59,19 @@ class ListFriendLocketFragment : Fragment() {
 
         clickListAddFriend()
         clickListMyFriend()
+        clickListMakeFriend()
 
         binding.recycleAddFriend.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleAddFriend.adapter = addFriendLocketAdapter
         binding.recycleMyFriend.layoutManager = LinearLayoutManager(requireContext())
         binding.recycleMyFriend.adapter = myFriendLocketAdapter
+        binding.recycleMakeFriend.layoutManager = LinearLayoutManager(requireContext())
+        binding.recycleMakeFriend.adapter = makeFriendLocketAdapter
 
 
         viewModel.onAddFriendList()
         viewModel.onMyFriendList()
+        viewModel.onMakeFriendList()
 
 
         setOnClick()
@@ -79,6 +87,24 @@ class ListFriendLocketFragment : Fragment() {
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
             viewModel.locketClick()
+        }
+
+
+        binding.editSearch.addTextChangedListener {
+            viewModel.searchFriend(it.toString())
+        }
+
+
+        binding.btnSearch.setOnClickListener {
+            viewModel.showSearchFriend()
+        }
+        binding.editSearch.setOnFocusChangeListener { _, search ->
+            viewModel.isSearch(search)
+        }
+
+
+        binding.btnCopy.setOnClickListener {
+            viewModel.onGetLinkLocket()
         }
     }
 
@@ -104,6 +130,11 @@ class ListFriendLocketFragment : Fragment() {
                     viewModel.itemClickMyFriend(id)
                 }
             )
+        }
+    }
+    private fun clickListMakeFriend() {
+        makeFriendLocketAdapter = MakeFriendLocketAdapter { id ->
+            viewModel.itemClickMakeFriend(id)
         }
     }
 
@@ -152,17 +183,44 @@ class ListFriendLocketFragment : Fragment() {
                 viewModel.state.collect { state ->
                     addFriendLocketAdapter.submitList(state.pendingFriend)
                     myFriendLocketAdapter.submitList(state.myFriend)
+                    makeFriendLocketAdapter.submitList(state.makeFriend)
 
 
 
-                    //check pendingFriend
-                    if (state.pendingFriend != emptyList<AddFriendLocketAdapter>()) {
-                        binding.tvAddFriend.visibility = View.VISIBLE
-                        binding.recycleAddFriend.visibility = View.VISIBLE
-                    }
-                    else {
+                    if (state.isShowSearch) {
+                        binding.tvMakeFriend.visibility = View.VISIBLE
+                        binding.recycleMakeFriend.visibility = View.VISIBLE
+
                         binding.tvAddFriend.visibility = View.GONE
                         binding.recycleAddFriend.visibility = View.GONE
+                    }
+                    else {
+                        binding.tvMakeFriend.visibility = View.GONE
+                        binding.recycleMakeFriend.visibility = View.GONE
+
+
+                        if (state.pendingFriend.isNotEmpty()) {
+                            binding.tvAddFriend.visibility = View.VISIBLE
+                            binding.recycleAddFriend.visibility = View.VISIBLE
+                        } else {
+                            binding.tvAddFriend.visibility = View.GONE
+                            binding.recycleAddFriend.visibility = View.GONE
+                        }
+                    }
+
+
+                    //check input
+                    if (binding.editSearch.text.toString() != state.searchFriend) {
+                        binding.editSearch.setText(state.searchFriend)
+                    }
+
+
+                    //Check search
+                    if (state.isSearch) {
+                        binding.editSearch.setBackgroundResource(R.drawable.button_input)
+                    }
+                    else {
+                        binding.editSearch.setBackgroundResource(R.drawable.tittle_search)
                     }
 
                 }
@@ -177,6 +235,15 @@ class ListFriendLocketFragment : Fragment() {
                     when (event) {
                         is ListFriendLocketEvent.NavigationLocket -> {
                             findNavController().navigate(R.id.listFriendLocket_locket)
+                        }
+                        is ListFriendLocketEvent.CopyLink -> {
+                            val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+
+                            val clip = android.content.ClipData.newPlainText("Locket Link", event.link)
+
+                            clipboard.setPrimaryClip(clip)
+
+                            Toast.makeText(requireContext(), "Đã sao chép liên kết", android.widget.Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

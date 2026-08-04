@@ -33,7 +33,7 @@
 
         <EditText
             style="@style/Chu2"
-            android:id="@+id/search"
+            android:id="@+id/editSearch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:background="@drawable/tittle_search"
@@ -49,14 +49,14 @@
             app:layout_constraintTop_toBottomOf="@id/btnBack"/>
 
         <ImageView
-            android:id="@+id/buttonSearch"
+            android:id="@+id/btnSearch"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
             android:src="@drawable/button_search"
             android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintTop_toTopOf="@id/search"
-            app:layout_constraintBottom_toBottomOf="@id/search"
-            app:layout_constraintEnd_toEndOf="@id/search"/>
+            app:layout_constraintTop_toTopOf="@id/editSearch"
+            app:layout_constraintBottom_toBottomOf="@id/editSearch"
+            app:layout_constraintEnd_toEndOf="@id/editSearch"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_25sdp"
-            app:layout_constraintTop_toBottomOf="@id/search"
+            app:layout_constraintTop_toBottomOf="@id/editSearch"
             app:layout_constraintBottom_toTopOf="@id/btnCopy">
 
 
@@ -81,14 +81,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleAddFriend"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_4sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvAddFriend"/>
-
             <TextView
                 style="@style/TieuDe1"
                 android:id="@+id/tvAddFriend"
@@ -99,6 +91,35 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleAddFriend"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvAddFriend"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/tvMakeFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm bạn bè"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleMakeFriend"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/tvMakeFriend"/>
 
             <TextView
                 style="@style/TieuDe1"

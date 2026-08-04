@@ -5,4 +5,6 @@ data class FriendChild (
     val friendId: Int,
     val username: String,
     val avatar: String?,
+
+    val isMakeFriend: Boolean = false,
 )
