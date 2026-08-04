@@ -38,7 +38,7 @@ public class UrlConstant {
     public static final String BOOK_APPOINTMENT = PREFIX + "/appointments/book";
     public static final String DEVICE_TOKEN = PREFIX + "/device-token";
     public static final String USER_REMINDER = PREFIX + "/user-reminder";
-    public static final String USER_LOCKET_LINK= PREFIX + "/locket-link";
+    public static final String USER_LOCKET_LINK = PREFIX + "/locket-link";
 
     private User() {}
   }

@@ -31,7 +31,7 @@ public class User extends BaseEntity {
   @Column(length = CommonConstant.PHONE_LENGTH)
   private String phone;
 
-  @Column(nullable = true, length = CommonConstant.ADDRESS_LENGTH)
+  @Column(length = CommonConstant.ADDRESS_LENGTH)
   private String homeAddress;
 
   @Column(nullable = false, unique = true, length = CommonConstant.EMAIL_LENGTH)

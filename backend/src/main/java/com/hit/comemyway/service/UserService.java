@@ -158,8 +158,8 @@ public class UserService {
 
   public String generateRandomCode(int length) {
     return IntStream.range(0, length)
-            .mapToObj(i -> String.valueOf(CHARS.charAt(random.nextInt(CHARS.length()))))
-            .collect(Collectors.joining());
+        .mapToObj(i -> String.valueOf(CHARS.charAt(random.nextInt(CHARS.length()))))
+        .collect(Collectors.joining());
   }
 
   @Transactional(readOnly = true)
@@ -167,7 +167,7 @@ public class UserService {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
     User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
     String locketCode = user.getLocketCode();
 
