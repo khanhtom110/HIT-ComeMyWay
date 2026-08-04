@@ -103,12 +103,13 @@ public class AuthService {
 
       String password = passwordEncoder.encode(registerRequest.password());
 
-      String locketCode; boolean isUnique = false;
+      String locketCode;
+      boolean isUnique = false;
       do {
-         locketCode = userService.generateRandomCode(6);
-         if(userRepository.findBylocketCode(locketCode).isEmpty())
-           isUnique = true;
-      } while(!isUnique);
+        locketCode = userService.generateRandomCode(6);
+        if (userRepository.findBylocketCode(locketCode).isEmpty())
+          isUnique = true;
+      } while (!isUnique);
 
       User user = User.builder().username(registerRequest.username()).password(password)
           .email(registerRequest.email()).role(Role.USER).locketCode(locketCode).build();

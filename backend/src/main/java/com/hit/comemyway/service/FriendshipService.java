@@ -33,10 +33,8 @@ public class FriendshipService {
     String locketCode;
 
     try {
-      locketCode = UriComponentsBuilder.fromUriString(request.locketLink())
-                                              .build()
-                                              .getQueryParams()
-                                              .getFirst("code");
+      locketCode = UriComponentsBuilder.fromUriString(request.locketLink()).build().getQueryParams()
+          .getFirst("code");
     } catch (Exception e) {
       throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
     }
@@ -46,7 +44,7 @@ public class FriendshipService {
     }
 
     User user = userRepository.findBylocketCode(locketCode)
-            .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
     return FindFriendResponse.from(user);
   }

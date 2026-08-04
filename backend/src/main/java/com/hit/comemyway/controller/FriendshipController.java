@@ -64,16 +64,15 @@ public class FriendshipController {
     return ResponseEntity.ok(ApiResponse.ok(responses));
   }
 
-  @Operation(summary = "Tìm bạn qua link locket",
-          description = "Tìm bạn qua link locket")
+  @Operation(summary = "Tìm bạn qua link locket", description = "Tìm bạn qua link locket")
   @PostMapping(UrlConstant.Locket.FIND_FRIEND)
-  public ResponseEntity<ApiResponse<FindFriendResponse>> findFriend(@Valid @RequestBody FindFriendRequest request) {
+  public ResponseEntity<ApiResponse<FindFriendResponse>> findFriend(
+      @Valid @RequestBody FindFriendRequest request) {
     FindFriendResponse responses = friendshipService.findFriend(request);
     return ResponseEntity.ok(ApiResponse.ok(responses));
   }
 
-  @Operation(summary = "Hủy  kết bạn locket",
-          description = "Hủy kết bạn locket")
+  @Operation(summary = "Hủy  kết bạn locket", description = "Hủy kết bạn locket")
   @PostMapping(UrlConstant.Locket.UNFRIEND)
   public ResponseEntity<ApiResponse<Void>> unfriend(@PathVariable Long friendId) {
     friendshipService.unfriend(friendId);

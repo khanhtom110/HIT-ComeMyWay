@@ -44,19 +44,19 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
   @Modifying
   @Query("""
-     DELETE FROM Friendship f
-     WHERE ((f.user.id = :userId AND f.friend.id = :friendId)
-        OR (f.user.id = :friendId AND f.friend.id = :userId))
-        AND f.status = 'ACCEPTED'
-     """)
+      DELETE FROM Friendship f
+      WHERE ((f.user.id = :userId AND f.friend.id = :friendId)
+         OR (f.user.id = :friendId AND f.friend.id = :userId))
+         AND f.status = 'ACCEPTED'
+      """)
   void deleteFriendship(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
   @Query("""
-     SELECT COUNT(f) > 0
-     FROM Friendship f
-     WHERE ((f.user.id = :userId AND f.friend.id = :friendId)
-       OR (f.user.id = :friendId AND f.friend.id = :userId))
-       AND f.status = 'ACCEPTED'
-     """)
+      SELECT COUNT(f) > 0
+      FROM Friendship f
+      WHERE ((f.user.id = :userId AND f.friend.id = :friendId)
+        OR (f.user.id = :friendId AND f.friend.id = :userId))
+        AND f.status = 'ACCEPTED'
+      """)
   boolean existsFriendship(@Param("userId") Long userId, @Param("friendId") Long friendId);
 }

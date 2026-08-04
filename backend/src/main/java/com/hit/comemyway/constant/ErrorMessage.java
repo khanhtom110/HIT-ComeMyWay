@@ -129,7 +129,7 @@ public final class ErrorMessage {
     public static final String CANNOT_ADD_FRIEND_TO_YOURSELF =
         "You cannot add friend to your own account.";
     public static final String CANNOT_UNFRIEND_TO_YOURSELF =
-            "You cannot unfriend to your own account.";
+        "You cannot unfriend to your own account.";
     public static final String FRIEND_REQUEST_ALREADY_EXISTS =
         "Friend request already exists or you are already friends.";
     public static final String FRIEND_LIMIT_EXCEEDED =
