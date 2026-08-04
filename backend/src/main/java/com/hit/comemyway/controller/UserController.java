@@ -55,4 +55,11 @@ public class UserController {
     userService.updateUserPassword(request);
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
+
+  @Operation(summary = "Lấy link locket người dùng")
+  @GetMapping(UrlConstant.User.USER_LOCKET_LINK)
+  public ResponseEntity<ApiResponse<String>> getUserLocketLink() {
+    String response = userService.getLocketLink();
+    return ResponseEntity.ok(ApiResponse.ok(response));
+  }
 }

@@ -2,7 +2,9 @@ package com.hit.comemyway.service;
 
 import com.hit.comemyway.constant.CommonConstant;
 import com.hit.comemyway.constant.ErrorMessage;
+import com.hit.comemyway.dto.request.FindFriendRequest;
 import com.hit.comemyway.dto.request.FriendRequest;
+import com.hit.comemyway.dto.response.FindFriendResponse;
 import com.hit.comemyway.dto.response.FriendResponse;
 import com.hit.comemyway.entity.Friendship;
 import com.hit.comemyway.entity.FriendshipStatus;
@@ -14,6 +16,7 @@ import com.hit.comemyway.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,29 @@ public class FriendshipService {
   private final FriendshipRepository friendshipRepository;
   private final UserRepository userRepository;
   private final SecurityUtils securityUtils;
+
+  @Transactional(readOnly = true)
+  public FindFriendResponse findFriend(FindFriendRequest request) {
+    String locketCode;
+
+    try {
+      locketCode = UriComponentsBuilder.fromUriString(request.locketLink())
+                                              .build()
+                                              .getQueryParams()
+                                              .getFirst("code");
+    } catch (Exception e) {
+      throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
+    }
+
+    if (locketCode == null) {
+      throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
+    }
+
+    User user = userRepository.findBylocketCode(locketCode)
+            .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    return FindFriendResponse.from(user);
+  }
 
   @Transactional
   public FriendResponse addFriendRequest(FriendRequest request) {
@@ -123,5 +149,21 @@ public class FriendshipService {
         friendshipRepository.findAllAcceptedFriends(currentUser.getId(), FriendshipStatus.ACCEPTED);
 
     return friendships.stream().map(f -> FriendResponse.from(f, currentUser.getId())).toList();
+  }
+
+  @Transactional
+  public void unfriend(Long friendId) {
+    Long currentUserId = securityUtils.getCurrentUser().getId();
+
+    if (currentUserId.equals(friendId)) {
+      throw new AppException(400, ErrorMessage.Locket.CANNOT_UNFRIEND_TO_YOURSELF);
+    }
+
+    boolean isFriend = friendshipRepository.existsFriendship(currentUserId, friendId);
+    if (!isFriend) {
+      throw new AppException(404, ErrorMessage.Locket.ARE_NOT_FRIENDS);
+    }
+
+    friendshipRepository.deleteFriendship(currentUserId, friendId);
   }
 }
