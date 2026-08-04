@@ -14,12 +14,14 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequ
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LinkFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LinkFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
@@ -140,13 +142,13 @@ interface ApiUserHome {
     suspend fun getMyPostLocket(
         @Query("lastPostId") lastPostId: Int,
         @Query("size") size: Int
-    ): ApiResponse<MyPostLocketResponse>
+    ): ApiResponse<List<MyPostLocketResponse>>
 
     @GET(ApiConstants.GETFEEDSLOCKET)
     suspend fun getMyFeedLocket(
         @Query("lastPostId") lastPostId: Int,
         @Query("size") size: Int
-    ): ApiResponse<MyPostLocketResponse>
+    ): ApiResponse<List<MyPostLocketResponse>>
 
     @POST(ApiConstants.REJECTFRIENDLOCKET)
     suspend fun rejectFriendLocket(
@@ -166,4 +168,15 @@ interface ApiUserHome {
 
     @GET(ApiConstants.GETMYFRIENDLOCKET)
     suspend fun getMyFriendLocket(): ApiResponse<List<AddFriendResponse>>
+
+    @GET(ApiConstants.LOCKETLINK)
+    suspend fun getLocketLink(): ApiResponse<String>
+
+    @POST(ApiConstants.FINDFRIEND)
+    suspend fun findFriend(@Body request: LinkFriendRequest): ApiResponse<LinkFriendResponse>
+
+    @POST(ApiConstants.UNFRIEND)
+    suspend fun unFriend(
+        @Path("friendId") friendId: Int
+    ): ApiResponse<Unit>
 }

@@ -37,6 +37,8 @@ object ApiConstants {
     const val ACCEPTFRIENDLOCKET = "/api/v1/user/locket/accept-request/{requestId}"
     const val GETPENDINGFRIENDLOCKET = "/api/v1/user/locket/pending"
     const val GETMYFRIENDLOCKET = "/api/v1/user/locket/my-friend"
+    const val FINDFRIEND = "/api/v1/user/locket/find-friend/{locketLink}"
+    const val UNFRIEND = "/api/v1/user/locket/unfriend/{friendId}"
 
 
     //ClinicController
@@ -60,6 +62,7 @@ object ApiConstants {
 
     //User
     const val FIREBASE = "/api/v1/user/device-token"
+    const val LOCKETLINK = "/api/v1/user/locket-link"
 
 
     //Media

@@ -17,6 +17,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicId
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LinkFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LocationRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
@@ -26,6 +27,7 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.Appoint
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LinkFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
@@ -185,13 +187,13 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun getMyPostLocket(lastPostId: Int, size: Int): DataResult<MyPostLocketResponse> {
+    suspend fun getMyPostLocket(lastPostId: Int, size: Int): DataResult<List<MyPostLocketResponse>> {
         return safeApiCall {
             apiUserHome.getMyPostLocket(lastPostId, size)
         }
     }
 
-    suspend fun getMyFeedLocket(lastPostId: Int, size: Int): DataResult<MyPostLocketResponse> {
+    suspend fun getMyFeedLocket(lastPostId: Int, size: Int): DataResult<List<MyPostLocketResponse>> {
         return safeApiCall {
             apiUserHome.getMyFeedLocket(lastPostId, size)
         }
@@ -224,6 +226,24 @@ class HomeUserRepository(
     suspend fun getMyFriendLocket(): DataResult<List<AddFriendResponse>> {
         return safeApiCall {
             apiUserHome.getMyFriendLocket()
+        }
+    }
+
+    suspend fun getLocketLink(): DataResult<String> {
+        return safeApiCall {
+            apiUserHome.getLocketLink()
+        }
+    }
+
+    suspend fun findFriend(request: LinkFriendRequest): DataResult<LinkFriendResponse> {
+        return safeApiCall {
+            apiUserHome.findFriend(request)
+        }
+    }
+
+    suspend fun unFriend(friendId: Int): DataResult<Unit> {
+        return safeApiCall {
+            apiUserHome.unFriend(friendId)
         }
     }
 
