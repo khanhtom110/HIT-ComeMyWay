@@ -93,9 +93,22 @@ class ListFriendLocketViewModel(
             val request = AddFriendRequest(id)
             val result = repository.sendFriendLocket(request)
 
+
             when (result) {
                 is DataResult.Success -> {
-                    return@launch
+                    val currentList = _state.value.makeFriend
+
+
+                    val updatedList = currentList.map { item ->
+                        if (item.friendId == id) {
+                            item.copy(isMakeFriend = true)
+                        }
+                        else {
+                            item
+                        }
+                    }
+
+                    _state.value = _state.value.copy(makeFriend = updatedList)
                 }
                 is DataResult.Error -> {
                     return@launch
@@ -157,33 +170,30 @@ class ListFriendLocketViewModel(
         }
     }
     fun onMakeFriendList() {
-//        viewModelScope.launch {
-//            val searchFriend = _state.value.searchFriend
-//
-//            val request = LinkFriendRequest(searchFriend)
-//            val result = repository.findFriend(request)
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//                    val apiDataList = result.data
-//
-//                    val showList = apiDataList.map { list ->
-//                        FriendChild(
-//                            friendshipId = list.friendshipId,
-//                            friendId = list.friendId,
-//                            avatar = list.avatar,
-//                            username = list.username,
-//                            isMakeFriend = true
-//                        )
-//                    }
-//
-//                    _state.value = _state.value.copy(myFriend = showList)
-//                }
-//                is DataResult.Error -> {
-//                    _state.value = _state.value.copy(myFriend = emptyList())
-//                }
-//            }
-//        }
+        viewModelScope.launch {
+            val searchFriend = _state.value.searchFriend
+
+            val request = LinkFriendRequest(searchFriend)
+            val result = repository.findFriend(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val apiDataList = result.data
+
+                    val friendItem = FriendChild(
+                        friendshipId = 0,
+                        friendId = apiDataList.friendId,
+                        avatar = apiDataList.avatar,
+                        username = apiDataList.username,
+                    )
+
+                    _state.value = _state.value.copy(makeFriend = listOf(friendItem))
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(makeFriend = emptyList())
+                }
+            }
+        }
     }
 
 
@@ -195,11 +205,11 @@ class ListFriendLocketViewModel(
                 is DataResult.Success -> {
                     val linkData = result.data
 
-                    _event.emit(ListFriendLocketEvent.CopyLink(linkData.toString()))
+                    Log.d("TEST_DATA", "linkData: $linkData, message: ${result.message}")
+
+                    _event.emit(ListFriendLocketEvent.CopyLink(linkData))
                 }
                 is DataResult.Error -> {
-                    Log.d("TEST_LINK", "message: ${result.message}  result: ${result.code}")
-
                     return@launch
                 }
             }

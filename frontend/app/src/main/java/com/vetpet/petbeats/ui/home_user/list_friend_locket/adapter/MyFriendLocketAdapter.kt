@@ -39,7 +39,7 @@ class MyFriendLocketAdapter(
                 .into(image)
 
             btnCancel.setOnClickListener {
-                onItemClick(item.friendshipId)
+                onItemClick(item.friendId)
             }
         }
     }

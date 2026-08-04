@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class MakeFriendLocketAdapter(
 
 
             btnMakeFriend.setOnClickListener {
+                Log.d("TEST_CLICK", "1. Đã bấm nút trong Adapter với friendId: ${item.friendId}")
                 onItemClick(item.friendId)
             }
         }

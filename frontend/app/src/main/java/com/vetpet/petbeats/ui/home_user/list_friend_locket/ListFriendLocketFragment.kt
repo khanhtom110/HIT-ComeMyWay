@@ -71,8 +71,6 @@ class ListFriendLocketFragment : Fragment() {
 
         viewModel.onAddFriendList()
         viewModel.onMyFriendList()
-        viewModel.onMakeFriendList()
-
 
         setOnClick()
         stateData()
@@ -97,6 +95,7 @@ class ListFriendLocketFragment : Fragment() {
 
         binding.btnSearch.setOnClickListener {
             viewModel.showSearchFriend()
+            viewModel.onMakeFriendList()
         }
         binding.editSearch.setOnFocusChangeListener { _, search ->
             viewModel.isSearch(search)
@@ -187,16 +186,23 @@ class ListFriendLocketFragment : Fragment() {
 
 
 
-                    if (state.isShowSearch) {
+                    if (state.isShowSearch && state.makeFriend.isNotEmpty()) {
                         binding.tvMakeFriend.visibility = View.VISIBLE
                         binding.recycleMakeFriend.visibility = View.VISIBLE
 
                         binding.tvAddFriend.visibility = View.GONE
                         binding.recycleAddFriend.visibility = View.GONE
+
+                        binding.tvMyFriend.visibility = View.GONE
+                        binding.recycleMyFriend.visibility = View.GONE
+
                     }
                     else {
                         binding.tvMakeFriend.visibility = View.GONE
                         binding.recycleMakeFriend.visibility = View.GONE
+
+                        binding.tvMyFriend.visibility = View.VISIBLE
+                        binding.recycleMyFriend.visibility = View.VISIBLE
 
 
                         if (state.pendingFriend.isNotEmpty()) {
