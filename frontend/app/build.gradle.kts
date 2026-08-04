@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.generativeai)
 //    implementation(libs.firebase.messaging.ktx) // Đã xóa: Google đã khai tử bản -ktx, chuyển sang dùng bản gốc kết hợp Firebase BoM.
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
