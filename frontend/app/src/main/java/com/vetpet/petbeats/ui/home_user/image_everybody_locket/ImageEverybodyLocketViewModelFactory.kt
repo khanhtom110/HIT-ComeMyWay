@@ -9,6 +9,6 @@ class ImageEverybodyLocketViewModelFactory(
     private val repository: HomeUserRepository
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ImageMeLocketViewModel(repository) as T
+        return ImageEverybodyLocketViewModel(repository) as T
     }
 }
