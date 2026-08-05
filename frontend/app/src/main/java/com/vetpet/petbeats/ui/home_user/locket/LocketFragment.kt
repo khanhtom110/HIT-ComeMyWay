@@ -161,8 +161,7 @@ class LocketFragment : Fragment() {
             val bitmap = drawable?.bitmap
             val imageFile = bitmapToFile(bitmap)
 
-            viewModel.onImageLink(imageFile)
-            viewModel.onImageLocketSend()
+            viewModel.uploadAndSendLocket(imageFile)
 
         }
 
@@ -183,17 +182,6 @@ class LocketFragment : Fragment() {
             }
 
             viewModel.changeFlash()
-        }
-
-
-        binding.btnCameraSend.setOnClickListener {
-            viewModel.onImageLocketSend()
-
-            suspend {
-                delay(1000)
-
-                startCamera(currentLensFacing)
-            }
         }
     }
 

@@ -187,7 +187,7 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun getMyPostLocket(lastPostId: Int, size: Int): DataResult<List<MyPostLocketResponse>> {
+    suspend fun getMyPostLocket(lastPostId: Int?, size: Int): DataResult<MyPostLocketResponse> {
         return safeApiCall {
             apiUserHome.getMyPostLocket(lastPostId, size)
         }

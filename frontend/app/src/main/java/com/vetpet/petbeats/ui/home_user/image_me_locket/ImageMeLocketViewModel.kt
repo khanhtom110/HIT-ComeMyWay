@@ -1,8 +1,8 @@
 package com.vetpet.petbeats.ui.home_user.image_me_locket
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.type.content
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.image_me_locket.adapter.ImageLocketChild
@@ -23,30 +23,48 @@ class ImageMeLocketViewModel(
 
 
 
+    fun downCheckLocketTrue() {
+        _state.value = _state.value.copy(isDown = true)
+    }
+    fun downCheckLocketFalse() {
+        _state.value = _state.value.copy(isDown = false)
+    }
+
+
+
     fun onMeLocketList() {
         val lastPostId = _state.value.lastPostId
 
-//        viewModelScope.launch {
-//            val result = repository.getMyPostLocket(lastPostId, 10)
-//
-//            when (result) {
-//                is DataResult.Success -> {
-//                    val apiDataList = result.data
-//                    val apiContentList = apiDataList?.content ?: emptyList()
-//
-//                    val showList = apiContentList.map { list ->
-//                        ImageLocketChild(
-//                            lastPostId = list.lastPostId,
-//                            imageUrl = list.content,
-//                            caption = list.content
-//                        )
-//                    }
-//                    _state.value = _state.value.copy(listMeLocket = showList)
-//                }
-//                is DataResult.Error -> {
-//                    _state.value = _state.value.copy(listMeLocket = emptyList())
-//                }
-//            }
-//        }
+        viewModelScope.launch {
+            val result = repository.getMyPostLocket(lastPostId, 10)
+
+            if (_state.value.isLoading || !_state.value.hasNext) {
+                return@launch
+            }
+            _state.value = _state.value.copy(isLoading = true)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val apiDataList = result.data
+                    val apiContentList = apiDataList.content
+
+                    val showList = apiContentList.map { list ->
+                        ImageLocketChild(
+                            lastPostId = list.id,
+                            imageUrl = list.imageUrl,
+                            caption = list.caption
+                        )
+                    }
+
+                    val currentList = if (lastPostId == null) emptyList() else _state.value.listMeLocket
+                    val updatedList = currentList + showList
+
+                    _state.value = _state.value.copy(listMeLocket = updatedList, lastPostId = apiDataList.lastPostId, hasNext = apiDataList.hasNext)
+                }
+                is DataResult.Error -> {
+                    _state.value = _state.value.copy(listMeLocket = emptyList())
+                }
+            }
+        }
     }
 }

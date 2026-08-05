@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_user.locket
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
@@ -57,14 +58,12 @@ class LocketViewModel(
     }
 
 
-
-
     fun onFeelChange(message: String) {
         _state.value = _state.value.copy(message = message)
     }
 
 
-    fun onImageLink(imageFile: File) {
+    fun uploadAndSendLocket(imageFile: File) {
         viewModelScope.launch {
             val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageFile)
             val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
@@ -74,29 +73,26 @@ class LocketViewModel(
             when (result) {
                 is DataResult.Success -> {
                     _state.value = _state.value.copy(linkImage = result.data)
+
+                    val message = _state.value.message
+                    val request = CreatePostLocketRequest(result.data, message)
+
+                    val sendResult = repository.createPostLocket(request)
+
+                    when (sendResult) {
+                        is DataResult.Success -> {
+                            _state.value = _state.value.copy(isSendSuccess = true, message = "")
+                        }
+                        is DataResult.Error -> {
+                            Log.d("TEST_IMAGE", "Lỗi gửi bài: ${sendResult.message}")
+
+                            return@launch
+                        }
+                    }
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy()
-                }
-            }
-        }
-    }
+                    Log.d("TEST_IMAGE", "Lỗi up ảnh: ${result.message}")
 
-
-
-    fun onImageLocketSend() {
-        viewModelScope.launch {
-            val linkImage = _state.value.linkImage
-            val message = _state.value.message
-
-            val request = CreatePostLocketRequest(linkImage, message)
-            val result = repository.createPostLocket(request)
-
-            when (result) {
-                is DataResult.Success -> {
-                    _state.value = _state.value.copy(isSendSuccess = true, message = "")
-                }
-                is DataResult.Error -> {
                     _state.value = _state.value.copy()
                     return@launch
                 }
