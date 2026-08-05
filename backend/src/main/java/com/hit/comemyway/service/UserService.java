@@ -55,9 +55,7 @@ public class UserService {
       throw new AppException(400, ErrorMessage.User.EMAIL_EXISTED);
     }
 
-    String randomPassword = IntStream.range(0, 8)
-        .mapToObj(i -> String.valueOf(CHARS.charAt(random.nextInt(CHARS.length()))))
-        .collect(Collectors.joining());
+    String randomPassword = generateRandomCode(8);
 
     User user = User.builder().username(request.username())
         .password(passwordEncoder.encode(randomPassword)).email(request.email()).role(Role.CLINIC)
@@ -156,5 +154,25 @@ public class UserService {
     user.setPassword(passwordEncoder.encode(request.newPassword()));
 
     userRepository.save(user);
+  }
+
+  public String generateRandomCode(int length) {
+    return IntStream.range(0, length)
+        .mapToObj(i -> String.valueOf(CHARS.charAt(random.nextInt(CHARS.length()))))
+        .collect(Collectors.joining());
+  }
+
+  @Transactional(readOnly = true)
+  public String getLocketLink() {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+
+    String locketCode = user.getLocketCode();
+
+    String formattedLocketLink = String.format("https://petlocket.com/add?code=%s", locketCode);
+
+    return formattedLocketLink;
   }
 }
