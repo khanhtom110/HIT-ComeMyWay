@@ -8,7 +8,6 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.Profil
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.AppointmentListClinicResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.GetClinicProfileResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
@@ -76,12 +75,6 @@ class HomeClinicRepository(
     suspend fun onUploadImage(file: MultipartBody.Part): DataResult<String> {
         return  safeApiCall {
             apiClinicHome.uploadImage(file)
-        }
-    }
-
-    suspend fun getProfile(): DataResult<GetClinicProfileResponse> {
-        return safeApiCall {
-            apiClinicHome.getProfile()
         }
     }
 

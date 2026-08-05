@@ -34,6 +34,7 @@ public final class ErrorMessage {
   public static final String INVALID_FORMAT_EMAIL = "Please enter a valid email address.";
   public static final String INVALID_FORMAT_CONDITION =
       "Condition must be under 1000 characters long.";
+  public static final String INVALID_LOCKET_LINK = "Invalid locket link";
   public static final String INVALID_PARAMETER = "The provided parameter is invalid";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
 
@@ -120,5 +121,28 @@ public final class ErrorMessage {
         "Only pending appointments can be cancelled.";
     public static final String ACTION_ONLY_FOR_PENDING =
         "Action allowed only for pending appointments.";
+  }
+
+  public static final class Locket {
+    public Locket() {}
+
+    public static final String CANNOT_ADD_FRIEND_TO_YOURSELF =
+        "You cannot add friend to your own account.";
+    public static final String CANNOT_UNFRIEND_TO_YOURSELF =
+        "You cannot unfriend to your own account.";
+    public static final String FRIEND_REQUEST_ALREADY_EXISTS =
+        "Friend request already exists or you are already friends.";
+    public static final String FRIEND_LIMIT_EXCEEDED =
+        "This friend is maximum limit of 20 friends reached.";
+    public static final String CURRENT_USER_LIMIT_REACHED = "Maximum limit of your account is 20.";
+    public static final String FRIEND_REQUEST_NOT_FOUND = "Friend request not found.";
+    public static final String NOT_AUTHORIZED_TO_ACCEPT =
+        "You do not have permission to accept this pending request.";
+    public static final String NOT_AUTHORIZED_TO_REJECT =
+        "You do not have permission to reject this pending request.";
+    public static final String INVALID_FRIEND_REQUEST_STATUS =
+        "This friendship is not PENDING status.";
+    public static final String INVALID_LENGTH_CAPTION = "Caption must be under 50 characters long.";
+    public static final String ARE_NOT_FRIENDS = "You are not friends with this user.";
   }
 }

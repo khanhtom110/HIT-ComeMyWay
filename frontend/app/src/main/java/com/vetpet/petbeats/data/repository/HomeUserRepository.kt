@@ -3,7 +3,6 @@ package com.vetpet.petbeats.data.repository
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
@@ -12,7 +11,6 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ClinicIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
@@ -34,7 +32,6 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchR
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.ChatResponse
 import okhttp3.MultipartBody
 
 class HomeUserRepository(
@@ -135,9 +132,9 @@ class HomeUserRepository(
         }
     }
 
-    suspend fun logoutUser(token: String, request: LogoutRequest): DataResult<Unit> {
+    suspend fun logoutUser(request: LogoutRequest): DataResult<Unit> {
         return safeApiCall {
-            apiUserHome.logout(token, request)
+            apiUserHome.logout(request)
         }
     }
 
