@@ -22,16 +22,6 @@ class ImageMeLocketViewModel(
     val event = _event.asSharedFlow()
 
 
-
-    fun downCheckLocketTrue() {
-        _state.value = _state.value.copy(isDown = true)
-    }
-    fun downCheckLocketFalse() {
-        _state.value = _state.value.copy(isDown = false)
-    }
-
-
-
     fun onMeLocketList() {
         val lastPostId = _state.value.lastPostId
 
@@ -52,7 +42,8 @@ class ImageMeLocketViewModel(
                         ImageLocketChild(
                             lastPostId = list.id,
                             imageUrl = list.imageUrl,
-                            caption = list.caption
+                            caption = list.caption,
+                            userName = "Bạn"
                         )
                     }
 

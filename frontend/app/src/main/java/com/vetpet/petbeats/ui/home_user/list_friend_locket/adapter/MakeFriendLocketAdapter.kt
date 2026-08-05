@@ -49,7 +49,6 @@ class MakeFriendLocketAdapter(
 
 
             btnMakeFriend.setOnClickListener {
-                Log.d("TEST_CLICK", "1. Đã bấm nút trong Adapter với friendId: ${item.friendId}")
                 onItemClick(item.friendId)
             }
         }

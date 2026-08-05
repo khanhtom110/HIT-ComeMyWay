@@ -12,7 +12,7 @@ import com.example.VetPet.R
 
 class ImageMeLocketAdapter: ListAdapter<ImageLocketChild, ImageMeLocketAdapter.ViewHolder>(ImageMeLocketDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_image_locket, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_image_me_locket, holder, false)
         return ViewHolder(view)
     }
 

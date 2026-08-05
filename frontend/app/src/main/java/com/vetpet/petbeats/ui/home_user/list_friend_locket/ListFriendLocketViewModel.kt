@@ -35,6 +35,11 @@ class ListFriendLocketViewModel(
 
     fun searchFriend(search: String) {
         _state.value = _state.value.copy(searchFriend = search)
+
+        //Nếu xóa hết chữ, tự động thoát chế độ tìm kiếm và làm sạch kết quả
+        if (search.isBlank()) {
+            _state.value = _state.value.copy(isShowSearch = false, makeFriend = emptyList())
+        }
     }
 
     fun isSearch(isSearch: Boolean) {
@@ -52,7 +57,8 @@ class ListFriendLocketViewModel(
 
             when (result) {
                 is DataResult.Success -> {
-                    return@launch
+                    onAddFriendList()
+                    onMyFriendList()
                 }
                 is DataResult.Error -> {
                     return@launch
@@ -66,7 +72,9 @@ class ListFriendLocketViewModel(
 
             when (result) {
                 is DataResult.Success -> {
-                    return@launch
+                    val currentList = _state.value.pendingFriend.filter { it.friendId != id }
+
+                    _state.value = _state.value.copy(pendingFriend = currentList)
                 }
                 is DataResult.Error -> {
                     return@launch
@@ -80,7 +88,9 @@ class ListFriendLocketViewModel(
 
             when (result) {
                 is DataResult.Success -> {
-                    return@launch
+                    val currentList = _state.value.myFriend.filter { it.friendId != id }
+
+                    _state.value = _state.value.copy(myFriend = currentList)
                 }
                 is DataResult.Error -> {
                     return@launch
@@ -111,6 +121,8 @@ class ListFriendLocketViewModel(
                     _state.value = _state.value.copy(makeFriend = updatedList)
                 }
                 is DataResult.Error -> {
+                    Log.d("TEST_API", "message: ${result.message}")
+
                     return@launch
                 }
             }
@@ -190,6 +202,8 @@ class ListFriendLocketViewModel(
                     _state.value = _state.value.copy(makeFriend = listOf(friendItem))
                 }
                 is DataResult.Error -> {
+                    Log.d("TEST_API", "message: ${result.message}")
+
                     _state.value = _state.value.copy(makeFriend = emptyList())
                 }
             }
