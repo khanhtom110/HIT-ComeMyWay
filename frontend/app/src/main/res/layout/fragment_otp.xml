@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:text="Chưa nhận được mã?"
             android:layout_marginBottom="@dimen/_40sdp"
-            android:layout_marginEnd="@dimen/_55sdp"
+            android:layout_marginEnd="@dimen/_50sdp"
             android:textColor="@color/colorTextSub"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

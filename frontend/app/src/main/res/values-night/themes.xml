@@ -3,12 +3,5 @@
     <style name="Base.Theme.PetBeats" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-
-        <!--thay màu background và text của thanh điều hướng trên cùng -->
-        <item name="android:statusBarColor">@color/colorBackground</item>
-        <item name="android:windowLightStatusBar">true</item>
-
-        <!--tắt background màu vàng khi chọn tự động điền-->
-        <item name="android:autofilledHighlight" tools:targetApi="o">@android:color/transparent</item>
     </style>
 </resources>
