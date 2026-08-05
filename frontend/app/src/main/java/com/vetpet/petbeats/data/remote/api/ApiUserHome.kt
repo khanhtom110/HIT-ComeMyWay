@@ -146,9 +146,9 @@ interface ApiUserHome {
 
     @GET(ApiConstants.GETFEEDSLOCKET)
     suspend fun getMyFeedLocket(
-        @Query("lastPostId") lastPostId: Int,
-        @Query("size") size: Int
-    ): ApiResponse<List<MyPostLocketResponse>>
+        @Query("lastPostId") lastPostId: Int?,
+        @Query("size") size: Int = 10
+    ): ApiResponse<MyPostLocketResponse>
 
     @POST(ApiConstants.REJECTFRIENDLOCKET)
     suspend fun rejectFriendLocket(

@@ -4,4 +4,5 @@ data class ImageLocketChild (
     val lastPostId: Int,
     val imageUrl: String,
     val caption: String,
+    val userName: String
 )
