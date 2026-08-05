@@ -45,7 +45,7 @@ class AdapterHint(
                 .into(thumbnailUrl)
 
 
-            name.setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClick(item.id)
             }
 
