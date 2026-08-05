@@ -70,9 +70,6 @@ object ErrorUtils {
             "AppointmentChild time must be within operating hours." -> {
                 Pair(ErrorTarget.TIME, "Thời gian hẹn phải nằm trong khung giờ hoạt động.")
             }
-            "Opening time must be earlier than closing time" -> {
-                Pair(ErrorTarget.TIME, "Giờ mở cửa phải sớm hơn giờ đóng cửa.")
-            }
 
             //General, Hệ thống, token
             "One or more fields contain invalid data." ->
@@ -100,9 +97,6 @@ object ErrorUtils {
             }
             "Clinic profile already done" -> {
                 Pair(ErrorTarget.GENERAL, "Hồ sơ phòng khám đã hoàn tất.")
-            }
-            "Invalid request body format or malformed JSON." -> {
-                Pair(ErrorTarget.GENERAL, "Định dạng phần thân yêu cầu không hợp lệ hoặc \nJSON bị lỗi cấu trúc.")
             }
 
 
