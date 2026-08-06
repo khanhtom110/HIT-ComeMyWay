@@ -82,7 +82,7 @@ class ConfirmAppointmentViewModel(
                     val mapStatus = when (data.status) {
                         "PENDING" -> BookChildState.PENDING
                         "CONFIRMED" -> BookChildState.CONFIRMED
-                        "REJECTED" -> BookChildState.REJECTED
+                        "CANCELLED" -> BookChildState.REJECTED
                         else -> BookChildState.PENDING
                     }
 
@@ -103,7 +103,8 @@ class ConfirmAppointmentViewModel(
                         appointmentDate = data.appointmentDate,
                         appointmentTime = data.appointmentTime,
                         services = data.services,
-                        status = mapStatus
+                        status = mapStatus,
+                        reason = data.rejectReason ?: "",
                     )
                 }
                 is DataResult.Error -> {

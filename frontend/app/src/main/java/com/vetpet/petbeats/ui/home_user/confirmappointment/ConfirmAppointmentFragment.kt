@@ -95,6 +95,7 @@ class ConfirmAppointmentFragment : Fragment() {
                     binding.tvInputDayHome.text = state.appointmentDate
                     binding.tvInputTimeHome.text = state.appointmentTime.take(5)
                     binding.tvRating.text = "đánh giá ${state.rating}/5"
+                    binding.tvInputReason.text = state.reason
 
 
                     binding.tvInputIncludeHome.text = if (state.services.isEmpty()) {
@@ -106,6 +107,7 @@ class ConfirmAppointmentFragment : Fragment() {
                         }
                     }
 
+
                     //check state clinic
                     when (state.status) {
                         BookChildState.PENDING -> {
@@ -116,6 +118,10 @@ class ConfirmAppointmentFragment : Fragment() {
                             binding.btnEdit.isEnabled = true
                             binding.btnEdit.setBackgroundResource(R.drawable.button_auth_white)
                             binding.btnEdit.setTextColor(Color.parseColor("#486BF3"))
+
+                            //check reason
+                            binding.tvReason.visibility = View.GONE
+                            binding.boxReason.visibility = View.GONE
                         }
                         BookChildState.CONFIRMED -> {
                             binding.stateClinic.text = "Đặt lịch thành công"
@@ -125,6 +131,10 @@ class ConfirmAppointmentFragment : Fragment() {
                             binding.btnEdit.isEnabled = false
                             binding.btnEdit.setBackgroundResource(R.drawable.button_close)
                             binding.btnEdit.setTextColor(Color.parseColor("#FAFCFF"))
+
+                            //check reason
+                            binding.tvReason.visibility = View.GONE
+                            binding.boxReason.visibility = View.GONE
                         }
                         BookChildState.REJECTED -> {
                             binding.stateClinic.text = "Từ chối"
@@ -134,6 +144,10 @@ class ConfirmAppointmentFragment : Fragment() {
                             binding.btnEdit.isEnabled = false
                             binding.btnEdit.setBackgroundResource(R.drawable.button_close)
                             binding.btnEdit.setTextColor(Color.parseColor("#FAFCFF"))
+
+                            //check reason
+                            binding.tvReason.visibility = View.VISIBLE
+                            binding.boxReason.visibility = View.VISIBLE
                         }
                     }
 

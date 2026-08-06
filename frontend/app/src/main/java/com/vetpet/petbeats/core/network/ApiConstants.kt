@@ -3,11 +3,11 @@ package com.vetpet.petbeats.core.network
 object ApiConstants {
 
     //Servers
-    const val BASE_URL = "https://hit-comemyway-api.onrender.com/"
+    const val BASE_URL = "http://56.10.63.38/"
 
 
     //Authentication
-    const val LOGOUT = "/api/v1/auth/logout"
+    const val LOGOUT = "/api/v1/user/logout"
     const val RESETOTP = "/api/v1/auth/verify-otp"
     const val REGISTEROTP = "/api/v1/auth/verify-register"
     const val RESETPASSWORD = "/api/v1/auth/reset-password"
@@ -50,6 +50,7 @@ object ApiConstants {
     const val PENDINGAPPOINTMENTGET = "/api/v1/clinic/appointments/pending"
     const val REJECTAPPOINTMENTGET = "/api/v1/clinic/appointments/rejected"
     const val CONFIRMAPPOINTMENTGET = "/api/v1/clinic/appointments/comfirmed"
+    const val GETPROFILE = "/api/v1/clinic/profile"
 
 
     //SearchClinicController
@@ -69,4 +70,9 @@ object ApiConstants {
     const val UPLOAD = "/api/v1/media/upload"
     const val PROFILEUSER = "/api/v1/user/profile"
     const val CHANGEPASSWORDUSER = "/api/v1/user/change-password"
+
+
+    //Chatbot
+    const val CHATBOT = "/api/v1/chat"
+
 }

@@ -34,7 +34,9 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import java.time.YearMonth
 import java.time.LocalDate
 import androidx.core.view.isEmpty
+import androidx.recyclerview.widget.RecyclerView
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
+import kotlin.math.abs
 
 
 class CalendarFragment : Fragment() {
@@ -172,15 +174,44 @@ class CalendarFragment : Fragment() {
         val hourList = (0..23).map {
             String.format("%02d", it)
         }
-        val minuteList = listOf("00", "30")
+        val minuteList = listOf("00", "15", "30", "45")
+
+        val fadePageTransformer = ViewPager2.PageTransformer { page, position ->
+
+            val absPosition = abs(position)
+
+            page.alpha = if (absPosition > 1) 0.2f else 1f - (absPosition * 0.7f)
+
+            page.scaleX = 1f - (absPosition * 0.15f)
+            page.scaleY = 1f - (absPosition * 0.15f)
+        }
+
 
         binding.vpTimeOpen.apply {
             adapter = TimePagerAdapter(hourList)
             orientation = ViewPager2.ORIENTATION_VERTICAL
+
+            offscreenPageLimit = 3
+            setPageTransformer(fadePageTransformer)
         }
+        (binding.vpTimeOpen.getChildAt(0) as RecyclerView).apply {
+            clipToPadding = false
+            clipChildren = false
+            overScrollMode = View.OVER_SCROLL_NEVER // Tắt hiệu ứng lóe sáng ở góc khi cuộn quá
+        }
+
+
         binding.vpTimeClose.apply {
             adapter = TimePagerAdapter(minuteList)
             orientation = ViewPager2.ORIENTATION_VERTICAL
+
+            offscreenPageLimit = 3
+            setPageTransformer(fadePageTransformer)
+        }
+        (binding.vpTimeClose.getChildAt(0) as RecyclerView).apply {
+            clipToPadding = false
+            clipChildren = false
+            overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 
@@ -193,7 +224,7 @@ class CalendarFragment : Fragment() {
             "00"
         }
         else {
-            "30"
+            "45"
         }
 
         viewModel.onTimeSelect(hour, minute)

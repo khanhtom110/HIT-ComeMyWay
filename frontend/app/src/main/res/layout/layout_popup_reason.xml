@@ -11,59 +11,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorBackground">
+        android:background="@color/colorBackground"
+        android:padding="@dimen/_16sdp">
+
+        <TextView
+            style="@style/Chu1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lí do từ chối"
+            android:textColor="@color/colorTextTitle"
+            android:layout_marginBottom="@dimen/_10sdp" />
 
         <EditText
-            style="@style/TieuDe1"
             android:id="@+id/tvDialogTitle"
+            style="@style/Chu1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_input"
-            android:paddingStart="24dp"
-            android:inputType="text"
-            android:paddingTop="@dimen/_15sdp"
-            android:paddingBottom="@dimen/_50sdp"
+            android:gravity="top|start"
             android:hint="Input"
-            android:textColor="@color/colorTextSub"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorPrimary" />
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:textColor="@color/colorTextSub"
+            android:textColorHint="@color/colorTextHint" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
             android:orientation="horizontal">
 
             <TextView
-                style="@style/TieuDe2"
                 android:id="@+id/btnLeft"
+                style="@style/TieuDe2"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
                 android:layout_weight="1"
+                android:background="@drawable/button_refuse"
                 android:gravity="center"
-                android:text="Huỷ"
-                android:textColor="@color/colorPrimary"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary" />
+                android:text="Từ chối"
+                android:textColor="@color/colorError" />
 
             <TextView
-                style="@style/TieuDe2"
                 android:id="@+id/btnRight"
+                style="@style/TieuDe2"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
+                android:background="@drawable/button_auth_blue"
                 android:gravity="center"
-                android:text="Xác nhận"
-                android:textColor="@color/colorPrimary"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:text="Quay lại"
+                android:textColor="@color/colorBackground" />
         </LinearLayout>
 
     </LinearLayout>
