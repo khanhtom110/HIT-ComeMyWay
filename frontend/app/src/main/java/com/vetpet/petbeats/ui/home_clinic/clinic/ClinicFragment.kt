@@ -19,6 +19,7 @@ import com.google.android.material.chip.Chip
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
