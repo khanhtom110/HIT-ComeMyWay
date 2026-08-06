@@ -679,7 +679,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_34sdp"
                     android:background="@drawable/ground_time"
-                    android:layout_marginHorizontal="1dp"
+                    android:layout_marginHorizontal="@dimen/_2sdp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
