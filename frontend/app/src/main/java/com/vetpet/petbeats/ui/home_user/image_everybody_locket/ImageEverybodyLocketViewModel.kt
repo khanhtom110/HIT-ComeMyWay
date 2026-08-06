@@ -20,6 +20,14 @@ class ImageEverybodyLocketViewModel(
     private val _event = MutableSharedFlow<ImageEverybodyLocketEvent>()
     val event = _event.asSharedFlow()
 
+
+    fun imageEverybodyLocketClick() {
+        viewModelScope.launch {
+            _event.emit(ImageEverybodyLocketEvent.NavigationImageEverybodyLocket)
+        }
+    }
+
+
     fun onMeLocketList() {
         val lastPostId = _state.value.lastPostId
 

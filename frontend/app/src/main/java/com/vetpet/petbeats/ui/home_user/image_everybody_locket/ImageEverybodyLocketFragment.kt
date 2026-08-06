@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentImageEverybodyLocketBinding
@@ -72,6 +73,11 @@ class ImageEverybodyLocketFragment : Fragment() {
     }
 
     private fun setOnClick() {
+        binding.btnCamera.setOnClickListener {
+            viewModel.imageEverybodyLocketClick()
+        }
+
+
         binding.btnDown.setOnClickListener {
             val imageUrl = currentImageLocket?.imageUrl
 
@@ -196,7 +202,11 @@ class ImageEverybodyLocketFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when (event) {
+                        is ImageEverybodyLocketEvent.NavigationImageEverybodyLocket -> {
+                            findNavController().navigate(R.id.imageEverybodyLocket_locket)
+                        }
+                    }
                 }
             }
         }
