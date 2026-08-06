@@ -20,5 +20,6 @@ data class ConfirmAppointmentState (
     val appointmentDate: String = "",
     val appointmentTime: String = "",
     val services: List<ServiceItem> = emptyList(),
-    val state: Boolean = false
+    val state: Boolean = false,
+    val reason: String? = null,
 )

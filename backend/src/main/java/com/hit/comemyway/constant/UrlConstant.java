@@ -38,7 +38,6 @@ public class UrlConstant {
     public static final String BOOK_APPOINTMENT = PREFIX + "/appointments/book";
     public static final String DEVICE_TOKEN = PREFIX + "/device-token";
     public static final String USER_REMINDER = PREFIX + "/user-reminder";
-    public static final String USER_LOCKET_LINK = PREFIX + "/locket-link";
 
     private User() {}
   }
@@ -97,22 +96,5 @@ public class UrlConstant {
     public static final String CLINIC_GET_DETAIL = CLINIC_PREFIX + "/detail/{appointmentId}";
 
     private Appointment() {}
-  }
-
-  public static class Locket {
-    private static final String PREFIX = "/user/locket";
-
-    public static final String ADD_FRIEND = PREFIX + "/add-friend";
-    public static final String PENDING = PREFIX + "/pending";
-    public static final String MY_FRIEND = PREFIX + "/my-friend";
-    public static final String ACCEPT_REQUEST = PREFIX + "/accept-request/{requestId}";
-    public static final String REJECT_REQUEST = PREFIX + "/reject-request/{requestId}";
-    public static final String CREATE_POST = PREFIX + "/create-post";
-    public static final String NEWS_FEED = PREFIX + "/feed";
-    public static final String MY_POSTS = PREFIX + "/my-posts";
-    public static final String FIND_FRIEND = PREFIX + "/find-friend/{locketLink}";
-    public static final String UNFRIEND = PREFIX + "/unfriend/{friendId}";
-
-    public Locket() {}
   }
 }

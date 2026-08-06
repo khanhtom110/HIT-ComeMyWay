@@ -60,7 +60,7 @@ class BookAdapter(
                 }
             }
 
-            nameRoom.setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClick(item.id, item.clinicId)
             }
         }

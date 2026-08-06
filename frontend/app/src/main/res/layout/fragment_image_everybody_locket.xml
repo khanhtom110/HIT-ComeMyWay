@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_user.image_everybody_locket.ImageEverybodyLocketFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btnFriend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/button_image_everybody"
+            android:layout_marginTop="@dimen/_45sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/imgEverybody"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:background="@color/colorBackground"
+            android:layout_marginHorizontal="@dimen/_17sdp"
+            android:layout_marginVertical="@dimen/_24sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnFriend"
+            app:layout_constraintBottom_toTopOf="@id/btnCamera"/>
+
+        <ImageView
+            android:id="@+id/btnCamera"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/button_camera"
+            android:layout_marginBottom="@dimen/_60sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/btnBin"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/icon_bin"
+            android:layout_marginEnd="@dimen/_25sdp"
+            app:layout_constraintTop_toTopOf="@id/btnCamera"
+            app:layout_constraintBottom_toBottomOf="@id/btnCamera"
+            app:layout_constraintEnd_toStartOf="@id/btnCamera"/>
+
+        <ImageView
+            android:id="@+id/btnDown"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:src="@drawable/icon_down"
+            android:layout_marginStart="@dimen/_25sdp"
+            app:layout_constraintTop_toTopOf="@id/btnCamera"
+            app:layout_constraintBottom_toBottomOf="@id/btnCamera"
+            app:layout_constraintStart_toEndOf="@id/btnCamera"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

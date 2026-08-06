@@ -217,14 +217,14 @@ class AppointmentDetailWaitFragment : Fragment() {
                         }
                         is AppointmentDetailWaitEvent.NavigationDetailReceive -> {
                             findNavController().navigate(
-                                R.id.appointmentDetailReceive,
+                                R.id.appointmentDetailReceiveFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
                             )
                         }
                         is AppointmentDetailWaitEvent.NavigationDetailRefuse -> {
-                            findNavController().navigate(R.id.appointmentDetailRefuse,
+                            findNavController().navigate(R.id.appointmentDetailRefuseFragment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }

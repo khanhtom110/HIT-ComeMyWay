@@ -37,6 +37,8 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.getValue
 import androidx.core.graphics.drawable.toDrawable
+import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.abs
 
 class EditCalendarFragment : Fragment() {
     private var _binding: FragmentEditCalendarBinding ?= null
@@ -176,15 +178,44 @@ class EditCalendarFragment : Fragment() {
         val hourList = (0..23).map {
             String.format("%02d", it)
         }
-        val minuteList = listOf("00", "30")
+        val minuteList = listOf("00", "15", "30", "45")
+
+        val fadePageTransformer = ViewPager2.PageTransformer { page, position ->
+
+            val absPosition = abs(position)
+
+            page.alpha = if (absPosition > 1) 0.2f else 1f - (absPosition * 0.7f)
+
+            page.scaleX = 1f - (absPosition * 0.15f)
+            page.scaleY = 1f - (absPosition * 0.15f)
+        }
+
 
         binding.vpTimeOpen.apply {
             adapter = TimePagerAdapter(hourList)
             orientation = ViewPager2.ORIENTATION_VERTICAL
+
+            offscreenPageLimit = 3
+            setPageTransformer(fadePageTransformer)
         }
+        (binding.vpTimeOpen.getChildAt(0) as RecyclerView).apply {
+            clipToPadding = false
+            clipChildren = false
+            overScrollMode = View.OVER_SCROLL_NEVER // Tắt hiệu ứng lóe sáng ở góc khi cuộn quá
+        }
+
+
         binding.vpTimeClose.apply {
             adapter = TimePagerAdapter(minuteList)
             orientation = ViewPager2.ORIENTATION_VERTICAL
+
+            offscreenPageLimit = 3
+            setPageTransformer(fadePageTransformer)
+        }
+        (binding.vpTimeClose.getChildAt(0) as RecyclerView).apply {
+            clipToPadding = false
+            clipChildren = false
+            overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 
@@ -195,9 +226,8 @@ class EditCalendarFragment : Fragment() {
         val hour = String.format("%02d", openTime)
         val minute = if (closeTime == 0) {
             "00"
-        }
-        else {
-            "30"
+        } else {
+            "45"
         }
 
         viewModel.onTimeSelect(hour, minute)
@@ -655,14 +685,18 @@ class EditCalendarFragment : Fragment() {
                         }
                     }
                     if (state.minute.isNotEmpty()) {
-                        if (state.minute == "30") {
-                            binding.vpTimeClose.currentItem = 1
-                        }
-                        else {
+                        if (state.minute == "00") {
                             binding.vpTimeClose.currentItem = 0
                         }
-
-
+                        if (state.minute == "15") {
+                            binding.vpTimeClose.currentItem = 1
+                        }
+                        if (state.minute == "30") {
+                            binding.vpTimeClose.currentItem = 2
+                        }
+                        if (state.minute == "45") {
+                            binding.vpTimeClose.currentItem = 3
+                        }
                     }
 
                 }

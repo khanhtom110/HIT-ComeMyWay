@@ -11,7 +11,7 @@
         android:title="Tìm hiểu"/>
 
     <item
-        android:id="@+id/locketFragment"
+        android:id="@+id/splashLocketFragment"
         android:icon="@drawable/locket"
         android:title="Locket"/>
 

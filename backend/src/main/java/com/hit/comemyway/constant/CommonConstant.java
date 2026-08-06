@@ -19,12 +19,6 @@ public final class CommonConstant {
   public static final class User {
     public static final int AVATAR_LENGTH = 500;
     public static final int HOBBY_LENGTH = 300;
-    public static final int FRIENDSHIP_STATUS_LENGTH = 20;
-    public static final int IMAGE_URL_LENGTH = 1000;
   }
 
-  public static final class Locket {
-    public static final int LIMIT_FRIEND = 20;
-    public static final int LIMIT_LENGTH_CAPTION = 50;
-  }
 }

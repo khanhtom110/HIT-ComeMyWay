@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Xin quyền notify -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--Xin quyền camera-->
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -33,6 +37,7 @@
 
         <activity
             android:name="com.vetpet.petbeats.ui.auth.activitymain.AuthActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
 
             <intent-filter>

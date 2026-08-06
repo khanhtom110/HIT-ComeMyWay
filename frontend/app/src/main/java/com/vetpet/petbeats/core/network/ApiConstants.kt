@@ -3,11 +3,11 @@ package com.vetpet.petbeats.core.network
 object ApiConstants {
 
     //Servers
-    const val BASE_URL = "https://hit-comemyway-api.onrender.com/"
+    const val BASE_URL = "http://56.10.63.38/"
 
 
     //Authentication
-    const val LOGOUT = "/api/v1/auth/logout"
+    const val LOGOUT = "/api/v1/user/logout"
     const val RESETOTP = "/api/v1/auth/verify-otp"
     const val REGISTEROTP = "/api/v1/auth/verify-register"
     const val RESETPASSWORD = "/api/v1/auth/reset-password"
@@ -25,6 +25,21 @@ object ApiConstants {
     const val TAKEAPPOINTMENTIDCLINIC = "/api/v1/clinic/appointments/detail/{id}"
 
 
+    //Pet Locket
+    const val CREATEPOSTLOCKET = "/api/v1/user/locket/create-post"
+    const val GETMYLOCKET = "/api/v1/user/locket/my-posts"
+    const val GETFEEDSLOCKET = "/api/v1/user/locket/feed"
+
+
+    //Friendship
+    const val REJECTFRIENDLOCKET = "/api/v1/user/locket/reject-request/{requestId}"
+    const val SENDFRIENDLOCKET = "/api/v1/user/locket/add-friend"
+    const val ACCEPTFRIENDLOCKET = "/api/v1/user/locket/accept-request/{requestId}"
+    const val GETPENDINGFRIENDLOCKET = "/api/v1/user/locket/pending"
+    const val GETMYFRIENDLOCKET = "/api/v1/user/locket/my-friend"
+    const val FINDFRIEND = "/api/v1/user/locket/find-friend/{locketLink}"
+    const val UNFRIEND = "/api/v1/user/locket/unfriend/{friendId}"
+
 
     //ClinicController
     const val UPDATEPROFILE = "/api/v1/clinic/update-profile"
@@ -35,6 +50,7 @@ object ApiConstants {
     const val PENDINGAPPOINTMENTGET = "/api/v1/clinic/appointments/pending"
     const val REJECTAPPOINTMENTGET = "/api/v1/clinic/appointments/rejected"
     const val CONFIRMAPPOINTMENTGET = "/api/v1/clinic/appointments/comfirmed"
+    const val GETPROFILE = "/api/v1/clinic/profile"
 
 
     //SearchClinicController
@@ -46,6 +62,7 @@ object ApiConstants {
 
     //User
     const val FIREBASE = "/api/v1/user/device-token"
+    const val LOCKETLINK = "/api/v1/user/locket-link"
 
 
     //Media
@@ -53,4 +70,9 @@ object ApiConstants {
     const val UPLOAD = "/api/v1/media/upload"
     const val PROFILEUSER = "/api/v1/user/profile"
     const val CHANGEPASSWORDUSER = "/api/v1/user/change-password"
+
+
+    //Chatbot
+    const val CHATBOT = "/api/v1/chat"
+
 }
