@@ -226,7 +226,14 @@ class EditCalendarFragment : Fragment() {
         val hour = String.format("%02d", openTime)
         val minute = if (closeTime == 0) {
             "00"
-        } else {
+        }
+        else if (closeTime == 1) {
+            "15"
+        }
+        else if (closeTime == 2) {
+            "30"
+        }
+        else {
             "45"
         }
 
@@ -468,11 +475,11 @@ class EditCalendarFragment : Fragment() {
                     binding.tvCalendarError.text = state.calendarError
 
                     if (state.isTime) {
-                        binding.boxTime.setBackgroundResource(R.drawable.button_input_errol)
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time_errol)
                         binding.tvTimeError.visibility = View.VISIBLE
                     }
                     else {
-                        binding.boxTime.setBackgroundResource(R.drawable.ground_information)
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time)
                         binding.tvTimeError.visibility = View.GONE
                     }
                     binding.tvTimeError.text = state.timeError
