@@ -204,7 +204,7 @@
 
     <fragment
         android:id="@+id/editResetPasswordSettingFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.edit_resetpassword_setting.EditResetpasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
         android:label="editResetPasswordSettingFragment">
         <action
             android:id="@+id/editResetpassword_editOtp"
@@ -221,7 +221,7 @@
 
     <fragment
         android:id="@+id/editPasswordSuccessSettingFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.edit_password_success_setting.EditPasswordSuccessSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
         android:label="editPasswordSuccessSetting">
         <action
             android:id="@+id/editPasswordSuccess_setting"
