@@ -1,14 +1,11 @@
-package com.vetpet.petbeats.ui.home_user.editpassword_setting
+package com.vetpet.petbeats.ui.home_user.edit_password_setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
