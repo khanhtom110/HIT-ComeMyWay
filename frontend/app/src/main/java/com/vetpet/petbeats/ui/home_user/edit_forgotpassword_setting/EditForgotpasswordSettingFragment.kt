@@ -123,7 +123,7 @@ class EditForgotpasswordSettingFragment : Fragment() {
                         is EditForgotpasswordSettingEvent.NavigationSetting -> {
                             findNavController().navigate(R.id.editForgotpassword_setting)
                         }
-
+                        
                     }
                 }
             }

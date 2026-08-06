@@ -10,6 +10,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/item_hand_cat_main"/>
 
         <ImageView
             android:id="@+id/logo1"
@@ -171,7 +176,7 @@
             android:id="@+id/signUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng kí"
+            android:text="Đăng ký"
             android:textColor="@color/colorPrimary"
             android:layout_marginStart="@dimen/_2sdp"
             app:layout_constraintStart_toEndOf="@id/donthave"

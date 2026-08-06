@@ -65,6 +65,7 @@ class CalendarFragment : Fragment() {
 
         val id = arguments?.getInt("id") ?: 0
         viewModel.onInformationBookingAPI(id)
+        viewModel.onProfile()
 
         calendar()
         setupTime()
@@ -222,6 +223,12 @@ class CalendarFragment : Fragment() {
         val hour = String.format("%02d", openTime)
         val minute = if (closeTime == 0) {
             "00"
+        }
+        else if (closeTime == 1) {
+            "15"
+        }
+        else if (closeTime == 2) {
+            "30"
         }
         else {
             "45"
@@ -455,11 +462,11 @@ class CalendarFragment : Fragment() {
                     binding.tvCalendarError.text = state.calendarError
 
                     if (state.isTime) {
-                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time_errol)
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_time_calendar_error)
                         binding.tvTimeError.visibility = View.VISIBLE
                     }
                     else {
-                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time)
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_time_calendar)
                         binding.tvTimeError.visibility = View.GONE
                     }
                     binding.tvTimeError.text = state.timeError

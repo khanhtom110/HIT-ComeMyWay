@@ -82,6 +82,7 @@ class ConfirmAppointmentViewModel(
                     val mapStatus = when (data.status) {
                         "PENDING" -> BookChildState.PENDING
                         "CONFIRMED" -> BookChildState.CONFIRMED
+                        "REJECTED" -> BookChildState.REJECTED
                         "CANCELLED" -> BookChildState.REJECTED
                         else -> BookChildState.PENDING
                     }

@@ -21,7 +21,7 @@ class BookViewModel(
 
     private val _event = MutableSharedFlow<BookEvent>()
     val event = _event.asSharedFlow()
-    
+
     fun searchClick() {
         viewModelScope.launch {
             _event.emit(BookEvent.NavigationSearch)
@@ -52,6 +52,7 @@ class BookViewModel(
                         val mapStatus = when (list.status) {
                             "PENDING" -> BookChildState.PENDING
                             "CONFIRMED" -> BookChildState.CONFIRMED
+                            "REJECTED" -> BookChildState.REJECTED
                             "CANCELLED" -> BookChildState.REJECTED
                             else -> BookChildState.PENDING
                         }

@@ -46,6 +46,7 @@ class HistoryBookViewModel(
                         val mapStatus = when (list.status) {
                             "PENDING" -> BookChildState.PENDING
                             "CONFIRMED" -> BookChildState.CONFIRMED
+                            "REJECTED" -> BookChildState.REJECTED
                             "CANCELLED" -> BookChildState.REJECTED
                             else -> BookChildState.PENDING
                         }

@@ -38,6 +38,11 @@
         <activity
             android:name="com.vetpet.petbeats.ui.auth.activitymain.AuthActivity"
             android:windowSoftInputMode="adjustResize"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.splash_onboarding.splash.SplashActivity"
             android:exported="true">
 
             <intent-filter>
@@ -46,10 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.vetpet.petbeats.ui.splash_onboarding.splash.SplashActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

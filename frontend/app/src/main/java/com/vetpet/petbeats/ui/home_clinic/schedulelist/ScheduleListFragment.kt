@@ -189,7 +189,7 @@ class ScheduleListFragment : Fragment() {
         }
 
         dialogBinding.btnRight.setOnClickListener {
-            val reason = dialogBinding.tvDialogTitle.text.toString()
+            val reason = dialogBinding.editInput.text.toString()
 
             dialog.dismiss()
             onRightButtonClick?.invoke(reason)
