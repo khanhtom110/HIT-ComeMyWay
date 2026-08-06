@@ -9,6 +9,10 @@
         android:name="com.vetpet.petbeats.ui.home_user.book.BookFragment"
         android:label="bookFragment"/>
 
+    <fragment
+        android:id="@+id/chatbotFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.chatbot.ChatBotFragment"
+        android:label="chatbotFragmnet"/>
 
     <fragment
         android:id="@+id/locketFragment"
@@ -152,29 +156,38 @@
         android:label="settingUserFragment"/>
 
 
-
-
     <fragment
-        android:id="@+id/editResetPasswordSettingFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
-        android:label="editResetPasswordSettingFragment">
-
+        android:id="@+id/editInformationFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
+        android:label="editInformationFragment">
         <action
-            android:id="@+id/editResetpassword_setting"
+            android:id="@+id/editInformation_setting"
             app:destination="@id/settingUserFragment"
             app:popUpTo="@id/settingUserFragment"
             app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
-        android:id="@+id/editPasswordSuccessSettingFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
-        android:label="editPasswordSuccessSetting">
+        android:id="@+id/editPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
+        android:label="editPasswordFragment">
         <action
-            android:id="@+id/editPasswordSuccess_setting"
+            android:id="@+id/editPassword_setting"
             app:destination="@id/settingUserFragment"
             app:popUpTo="@id/settingUserFragment"
             app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordFragment"
+        android:label="forgotPasswordFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordFragment"
+        android:label="resetPasswordFragment">
     </fragment>
 
     <fragment
