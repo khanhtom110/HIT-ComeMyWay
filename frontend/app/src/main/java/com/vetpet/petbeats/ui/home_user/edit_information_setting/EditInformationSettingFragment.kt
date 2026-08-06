@@ -36,6 +36,7 @@ import java.io.FileOutputStream
 import kotlin.getValue
 
 
+
 class EditInformationSettingFragment : Fragment() {
     private var _binding: FragmentEditInformationSettingBinding?= null
     private val binding get() = _binding!!
