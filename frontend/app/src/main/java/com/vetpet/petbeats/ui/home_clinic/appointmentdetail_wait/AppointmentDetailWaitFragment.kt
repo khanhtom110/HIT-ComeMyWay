@@ -164,7 +164,7 @@ class AppointmentDetailWaitFragment : Fragment() {
         }
 
         dialogBinding.btnRight.setOnClickListener {
-            val reason = dialogBinding.tvDialogTitle.text.toString()
+            val reason = dialogBinding.editInput.text.toString()
 
             dialog.dismiss()
             onRightButtonClick?.invoke(reason)
@@ -213,7 +213,7 @@ class AppointmentDetailWaitFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailWaitEvent.NavigationAppointmentSchedule -> {
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.wait_appointmentSchedule)
                         }
                         is AppointmentDetailWaitEvent.NavigationDetailReceive -> {
                             findNavController().navigate(

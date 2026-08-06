@@ -104,7 +104,7 @@ class AppointmentDetailRefuseFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is AppointmentDetailRefuseEvent.NavigationAppointmentSchedule -> {
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.refuse_appointmentSchedule)
                         }
                     }
                 }
