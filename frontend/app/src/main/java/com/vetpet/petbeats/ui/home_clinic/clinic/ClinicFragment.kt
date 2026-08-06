@@ -1,6 +1,5 @@
 package com.vetpet.petbeats.ui.home_clinic.clinic
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentClinicBinding
@@ -21,9 +19,6 @@ import com.google.android.material.chip.Chip
 import com.vetpet.petbeats.data.remote.api.ApiClinicHome
 import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
-import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModel
-import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
