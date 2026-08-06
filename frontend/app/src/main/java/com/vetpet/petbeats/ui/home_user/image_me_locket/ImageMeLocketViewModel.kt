@@ -22,6 +22,13 @@ class ImageMeLocketViewModel(
     val event = _event.asSharedFlow()
 
 
+    fun imageMeLocketClick() {
+        viewModelScope.launch {
+            _event.emit(ImageMeLocketEvent.NavigationImageMeLocket)
+        }
+    }
+
+
     fun onMeLocketList() {
         val lastPostId = _state.value.lastPostId
 
