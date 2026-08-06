@@ -65,7 +65,6 @@ class CalendarFragment : Fragment() {
 
         val id = arguments?.getInt("id") ?: 0
         viewModel.onInformationBookingAPI(id)
-        viewModel.onProfile()
 
         calendar()
         setupTime()
