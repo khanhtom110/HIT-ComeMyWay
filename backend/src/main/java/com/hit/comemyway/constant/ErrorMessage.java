@@ -143,6 +143,8 @@ public final class ErrorMessage {
     public static final String INVALID_FRIEND_REQUEST_STATUS =
         "This friendship is not PENDING status.";
     public static final String INVALID_LENGTH_CAPTION = "Caption must be under 50 characters long.";
-    public static final String ARE_NOT_FRIENDS = "You are not friends with this user.";
+    public static final String NOT_FRIENDS = "You are not friends with this user.";
+    public static final String POST_NOT_EXISTED = "This post does not exist.";
+    public static final String NOT_AUTHOR = "You are not the author of this post";
   }
 }

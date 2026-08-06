@@ -28,18 +28,21 @@ public class FriendshipService {
   private final UserRepository userRepository;
   private final SecurityUtils securityUtils;
 
+  private static final String LOCKET_LINK_REGEX =
+      "^https://petlocket\\.com/add\\?code=[a-zA-Z0-9_.-]+$";
+
   @Transactional(readOnly = true)
   public FindFriendResponse findFriend(FindFriendRequest request) {
     String locketCode;
+
+    if (!request.locketLink().matches(LOCKET_LINK_REGEX)) {
+      throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
+    }
 
     try {
       locketCode = UriComponentsBuilder.fromUriString(request.locketLink()).build().getQueryParams()
           .getFirst("code");
     } catch (Exception e) {
-      throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
-    }
-
-    if (locketCode == null) {
       throw new AppException(400, ErrorMessage.INVALID_LOCKET_LINK);
     }
 
@@ -159,7 +162,7 @@ public class FriendshipService {
 
     boolean isFriend = friendshipRepository.existsFriendship(currentUserId, friendId);
     if (!isFriend) {
-      throw new AppException(404, ErrorMessage.Locket.ARE_NOT_FRIENDS);
+      throw new AppException(404, ErrorMessage.Locket.NOT_FRIENDS);
     }
 
     friendshipRepository.deleteFriendship(currentUserId, friendId);

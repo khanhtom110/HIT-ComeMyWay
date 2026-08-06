@@ -1,11 +1,13 @@
 package com.hit.comemyway.service;
 
+import com.hit.comemyway.constant.ErrorMessage;
 import com.hit.comemyway.dto.request.PetLocketCreateRequest;
 import com.hit.comemyway.dto.response.PetLocketResponse;
 import com.hit.comemyway.entity.Friendship;
 import com.hit.comemyway.entity.FriendshipStatus;
 import com.hit.comemyway.entity.PetLocket;
 import com.hit.comemyway.entity.User;
+import com.hit.comemyway.exception.extended.AppException;
 import com.hit.comemyway.repository.FriendshipRepository;
 import com.hit.comemyway.repository.PetLocketRepository;
 import com.hit.comemyway.security.SecurityUtils;
@@ -68,5 +70,19 @@ public class PetLocketService {
     Slice<PetLocket> petLockets =
         petLocketRepository.findMyPostsByCursor(currentUser.getId(), lastPostId, pageable);
     return petLockets.map(PetLocketResponse::from);
+  }
+
+  @Transactional
+  public void deletePost(Long postId) {
+    User currentUser = securityUtils.getCurrentUser();
+
+    PetLocket petLocket = petLocketRepository.findById(postId)
+        .orElseThrow(() -> new AppException(404, ErrorMessage.Locket.POST_NOT_EXISTED));
+
+    if (!petLocket.getUser().getId().equals(currentUser.getId())) {
+      throw new AppException(403, ErrorMessage.Locket.NOT_AUTHOR);
+    }
+
+    petLocketRepository.delete(petLocket);
   }
 }

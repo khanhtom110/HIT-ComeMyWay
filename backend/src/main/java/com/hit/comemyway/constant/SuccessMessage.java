@@ -14,5 +14,6 @@ public class SuccessMessage {
 
   public static class Locket {
     public static final String UNFRIEND_SUCCESS = "Unfriend successfully";
+    public static final String DELETE_POST_SUCCESS = "Delete post successfully";
   }
 }
