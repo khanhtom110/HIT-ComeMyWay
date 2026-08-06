@@ -56,7 +56,7 @@ class ResultSearchAdapter(
                 .circleCrop()
                 .into(image)
 
-            detail.setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClick(item.id)
             }
 

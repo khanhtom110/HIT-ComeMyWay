@@ -115,6 +115,8 @@ class SettingUserFragment : Fragment() {
                         is SettingUserEvent.NavigationLogin -> {
                             val intent = Intent(requireContext(), AuthActivity::class.java)
                             startActivity(intent)
+
+                            requireActivity().finish()
                         }
                     }
                 }

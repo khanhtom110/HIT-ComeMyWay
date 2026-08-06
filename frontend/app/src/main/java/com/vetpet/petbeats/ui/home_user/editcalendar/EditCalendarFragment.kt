@@ -475,11 +475,11 @@ class EditCalendarFragment : Fragment() {
                     binding.tvCalendarError.text = state.calendarError
 
                     if (state.isTime) {
-                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time_errol)
+                        binding.boxTime.setBackgroundResource(R.drawable.button_input_errol)
                         binding.tvTimeError.visibility = View.VISIBLE
                     }
                     else {
-                        binding.boxTime.setBackgroundResource(R.drawable.ground_calendar_time)
+                        binding.boxTime.setBackgroundResource(R.drawable.ground_information)
                         binding.tvTimeError.visibility = View.GONE
                     }
                     binding.tvTimeError.text = state.timeError

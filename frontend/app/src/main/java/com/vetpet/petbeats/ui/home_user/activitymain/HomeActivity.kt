@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
         setupController()
         setupBottomNav()
         changeColorDestination()
-//        hideDestination()
+        hideDestination()
     }
 
     private fun setupController() {
