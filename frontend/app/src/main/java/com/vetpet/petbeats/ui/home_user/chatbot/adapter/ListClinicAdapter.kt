@@ -39,7 +39,7 @@ class ListClinicAdapter(
                 .circleCrop()
                 .into(image)
 
-            nameClinic.setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClick(item.id)
             }
         }
