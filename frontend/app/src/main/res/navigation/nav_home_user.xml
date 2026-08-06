@@ -158,7 +158,7 @@
 
     <fragment
         android:id="@+id/editInformationFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editinformation_setting.EditInformationSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_information_setting.EditInformationSettingFragment"
         android:label="editInformationFragment">
         <action
             android:id="@+id/editInformation_setting"
@@ -169,7 +169,7 @@
 
     <fragment
         android:id="@+id/editPasswordFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.editpassword_setting.EditPasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingFragment"
         android:label="editPasswordFragment">
         <action
             android:id="@+id/editPassword_setting"
@@ -178,16 +178,56 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+
+
     <fragment
-        android:id="@+id/forgotPasswordFragment"
-        android:name="com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordFragment"
-        android:label="forgotPasswordFragment">
+        android:id="@+id/editForgotpasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_forgotpassword_setting.EditForgotpasswordSettingFragment"
+        android:label="editForgotpasswordSettingFragment">
+        <action
+            android:id="@+id/editForgotpassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
-        android:id="@+id/resetPasswordFragment"
-        android:name="com.vetpet.petbeats.ui.auth.resetpassword.ResetPasswordFragment"
-        android:label="resetPasswordFragment">
+        android:id="@+id/editOtpSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_otp_setting.EditOtpSettingFragment"
+        android:label="editOtpSettingFragment">
+        <action
+            android:id="@+id/editOtp_editForgotpassword"
+            app:destination="@id/editForgotpasswordSettingFragment"
+            app:popUpTo="@id/editForgotpasswordSettingFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editResetPasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_resetpassword_setting.EditResetpasswordSettingFragment"
+        android:label="editResetPasswordSettingFragment">
+        <action
+            android:id="@+id/editResetpassword_editOtp"
+            app:destination="@id/editOtpSettingFragment"
+            app:popUpTo="@id/editOtpSettingFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/editResetpassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPasswordSuccessSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_password_success_setting.EditPasswordSuccessSettingFragment"
+        android:label="editPasswordSuccessSetting">
+        <action
+            android:id="@+id/editPasswordSuccess_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
