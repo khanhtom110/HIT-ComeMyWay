@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.example.VetPet.databinding.FragmentEditPasswordSuccessSettingBinding
 import com.example.VetPet.databinding.FragmentSplashLocketBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
