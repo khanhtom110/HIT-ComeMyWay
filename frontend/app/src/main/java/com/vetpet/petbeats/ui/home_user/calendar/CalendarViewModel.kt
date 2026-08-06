@@ -206,4 +206,29 @@ class CalendarViewModel(
 
         }
     }
+
+
+    fun onProfile() {
+        viewModelScope.launch {
+            val result = repository.profile()
+
+            when (result) {
+                is DataResult.Success -> {
+                    val data = result.data
+
+                    _state.value = _state.value.copy(
+                        name = data.fullName.orEmpty(),
+                        phone = data.phone.orEmpty(),
+                        address = data.homeAddress.orEmpty(),
+                    )
+                }
+                is DataResult.Error -> {
+                    Log.d("TEST_CASE", "lỗi trả: ${result.target} và message ${result.message}")
+
+                    _state.value = _state.value.copy()
+                    return@launch
+                }
+            }
+        }
+    }
 }
