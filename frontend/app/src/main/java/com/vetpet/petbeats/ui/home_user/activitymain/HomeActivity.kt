@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
         setupController()
         setupBottomNav()
         changeColorDestination()
-        hideDestination()
+//        hideDestination()
     }
 
     private fun setupController() {
@@ -101,4 +101,19 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
+//    private fun hideDestination() {
+//        //4.Dặn dò ẩn/hiện thanh điều hướng tùy theo màn hình
+//        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+//            if (
+//                destination.id == R.id.editForgotpasswordSettingFragment ||
+//                destination.id == R.id.editOtpSettingFragment ||
+//                destination.id == R.id.editResetPasswordSettingFragment ||
+//                destination.id == R.id.editPasswordSuccessSettingFragment) {
+//                binding.bottomUserNav.visibility = View.GONE // Nếu đích đến là màn hình Máy tính -> Giấu thanh điều hướng đi
+//            }
+//            else {
+//                binding.bottomUserNav.visibility = View.VISIBLE // Nếu là các màn hình khác (Home, Blog) -> Hiện thanh điều hướng lên
+//            }
+//        }
+//    }
 }

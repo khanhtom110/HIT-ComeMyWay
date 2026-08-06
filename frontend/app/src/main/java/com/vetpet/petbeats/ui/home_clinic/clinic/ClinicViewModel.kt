@@ -1,6 +1,9 @@
 package com.vetpet.petbeats.ui.home_clinic.clinic
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ClinicViewModel(
     private val repository: HomeClinicRepository
+    private val repository: HomeClinicRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(ClinicState())
     val state = _state.asStateFlow()
