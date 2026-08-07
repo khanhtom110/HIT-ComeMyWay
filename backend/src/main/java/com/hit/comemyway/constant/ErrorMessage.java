@@ -146,5 +146,6 @@ public final class ErrorMessage {
     public static final String ARE_NOT_FRIENDS = "You are not friends with this user.";
     public static final String POST_NOT_EXISTED = "Post does not exist.";
     public static final String ARE_NOT_AUTHOR = "You are not the author of this post.";
+    public static final String ALREADY_FRIENDS = "You are already friend.";
   }
 }
