@@ -97,4 +97,19 @@ public class UrlConstant {
 
     private Appointment() {}
   }
+
+  public static class Locket {
+    private static final String PREFIX = "/user/locket";
+
+    public static final String ADD_FRIEND = PREFIX + "/add-friend";
+    public static final String PENDING = PREFIX + "/pending";
+    public static final String MY_FRIEND = PREFIX + "/my-friend";
+    public static final String ACCEPT_REQUEST = PREFIX + "/accept-request/{requestId}";
+    public static final String REJECT_REQUEST = PREFIX + "/reject-request/{requestId}";
+    public static final String CREATE_POST = PREFIX + "/create-post";
+    public static final String NEWS_FEED = PREFIX + "/feed";
+    public static final String MY_POSTS = PREFIX + "/my-posts";
+
+    public Locket() {}
+  }
 }
