@@ -169,27 +169,6 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     app:layout_constraintTop_toBottomOf="@id/time"/>
-
-                <ImageView
-                    android:id="@+id/click"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:src="@drawable/vector_close"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginStart="@dimen/_19sdp"
-                    app:layout_constraintTop_toBottomOf="@id/lineTime"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <TextView
-                    style="@style/Chu2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đặt lời nhắc"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    app:layout_constraintTop_toTopOf="@id/click"
-                    app:layout_constraintBottom_toBottomOf="@id/click"
-                    app:layout_constraintStart_toEndOf="@id/click"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView

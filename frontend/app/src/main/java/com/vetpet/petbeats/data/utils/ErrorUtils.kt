@@ -73,7 +73,7 @@ object ErrorUtils {
             "Opening time must be earlier than closing time" -> {
                 Pair(ErrorTarget.TIME, "Giờ mở cửa phải sớm hơn giờ đóng cửa.")
             }
-            "Appointment time must be within the operating hours." -> {
+            "Appointment time must be within operating hours." -> {
                 Pair(ErrorTarget.TIME, "Thời gian hẹn phải nằm trong khung giờ hoạt động.")
             }
 
