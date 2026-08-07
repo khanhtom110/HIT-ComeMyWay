@@ -42,18 +42,34 @@ public class FriendshipService {
     User friend = userRepository.findById(request.friendId())
         .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
 
+    Friendship friendship;
+
     Optional<Friendship> existedFriendship =
         friendshipRepository.findRelationship(user.getId(), request.friendId());
     if (existedFriendship.isPresent()) {
-      throw new AppException(400, ErrorMessage.Locket.FRIEND_REQUEST_ALREADY_EXISTS);
+      friendship = existedFriendship.get();
+
+      if (friendship.getStatus() == FriendshipStatus.ACCEPTED) {
+        throw new AppException(400, ErrorMessage.Locket.ALREADY_FRIENDS);
+      }
+
+      if (friendship.getStatus() == FriendshipStatus.PENDING) {
+        throw new AppException(400, ErrorMessage.Locket.FRIEND_REQUEST_ALREADY_EXISTS);
+      }
+
+      if (friendship.getStatus() == FriendshipStatus.REJECTED) {
+        friendship.setUser(user);
+        friendship.setFriend(friend);
+        friendship.setStatus(FriendshipStatus.PENDING);
+      }
+    } else {
+      friendship =
+          Friendship.builder().user(user).friend(friend).status(FriendshipStatus.PENDING).build();
     }
 
-    Friendship friendship =
-        Friendship.builder().user(user).friend(friend).status(FriendshipStatus.PENDING).build();
+    Friendship savedFriendship = friendshipRepository.save(friendship);
 
-    friendshipRepository.save(friendship);
-
-    return FriendResponse.from(friendship, user.getId());
+    return FriendResponse.from(savedFriendship, user.getId());
   }
 
   @Transactional(readOnly = true)
