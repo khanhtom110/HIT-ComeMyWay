@@ -63,11 +63,8 @@ public class FriendshipService {
         friendship.setStatus(FriendshipStatus.PENDING);
       }
     } else {
-      friendship = Friendship.builder()
-              .user(user)
-              .friend(friend)
-              .status(FriendshipStatus.PENDING)
-              .build();
+      friendship =
+          Friendship.builder().user(user).friend(friend).status(FriendshipStatus.PENDING).build();
     }
 
     Friendship savedFriendship = friendshipRepository.save(friendship);
