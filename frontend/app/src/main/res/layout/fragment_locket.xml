@@ -48,6 +48,17 @@
 
         </androidx.cardview.widget.CardView>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:elevation="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="@id/btnCamera"
+            app:layout_constraintBottom_toBottomOf="@id/btnCamera"
+            app:layout_constraintStart_toStartOf="@id/btnCamera"
+            app:layout_constraintEnd_toEndOf="@id/btnCamera" />
+
         <EditText
             style="@style/Chu3"
             android:id="@+id/editFeel"
