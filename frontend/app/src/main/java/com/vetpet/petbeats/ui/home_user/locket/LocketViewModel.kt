@@ -62,9 +62,19 @@ class LocketViewModel(
         _state.value = _state.value.copy(message = message)
     }
 
+    fun resetSendSuccess() {
+        _state.value = _state.value.copy(
+            isSendSuccess = false,
+            isLoading = false,
+            message = ""
+        )
+    }
+
 
     fun uploadAndSendLocket(imageFile: File) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
+
             val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageFile)
             val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
@@ -81,11 +91,11 @@ class LocketViewModel(
 
                     when (sendResult) {
                         is DataResult.Success -> {
-                            _state.value = _state.value.copy(isSendSuccess = true, message = "")
+                            _state.value = _state.value.copy(isLoading = false, isSendSuccess = true, message = "")
                         }
                         is DataResult.Error -> {
                             Log.d("TEST_IMAGE", "Lỗi gửi bài: ${sendResult.message}")
-
+                            _state.value = _state.value.copy(isLoading = false)
                             return@launch
                         }
                     }
@@ -93,7 +103,7 @@ class LocketViewModel(
                 is DataResult.Error -> {
                     Log.d("TEST_IMAGE", "Lỗi up ảnh: ${result.message}")
 
-                    _state.value = _state.value.copy()
+                    _state.value = _state.value.copy(isLoading = false)
                     return@launch
                 }
             }

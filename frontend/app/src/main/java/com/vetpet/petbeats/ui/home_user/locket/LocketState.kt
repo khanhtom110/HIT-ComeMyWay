@@ -8,4 +8,5 @@ data class LocketState (
     val isDown: Boolean = false,
     val isFlash: Boolean = false,
     val isSendSuccess: Boolean = false,
+    val isLoading: Boolean = false,
 )

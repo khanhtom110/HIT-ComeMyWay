@@ -123,6 +123,8 @@ class LocketFragment : Fragment() {
 
 
         binding.btnCamera.setOnClickListener {
+            binding.btnCamera.isEnabled = false
+            binding.progressBar.visibility = View.VISIBLE
             takePhoto()
         }
         binding.btnReflect.setOnClickListener {
@@ -136,20 +138,7 @@ class LocketFragment : Fragment() {
             startCamera(currentLensFacing)
         }
         binding.btnCancel.setOnClickListener {
-            binding.imgResult.visibility = View.GONE
-            binding.btnCancel.visibility = View.GONE
-            binding.btnDown.visibility = View.GONE
-            binding.btnCameraSend.visibility = View.GONE
-            binding.editFeel.visibility = View.GONE
-
-            binding.btnCamera.visibility = View.VISIBLE
-            binding.btnImage.visibility = View.VISIBLE
-            binding.btnReflect.visibility = View.VISIBLE
-            binding.btnFlash.visibility = View.VISIBLE
-
-            viewModel.downCheckLocketFalse()
-
-            startCamera(currentLensFacing)
+            resetCameraUI()
         }
         binding.btnDown.setOnClickListener {
             viewModel.downCheckLocketTrue()
@@ -157,12 +146,13 @@ class LocketFragment : Fragment() {
 
 
         binding.btnCameraSend.setOnClickListener {
+            binding.btnCameraSend.isEnabled = false
+
             val drawable = binding.imgResult.drawable as? android.graphics.drawable.BitmapDrawable
             val bitmap = drawable?.bitmap
             val imageFile = bitmapToFile(bitmap)
 
             viewModel.uploadAndSendLocket(imageFile)
-
         }
 
 
@@ -237,6 +227,8 @@ class LocketFragment : Fragment() {
 
                     binding.imgResult.setImageBitmap(bitmap)
 
+                    binding.progressBar.visibility = View.GONE
+
                     binding.imgResult.visibility = View.VISIBLE
                     binding.btnCancel.visibility = View.VISIBLE
                     binding.btnDown.visibility = View.VISIBLE
@@ -250,6 +242,7 @@ class LocketFragment : Fragment() {
                     binding.btnFlash.visibility = View.INVISIBLE
 
                     binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send)
+                    binding.btnCamera.isEnabled = true
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -258,6 +251,29 @@ class LocketFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun resetCameraUI() {
+        binding.imgResult.visibility = View.GONE
+        binding.btnCancel.visibility = View.GONE
+        binding.btnDown.visibility = View.GONE
+        binding.btnCameraSend.visibility = View.GONE
+        binding.editFeel.visibility = View.GONE
+
+        binding.progressBar.visibility = View.GONE
+
+        binding.btnCamera.visibility = View.VISIBLE
+        binding.btnImage.visibility = View.VISIBLE
+        binding.btnReflect.visibility = View.VISIBLE
+        binding.btnFlash.visibility = View.VISIBLE
+
+        binding.btnCameraSend.isEnabled = true
+        binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send)
+
+        viewModel.downCheckLocketFalse()
+         viewModel.resetSendSuccess()
+
+        startCamera(currentLensFacing)
     }
 
     //Hàm hỗ trợ xử lý ảnh
@@ -365,14 +381,21 @@ class LocketFragment : Fragment() {
                     if (state.isSendSuccess) {
                         binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send_success)
 
-                        suspend {
+                        lifecycleScope.launch {
                             delay(1000)
-                            startCamera(currentLensFacing)
+                            resetCameraUI()
                         }
                     }
                     else {
                         binding.btnCameraSend.setImageResource(R.drawable.icon_camera_send)
+                    }
 
+
+                    //check loading
+                    if (state.isLoading) {
+                        binding.progressBar.visibility = View.VISIBLE
+                    } else {
+                        binding.progressBar.visibility = View.GONE
                     }
                 }
             }

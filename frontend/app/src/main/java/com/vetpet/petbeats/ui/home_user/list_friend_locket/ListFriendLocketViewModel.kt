@@ -73,8 +73,9 @@ class ListFriendLocketViewModel(
             when (result) {
                 is DataResult.Success -> {
                     val currentList = _state.value.pendingFriend.filter { it.friendId != id }
-
                     _state.value = _state.value.copy(pendingFriend = currentList)
+
+                    onAddFriendList()
                 }
                 is DataResult.Error -> {
                     return@launch
