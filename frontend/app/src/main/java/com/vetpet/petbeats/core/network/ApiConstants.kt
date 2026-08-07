@@ -26,6 +26,7 @@ object ApiConstants {
 
 
     //Pet Locket
+    const val DELETEPOSTLOCKET = "/api/v1/user/locket/delete-post/{postId}"
     const val CREATEPOSTLOCKET = "/api/v1/user/locket/create-post"
     const val GETMYLOCKET = "/api/v1/user/locket/my-posts"
     const val GETFEEDSLOCKET = "/api/v1/user/locket/feed"

@@ -76,6 +76,9 @@ object ErrorUtils {
             "Appointment time must be within operating hours." -> {
                 Pair(ErrorTarget.TIME, "Thời gian hẹn phải nằm trong khung giờ hoạt động.")
             }
+            "Appointment time must be after the current time." -> {
+                Pair(ErrorTarget.TIME, "Thời gian hẹn phải sau thời điểm hiện tại.")
+            }
 
             //General, Hệ thống, token
             "One or more fields contain invalid data." ->

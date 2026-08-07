@@ -179,4 +179,9 @@ interface ApiUserHome {
     suspend fun unFriend(
         @Path("friendId") friendId: Int
     ): ApiResponse<Unit>
+
+    @POST(ApiConstants.DELETEPOSTLOCKET)
+    suspend fun deletePost(
+        @Path("postId") postId: Int?
+    ): ApiResponse<Unit>
 }
