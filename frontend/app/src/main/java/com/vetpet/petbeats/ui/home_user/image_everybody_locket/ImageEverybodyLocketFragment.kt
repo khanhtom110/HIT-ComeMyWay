@@ -117,6 +117,8 @@ class ImageEverybodyLocketFragment : Fragment() {
                 Toast.makeText(requireContext(), "Không tìm thấy đường dẫn ảnh", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
 
