@@ -65,4 +65,28 @@ class ImageMeLocketViewModel(
             }
         }
     }
+
+    fun onMeCancel(postId: Int?) {
+        viewModelScope.launch {
+            val result = repository.deletePost(postId)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val currentList = _state.value.listMeLocket.toMutableList()
+                    currentList.removeAll {
+                        it.lastPostId == postId
+                    }
+
+                    _state.value = _state.value.copy(listMeLocket = currentList)
+                }
+
+                is DataResult.Error -> {
+                    Log.d("TEST_IMAGE", "Lỗi xóa bài: ${result.message}")
+                    return@launch
+                }
+            }
+        }
+    }
+
+
 }

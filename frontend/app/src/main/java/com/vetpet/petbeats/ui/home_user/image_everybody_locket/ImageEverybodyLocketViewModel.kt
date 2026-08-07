@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.ui.home_user.image_everybody_locket
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
@@ -60,6 +61,28 @@ class ImageEverybodyLocketViewModel(
                 }
                 is DataResult.Error -> {
                     _state.value = _state.value.copy(listMeLocket = emptyList())
+                }
+            }
+        }
+    }
+
+    fun onMeCancel(postId: Int?) {
+        viewModelScope.launch {
+            val result = repository.deletePost(postId)
+
+            when (result) {
+                is DataResult.Success -> {
+                    val currentList = _state.value.listMeLocket.toMutableList()
+                    currentList.removeAll {
+                        it.lastPostId == postId
+                    }
+
+                    _state.value = _state.value.copy(listMeLocket = currentList)
+                }
+
+                is DataResult.Error -> {
+                    Log.d("TEST_IMAGE", "Lỗi xóa bài: ${result.message}")
+                    return@launch
                 }
             }
         }

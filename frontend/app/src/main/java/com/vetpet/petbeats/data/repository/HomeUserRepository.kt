@@ -247,4 +247,10 @@ class HomeUserRepository(
         }
     }
 
+    suspend fun deletePost(postId: Int?): DataResult<Unit> {
+        return safeApiCall {
+            apiUserHome.deletePost(postId)
+        }
+    }
+
 }

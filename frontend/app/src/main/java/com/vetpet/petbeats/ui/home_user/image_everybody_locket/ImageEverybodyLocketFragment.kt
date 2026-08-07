@@ -117,6 +117,13 @@ class ImageEverybodyLocketFragment : Fragment() {
                 Toast.makeText(requireContext(), "Không tìm thấy đường dẫn ảnh", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnBin.setOnClickListener {
+            val postId = currentImageLocket?.lastPostId
+
+
+            viewModel.onMeCancel(postId)
+        }
     }
 
 
