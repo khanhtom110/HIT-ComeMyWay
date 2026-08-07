@@ -11,4 +11,9 @@ public class SuccessMessage {
     public static final String RESET_PASSWORD_SUCCESS = "Password reset successfully";
     public static final String VERIFY_OTP_SUCCESS = "OTP verified successfully";
   }
+
+  public static class Locket {
+    public static final String UNFRIEND_SUCCESS = "Unfriend successfully";
+    public static final String DELETE_POST_SUCCESS = "Delete post successfully";
+  }
 }

@@ -51,6 +51,9 @@ public class User extends BaseEntity {
   private List<Appointment> appointments;
 
   @Column(nullable = true)
+  private String locketCode;
+
+  @Column(nullable = true)
   private String deviceToken;
 
   @Column(nullable = true)

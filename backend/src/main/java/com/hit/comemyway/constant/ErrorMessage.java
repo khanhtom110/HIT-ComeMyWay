@@ -36,6 +36,7 @@ public final class ErrorMessage {
       "Condition must be under 1000 characters long.";
   public static final String INVALID_PARAMETER = "The provided parameter is invalid";
   public static final String PASSWORD_MISMATCH = "Passwords do not match.";
+  public static final String INVALID_LOCKET_LINK = "Invalid locket link";
 
   // Authentication Errors (Auth)
   public static final class Auth {
@@ -140,5 +141,10 @@ public final class ErrorMessage {
     public static final String INVALID_FRIEND_REQUEST_STATUS =
         "This friendship is not PENDING status.";
     public static final String INVALID_LENGTH_CAPTION = "Caption must be under 50 characters long.";
+    public static final String CANNOT_UNFRIEND_TO_YOURSELF =
+        "You cannot unfriend to your own account.";
+    public static final String ARE_NOT_FRIENDS = "You are not friends with this user.";
+    public static final String POST_NOT_EXISTED = "Post does not exist.";
+    public static final String ARE_NOT_AUTHOR = "You are not the author of this post.";
   }
 }

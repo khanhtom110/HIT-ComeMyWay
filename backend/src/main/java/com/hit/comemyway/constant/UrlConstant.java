@@ -38,6 +38,7 @@ public class UrlConstant {
     public static final String BOOK_APPOINTMENT = PREFIX + "/appointments/book";
     public static final String DEVICE_TOKEN = PREFIX + "/device-token";
     public static final String USER_REMINDER = PREFIX + "/user-reminder";
+    public static final String USER_LOCKET_LINK = PREFIX + "/locket-link";
 
     private User() {}
   }
@@ -109,6 +110,9 @@ public class UrlConstant {
     public static final String CREATE_POST = PREFIX + "/create-post";
     public static final String NEWS_FEED = PREFIX + "/feed";
     public static final String MY_POSTS = PREFIX + "/my-posts";
+    public static final String FIND_FRIEND = PREFIX + "/find-friend/{locketLink}";
+    public static final String UNFRIEND = PREFIX + "/unfriend/{friendId}";
+    public static final String DELETE_POST = PREFIX + "/delete-post/{postId}";
 
     public Locket() {}
   }

@@ -2,6 +2,7 @@ package com.hit.comemyway.controller;
 
 import com.hit.comemyway.base.ApiResponse;
 import com.hit.comemyway.constant.ApiPath;
+import com.hit.comemyway.constant.SuccessMessage;
 import com.hit.comemyway.constant.UrlConstant;
 import com.hit.comemyway.dto.request.PetLocketCreateRequest;
 import com.hit.comemyway.dto.response.CursorResponse;
@@ -65,5 +66,12 @@ public class PetLocketController {
 
     CursorResponse<PetLocketResponse> response = CursorResponse.of(posts, nextCursor);
     return ResponseEntity.ok(ApiResponse.ok(response));
+  }
+
+  @Operation(summary = "Xóa ảnh locket", description = "Xóa ảnh locket")
+  @PostMapping(UrlConstant.Locket.DELETE_POST)
+  public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
+    petLocketService.deletePost(postId);
+    return ResponseEntity.ok(ApiResponse.ok(SuccessMessage.Locket.DELETE_POST_SUCCESS, null));
   }
 }

@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthService {
   private final UserRepository userRepository;
+  private final UserService userService;
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
   private final InvalidatedRepository invalidatedRepository;
@@ -101,8 +102,17 @@ public class AuthService {
       RegisterRequest registerRequest = objectMapper.readValue(userInfor, RegisterRequest.class);
 
       String password = passwordEncoder.encode(registerRequest.password());
+
+      String locketCode;
+      boolean isUnique = false;
+      do {
+        locketCode = userService.generateRandomCode(6);
+        if (userRepository.findBylocketCode(locketCode).isEmpty())
+          isUnique = true;
+      } while (!isUnique);
+
       User user = User.builder().username(registerRequest.username()).password(password)
-          .email(registerRequest.email()).role(Role.USER).build();
+          .email(registerRequest.email()).role(Role.USER).locketCode(locketCode).build();
 
       redisTemplate.delete("REGISTRATION_OTP:" + request.email());
       redisTemplate.delete("REGISTRATION_DATA:" + request.email());
