@@ -118,7 +118,12 @@ class ImageEverybodyLocketFragment : Fragment() {
             }
         }
 
+        binding.btnBin.setOnClickListener {
+            val postId = currentImageLocket?.lastPostId
 
+
+            viewModel.onMeCancel(postId)
+        }
     }
 
 
