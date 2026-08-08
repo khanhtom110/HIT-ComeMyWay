@@ -63,7 +63,8 @@ class AppointmentDetailRefuseViewModel(
                         phone = data.phone,
                         address = data.homeAddress,
                         state = data.petCondition,
-                        reason = data.rejectReason
+                        reason = data.rejectReason,
+                        petType = data.petType
                     )
                 }
                 is DataResult.Error -> {

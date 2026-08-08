@@ -61,7 +61,8 @@ class AppointmentDetailReceiveViewModel(
                         fullName = data.fullName,
                         phone = data.phone,
                         address = data.homeAddress,
-                        state = data.petCondition
+                        state = data.petCondition,
+                        petType = data.petType
                     )
                 }
                 is DataResult.Error -> {
