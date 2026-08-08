@@ -37,7 +37,7 @@
 
         <activity
             android:name="com.vetpet.petbeats.ui.auth.activitymain.AuthActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false">
         </activity>
 
