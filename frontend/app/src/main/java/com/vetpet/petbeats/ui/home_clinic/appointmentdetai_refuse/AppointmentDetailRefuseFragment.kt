@@ -76,6 +76,7 @@ class AppointmentDetailRefuseFragment : Fragment() {
                     binding.numbAddress.text = state.address
                     binding.numbState.text = state.state
                     binding.tvInputReason.text = state.reason
+                    binding.tvTypePet.text = state.petType
 
 
                     binding.numbInclude.text = if (state.services.isEmpty()) {
