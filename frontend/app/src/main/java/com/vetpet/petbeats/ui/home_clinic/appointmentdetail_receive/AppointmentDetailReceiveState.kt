@@ -6,6 +6,7 @@ import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 data class AppointmentDetailReceiveState (
     val id: Int = 0,
     val imgPet: String = "",
+    val petType: String = "",
     val status: BookChildState = BookChildState.PENDING,
     val day: String = "",
     val time: String = "",

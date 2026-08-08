@@ -74,6 +74,7 @@ class AppointmentDetailReceiveFragment : Fragment() {
                     binding.numbPhone.text = state.phone
                     binding.numbAddress.text = state.address
                     binding.numbState.text = state.state
+                    binding.tvTypePet.text = state.petType
 
 
                     binding.numbInclude.text = if (state.services.isEmpty()) {
