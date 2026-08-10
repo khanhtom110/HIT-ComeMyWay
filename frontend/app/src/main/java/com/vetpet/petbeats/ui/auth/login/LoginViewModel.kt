@@ -1,0 +1,111 @@
+package com.vetpet.petbeats.ui.auth.login
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vetpet.petbeats.core.base.DataResult
+import com.vetpet.petbeats.data.repository.AuthRepository
+import com.vetpet.petbeats.data.repository.ErrorTarget
+import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class LoginViewModel(
+    private val repository: AuthRepository
+): ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
+
+    private val _event = MutableSharedFlow<LoginEvent>()
+    val event = _event.asSharedFlow()
+
+    fun changeEye() {
+        _state.value = _state.value.copy(isPasswordVisible = !_state.value.isPasswordVisible)
+    }
+
+    fun forgotCLick() {
+        viewModelScope.launch {
+            _event.emit(LoginEvent.NavigationForgot)
+        }
+    }
+
+    fun registerClick() {
+        viewModelScope.launch {
+            _event.emit(LoginEvent.NavigationRegister)
+        }
+    }
+
+    fun onNameChange(name: String) {
+        viewModelScope.launch {
+            _state.value =_state.value.copy(name = name, isName = false)
+        }
+    }
+
+    fun onPasswordChange(password: String) {
+        viewModelScope.launch {
+            _state.value =_state.value.copy(password = password, isPassword = false)
+        }
+    }
+
+    fun onLoginClick() {
+        viewModelScope.launch {
+            val name = _state.value.name.trim()
+            val password = _state.value.password.trim()
+
+
+            val request = LoginRequest(name, password)
+            val result = repository.loginUser(request)
+
+            when (result) {
+                is DataResult.Success -> {
+                    _state.value = _state.value.copy(isName = false, isPassword = false, nameError = "", passwordError = "")
+
+                    // Lấy Token từ result.data để lưu vào DataStore/SharedPreferences
+                    val accessToken = result.data.accessToken ?: ""
+                    val refreshToken = result.data.refreshToken ?: ""
+
+
+                    val userId = result.data.userId
+                    val roles = result.data.role
+                    val accountStatus = result.data.accountStatus
+
+                    when (roles) {
+                        "USER" -> {
+                            _event.emit(LoginEvent.NavigationUserHome(accessToken, refreshToken, userId))
+                        }
+
+                        "CLINIC" -> {
+                            Log.d("TEST_LOGIN", "result: ${result.message}, accountStatus: $accountStatus")
+
+                            when (accountStatus) {
+                                "PENDING_PASSWORD_CHANGE" -> {
+                                    _event.emit(LoginEvent.NavigationChangePassword(accessToken, refreshToken, userId))
+                                }
+                                "PENDING_PROFILE" -> {
+                                    _event.emit(LoginEvent.NavigationLoginSuccess(accessToken, refreshToken, userId))
+                                }
+                                else -> {
+                                    _event.emit(LoginEvent.NavigationClinicHome(accessToken, refreshToken, userId))
+                                }
+                            }
+                        }
+                    }
+                }
+
+                is DataResult.Error -> {
+                    Log.d("TEST_LOGIN", "result: ${result.message}")
+                    _state.value = _state.value.copy(
+                        isName = (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL),
+                        isPassword = (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL),
+                        nameError = if (result.target == ErrorTarget.NAME || result.target ==  ErrorTarget.GENERAL) result.message else "",
+                        passwordError = if (result.target == ErrorTarget.PASSWORD || result.target ==  ErrorTarget.GENERAL) result.message else ""
+                    )
+                    return@launch
+                }
+            }
+        }
+    }
+}

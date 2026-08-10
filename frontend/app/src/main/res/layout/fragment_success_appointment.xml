@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trạng thái lịch khám"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginTop="@dimen/_40sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/logoSuccess"
+                android:layout_width="@dimen/_110sdp"
+                android:layout_height="@dimen/_110sdp"
+                android:src="@drawable/logo_success"
+                android:layout_marginTop="@dimen/_21sdp"
+                app:layout_constraintTop_toBottomOf="@id/state"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/tvTittleSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lịch khám đã được gửi thành công"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/logoSuccess"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvContentSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="Phòng khám sẽ gửi lại phản hồi cho bạn trong thời gian sớm nhất."
+                android:gravity="center"
+                android:layout_marginHorizontal="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:textColor="@color/colorTextContent"
+                app:layout_constraintTop_toBottomOf="@id/tvTittleSuccess"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                style="@style/TieuDe1"
+                android:id="@+id/stateClinic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@drawable/button_input"
+                android:layout_marginHorizontal="@dimen/_32sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="Chờ xử lý"
+                android:gravity="center"
+                android:textColor="@color/colorWarning"
+                app:layout_constraintTop_toBottomOf="@id/tvContentSuccess"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/boxInformationClinic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_230sdp"
+                android:background="@drawable/ground_information"
+                android:layout_marginHorizontal="@dimen/_12sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/stateClinic">
+
+                <TextView
+                    style="@style/TieuDe1"
+                    android:id="@+id/tittle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phòng khám thú y FunVet"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/locate"
+                    android:layout_width="@dimen/_13sdp"
+                    android:layout_height="@dimen/_17sdp"
+                    android:src="@drawable/locate"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tittle"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/Chu2"
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="83 Giải Phóng, P. Đồng Tâm"
+                    android:layout_marginStart="@dimen/_35sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    app:layout_constraintTop_toTopOf="@id/locate" />
+
+                <ImageView
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:src="@drawable/line"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/tvAddress"/>
+
+                <ImageView
+                    android:id="@+id/image_time"
+                    android:layout_width="@dimen/_13sdp"
+                    android:layout_height="@dimen/_17sdp"
+                    android:src="@drawable/time"
+                    android:layout_marginTop="@dimen/_9sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/line"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+
+                <TextView
+                    style="@style/Chu2"
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25/06/2026 -"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    app:layout_constraintTop_toTopOf="@id/image_time"
+                    app:layout_constraintStart_toEndOf="@id/image_time"/>
+
+                <TextView
+                    style="@style/Chu2"
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9:00"
+                    android:textColor="@color/colorTextSub"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    app:layout_constraintTop_toTopOf="@id/date"
+                    app:layout_constraintBottom_toBottomOf="@id/date"
+                    app:layout_constraintStart_toEndOf="@id/date"/>
+
+                <ImageView
+                    android:id="@+id/lineTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:src="@drawable/line"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    app:layout_constraintTop_toBottomOf="@id/time"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/btnDetail"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:background="@drawable/bottom_detail"
+                android:layout_marginBottom="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnNewBooking"/>
+
+
+            <TextView
+                style="@style/Nut2"
+                android:id="@+id/btnNewBooking"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:background="@drawable/button_auth_blue"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:text="Đặt lịch khám mới"
+                android:gravity="center"
+                android:textColor="@color/colorBackground"
+                android:layout_marginTop="@dimen/_25sdp"
+                app:layout_constraintTop_toBottomOf="@id/boxInformationClinic"/>
+
+            <TextView
+                style="@style/Nut2"
+                android:id="@+id/btnHome"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:background="@drawable/button_auth_white"
+                android:text="Trang chủ"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/btnNewBooking" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</FrameLayout>

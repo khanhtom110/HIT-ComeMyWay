@@ -1,0 +1,216 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_user.edit_information_setting.EditInformationSettingFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/back_left"
+            android:layout_marginTop="@dimen/_40sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TieuDe1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chỉnh sửa thông tin cá nhân"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintTop_toTopOf="@id/btnBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/boxInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ground_information"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginVertical="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnBack">
+
+            <ImageView
+                android:id="@+id/imgLibrary"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:src="@drawable/image_test"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                style="@style/Nut3"
+                android:id="@+id/btnUploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tải ảnh lên"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/imgLibrary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Họ và tên"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/btnUploadImage"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/tvInputName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search_blue"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:hint="Nhập họ và tên"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:inputType="text"
+                android:textColor="@color/colorTextSub"
+                android:textColorHint="@color/colorTextContent"
+                app:layout_constraintTop_toBottomOf="@id/tvName"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvNameError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvInputName"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số điện thoại"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvNameError"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/tvInputPhone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search_blue"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:hint="Nhập số điện thoại của bạn"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:inputType="phone"
+                android:textColor="@color/colorTextSub"
+                android:textColorHint="@color/colorTextContent"
+                app:layout_constraintTop_toBottomOf="@id/tvPhone"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvPhoneError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintTop_toBottomOf="@id/tvInputPhone"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvPhoneError"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/tvInputAddress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search_blue"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:hint="Nhập địa chỉ hiện tại của bạn"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:inputType="text"
+                android:textColor="@color/colorTextSub"
+                android:textColorHint="@color/colorTextContent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddress"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvInputAddress"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvInputEmail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search_blue"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:text="Nhập số email của bạn"
+                android:paddingHorizontal="@dimen/_16sdp"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorTextContent"
+                app:layout_constraintTop_toBottomOf="@id/tvEmail"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/btnUpdate"
+            style="@style/Nut2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_auth_blue"
+            android:gravity="center"
+            android:text="Cập nhật"
+            android:textColor="@color/colorBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/boxInformation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -1,0 +1,62 @@
+package com.hit.comemyway.entity;
+
+import com.hit.comemyway.constant.CommonConstant;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class User extends BaseEntity {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(nullable = false, updatable = false, length = CommonConstant.USERNAME_LENGTH,
+      unique = true)
+  private String username;
+
+  @Column(nullable = false, length = CommonConstant.PASSWORD_LENGTH)
+  private String password;
+
+  @Column(length = CommonConstant.FULLNAME_LENGTH)
+  private String fullName;
+
+  @Column(length = CommonConstant.PHONE_LENGTH)
+  private String phone;
+
+  @Column(nullable = false, length = CommonConstant.ADDRESS_LENGTH)
+  private String homeAddress;
+
+  @Column(nullable = false, unique = true, length = CommonConstant.EMAIL_LENGTH)
+  private String email;
+
+  @Column(name = "avatar", length = CommonConstant.User.AVATAR_LENGTH)
+  private String avatar;
+
+  @Column(name = "hobby", length = CommonConstant.User.HOBBY_LENGTH)
+  private String hobby;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<Appointment> appointments;
+
+  @Column(nullable = true)
+  private String locketCode;
+
+  @Column(nullable = true)
+  private String deviceToken;
+
+  @Column(nullable = true)
+  @Enumerated(EnumType.STRING)
+  private AccountStatus status;
+}

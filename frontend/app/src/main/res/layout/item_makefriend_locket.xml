@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="@dimen/_10sdp"
+    android:background="@color/colorBackground">
+
+    <ImageView
+        android:id="@+id/imgName"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:src="@drawable/image_test"
+        android:layout_marginStart="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        style="@style/Chu2"
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textColor="@color/colorTextSub"
+        android:layout_marginStart="@dimen/_5sdp"
+        app:layout_constraintTop_toTopOf="@id/imgName"
+        app:layout_constraintBottom_toBottomOf="@id/imgName"
+        app:layout_constraintStart_toEndOf="@id/imgName"/>
+
+    <ImageView
+        android:id="@+id/btnMakeFriend"
+        android:layout_width="@dimen/_64sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:src="@drawable/button_makefriend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvName"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

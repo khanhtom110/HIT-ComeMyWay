@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_home_user"
+    app:startDestination="@id/bookFragment">
+
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.book.BookFragment"
+        android:label="bookFragment"/>
+
+    <fragment
+        android:id="@+id/chatbotFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.chatbot.ChatbotFragment"
+        android:label="chatbotFragmnet"/>
+
+    <fragment
+        android:id="@+id/locketFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.locket.LocketFragment"
+        android:label="locketFragment"/>
+
+    <fragment
+        android:id="@+id/settingUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
+        android:label="settingUserFragment"/>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.search.SearchFragment"
+        android:label="searchFragment">
+        <action
+            android:id="@+id/search_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/search_resultSearch"
+            app:destination="@id/resultSearchFragment"
+            app:popUpTo="@id/resultSearchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultSearchFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.resultsearch.ResultSearchFragment"
+        android:label="resultSearch">
+        <action
+            android:id="@+id/resultSearch_search"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/informationRoomFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.informationroom.InformationRoomFragment"
+        android:label="informationRoomFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyListAllFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.historylistall.HistoryListAllFragment"
+        android:label="historyListAllFragment">
+        <action
+            android:id="@+id/historyListAll_Search"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.calendar.CalendarFragment"
+        android:label="calendarFragment">
+        <action
+            android:id="@+id/calendar_informationRoom"
+            app:destination="@+id/informationRoomFragment"
+            app:popUpTo="@id/informationRoomFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/calendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confirmAppointmentFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.confirmappointment.ConfirmAppointmentFragment"
+        android:label="confirmAppointmentFragment">
+        <action
+            android:id="@+id/confirmAppointment_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/confirmAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/successAppointFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentFragment"
+        android:label="successAppointFragment">
+
+        <action
+            android:id="@+id/successAppointment_booking"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/successAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyBookFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.historyBook.HistoryBookFragment"
+        android:label="historyBookFragment">
+
+        <action
+            android:id="@+id/historyBook_book"
+            app:destination="@+id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editCalendarFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.editcalendar.EditCalendarFragment"
+        android:label="editCalendarFragment">
+        <action
+            android:id="@+id/editCalendar_confirm"
+            app:destination="@+id/confirmAppointmentFragment"
+            app:popUpTo="@id/confirmAppointmentFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/editCalendar_book"
+            app:destination="@id/bookFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@id/settingUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
+        android:label="settingUserFragment"/>
+
+
+    <fragment
+        android:id="@+id/editInformationFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_information_setting.EditInformationSettingFragment"
+        android:label="editInformationFragment">
+        <action
+            android:id="@+id/editInformation_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPasswordFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingFragment"
+        android:label="editPasswordFragment">
+        <action
+            android:id="@+id/editPassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/editForgotpasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_forgotpassword_setting.EditForgotpasswordSettingFragment"
+        android:label="editForgotpasswordSettingFragment">
+        <action
+            android:id="@+id/editForgotpassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editOtpSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_otp_setting.EditOtpSettingFragment"
+        android:label="editOtpSettingFragment">
+        <action
+            android:id="@+id/editOtp_editForgotpassword"
+            app:destination="@id/editForgotpasswordSettingFragment"
+            app:popUpTo="@id/editForgotpasswordSettingFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editResetPasswordSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_resetpassword_setting.EditResetpasswordSettingFragment"
+        android:label="editResetPasswordSettingFragment">
+        <action
+            android:id="@+id/editResetpassword_editOtp"
+            app:destination="@id/editOtpSettingFragment"
+            app:popUpTo="@id/editOtpSettingFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/editResetpassword_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editPasswordSuccessSettingFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.edit_password_success_setting.EditPasswordSuccessSettingFragment"
+        android:label="editPasswordSuccessSetting">
+        <action
+            android:id="@+id/editPasswordSuccess_setting"
+            app:destination="@id/settingUserFragment"
+            app:popUpTo="@id/settingUserFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/splashLocketFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.splash_locket.SplashLocketFragment"
+        android:label="splashLocketFragment">
+        <action
+            android:id="@+id/splashLocket_locket"
+            app:destination="@id/locketFragment"
+            app:popUpTo="@id/locketFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/imageMeLocketFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.image_me_locket.ImageMeLocketFragment"
+        android:label="imageMeLocketFragment">
+        <action
+            android:id="@+id/imageMeLocket_locket"
+            app:destination="@id/locketFragment"
+            app:popUpTo="@id/locketFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/imageEverybodyLocketFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.image_everybody_locket.ImageEverybodyLocketFragment"
+        android:label="imageEverybodyLocketFragment">
+        <action
+            android:id="@+id/imageEverybodyLocket_locket"
+            app:destination="@id/locketFragment"
+            app:popUpTo="@id/locketFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/listFriendLocketFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.list_friend_locket.ListFriendLocketFragment"
+        android:label="listFriendLocketFragment">
+
+        <action
+            android:id="@+id/listFriendLocket_locket"
+            app:destination="@id/locketFragment"
+            app:popUpTo="@id/locketFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+</navigation>

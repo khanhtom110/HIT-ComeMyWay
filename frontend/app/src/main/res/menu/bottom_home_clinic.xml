@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/appointmentScheduleFragment"
+        android:icon="@drawable/schedule"
+        android:title="Lịch khám"/>
+
+    <item
+        android:id="@+id/clinicFragment"
+        android:icon="@drawable/clinic"
+        android:title="Phòng khám"/>
+</menu>

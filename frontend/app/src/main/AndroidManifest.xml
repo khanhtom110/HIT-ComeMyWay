@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- Xin quyền vị trí -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Wifi -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Xin quyền notify -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--Xin quyền camera-->
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -10,19 +20,36 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PetBeats">
+        android:theme="@style/Theme.PetBeats"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.auth.activityMain.AuthActivity"
+            android:name="com.vetpet.petbeats.ui.home_clinic.activitymain.HomeClinicActivity"
+            android:exported="true" >
+
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.auth.activitymain.AuthActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name="com.vetpet.petbeats.ui.splash_onboarding.splash.SplashActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.splash_onboarding.splash.SplashActivity"
-            android:exported="false">
         </activity>
     </application>
 

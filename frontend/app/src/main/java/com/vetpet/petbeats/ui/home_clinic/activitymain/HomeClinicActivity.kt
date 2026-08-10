@@ -1,0 +1,68 @@
+package com.vetpet.petbeats.ui.home_clinic.activitymain
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.example.VetPet.R
+import com.example.VetPet.databinding.ActivityHomeBinding
+import com.example.VetPet.databinding.ActivityHomeClinicBinding
+
+class HomeClinicActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHomeClinicBinding
+    private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        binding = ActivityHomeClinicBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setupController()
+        setupBottomNav()
+        hideDestination()
+    }
+
+    private fun setupController() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHomeClinicFragment) as NavHostFragment
+        navController = navHostFragment.navController
+    }
+
+    private fun setupBottomNav() {
+        binding.bottomClinicNav.setupWithNavController(navController)
+    }
+
+    private fun hideDestination() {
+        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+            // Fix lỗi không hiện màu ở Bottom Nav
+            when (destination.id) {
+                R.id.scheduleListFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailWaitFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailReceiveFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.appointmentDetailRefuseFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.appointmentScheduleFragment)?.isChecked = true
+                }
+                R.id.editInformationClinicFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.clinicFragment)?.isChecked = true
+                }
+                R.id.editPasswordClinicFragment -> {
+                    binding.bottomClinicNav.menu.findItem(R.id.clinicFragment)?.isChecked = true
+                }
+            }
+        }
+    }
+}
