@@ -281,4 +281,4 @@ Swagger UI: `http://localhost:8080/swagger-ui/index.html`
 
 ## License
 
-Dự án được thực hiện trong khuôn khổ CLB HIT — Đại học Công Nghiệp Hà Nội.
+Dự án được thực hiện trong khuôn khổ CLB Tin học HIT — Đại học Công Nghiệp Hà Nội.
