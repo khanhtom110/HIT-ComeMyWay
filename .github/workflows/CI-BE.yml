@@ -2,17 +2,19 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY (ví dụ: main)
+      - deploy # <-- Đã đổi thành main cho khớp nhánh của bạn
     paths:
       - 'backend/**'
+      - '.github/workflows/**' # Trigger Action khi bạn sửa file yml này
   pull_request:
     types:
       - opened
       - synchronize
     branches:
-      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY NỮA
+      - deploy # <-- Đã đổi thành main cho khớp nhánh của bạn
     paths:
       - 'backend/**'
+      - '.github/workflows/**'
 
 jobs:
   build-and-deploy:
