@@ -1,8 +1,8 @@
-name: CI
+name: CI/CD Pipeline
 on:
   push:
     branches:
-      - dev
+      - deploy # Chú ý: Action sẽ chạy khi code được push lên nhánh main. (Đổi thành dev nếu bạn test trên dev)
     paths:
       - 'backend/**'
   pull_request:
@@ -10,30 +10,70 @@ on:
       - opened
       - synchronize
     branches:
-      - dev
+      - main
     paths:
       - 'backend/**'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
 
     steps:
-      - name: Checkout code
+      - name: 1. Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
+      - name: 2. Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
 
-      - name: Validate Code Formatting
+      - name: 3. Validate Code Formatting
         run: mvn -T 2C --batch-mode formatter:validate
 
-      - name: Build and Skip Test
-        run: mvn -T 2C --batch-mode verify -DskipTests
+      - name: 4. Build JAR (Skip Test)
+        run: mvn -T 2C --batch-mode package -DskipTests
+
+      # ---------------- BẮT ĐẦU PHẦN DEPLOY LÊN AWS ----------------
+
+      - name: 5. Copy JAR to EC2
+        uses: appleboy/scp-action@v0.1.7
+        # Chỉ copy và deploy khi đó là hành động "push" (Không deploy khi chỉ tạo Pull Request)
+        if: github.event_name == 'push'
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: ${{ secrets.EC2_PORT }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "backend/target/comemyway-0.0.1-SNAPSHOT.jar"
+          target: "/home/${{ secrets.EC2_USERNAME }}/app/"
+          strip_components: 2
+
+      - name: 6. Execute and Run JAR on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        if: github.event_name == 'push'
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: ${{ secrets.EC2_PORT }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Di chuyển vào thư mục chứa code
+            cd /home/${{ secrets.EC2_USERNAME }}/app/
+            
+            # 1. Tìm và tắt ứng dụng Java đang chạy ngầm từ bản build cũ (nếu có)
+            pid=$(pgrep -f comemyway-0.0.1-SNAPSHOT.jar)
+            if [ -n "$pid" ]; then
+              echo "Stopping old app..."
+              kill -9 $pid
+            fi
+            
+            # 2. Khởi động app ngầm (Dùng nohup để khi tắt terminal ssh app không bị chết)
+            # Log sẽ được ghi ra file app.log để tiện kiểm tra lỗi
+            nohup java -jar comemyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+            
+            echo "Deployed successfully!"
