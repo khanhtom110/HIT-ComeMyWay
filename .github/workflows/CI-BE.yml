@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - dev # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY (ví dụ: main)
+      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY (ví dụ: main)
     paths:
       - 'backend/**'
   pull_request:
@@ -10,7 +10,7 @@ on:
       - opened
       - synchronize
     branches:
-      - dev # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY NỮA
+      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY NỮA
     paths:
       - 'backend/**'
 
