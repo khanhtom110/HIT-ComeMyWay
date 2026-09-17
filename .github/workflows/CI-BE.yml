@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY (ví dụ: main)
+      - dev # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY (ví dụ: main)
     paths:
       - 'backend/**'
   pull_request:
@@ -10,7 +10,7 @@ on:
       - opened
       - synchronize
     branches:
-      - deploy # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY NỮA
+      - dev # <-- ĐỔI NHÁNH BẰNG TAY Ở ĐÂY NỮA
     paths:
       - 'backend/**'
 
@@ -63,9 +63,10 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USERNAME }}/app/
             
-            pid=$(pgrep -f comemyway-0.0.1-SNAPSHOT.jar)
+            # Tìm PID của ứng dụng Java bằng công cụ jps (chỉ quét các tiến trình Java, tránh việc kill nhầm script)
+            pid=$(jps -l | grep 'comemyway-0.0.1-SNAPSHOT.jar' | awk '{print $1}')
             if [ -n "$pid" ]; then
-              echo "Stopping old app..."
+              echo "Stopping old app (PID: $pid)..."
               kill -9 $pid
             fi
             
