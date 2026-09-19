@@ -19,29 +19,15 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAppointmentDetailBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.example.VetPet.databinding.LayoutPopupReasonBinding
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.ui.home_clinic.appointmentdetail_receive.AppointmentDetailReceiveEvent
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleEvent
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleViewModelFactory
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
-import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class AppointmentDetailWaitFragment : Fragment() {
     private var _binding: FragmentAppointmentDetailBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: AppointmentDetailWaitViewModel by viewModels {
-        AppointmentDetailWaitViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            )
-        )
-    }
+    private val viewModel: AppointmentDetailWaitViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

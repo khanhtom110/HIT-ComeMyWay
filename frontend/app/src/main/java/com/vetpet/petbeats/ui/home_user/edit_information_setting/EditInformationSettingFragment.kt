@@ -24,9 +24,7 @@ import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditInformationSettingBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -35,17 +33,11 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class EditInformationSettingFragment : Fragment() {
     private var _binding: FragmentEditInformationSettingBinding?= null
     private val binding get() = _binding!!
-    private val viewModel: EditInformationSettingViewModel by viewModels {
-        EditInformationSettingViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: EditInformationSettingViewModel by viewModels()
 
     //Khởi tạo Photo Picker Launcher
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

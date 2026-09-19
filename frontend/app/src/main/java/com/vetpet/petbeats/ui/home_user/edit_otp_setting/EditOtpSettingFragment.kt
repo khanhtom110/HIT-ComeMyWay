@@ -15,30 +15,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditOtpSettingBinding
-import com.example.VetPet.databinding.FragmentOtpBinding
-import com.vetpet.petbeats.data.remote.api.ApiAuth
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
-import com.vetpet.petbeats.data.repository.AuthRepository
-import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.auth.otp.OtpEvent
-import com.vetpet.petbeats.ui.auth.otp.OtpViewModel
-import com.vetpet.petbeats.ui.auth.otp.OtpViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class EditOtpSettingFragment : Fragment() {
     private var _binding: FragmentEditOtpSettingBinding? = null
     private val binding get() = _binding!!
     private var countDownTimer: CountDownTimer ?= null
-    private val viewModel: EditOtpSettingViewModel by viewModels {
-        EditOtpSettingViewModelFactory(
-            HomeUserRepository(
-                retrofit.create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: EditOtpSettingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

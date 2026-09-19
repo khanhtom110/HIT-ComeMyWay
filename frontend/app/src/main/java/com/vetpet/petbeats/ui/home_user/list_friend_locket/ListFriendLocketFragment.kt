@@ -20,29 +20,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentListFriendLocketBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.AddFriendLocketAdapter
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.MakeFriendLocketAdapter
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.MyFriendLocketAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ListFriendLocketFragment : Fragment() {
     private var _binding: FragmentListFriendLocketBinding ?= null
     private val binding get() = _binding!!
     private lateinit var addFriendLocketAdapter: AddFriendLocketAdapter
     private lateinit var myFriendLocketAdapter: MyFriendLocketAdapter
     private lateinit var makeFriendLocketAdapter: MakeFriendLocketAdapter
-    private val viewModel: ListFriendLocketViewModel by viewModels {
-        ListFriendLocketViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ListFriendLocketViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

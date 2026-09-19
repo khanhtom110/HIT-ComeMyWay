@@ -17,27 +17,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.vetpet.petbeats.core.base.PermissionHelper
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentBookBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookAdapter
 import kotlinx.coroutines.launch
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class BookFragment : Fragment() {
     private var _binding: FragmentBookBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapter: BookAdapter
-    private val viewModel: BookViewModel by viewModels {
-        BookViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: BookViewModel by viewModels()
 
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient

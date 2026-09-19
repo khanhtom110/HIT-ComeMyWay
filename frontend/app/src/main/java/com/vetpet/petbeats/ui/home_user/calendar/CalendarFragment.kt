@@ -17,9 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
@@ -36,19 +33,14 @@ import java.time.LocalDate
 import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.RecyclerView
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
-
+@AndroidEntryPoint
 class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: CalendarViewModel by viewModels {
-        CalendarViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: CalendarViewModel by viewModels()
     private var selectedDate: LocalDate? = null
 
     override fun onCreateView(

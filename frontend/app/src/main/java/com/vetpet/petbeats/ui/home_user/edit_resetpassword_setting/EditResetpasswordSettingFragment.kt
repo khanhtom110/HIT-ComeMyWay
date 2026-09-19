@@ -16,23 +16,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditResetpasswordSettingBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
-import com.vetpet.petbeats.data.repository.HomeUserRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class EditResetpasswordSettingFragment : Fragment() {
     private var _binding: FragmentEditResetpasswordSettingBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: EditResetpasswordSettingViewModel by viewModels {
-        EditResetpasswordSettingViewModelFactory(
-            HomeUserRepository(
-                retrofit.create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: EditResetpasswordSettingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -15,27 +15,20 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentResultSearchBinding
 import com.vetpet.petbeats.ui.home_user.resultsearch.adapter.ResultSearchAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
+@AndroidEntryPoint
 class ResultSearchFragment : Fragment() {
     private var _binding: FragmentResultSearchBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapter: ResultSearchAdapter
-    private val viewModel: ResultSearchViewModel by viewModels {
-        ResultSearchViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ResultSearchViewModel by viewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     @SuppressLint("MissingPermission")

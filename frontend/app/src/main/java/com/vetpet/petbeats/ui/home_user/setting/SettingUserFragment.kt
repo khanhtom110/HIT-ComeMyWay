@@ -10,33 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.example.VetPet.databinding.FragmentSettingUserBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
-import com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentViewModel
-import com.vetpet.petbeats.ui.home_user.successAppointment.SuccessAppointmentViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class SettingUserFragment : Fragment() {
     private var _binding: FragmentSettingUserBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: SettingUserViewModel by viewModels {
-        SettingUserViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            ),
-            TokenManager(requireContext())
-        )
-    }
+    private val viewModel: SettingUserViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

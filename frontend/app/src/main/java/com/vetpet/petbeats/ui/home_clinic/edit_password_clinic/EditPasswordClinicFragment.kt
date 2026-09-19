@@ -16,29 +16,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditPasswordClinicBinding
-import com.example.VetPet.databinding.FragmentEditPasswordSettingBinding
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.data.repository.HomeUserRepository
-import com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingEvent
-import com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingViewModel
-import com.vetpet.petbeats.ui.home_user.edit_password_setting.EditPasswordSettingViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class EditPasswordClinicFragment : Fragment() {
     private var _binding: FragmentEditPasswordClinicBinding?= null
     private val binding get() = _binding!!
-    private val viewModel: EditPasswordClinicViewModel by viewModels {
-        EditPasswordClinicViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            ),
-        )
-    }
+    private val viewModel: EditPasswordClinicViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

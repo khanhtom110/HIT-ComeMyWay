@@ -14,25 +14,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiAuth
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance.retrofit
-import com.vetpet.petbeats.data.repository.AuthRepository
 import com.example.VetPet.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
 import kotlin.toString
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: RegisterViewModel by viewModels {
-        RegisterViewModelFactory(
-            AuthRepository(
-                retrofit.create(ApiAuth::class.java)
-            )
-        )
-    }
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -12,37 +12,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.local.database.AppDatabase
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentHistoryListAllBinding
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.AdapterHistory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class HistoryListAllFragment : Fragment() {
     private var _binding: FragmentHistoryListAllBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterHistory: AdapterHistory
-    private val viewModel: HistoryListAllViewModel by viewModels {
-        HistoryListAllVIewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            ),
-
-            Room.databaseBuilder(
-                requireContext(),
-                AppDatabase::class.java,
-                "app_db"
-            ).build().historyDao(),
-
-            TokenManager(requireContext())
-        )
-    }
+    private val viewModel: HistoryListAllViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

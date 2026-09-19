@@ -16,9 +16,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentInformationRoomBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,18 +23,13 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import androidx.core.net.toUri
 import androidx.core.graphics.toColorInt
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class InformationRoomFragment : Fragment() {
     private var _binding: FragmentInformationRoomBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: InformationRoomViewModel by viewModels {
-        InformationRoomViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: InformationRoomViewModel by viewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
