@@ -6,13 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.image_me_locket.adapter.ImageLocketChild
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ImageEverybodyLocketViewModel(
+@HiltViewModel
+class ImageEverybodyLocketViewModel @Inject constructor(
     private val repository: HomeUserRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(ImageEverybodyLocketState())

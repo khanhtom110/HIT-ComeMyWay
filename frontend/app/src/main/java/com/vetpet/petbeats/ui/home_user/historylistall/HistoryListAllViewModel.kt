@@ -7,13 +7,16 @@ import com.vetpet.petbeats.data.local.entity.HistoryEntity
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.HistoryChild
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HistoryListAllViewModel(
+@HiltViewModel
+class HistoryListAllViewModel @Inject constructor(
     private val repository: HomeUserRepository,
     private val historyDao: HistoryDao,
     private val tokenManager: TokenManager

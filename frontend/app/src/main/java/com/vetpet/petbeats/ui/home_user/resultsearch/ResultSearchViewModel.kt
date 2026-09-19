@@ -7,13 +7,16 @@ import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.SearchRequest
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.resultsearch.adapter.ResultSearchChild
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ResultSearchViewModel(
+@HiltViewModel
+class ResultSearchViewModel @Inject constructor(
     private val repository: HomeUserRepository
 ): ViewModel() {
 
