@@ -36,8 +36,11 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBoo
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.ChatResponse
 import okhttp3.MultipartBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeUserRepository(
+@Singleton
+class HomeUserRepository @Inject constructor(
     private val apiUserHome: ApiUserHome
 ): BaseRepository() {
     suspend fun location(request: LocationRequest): DataResult<List<LocationResponse>> {
