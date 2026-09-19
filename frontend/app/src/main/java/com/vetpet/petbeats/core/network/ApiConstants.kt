@@ -3,7 +3,7 @@ package com.vetpet.petbeats.core.network
 object ApiConstants {
 
     //Servers
-    const val BASE_URL = "http://56.10.63.38/"
+    const val BASE_URL = "http://petcare23593.duckdns.org"
 
 
     //Authentication
