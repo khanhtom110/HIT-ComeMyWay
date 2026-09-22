@@ -13,8 +13,11 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.Profi
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import okhttp3.MultipartBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeClinicRepository(
+@Singleton
+class HomeClinicRepository @Inject constructor(
     private val apiClinicHome: ApiClinicHome
 ): BaseRepository() {
     suspend fun updateProfile(request: ProfileRequest): DataResult<ProfileResponse> {

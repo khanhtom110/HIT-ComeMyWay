@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
 import com.vetpet.petbeats.data.repository.HomeUserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,8 +16,10 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import javax.inject.Inject
 
-class LocketViewModel(
+@HiltViewModel
+class LocketViewModel @Inject constructor(
     private val repository: HomeUserRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(LocketState())

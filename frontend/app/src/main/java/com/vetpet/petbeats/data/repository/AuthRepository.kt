@@ -13,8 +13,11 @@ import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RegisterReque
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.RegisterResponse
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthRepository(
+@Singleton
+class AuthRepository @Inject constructor(
     private val apiAuth: ApiAuth
 ): BaseRepository() {
 

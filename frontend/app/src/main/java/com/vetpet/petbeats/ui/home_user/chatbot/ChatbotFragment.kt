@@ -13,26 +13,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentChatbotBinding
-import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.chatbot.adapter.ChatbotAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ChatbotFragment : Fragment() {
     private var _binding: FragmentChatbotBinding ?= null
     private val binding get() = _binding!!
     private lateinit var chatbotAdapter: ChatbotAdapter
-    private val viewModel: ChatbotViewModel by viewModels {
-        ChatbotViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ChatbotViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

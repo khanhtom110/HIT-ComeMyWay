@@ -20,9 +20,6 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentScheduleListBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.example.VetPet.databinding.LayoutPopupReasonBinding
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
@@ -36,13 +33,7 @@ class ScheduleListFragment : Fragment() {
     private lateinit var adapterWait: AppointmentWaitAdapter
     private lateinit var adapterRefuse: AppointmentRefuseAdapter
     private lateinit var adapterReceive: AppointmentReceiveAdapter
-    private val viewModel: ScheduleListViewModel by viewModels {
-        ScheduleListViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ScheduleListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

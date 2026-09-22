@@ -19,27 +19,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentSuccessAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class SuccessAppointmentFragment : Fragment() {
     private var _binding: FragmentSuccessAppointmentBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: SuccessAppointmentViewModel by viewModels {
-        SuccessAppointmentViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: SuccessAppointmentViewModel by viewModels()
 
     //Khởi tạo launch xin quyền notify
     private val requestPermission = registerForActivityResult(

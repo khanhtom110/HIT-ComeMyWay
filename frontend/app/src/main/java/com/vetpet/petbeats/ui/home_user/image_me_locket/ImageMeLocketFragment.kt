@@ -21,11 +21,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentImageMeLocketBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.image_me_locket.adapter.ImageLocketChild
 import com.vetpet.petbeats.ui.home_user.image_me_locket.adapter.ImageMeLocketAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,19 +31,13 @@ import java.io.OutputStream
 import java.net.URL
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ImageMeLocketFragment : Fragment() {
     private var _binding: FragmentImageMeLocketBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapter: ImageMeLocketAdapter
     private var currentImageLocket: ImageLocketChild? = null
-    private val viewModel: ImageMeLocketViewModel by viewModels {
-        ImageMeLocketViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ImageMeLocketViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

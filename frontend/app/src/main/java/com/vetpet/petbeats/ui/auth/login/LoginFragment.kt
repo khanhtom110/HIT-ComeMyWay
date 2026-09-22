@@ -25,18 +25,14 @@ import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import com.vetpet.petbeats.ui.home_clinic.activitymain.HomeClinicActivity
 import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory(
-            AuthRepository(
-                RetrofitInstance.retrofit.create(ApiAuth::class.java)
-            )
-        )
-    }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

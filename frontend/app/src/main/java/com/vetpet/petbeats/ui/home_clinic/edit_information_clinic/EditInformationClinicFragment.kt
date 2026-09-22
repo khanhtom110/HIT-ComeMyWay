@@ -24,10 +24,8 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentEditInformationClinicBinding
 import com.example.VetPet.databinding.ItemCustomServiceBinding
 import com.google.android.material.chip.Chip
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.home_user.calendar.adapter.TimePagerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -37,16 +35,11 @@ import java.io.FileOutputStream
 import kotlin.getValue
 
 
+@AndroidEntryPoint
 class EditInformationClinicFragment : Fragment() {
     private var _binding: FragmentEditInformationClinicBinding?= null
     private val binding get() = _binding!!
-    private val viewModel: EditInformationClinicViewModel by viewModels {
-        EditInformationClinicViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            )
-        )
-    }
+    private val viewModel: EditInformationClinicViewModel by viewModels()
 
     //Khởi tạo Photo Picker Launcher
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

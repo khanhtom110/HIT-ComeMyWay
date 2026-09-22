@@ -28,21 +28,16 @@ import androidx.core.graphics.drawable.toDrawable
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AppointmentScheduleFragment : Fragment() {
     private var _binding: FragmentAppointmentScheduleBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterWait: AppointmentWaitAdapter
     private lateinit var adapterRefuse: AppointmentRefuseAdapter
     private lateinit var adapterReceive: AppointmentReceiveAdapter
-    private val viewModel: AppointmentScheduleViewModel by viewModels {
-        AppointmentScheduleViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            )
-        )
-    }
+    private val viewModel: AppointmentScheduleViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -13,23 +13,16 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAppointmentDetailRefuseBinding
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
 
+@AndroidEntryPoint
 class AppointmentDetailRefuseFragment : Fragment() {
     private var _binding: FragmentAppointmentDetailRefuseBinding?= null
     private val binding get() = _binding!!
-    private val viewModel: AppointmentDetailRefuseViewModel by viewModels {
-        AppointmentDetailRefuseViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            )
-        )
-    }
+    private val viewModel: AppointmentDetailRefuseViewModel by viewModels()
 
 
     override fun onCreateView(

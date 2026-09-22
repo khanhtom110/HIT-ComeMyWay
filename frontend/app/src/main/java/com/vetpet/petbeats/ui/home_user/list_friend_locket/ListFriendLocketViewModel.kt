@@ -8,13 +8,16 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFrien
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LinkFriendRequest
 import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.FriendChild
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListFriendLocketViewModel(
+@HiltViewModel
+class ListFriendLocketViewModel @Inject constructor(
     private val repository: HomeUserRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(ListFriendLocketState())

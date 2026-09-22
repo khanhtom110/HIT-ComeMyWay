@@ -17,32 +17,17 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentClinicBinding
-import com.example.VetPet.databinding.FragmentScheduleListBinding
 import com.google.android.material.chip.Chip
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
-import com.vetpet.petbeats.ui.home_clinic.informationclinic.InformationClinicState
-import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModel
-import com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListViewModelFactory
-import com.vetpet.petbeats.ui.home_user.chatbot.ChatbotEvent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ClinicFragment : Fragment() {
     private var _binding: FragmentClinicBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: ClinicViewModel by viewModels {
-        ClinicViewModelFactory(
-            HomeClinicRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiClinicHome::class.java)
-            ),
-            TokenManager(requireContext())
-        )
-    }
+    private val viewModel: ClinicViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

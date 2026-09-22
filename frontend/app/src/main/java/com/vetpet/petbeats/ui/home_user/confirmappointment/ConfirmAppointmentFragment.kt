@@ -13,25 +13,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.VetPet.R
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ConfirmAppointmentFragment : Fragment() {
     private var _binding: FragmentConfirmAppointmentBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: ConfirmAppointmentViewModel by viewModels {
-        ConfirmAppointmentViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: ConfirmAppointmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

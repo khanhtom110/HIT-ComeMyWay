@@ -9,13 +9,16 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.Appointm
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.AppointmentScheduleEvent
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AppointmentDetailWaitViewModel(
+@HiltViewModel
+class AppointmentDetailWaitViewModel @Inject constructor(
     private val repositoryClinic: HomeClinicRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(AppointmentDetailWaitState())

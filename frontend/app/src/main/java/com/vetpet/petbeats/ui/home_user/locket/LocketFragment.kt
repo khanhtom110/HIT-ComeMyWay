@@ -25,9 +25,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentLocketBinding
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -38,21 +35,16 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.widget.addTextChangedListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import java.io.File
 import java.io.OutputStream
 
-
+@AndroidEntryPoint
 class LocketFragment : Fragment() {
     private var _binding: FragmentLocketBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: LocketViewModel by viewModels {
-        LocketViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            )
-        )
-    }
+    private val viewModel: LocketViewModel by viewModels()
 
 
     private var currentFlashMode = ImageCapture.FLASH_MODE_OFF

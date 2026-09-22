@@ -14,40 +14,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.local.database.AppDatabase
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.example.VetPet.databinding.FragmentSearchBinding
 import com.vetpet.petbeats.ui.home_user.search.adapterhint.AdapterHint
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.AdapterHistory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding ?= null
     private val binding get() = _binding!!
     private lateinit var adapterHistory: AdapterHistory
     private lateinit var adapterHint: AdapterHint
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(
-            HomeUserRepository(
-                RetrofitInstance.getAuthRetrofit(requireContext()).create(ApiUserHome::class.java)
-            ),
-
-            Room.databaseBuilder(
-                requireContext(),
-                AppDatabase::class.java,
-                "app_db"
-            ).build().historyDao(),
-
-            TokenManager(requireContext())
-        )
-    }
+    private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 

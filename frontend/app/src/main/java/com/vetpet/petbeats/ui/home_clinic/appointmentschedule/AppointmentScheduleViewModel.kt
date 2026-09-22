@@ -1,24 +1,22 @@
 package com.vetpet.petbeats.ui.home_clinic.appointmentschedule
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
 import com.vetpet.petbeats.data.repository.HomeClinicRepository
-import com.vetpet.petbeats.data.repository.HomeUserRepository
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentChild
-import com.vetpet.petbeats.ui.home_user.book.adapter.BookChild
-import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.Int
 
-class AppointmentScheduleViewModel(
+@HiltViewModel
+class AppointmentScheduleViewModel @Inject constructor(
     private val repositoryClinic: HomeClinicRepository,
 ): ViewModel() {
     private val _state = MutableStateFlow(AppointmentScheduleState())

@@ -7,13 +7,16 @@ import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.repository.ErrorTarget
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OtpViewModel(
+@HiltViewModel
+class OtpViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(OtpState())
