@@ -10,6 +10,8 @@ Môi trường Docker dev đã có MySQL, Redis và tài khoản phòng khám m�
 
 Environment đã điền tài khoản dev, `springBaseUrl=http://localhost:8080` và `nodeBaseUrl=http://localhost:3002`. Body đăng nhập hiển thị trực tiếp `{{username}}` và `{{password}}`; chọn environment trên trước khi bấm Send. Các bước đăng nhập, refresh và lấy hồ sơ tự cập nhật token/clinic ID; sau đó Node.js dùng token Spring Boot để đăng tin. File environment có mật khẩu dev nên được Git ignore.
 
+Environment **ComeMyWay - Local (MySQL)** có `nodeBaseUrl` mặc định là `http://127.0.0.1:3001`. Trên máy này, cổng `3001` đang chạy API giả cũ, nên token Spring Boot sẽ bị từ chối ở đó. Để test stack Docker dev, chọn environment **Docker Dev (Spring + Node)**; nếu đang dùng **Local (MySQL)** thì sửa `nodeBaseUrl` thành `http://localhost:3002` và chạy lại bước đăng nhập trong chính environment đó.
+
 Để khởi động lại stack dev trên máy này, chạy lệnh sau trong PowerShell (chỉ sao chép dòng lệnh bên trong khung):
 
 ```powershell
@@ -49,7 +51,7 @@ Sau khi khởi động lại, lấy `accessToken` mới từ `session.json` cùn
 | 02 - Node Clinic Posts | Liveness/readiness → feed công khai → đăng tin → danh sách của phòng khám → xác nhận tin xuất hiện công khai |
 | 03 - Node Validation | Tiêu đề trống/quá dài, thiếu/quá dài nội dung, thiếu/sai token, JSON lỗi, body quá 64 KB |
 
-Request đăng nhập và refresh tự lưu `accessToken`, `refreshToken`; lấy hồ sơ lưu `clinicId`. Request đăng tin lưu `createdPostId` cho các bước sau. Response được kiểm tra HTTP status, envelope và dữ liệu. Request tạo tin cố ý gửi `clinicId=-1` để xác nhận server lấy tác giả từ token.
+Request đăng nhập và refresh tự lưu `accessToken`, `refreshToken`; lấy hồ sơ lưu `clinicId`. Request đăng tin lưu `createdPostId` cho các bước sau. Response được kiểm tra HTTP status, envelope và dữ liệu. Body tạo tin chỉ gửi `title` và `content`; server lấy phòng khám từ token.
 
 Nếu muốn gửi thủ công, sao chép body từ [`clinic-post.example.json`](clinic-post.example.json) vào **Body → raw → JSON** của request `POST http://localhost:3002/api/v1/clinic/posts` (Docker dev). Chọn **Authorization → Bearer Token** và dùng `accessToken` lấy từ bước đăng nhập Spring Boot. JSON chỉ có `title` và `content`; server tự gắn phòng khám và thời gian đăng.
 

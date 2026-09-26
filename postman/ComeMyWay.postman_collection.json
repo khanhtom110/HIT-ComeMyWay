@@ -322,10 +322,10 @@
               }
             ],
             "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
-            "description": "Mỗi lần chạy tạo một bài thật trong môi trường được chọn. clinicId=-1 kiểm tra server luôn lấy tác giả từ token.",
+            "description": "Mỗi lần chạy tạo một bài trong môi trường được chọn. Đăng nhập Spring Boot trước để lưu accessToken.",
             "body": {
               "mode": "raw",
-              "raw": "{{postBody}}",
+              "raw": "{\n  \"title\": \"{{postTitle}}\",\n  \"content\": \"{{postContent}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -339,12 +339,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.environment.unset(\"createdPostId\");",
-                  "pm.variables.set(\"postBody\", JSON.stringify({",
-                  "  title: pm.variables.get(\"postTitle\"),",
-                  "  content: pm.variables.get(\"postContent\"),",
-                  "  clinicId: -1",
-                  "}));"
+                  "pm.environment.unset(\"createdPostId\");"
                 ]
               }
             },
@@ -367,11 +362,10 @@
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(Number.isNaN(Date.parse(post.createdAt))).to.eql(false);",
                   "});",
-                  "pm.test(\"Author comes from the token, ignores supplied clinicId\", () => {",
+                  "pm.test(\"Post belongs to the signed-in clinic\", () => {",
                   "  const clinicId = pm.environment.get(\"clinicId\");",
                   "  pm.expect(clinicId, \"Run Spring Clinic profile or use the dev environment\").to.be.ok;",
                   "  pm.expect(String(pm.response.json().data.clinicId)).to.eql(String(clinicId));",
-                  "  pm.expect(Number(pm.response.json().data.clinicId)).not.to.eql(-1);",
                   "});",
                   "if (pm.response.code === 201) pm.environment.set(\"createdPostId\", pm.response.json().data.id);"
                 ]
