@@ -53,12 +53,13 @@ object RetrofitInstance {
     @Singleton
     @Named("AuthRetrofit")
     fun provideAuthRetrofit(
+        @ApplicationContext context: Context,
         tokenManager: TokenManager,
         apiAuth: ApiAuth
     ): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(tokenManager))
-            .authenticator(TokenAuthenticator(tokenManager, apiAuth))
+            .authenticator(TokenAuthenticator(context, tokenManager, apiAuth))
             .build()
 
         return Retrofit.Builder()
