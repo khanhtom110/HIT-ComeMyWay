@@ -13,6 +13,7 @@ backend-nodejs/
 ├── src/
 │   ├── configs/                    # env.config.js, db.config.js
 │   ├── constants/                  # Giới hạn dữ liệu bài đăng
+│   ├── docs/                       # Tài liệu OpenAPI cho Swagger UI
 │   ├── models/                     # Truy vấn MySQL cho clinic và clinic-post
 │   ├── validations/                # Schema Joi cho input
 │   ├── middlewares/                # Xác thực, validation, 404, lỗi chung
@@ -28,7 +29,7 @@ backend-nodejs/
 └── package-lock.json
 ```
 
-Mỗi tính năng có các file tương ứng trong `routers`, `validations`, `controllers`, `services`, `models`. Joi kiểm tra và chuẩn hóa input qua middleware; controller dùng `request.validated` và danh tính phòng khám đã xác thực. Service gọi model bằng dependency được truyền vào để kiểm thử mà không cần database thật. Khi thêm API, đăng ký router tại `src/routers/index.js` và ghép các dependency tại `src/app.js`/`src/server.js`.
+Mỗi tính năng có các file tương ứng trong `routers`, `validations`, `controllers`, `services`, `models`. Joi kiểm tra và chuẩn hóa input qua middleware; controller dùng `request.validated` và danh tính phòng khám đã xác thực. Khi thêm API, đăng ký router tại `src/routers/index.js`, ghép các dependency tại `src/app.js`/`src/server.js` và cập nhật tài liệu OpenAPI tại `src/docs/openapi.js`.
 
 ## Cài đặt
 
@@ -38,7 +39,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 2. Tạo `.env` với `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
 3. Chạy `database/migrations/001_create_clinic_posts.sql` trên database đó.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3001`; có thể đổi `HOST`/`PORT` trong `.env`.
-5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình bằng model giả. Các test không kết nối database thật.
+5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
 `CORS_ORIGINS` là danh sách origin trình duyệt, phân cách bằng dấu phẩy, ví dụ `http://localhost:3000,https://app.example.com`. Request Android không gửi `Origin` vẫn được chấp nhận. JSON body giới hạn 64 KB; response dùng `{ statusCode, message, data, timestamp }` để tương thích Android.
 
@@ -49,6 +50,8 @@ Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Sp
 Import collection và environment trong [postman/](../postman/README.md) để chạy luồng đăng nhập Spring Boot → đăng tin Node.js và kiểm tra validation.
 
 ## API
+
+Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `http://localhost:3001/api-docs/` khi chạy Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize** và dán access token nhận từ API đăng nhập Spring Boot để thử các endpoint dành cho phòng khám. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
 - `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"..."}`. Trả 201 và bài đăng. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự.
 - `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.

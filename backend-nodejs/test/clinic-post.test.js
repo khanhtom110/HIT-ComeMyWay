@@ -162,6 +162,25 @@ test('CORS allows configured browser origins and rejects other origins', async (
   assert.equal((await denied.json()).statusCode, 403);
 });
 
+test('Swagger UI serves the clinic post contract and accepts same-origin requests', async () => {
+  const ui = await fetch(`${baseUrl}/api-docs/`);
+  assert.equal(ui.status, 200);
+  assert.match(await ui.text(), /Swagger UI/);
+
+  const specResponse = await fetch(`${baseUrl}/api-docs/openapi.json`);
+  assert.equal(specResponse.status, 200);
+  const spec = await specResponse.json();
+  assert.equal(spec.openapi, '3.0.3');
+  assert.deepEqual(spec.paths['/api/v1/clinic/posts'].post.security, [{ clinicBearer: [] }]);
+  assert.deepEqual(spec.components.schemas.CreateClinicPost.required, ['title', 'content']);
+
+  const sameOrigin = await fetch(`${baseUrl}/api/v1/public/clinic-posts`, {
+    headers: { Origin: baseUrl },
+  });
+  assert.equal(sameOrigin.status, 200);
+  assert.equal(sameOrigin.headers.get('access-control-allow-origin'), baseUrl);
+});
+
 test('async model errors use the common response without leaking details', async t => {
   t.mock.method(console, 'error', () => {});
   failPublicQuery = true;
