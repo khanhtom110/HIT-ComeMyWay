@@ -23,7 +23,6 @@ backend-nodejs/
 │   ├── app.js                      # Tạo Express app và ghép các tầng
 │   └── server.js                   # Nạp .env, kết nối MySQL, listen, đóng kết nối
 ├── test/                           # Kiểm thử HTTP và cấu hình với Node test runner
-├── .env.example
 ├── .gitignore
 ├── package.json
 └── package-lock.json
@@ -36,7 +35,7 @@ Mỗi tính năng có các file tương ứng trong `routers`, `validations`, `c
 Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
-2. Nếu chưa có `.env`, sao chép `.env.example` thành `.env`. Điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
+2. Tạo `.env` với `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
 3. Chạy `database/migrations/001_create_clinic_posts.sql` trên database đó.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3001`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình bằng model giả. Các test không kết nối database thật.
@@ -47,7 +46,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng host riêng: Spring Boot `8080`, Node.js `3002`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`).
 
-Import collection và environment trong [postman/](../postman/README.md) để chạy luồng đăng nhập Spring Boot → đăng tin Node.js và kiểm tra validation. Có environment local riêng cho phiên dữ liệu giả dev đang chạy trên máy.
+Import collection và environment trong [postman/](../postman/README.md) để chạy luồng đăng nhập Spring Boot → đăng tin Node.js và kiểm tra validation.
 
 ## API
 

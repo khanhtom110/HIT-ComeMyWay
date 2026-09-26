@@ -82,7 +82,3 @@ docker compose -f compose.backends.yaml down
 ```
 
 Lệnh trên dừng/xóa container và network của stack. Database ở ngoài stack.
-
-## Dữ liệu giả dev hiện tại
-
-Phiên API giả cũ đang chạy riêng ở `http://127.0.0.1:3001`, với script/data trong thư mục tạm ngoài repository. Nếu cần kiểm tra riêng phiên này, dùng `postman/Dev-Fake.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Image Docker chạy source bình thường và cần MySQL khi khởi động; không có chế độ fake DB được thêm vào source.

@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
     "name": "ComeMyWay - Spring Boot + Node.js",
-    "description": "Test luồng phòng khám: đăng nhập Spring Boot → dùng JWT đăng tin Node.js → kiểm tra quyền và validation. Xem postman/README.md. Chọn environment trước khi chạy. Với Dev Fake chỉ chạy các folder Node; với Local chạy cả collection. Mỗi lượt chạy tạo một bài đăng.",
+    "description": "Test đăng nhập Spring Boot, dùng JWT đăng tin Node.js và kiểm tra validation. Chọn ComeMyWay - Local (MySQL), rồi chạy collection theo thứ tự. Mỗi lượt chạy tạo một bài đăng.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -251,7 +251,7 @@
             "method": "GET",
             "header": [],
             "url": "{{nodeBaseUrl}}/health/ready",
-            "description": "Bản thật kiểm tra MySQL. Phiên dev tạm kiểm tra kho dữ liệu giả.",
+            "description": "Kiểm tra kết nối MySQL của Node.js.",
             "auth": {
               "type": "noauth"
             }
