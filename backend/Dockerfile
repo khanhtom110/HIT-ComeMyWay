@@ -1,17 +1,15 @@
-# Bước 1: Dùng ảnh chứa Maven và Java 21 để build code
+# syntax=docker/dockerfile:1
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY pom.xml .
+COPY pom.xml eclipse-java-google-style.xml ./
 COPY src ./src
-# Build ra file .jar và bỏ qua test
-RUN mvn clean package -DskipTests -Dformatter.skip=true
+RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp package -DskipTests -Dformatter.skip=true
 
-# Bước 2: Dùng ảnh chỉ chứa Java JRE 21 cho nhẹ server
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jre AS runtime
+ENV SERVER_PORT=8080
 WORKDIR /app
-# Copy file .jar từ bước 1 sang
-COPY --from=build /app/target/comemyway-0.0.1-SNAPSHOT.jar app.jar
-# Mở cổng 8080
+RUN groupadd --system app && useradd --system --gid app --home-dir /app app
+COPY --from=build --chown=app:app /app/target/comemyway-0.0.1-SNAPSHOT.jar app.jar
+USER app
 EXPOSE 8080
-# Lệnh chạy ứng dụng
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -43,19 +43,11 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 `CORS_ORIGINS` là danh sách origin trình duyệt, phân cách bằng dấu phẩy, ví dụ `http://localhost:3000,https://app.example.com`. Request Android không gửi `Origin` vẫn được chấp nhận. JSON body giới hạn 64 KB; response dùng `{ statusCode, message, data, timestamp }` để tương thích Android.
 
-Khi triển khai, định tuyến `/api/v1/clinic/posts` và `/api/v1/public/clinic-posts` trên host API của Android sang dịch vụ Node.js. Các endpoint Spring Boot tiếp tục dùng cấu hình hiện tại.
+## Docker và Postman
 
-Ví dụ Nginx:
+Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng riêng: Spring Boot `8080`, Node.js `3001`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`).
 
-```nginx
-location = /api/v1/clinic/posts {
-    proxy_pass http://127.0.0.1:3001;
-    proxy_set_header Authorization $http_authorization;
-}
-location = /api/v1/public/clinic-posts {
-    proxy_pass http://127.0.0.1:3001;
-}
-```
+Import collection và environment trong [postman/](../postman/README.md) để chạy luồng đăng nhập Spring Boot → đăng tin Node.js và kiểm tra validation. Có environment local riêng cho phiên dữ liệu giả dev đang chạy trên máy.
 
 ## API
 

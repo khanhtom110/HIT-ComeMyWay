@@ -1,0 +1,888 @@
+{
+  "info": {
+    "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
+    "name": "ComeMyWay - Spring Boot + Node.js",
+    "description": "Test luồng phòng khám: đăng nhập Spring Boot → dùng JWT đăng tin Node.js → kiểm tra quyền và validation. Xem postman/README.md. Chọn environment trước khi chạy. Với Dev Fake chỉ chạy các folder Node; với Local chạy cả collection. Mỗi lượt chạy tạo một bài đăng.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "postTitle",
+      "value": "Thông báo lịch khám",
+      "type": "string"
+    },
+    {
+      "key": "postContent",
+      "value": "Phòng khám nhận lịch khám cho thú cưng. Vui lòng liên hệ để đặt lịch.",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Spring Boot",
+      "item": [
+        {
+          "name": "01 Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{springBaseUrl}}/api/v1/public/health",
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Spring Boot is awake\", () => pm.expect(pm.response.json().data).to.eql(\"Server is awake\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Login clinic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{springBaseUrl}}/api/v1/auth/login",
+            "description": "Nhập username/password của tài khoản phòng khám ACTIVE trong environment. Tự lưu accessToken và refreshToken.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{{loginBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset(\"accessToken\");",
+                  "pm.environment.unset(\"refreshToken\");",
+                  "pm.environment.unset(\"clinicId\");",
+                  "pm.environment.unset(\"createdPostId\");",
+                  "pm.variables.set(\"loginBody\", JSON.stringify({",
+                  "  username: pm.environment.get(\"username\") || \"\",",
+                  "  password: pm.environment.get(\"password\") || \"\"",
+                  "}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Active clinic account and token pair\", () => {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.expect(data.role).to.eql(\"CLINIC\");",
+                  "  pm.expect(data.accountStatus).to.eql(\"ACTIVE\");",
+                  "  pm.expect(data.accessToken).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(data.refreshToken).to.be.a(\"string\").and.not.empty;",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json().data;",
+                  "  if (data.role === \"CLINIC\" && data.accountStatus === \"ACTIVE\") {",
+                  "    pm.environment.set(\"accessToken\", data.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", data.refreshToken);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Refresh token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{springBaseUrl}}/api/v1/auth/refresh",
+            "description": "Dùng refreshToken từ request đăng nhập; tự thay accessToken/refreshToken bằng cặp mới.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{{refreshBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set(\"refreshBody\", JSON.stringify({refreshToken: pm.environment.get(\"refreshToken\") || \"\"}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Active clinic account and token pair\", () => {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.expect(data.role).to.eql(\"CLINIC\");",
+                  "  pm.expect(data.accountStatus).to.eql(\"ACTIVE\");",
+                  "  pm.expect(data.accessToken).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(data.refreshToken).to.be.a(\"string\").and.not.empty;",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "  const data = pm.response.json().data;",
+                  "  if (data.role === \"CLINIC\" && data.accountStatus === \"ACTIVE\") {",
+                  "    pm.environment.set(\"accessToken\", data.accessToken);",
+                  "    pm.environment.set(\"refreshToken\", data.refreshToken);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Clinic profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{springBaseUrl}}/api/v1/clinic/profile",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Clinic profile contains an ID\", () => pm.expect(Number(pm.response.json().data.id)).to.be.above(0));",
+                  "if (pm.response.code === 200) pm.environment.set(\"clinicId\", pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Node Clinic Posts",
+      "item": [
+        {
+          "name": "01 Liveness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/health/live",
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Node process is alive\", () => pm.expect(pm.response.json().data.status).to.eql(\"ok\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Readiness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/health/ready",
+            "description": "Bản thật kiểm tra MySQL. Phiên dev tạm kiểm tra kho dữ liệu giả.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Storage is ready\", () => pm.expect(pm.response.json().data.status).to.eql(\"ready\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Public feed",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"At most 50 posts, newest first\", () => {",
+                  "  const posts = pm.response.json().data;",
+                  "  pm.expect(posts).to.be.an(\"array\");",
+                  "  pm.expect(posts.length).to.be.at.most(50);",
+                  "  posts.forEach((post, index) => {",
+                  "    pm.expect(post).to.include.all.keys(\"id\", \"clinicId\", \"clinicName\", \"title\", \"content\", \"createdAt\");",
+                  "    if (index > 0) pm.expect(Number(posts[index - 1].id)).to.be.at.least(Number(post.id));",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Create post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "Mỗi lần chạy tạo một bài thật trong môi trường được chọn. clinicId=-1 kiểm tra server luôn lấy tác giả từ token.",
+            "body": {
+              "mode": "raw",
+              "raw": "{{postBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset(\"createdPostId\");",
+                  "pm.variables.set(\"postBody\", JSON.stringify({",
+                  "  title: pm.variables.get(\"postTitle\"),",
+                  "  content: pm.variables.get(\"postContent\"),",
+                  "  clinicId: -1",
+                  "}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(201);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Post fields match submitted data\", () => {",
+                  "  const post = pm.response.json().data;",
+                  "  pm.expect(Number(post.id)).to.be.above(0);",
+                  "  pm.expect(post.title).to.eql(pm.variables.get(\"postTitle\").trim());",
+                  "  pm.expect(post.content).to.eql(pm.variables.get(\"postContent\").trim());",
+                  "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(Number.isNaN(Date.parse(post.createdAt))).to.eql(false);",
+                  "});",
+                  "pm.test(\"Author comes from the token, ignores supplied clinicId\", () => {",
+                  "  const clinicId = pm.environment.get(\"clinicId\");",
+                  "  pm.expect(clinicId, \"Run Spring Clinic profile or use the dev environment\").to.be.ok;",
+                  "  pm.expect(String(pm.response.json().data.clinicId)).to.eql(String(clinicId));",
+                  "  pm.expect(Number(pm.response.json().data.clinicId)).not.to.eql(-1);",
+                  "});",
+                  "if (pm.response.code === 201) pm.environment.set(\"createdPostId\", pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 My clinic posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"At most 50 posts, newest first\", () => {",
+                  "  const posts = pm.response.json().data;",
+                  "  pm.expect(posts).to.be.an(\"array\");",
+                  "  pm.expect(posts.length).to.be.at.most(50);",
+                  "  posts.forEach((post, index) => {",
+                  "    pm.expect(post).to.include.all.keys(\"id\", \"clinicId\", \"clinicName\", \"title\", \"content\", \"createdAt\");",
+                  "    if (index > 0) pm.expect(Number(posts[index - 1].id)).to.be.at.least(Number(post.id));",
+                  "  });",
+                  "});",
+                  "pm.test(\"Contains the post just created\", () => {",
+                  "  const id = pm.environment.get(\"createdPostId\");",
+                  "  pm.expect(id, \"Run Create post first\").to.be.ok;",
+                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(true);",
+                  "});",
+                  "pm.test(\"Only the signed-in clinic's posts\", () => {",
+                  "  const clinicId = pm.environment.get(\"clinicId\");",
+                  "  pm.response.json().data.forEach(post => pm.expect(String(post.clinicId)).to.eql(String(clinicId)));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Public feed includes new post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"At most 50 posts, newest first\", () => {",
+                  "  const posts = pm.response.json().data;",
+                  "  pm.expect(posts).to.be.an(\"array\");",
+                  "  pm.expect(posts.length).to.be.at.most(50);",
+                  "  posts.forEach((post, index) => {",
+                  "    pm.expect(post).to.include.all.keys(\"id\", \"clinicId\", \"clinicName\", \"title\", \"content\", \"createdAt\");",
+                  "    if (index > 0) pm.expect(Number(posts[index - 1].id)).to.be.at.least(Number(post.id));",
+                  "  });",
+                  "});",
+                  "pm.test(\"Contains the post just created\", () => {",
+                  "  const id = pm.environment.get(\"createdPostId\");",
+                  "  pm.expect(id, \"Run Create post first\").to.be.ok;",
+                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Node Validation",
+      "item": [
+        {
+          "name": "01 Blank title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"   \",\n  \"content\": \"Nội dung kiểm thử\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(400);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Missing content",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Thông báo phòng khám\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(400);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Title longer than 200 characters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{{invalidBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"x\".repeat(201), content: \"Test\"}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(400);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Content longer than 10000 characters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{{invalidBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(10001)}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(400);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Missing bearer token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test\",\n  \"content\": \"Must reject without a token\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(401);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Invalid bearer token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "invalid-token",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test\",\n  \"content\": \"Must reject an invalid token\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(401);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Malformed JSON",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(400);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Body over 64 KB",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{{invalidBody}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(70000)}));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 413\", () => pm.response.to.have.status(413));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(413);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Error message without internal details\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.eql(null);",
+                  "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

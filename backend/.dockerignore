@@ -1,0 +1,9 @@
+**
+!Dockerfile
+!pom.xml
+!eclipse-java-google-style.xml
+!src/
+!src/**
+**/.env*
+**/firebase-service-account*.json
+**/*.log

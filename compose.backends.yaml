@@ -1,0 +1,33 @@
+services:
+  springboot:
+    image: comemyway-springboot:dev
+    build:
+      context: ./backend
+    ports:
+      - "${SPRING_HTTP_PORT:-8080}:8080"
+    env_file:
+      - path: ./backend/.env
+        format: raw
+    environment:
+      SERVER_PORT: "8080"
+      DB_URL: "${DOCKER_DB_URL:-jdbc:mysql://host.docker.internal:3306/pet_heartbeat_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  nodejs:
+    image: comemyway-nodejs:dev
+    build:
+      context: ./backend-nodejs
+    ports:
+      - "${NODE_HTTP_PORT:-3001}:3001"
+    env_file:
+      - path: ./backend-nodejs/.env
+        format: raw
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3001"
+      DB_HOST: "${DOCKER_DB_HOST:-host.docker.internal}"
+      DB_PORT: "${DOCKER_DB_PORT:-3306}"
+      DB_NAME: "${DOCKER_DB_NAME:-pet_heartbeat_db}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

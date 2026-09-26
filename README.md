@@ -40,6 +40,9 @@
 
 Chức năng đăng tin phòng khám chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi và cấu trúc theo tầng của base HITProduct, kết nối MySQL/JWT chung với Spring Boot. Xem tài liệu trong thư mục này để cấu hình và chạy dịch vụ Node.js.
 
+- [Build và chạy hai backend bằng Docker](DOCKER.md) — publish cổng riêng, gọi trực tiếp bằng IP.
+- [Collection và environment Postman](postman/README.md) — test đăng nhập, đăng tin và validation; có hướng dẫn dùng dữ liệu giả dev.
+
 ### Frontend
 
 | Thành phần | Công nghệ |
