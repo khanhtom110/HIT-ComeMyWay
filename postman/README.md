@@ -51,6 +51,8 @@ Sau khi khởi động lại, lấy `accessToken` mới từ `session.json` cùn
 
 Request đăng nhập và refresh tự lưu `accessToken`, `refreshToken`; lấy hồ sơ lưu `clinicId`. Request đăng tin lưu `createdPostId` cho các bước sau. Response được kiểm tra HTTP status, envelope và dữ liệu. Request tạo tin cố ý gửi `clinicId=-1` để xác nhận server lấy tác giả từ token.
 
+Nếu muốn gửi thủ công, sao chép body từ [`clinic-post.example.json`](clinic-post.example.json) vào **Body → raw → JSON** của request `POST http://localhost:3002/api/v1/clinic/posts` (Docker dev). Chọn **Authorization → Bearer Token** và dùng `accessToken` lấy từ bước đăng nhập Spring Boot. JSON chỉ có `title` và `content`; server tự gắn phòng khám và thời gian đăng.
+
 `postTitle` và `postContent` là biến collection, có thể sửa để thử dữ liệu khác. Mỗi lượt Runner tạo một bài đăng; API hiện chưa có endpoint xóa. Tài khoản USER không dùng được cho luồng đăng tin phòng khám.
 
 ### Test server bằng IP
