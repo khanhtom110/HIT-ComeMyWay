@@ -19,3 +19,9 @@ export const createClinicPostValidation = {
       }),
   }).required(),
 };
+
+export const deleteClinicPostValidation = {
+  params: Joi.object({
+    id: Joi.number().integer().positive().max(Number.MAX_SAFE_INTEGER).required(),
+  }).required(),
+};

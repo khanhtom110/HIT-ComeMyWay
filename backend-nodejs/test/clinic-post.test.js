@@ -2,12 +2,16 @@ import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
 import { after, before, test } from 'node:test';
 import { createApp } from '../src/app.js';
+import { createClinicPostModel } from '../src/models/clinic-post.model.js';
 
 const secret = 'test-secret-at-least-32-characters-long';
 const posts = [];
 const clinicModel = {
   async findActiveByUsername(username, jti) {
-    return username === 'clinic' && jti !== 'revoked' ? { id: 7 } : null;
+    if (jti === 'revoked') return null;
+    if (username === 'clinic') return { id: 7 };
+    if (username === 'other-clinic') return { id: 8 };
+    return null;
   },
 };
 let failPublicQuery = false;
@@ -21,6 +25,12 @@ const clinicPostModel = {
   async listPublic() {
     if (failPublicQuery) throw new Error('Sensitive database error');
     return posts;
+  },
+  async deleteByClinic(id, clinicId) {
+    const index = posts.findIndex(post => post.id === id && post.clinicId === clinicId);
+    if (index === -1) return false;
+    posts.splice(index, 1);
+    return true;
   },
 };
 
@@ -87,6 +97,59 @@ test('rejects empty fields and unauthorized tokens', async () => {
     body: JSON.stringify({ title: '  ', content: 'text' }),
   });
   assert.equal(response.status, 400);
+});
+
+test('only the author clinic can delete a post', async () => {
+  const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: 'Tin cần xóa', content: 'Nội dung' }),
+  });
+  assert.equal(created.status, 201);
+  const id = (await created.json()).data.id;
+  const url = `${baseUrl}/api/v1/clinic/posts/${id}`;
+
+  const unauthorized = await fetch(url, { method: 'DELETE' });
+  assert.equal(unauthorized.status, 401);
+  const otherClinic = await fetch(url, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${token({ sub: 'other-clinic' })}` },
+  });
+  assert.equal(otherClinic.status, 404);
+  assert.equal(posts.some(post => post.id === id), true);
+
+  const invalidId = await fetch(`${baseUrl}/api/v1/clinic/posts/abc`, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${token()}` },
+  });
+  assert.equal(invalidId.status, 400);
+  const missing = await fetch(`${baseUrl}/api/v1/clinic/posts/999999`, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${token()}` },
+  });
+  assert.equal(missing.status, 404);
+
+  const deleted = await fetch(url, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${token()}` },
+  });
+  assert.equal(deleted.status, 200);
+  assert.deepEqual((await deleted.json()).data, { id });
+  const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
+  assert.equal((await feed.json()).data.some(post => post.id === id), false);
+  const repeat = await fetch(url, {
+    method: 'DELETE', headers: { Authorization: `Bearer ${token()}` },
+  });
+  assert.equal(repeat.status, 404);
+});
+
+test('delete query includes both post and clinic IDs', async () => {
+  const calls = [];
+  const model = createClinicPostModel({
+    async execute(sql, params) {
+      calls.push({ sql, params });
+      return [{ affectedRows: 1 }];
+    },
+  });
+  assert.equal(await model.deleteByClinic(12, 7), true);
+  assert.deepEqual(calls[0].params, [12, 7]);
+  assert.match(calls[0].sql, /DELETE FROM clinic_posts WHERE id = \? AND clinic_id = \?/);
 });
 
 test('routes preserve health, authentication and JSON error responses', async () => {
@@ -172,6 +235,7 @@ test('Swagger UI serves the clinic post contract and accepts same-origin request
   const spec = await specResponse.json();
   assert.equal(spec.openapi, '3.0.3');
   assert.deepEqual(spec.paths['/api/v1/clinic/posts'].post.security, [{ clinicBearer: [] }]);
+  assert.deepEqual(spec.paths['/api/v1/clinic/posts/{id}'].delete.security, [{ clinicBearer: [] }]);
   assert.deepEqual(spec.components.schemas.CreateClinicPost.required, ['title', 'content']);
 
   const sameOrigin = await fetch(`${baseUrl}/api/v1/public/clinic-posts`, {

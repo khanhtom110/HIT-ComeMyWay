@@ -34,5 +34,12 @@ export function createClinicPostModel(pool) {
       );
       return rows;
     },
+    async deleteByClinic(id, clinicId) {
+      const [result] = await pool.execute(
+        'DELETE FROM clinic_posts WHERE id = ? AND clinic_id = ?',
+        [id, clinicId],
+      );
+      return result.affectedRows === 1;
+    },
   };
 }

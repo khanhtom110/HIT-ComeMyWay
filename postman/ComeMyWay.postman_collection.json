@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
     "name": "ComeMyWay - Spring Boot + Node.js",
-    "description": "Test đăng nhập Spring Boot, dùng JWT đăng tin Node.js và kiểm tra validation. Chọn ComeMyWay - Local (MySQL), rồi chạy collection theo thứ tự. Mỗi lượt chạy tạo một bài đăng.",
+    "description": "Test đăng nhập Spring Boot, dùng JWT đăng tin và xóa bài trên Node.js. Chọn ComeMyWay - Local (MySQL), rồi chạy collection theo thứ tự. Mỗi lượt chạy tạo rồi xóa một bài đăng.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -457,6 +457,55 @@
                   "  const id = pm.environment.get(\"createdPostId\");",
                   "  pm.expect(id, \"Run Create post first\").to.be.ok;",
                   "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Delete own post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}",
+            "description": "Xóa bài vừa tạo bằng access token của phòng khám."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Deleted post matches created post\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(String(body.data.id)).to.eql(String(pm.environment.get(\"createdPostId\")));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Public feed excludes deleted post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
+            "auth": { "type": "noauth" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Deleted post is absent\", () => {",
+                  "  const id = pm.environment.get(\"createdPostId\");",
+                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(false);",
                   "});"
                 ]
               }

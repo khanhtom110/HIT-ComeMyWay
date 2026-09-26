@@ -12,5 +12,9 @@ export function createClinicPostController(service) {
     async listPublic(request, response) {
       return sendResponse(response, 200, await service.listPublic());
     },
+    async remove(request, response) {
+      const result = await service.remove(request.clinic.id, request.validated.params.id);
+      return sendResponse(response, 200, result, 'Xóa bài đăng thành công');
+    },
   };
 }

@@ -118,6 +118,27 @@ export const openApiDocument = {
         },
       },
     },
+    '/api/v1/clinic/posts/{id}': {
+      delete: {
+        tags: ['Clinic posts'], summary: 'Xóa bài đăng của phòng khám hiện tại',
+        description: 'Chỉ xóa bài do phòng khám trong access token đăng. Bài không tồn tại hoặc thuộc phòng khám khác đều trả 404.',
+        security: [{ clinicBearer: [] }],
+        parameters: [{
+          in: 'path', name: 'id', required: true, description: 'ID bài đăng',
+          schema: { type: 'integer', format: 'int64', minimum: 1 },
+        }],
+        responses: {
+          200: response('Xóa bài đăng thành công', {
+            type: 'object', required: ['id'], properties: { id: { type: 'integer', format: 'int64' } },
+          }),
+          400: errorResponse('ID bài đăng không hợp lệ'),
+          401: errorResponse('Thiếu hoặc sai access token'),
+          403: errorResponse('Tài khoản không phải phòng khám đang hoạt động'),
+          404: errorResponse('Không tìm thấy bài đăng'),
+          500: errorResponse('Lỗi xử lý phía server'),
+        },
+      },
+    },
     '/api/v1/public/clinic-posts': {
       get: {
         tags: ['Clinic posts'], summary: 'Tin phòng khám công khai',
