@@ -25,6 +25,11 @@ class ScheduleListViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
 
+    init {
+        onWaitClick()
+    }
+
+
 
     fun appointmentScheduleClick() {
         viewModelScope.launch {
@@ -48,13 +53,19 @@ class ScheduleListViewModel @Inject constructor(
 
 
     fun onWaitClick() {
-        _state.value = _state.value.copy(isWait = true, isRefuse = false, isReceive = false)
+        _state.value = _state.value.copy(isWait = true, isRefuse = false, isReceive = false, isLoading = true, listAppointmentChild = emptyList())
+
+        onAppointmentWaitList()
     }
     fun onReceiveClick() {
-        _state.value = _state.value.copy(isWait = false, isRefuse = false, isReceive = true)
+        _state.value = _state.value.copy(isWait = false, isRefuse = false, isReceive = true, isLoading = true, listAppointmentChild = emptyList())
+
+        onAppointmentReceiveList()
     }
     fun onRefuseClick() {
-        _state.value = _state.value.copy(isWait = false, isRefuse = true, isReceive = false)
+        _state.value = _state.value.copy(isWait = false, isRefuse = true, isReceive = false, isLoading = true, listAppointmentChild = emptyList())
+
+        onAppointmentRefuseList()
     }
 
 
@@ -117,10 +128,10 @@ class ScheduleListViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listAppointmentChild = showList)
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listAppointmentChild = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = emptyList())
                 }
             }
         }
@@ -148,10 +159,10 @@ class ScheduleListViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listAppointmentChild = showList)
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listAppointmentChild = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = emptyList())
                 }
             }
         }
@@ -178,10 +189,10 @@ class ScheduleListViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listAppointmentChild = showList)
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listAppointmentChild = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listAppointmentChild = emptyList())
                 }
             }
         }

@@ -213,10 +213,6 @@ class AppointmentScheduleFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterWait
-                        adapterWait.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentWaitList()
                     }
                     else {
                         binding.btnWait.setBackgroundResource(R.color.colorBackground)
@@ -235,10 +231,6 @@ class AppointmentScheduleFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterRefuse
-                        adapterRefuse.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentRefuseList()
                     }
                     else {
                         binding.btnRefuse.setBackgroundResource(R.color.colorBackground)
@@ -257,10 +249,6 @@ class AppointmentScheduleFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterReceive
-                        adapterReceive.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentReceiveList()
                     }
                     else {
                         binding.btnReceive.setBackgroundResource(R.color.colorBackground)
@@ -270,7 +258,33 @@ class AppointmentScheduleFragment : Fragment() {
                         binding.btnReceive.setTextColor(clinic)
                     }
 
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
 
+                        //Kiểm tra xem list có data không
+                        if (state.listAppointmentChild.isEmpty()) {
+                            binding.recycle.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.recycle.visibility = View.VISIBLE
+                            binding.tvEmpty.visibility = View.GONE
+                        }
+                    }
+
+                    if (!state.isLoading) {
+                        when {
+                            state.isWait -> adapterWait.submitList(state.listAppointmentChild)
+                            state.isRefuse -> adapterRefuse.submitList(state.listAppointmentChild)
+                            state.isReceive -> adapterReceive.submitList(state.listAppointmentChild)
+                        }
+                    }
                 }
             }
         }
