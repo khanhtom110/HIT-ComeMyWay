@@ -8,7 +8,7 @@ Chạy lệnh từ thư mục gốc project. Cần Docker Engine/Desktop và Doc
 docker compose -f compose.backends.yaml build
 ```
 
-Compose đọc hai file local `backend/.env` và `backend-nodejs/.env`; tạo chúng trước khi dùng Compose. Có thể build từng image độc lập với `.env`:
+Compose đọc hai file local `backend/.env` và `backend-nodejs/.env`; sao chép từ `.env.example` trong từng thư mục rồi điền giá trị thực trước khi dùng Compose. Có thể build từng image độc lập với `.env`:
 
 ```bash
 docker build -t comemyway-nodejs:dev ./backend-nodejs
