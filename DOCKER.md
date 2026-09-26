@@ -2,18 +2,6 @@
 
 Chạy lệnh từ thư mục gốc project. Cần Docker Engine/Desktop và Docker Compose **2.30+** (để đọc `env_file` với `format: raw`). Không cần cài Node.js, Maven hoặc Java trên máy host để build.
 
-## Stack dev đã chuẩn bị trên máy này
-
-Để test cả hai backend ngay, dùng một environment `postman/Local.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Spring Boot đang dùng cổng `8080`, Node.js dùng cổng `3002`; MySQL và Redis dev chạy trong cùng network Docker. MySQL lưu dữ liệu trong volume `hit-comemyway_comemyway_dev_mysql`.
-
-Khởi động lại bằng PowerShell:
-
-```powershell
-& "$env:TEMP\comemyway-docker-dev\start.ps1"
-```
-
-Script dùng file Compose bên dưới cùng override local `%TEMP%\comemyway-docker-dev\compose.override.json`. Override chứa cấu hình và thông tin đăng nhập dev; không được commit. Các phần tiếp theo mô tả cách build và chạy file Compose cơ sở với database do bạn cấu hình.
-
 ## 1. Build image
 
 ```bash
@@ -41,7 +29,7 @@ Trước khi chạy:
 2. `backend/.env` chứa các biến Spring Boot đang dùng: `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_ACCESS_EXPIRATION`, `JWT_REFRESH_EXPIRATION`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`, `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `GEMINI_API_KEY`.
 3. `backend-nodejs/.env` chứa `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` giống Spring Boot. Có thể thêm `CORS_ORIGINS` nếu gọi từ trình duyệt. Compose đặt lại `HOST=0.0.0.0`, `PORT=3001` và các biến địa chỉ database.
 4. Spring Boot cần Redis theo cấu hình hiện tại (SSL đang bật); đăng nhập/refresh cần Redis hoạt động.
-5. Khởi động Spring Boot để tạo/cập nhật schema, rồi chạy SQL trong `backend-nodejs/database/migrations/001_create_clinic_posts.sql` trên cùng database trước khi dùng API đăng tin. Tài khoản phòng khám test cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
+5. Khởi động Spring Boot để tạo/cập nhật schema, rồi chạy SQL trong `backend-nodejs/database/migrations/001_create_clinic_posts.sql` trên cùng database trước khi dùng API đăng tin. Tài khoản phòng khám cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
 
 Compose ưu tiên `DOCKER_DB_URL` cho Spring Boot và `DOCKER_DB_HOST`, `DOCKER_DB_PORT`, `DOCKER_DB_NAME` cho Node.js. Đặt các biến này khi dùng MySQL ở máy khác. Ví dụ PowerShell (thay `mysql-host` bằng hostname/IP thực):
 
@@ -56,7 +44,7 @@ Hai backend phải trỏ tới cùng database và cùng `JWT_SECRET` để dùng
 
 Firebase push notification cần file service account riêng. Khi sử dụng chức năng đó, mount file read-only vào `/etc/secrets/firebase-service-account.json`; không đưa file vào image.
 
-## 3. Chạy và test
+## 3. Chạy backend
 
 ```bash
 docker compose -f compose.backends.yaml up -d springboot
@@ -66,10 +54,10 @@ docker compose -f compose.backends.yaml ps
 docker compose -f compose.backends.yaml logs --tail=100 springboot nodejs
 ```
 
-| Dịch vụ | URL local | Health endpoint |
-| --- | --- | --- |
-| Spring Boot | `http://localhost:8080` | `/api/v1/public/health` |
-| Node.js | `http://localhost:3002` | `/health/live`, `/health/ready` |
+| Dịch vụ | URL local | Health endpoint | Swagger UI |
+| --- | --- | --- | --- |
+| Spring Boot | `http://localhost:8080` | `/api/v1/public/health` | `/swagger-ui/index.html` |
+| Node.js | `http://localhost:3002` | `/health/live`, `/health/ready` | `/api-docs/` |
 
 Node `/health/ready` kiểm tra kết nối MySQL. Docker healthcheck dùng `/health/live` để kiểm tra tiến trình HTTP. Health trả 200 không thay thế việc test đăng nhập và đăng tin trong [Postman](postman/README.md).
 
