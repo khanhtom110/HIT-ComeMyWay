@@ -6,7 +6,7 @@ data class AppointmentScheduleState (
     val isWait: Boolean = true,
     val isReceive: Boolean = false,
     val isRefuse: Boolean = false,
-
+    val isLoading: Boolean = false,
 
     val listAppointmentChild: List<AppointmentChild> = emptyList()
 )

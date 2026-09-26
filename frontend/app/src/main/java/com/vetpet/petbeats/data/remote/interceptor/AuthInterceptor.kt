@@ -13,7 +13,7 @@ class AuthInterceptor(
 
         val accessToken = tokenManager.getAccessToken()
 
-        Log.d("TOKEN", "AccessToken = $accessToken")
+        Log.d("ACCESSTOKEN", "AccessToken = $accessToken")
 
         if (!accessToken.isNullOrEmpty()) {
             request.addHeader("Authorization", "Bearer $accessToken")

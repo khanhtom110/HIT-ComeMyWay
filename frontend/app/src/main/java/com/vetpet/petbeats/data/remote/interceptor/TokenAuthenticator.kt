@@ -1,5 +1,6 @@
 package com.vetpet.petbeats.data.remote.interceptor
 
+import android.content.Context
 import android.util.Log
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
@@ -10,6 +11,7 @@ import okhttp3.Response
 import okhttp3.Route
 
 class TokenAuthenticator(
+    private val context: Context,
     private val tokenManager: TokenManager,
     private val apiAuth: ApiAuth
 ): Authenticator {

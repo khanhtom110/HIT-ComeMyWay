@@ -40,5 +40,7 @@
     <color name="colorRefuse">#FFF3F1</color>
     <color name="colorTextRefuse">#CC0900</color>
     
+    <!--shimmer-->
+    <color name="colorShimmer">#E0E0E0</color>
 
 </resources>

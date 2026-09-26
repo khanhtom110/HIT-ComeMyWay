@@ -25,6 +25,15 @@ class BookViewModel @Inject constructor(
     private val _event = MutableSharedFlow<BookEvent>()
     val event = _event.asSharedFlow()
 
+
+    init {
+        _state.value = _state.value.copy(isLoading = true, listBook = emptyList())
+
+        onBookingList()
+    }
+
+
+
     fun searchClick() {
         viewModelScope.launch {
             _event.emit(BookEvent.NavigationSearch)
@@ -72,10 +81,10 @@ class BookViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listBook = showList)
+                    _state.value = _state.value.copy(isLoading = false, listBook = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listBook = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listBook = emptyList())
                 }
             }
         }

@@ -41,16 +41,11 @@ class SearchFragment : Fragment() {
                 val userLng = location.longitude
 
                 viewModel.onLatiLong(userLat, userLng)
-                viewModel.onHintList()
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
-
-                viewModel.onHintList()
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
-
-            viewModel.onHintList()
         }
     }
 
@@ -147,6 +142,18 @@ class SearchFragment : Fragment() {
                     //check search
                     if (binding.search.text.toString() != state.search) {
                         binding.search.setText(state.search)
+                    }
+
+
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycleHint.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+                        binding.recycleHint.visibility = View.VISIBLE
                     }
                 }
             }

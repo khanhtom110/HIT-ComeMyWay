@@ -26,6 +26,14 @@ class ResultSearchViewModel @Inject constructor(
     private val _event = MutableSharedFlow< ResultSearchEvent>()
     val event = _event.asSharedFlow()
 
+
+    init {
+        _state.value = _state.value.copy(isLoading = true, listResultSearch = emptyList())
+
+        onResultSearchList()
+    }
+
+
     fun backClick() {
         viewModelScope.launch {
             _event.emit(ResultSearchEvent.NavigationSearch)
@@ -82,10 +90,10 @@ class ResultSearchViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listResultSearch = showList)
+                    _state.value = _state.value.copy(isLoading = false, listResultSearch = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listResultSearch = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listResultSearch = emptyList())
                 }
             }
         }

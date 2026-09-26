@@ -23,10 +23,11 @@ import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class ScheduleListFragment : Fragment() {
     private var _binding: FragmentScheduleListBinding ?= null
     private val binding get() = _binding!!
@@ -203,10 +204,6 @@ class ScheduleListFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterWait
-                        adapterWait.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentWaitList()
                     }
                     else {
                         binding.btnWait.setBackgroundResource(R.color.colorBackground)
@@ -225,10 +222,6 @@ class ScheduleListFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterRefuse
-                        adapterRefuse.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentRefuseList()
                     }
                     else {
                         binding.btnRefuse.setBackgroundResource(R.color.colorBackground)
@@ -247,10 +240,6 @@ class ScheduleListFragment : Fragment() {
 
 
                         binding.recycle.adapter = adapterReceive
-                        adapterReceive.submitList(state.listAppointmentChild)
-
-
-                        viewModel.onAppointmentReceiveList()
                     }
                     else {
                         binding.btnReceive.setBackgroundResource(R.color.colorBackground)
@@ -258,6 +247,34 @@ class ScheduleListFragment : Fragment() {
 
                         val clinic = ContextCompat.getColor(requireContext(),R.color.colorPrimary)
                         binding.btnReceive.setTextColor(clinic)
+                    }
+
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+
+                        //Kiểm tra xem list có data không
+                        if (state.listAppointmentChild.isEmpty()) {
+                            binding.recycle.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.recycle.visibility = View.VISIBLE
+                            binding.tvEmpty.visibility = View.GONE
+                        }
+                    }
+
+                    if (!state.isLoading) {
+                        when {
+                            state.isWait -> adapterWait.submitList(state.listAppointmentChild)
+                            state.isRefuse -> adapterRefuse.submitList(state.listAppointmentChild)
+                            state.isReceive -> adapterReceive.submitList(state.listAppointmentChild)
+                        }
                     }
                 }
             }

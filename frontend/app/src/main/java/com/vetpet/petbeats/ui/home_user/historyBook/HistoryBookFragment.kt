@@ -42,8 +42,6 @@ class HistoryBookFragment : Fragment() {
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapter
 
-        viewModel.onHistoryBookingList()
-
         setOnClick()
         stateData()
         eventData()
@@ -71,6 +69,27 @@ class HistoryBookFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     adapter.submitList(state.listBook)
+
+                    
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+
+                        //Kiểm tra xem list có data không
+                        if (state.listBook.isEmpty()) {
+                            binding.recycle.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.recycle.visibility = View.VISIBLE
+                            binding.tvEmpty.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }

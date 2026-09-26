@@ -45,13 +45,9 @@ class ResultSearchFragment : Fragment() {
 
             } else {
                 Toast.makeText(requireContext(), "Vui lòng bật GPS trên điện thoại", Toast.LENGTH_SHORT).show()
-
-                viewModel.onResultSearchList()
             }
         }.addOnFailureListener {
             Toast.makeText(requireContext(), "Không thể lấy vị trí hiện tại", Toast.LENGTH_SHORT).show()
-
-            viewModel.onResultSearchList()
         }
     }
 
@@ -134,6 +130,27 @@ class ResultSearchFragment : Fragment() {
                     }
                     else {
                         binding.search.setBackgroundResource(R.drawable.tittle_search)
+                    }
+
+
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+                        binding.tvEmpty.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+
+                        //Kiểm tra xem list có data không
+                        if (state.listResultSearch.isEmpty()) {
+                            binding.recycle.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.VISIBLE
+                        } else {
+                            binding.recycle.visibility = View.VISIBLE
+                            binding.tvEmpty.visibility = View.GONE
+                        }
                     }
                 }
             }

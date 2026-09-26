@@ -24,6 +24,14 @@ class HistoryBookViewModel @Inject constructor(
     private val _event = MutableSharedFlow<HistoryBookEvent>()
     val event = _event.asSharedFlow()
 
+
+    init {
+        _state.value = _state.value.copy(isLoading = true, listBook = emptyList())
+
+        onHistoryBookingList()
+    }
+
+
     fun bookClick() {
         viewModelScope.launch {
             _event.emit(HistoryBookEvent.NavigationBook)
@@ -66,10 +74,10 @@ class HistoryBookViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listBook = showList)
+                    _state.value = _state.value.copy(isLoading = false, listBook = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listBook = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listBook = emptyList())
                 }
             }
         }
