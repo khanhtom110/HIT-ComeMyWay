@@ -95,8 +95,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
 
-
-    val camerax_version = "1.3.0" // Hoặc mới hơn
+    //CameraX
+    val camerax_version = "1.3.0"
     implementation("androidx.camera:camera-core:${camerax_version}")
     implementation("androidx.camera:camera-camera2:${camerax_version}")
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
@@ -106,4 +106,8 @@ dependencies {
     //dependency injection
     implementation("com.google.dagger:hilt-android:2.60.1")
     ksp("com.google.dagger:hilt-android-compiler:2.60.1")
+
+
+    //Hiệu ứng shimmer
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }
