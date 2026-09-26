@@ -1,35 +1,37 @@
-import { createServer } from 'node:http';
-import { HttpError } from './http/http-error.js';
-import { sendJson } from './http/json.js';
+import express from 'express';
+import cors from 'cors';
+import { ApiError } from './utils/ApiError.js';
 import { createClinicAuth } from './middlewares/clinic-auth.middleware.js';
-import { handleError } from './middlewares/error.middleware.js';
-import { createClinicPostController } from './modules/clinic-posts/clinic-post.controller.js';
-import { createClinicPostRoutes } from './modules/clinic-posts/clinic-post.routes.js';
-import { createClinicPostService } from './modules/clinic-posts/clinic-post.service.js';
+import { handleError, notFound } from './middlewares/error.middleware.js';
+import { createClinicPostController } from './controllers/clinic-post.controller.js';
+import { createHealthController } from './controllers/health.controller.js';
+import { createApiRouter } from './routers/index.js';
+import { createHealthRouter } from './routers/health.route.js';
+import { createClinicPostService } from './services/clinic-post.service.js';
 
-export function createApp({ repository, secret }) {
-  if (!repository || !secret) throw new Error('Missing repository or JWT_SECRET');
+export function createApp({
+  clinicPostModel, clinicModel, jwtSecret, corsOrigins = [], checkReadiness = async () => false,
+}) {
+  if (!clinicPostModel || !clinicModel || !jwtSecret) {
+    throw new Error('Missing models or JWT_SECRET');
+  }
 
-  const service = createClinicPostService(repository);
-  const controller = createClinicPostController(service);
-  const authenticateClinic = createClinicAuth({ repository, secret });
-  const routes = [
-    {
-      method: 'GET',
-      path: '/health',
-      handler: (request, response) => sendJson(response, 200, { status: 'ok' }),
+  const app = express();
+  app.disable('x-powered-by');
+  app.use(cors({
+    origin(origin, callback) {
+      if (!origin || corsOrigins.includes(origin)) return callback(null, true);
+      return callback(new ApiError(403, 'Origin không được phép'));
     },
-    ...createClinicPostRoutes({ controller, authenticateClinic }),
-  ];
+  }));
+  app.use(express.json({ limit: '64kb' }));
 
-  return createServer(async (request, response) => {
-    try {
-      const path = new URL(request.url, 'http://localhost').pathname;
-      const route = routes.find(item => item.method === request.method && item.path === path);
-      if (!route) throw new HttpError(404, 'Không tìm thấy API');
-      await route.handler(request, response);
-    } catch (error) {
-      handleError(error, response);
-    }
-  });
+  const service = createClinicPostService(clinicPostModel);
+  const controller = createClinicPostController(service);
+  const authenticateClinic = createClinicAuth({ clinicModel, jwtSecret });
+  app.use('/health', createHealthRouter(createHealthController(checkReadiness)));
+  app.use('/api/v1', createApiRouter({ controller, authenticateClinic }));
+  app.use(notFound);
+  app.use(handleError);
+  return app;
 }

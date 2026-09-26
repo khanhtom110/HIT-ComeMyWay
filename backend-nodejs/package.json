@@ -1,14 +1,19 @@
 {
   "name": "comemyway-backend-nodejs",
-  "description": "Node.js backend modules for HIT-ComeMyWay",
+  "description": "Express backend for HIT-ComeMyWay",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "test": "node --test"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.9",
     "mysql2": "^3.14.0"
   },
   "engines": {

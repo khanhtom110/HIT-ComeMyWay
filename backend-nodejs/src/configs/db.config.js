@@ -5,6 +5,7 @@ export function createDatabasePool(databaseConfig) {
     ...databaseConfig,
     waitForConnections: true,
     connectionLimit: 10,
+    connectTimeout: 5000,
     timezone: 'Z',
   });
 }

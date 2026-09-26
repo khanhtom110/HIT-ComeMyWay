@@ -1,13 +1,15 @@
-import { HttpError } from '../http/http-error.js';
-import { verifyClinicToken } from '../security/jwt.js';
+import { ApiError } from '../utils/ApiError.js';
+import { catchAsync } from '../utils/catchAsync.js';
+import { verifyClinicToken } from '../utils/jwt.js';
 
-export function createClinicAuth({ repository, secret }) {
-  return async function authenticateClinic(request) {
-    const claims = verifyClinicToken(request.headers.authorization, secret);
-    if (!claims) throw new HttpError(401, 'Token không hợp lệ');
+export function createClinicAuth({ clinicModel, jwtSecret }) {
+  return catchAsync(async (request, response, next) => {
+    const claims = verifyClinicToken(request.headers.authorization, jwtSecret);
+    if (!claims) throw new ApiError(401, 'Token không hợp lệ');
 
-    const clinic = await repository.findClinicByUsername(claims.sub, claims.jti);
-    if (!clinic) throw new HttpError(403, 'Chỉ phòng khám được đăng tin');
-    return clinic;
-  };
+    const clinic = await clinicModel.findActiveByUsername(claims.sub, claims.jti);
+    if (!clinic) throw new ApiError(403, 'Chỉ phòng khám được đăng tin');
+    request.clinic = clinic;
+    next();
+  });
 }
