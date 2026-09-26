@@ -5,10 +5,9 @@ import com.vetpet.petbeats.ui.home_user.search.adapterhistory.HistoryChild
 
 data class SearchState (
     val search: String = "",
-
     val isSearch: Boolean = false,
-
     val isButtonAll: Boolean = false,
+    val isLoading: Boolean = false,
 
     //history
     val listHistory: List<HistoryChild> = emptyList(),

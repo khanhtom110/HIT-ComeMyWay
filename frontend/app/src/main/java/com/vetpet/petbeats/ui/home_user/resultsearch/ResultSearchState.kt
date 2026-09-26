@@ -6,6 +6,7 @@ data class ResultSearchState (
     val listResultSearch: List<ResultSearchChild> = emptyList(),
     val search: String = "",
     val isSearch: Boolean = false,
+    val isLoading: Boolean = false,
 
     val latitude: Double? = null,
     val longitude: Double? = null,

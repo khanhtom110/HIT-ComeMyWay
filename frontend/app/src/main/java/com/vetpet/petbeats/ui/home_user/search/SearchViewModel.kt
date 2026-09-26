@@ -34,6 +34,11 @@ class SearchViewModel @Inject constructor(
 
     //Gán database vào list của mình để hiển thị lên màn hình
     init {
+        _state.value = _state.value.copy(isLoading = true, listHint = emptyList())
+
+        onHintList()
+
+
         viewModelScope.launch {
             val currentUserId = tokenManager.getUserId()
 
@@ -132,10 +137,10 @@ class SearchViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(listHint = showList)
+                    _state.value = _state.value.copy(isLoading = false, listHint = showList)
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(listHint = emptyList())
+                    _state.value = _state.value.copy(isLoading = false, listHint = emptyList())
                 }
             }
         }
