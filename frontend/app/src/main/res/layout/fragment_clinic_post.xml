@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng tin phòng khám"
+            android:textColor="@color/colorTextTitle"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:labelFor="@id/inputTitle"
+            android:text="Tiêu đề"
+            android:textColor="@color/colorTextSub" />
+
+        <EditText
+            android:id="@+id/inputTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập tiêu đề tin"
+            android:inputType="textCapSentences"
+            android:maxLength="200"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:labelFor="@id/inputContent"
+            android:text="Nội dung"
+            android:textColor="@color/colorTextSub" />
+
+        <EditText
+            android:id="@+id/inputContent"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:gravity="top|start"
+            android:hint="Nhập nội dung tin"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="10000" />
+
+        <Button
+            android:id="@+id/btnPublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Đăng tin" />
+    </LinearLayout>
+</ScrollView>

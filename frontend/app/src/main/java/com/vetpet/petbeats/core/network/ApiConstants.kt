@@ -52,6 +52,7 @@ object ApiConstants {
     const val REJECTAPPOINTMENTGET = "/api/v1/clinic/appointments/rejected"
     const val CONFIRMAPPOINTMENTGET = "/api/v1/clinic/appointments/comfirmed"
     const val GETPROFILE = "/api/v1/clinic/profile"
+    const val CLINIC_POSTS = "/api/v1/clinic/posts"
 
 
     //SearchClinicController

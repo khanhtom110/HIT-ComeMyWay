@@ -15,6 +15,11 @@
         android:label="clinicFragment"/>
 
     <fragment
+        android:id="@+id/clinicPostFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.clinicpost.ClinicPostFragment"
+        android:label="Đăng tin"/>
+
+    <fragment
         android:id="@+id/scheduleListFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.schedulelist.ScheduleListFragment"
         android:label="scheduleListFragment">

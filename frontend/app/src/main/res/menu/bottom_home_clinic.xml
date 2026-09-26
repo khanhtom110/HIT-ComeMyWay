@@ -9,4 +9,8 @@
         android:id="@+id/clinicFragment"
         android:icon="@drawable/clinic"
         android:title="Phòng khám"/>
+    <item
+        android:id="@+id/clinicPostFragment"
+        android:icon="@drawable/news"
+        android:title="Đăng tin"/>
 </menu>
