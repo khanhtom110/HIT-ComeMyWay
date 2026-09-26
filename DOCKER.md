@@ -2,6 +2,18 @@
 
 Chạy lệnh từ thư mục gốc project. Cần Docker Engine/Desktop và Docker Compose **2.30+** (để đọc `env_file` với `format: raw`). Không cần cài Node.js, Maven hoặc Java trên máy host để build.
 
+## Stack dev đã chuẩn bị trên máy này
+
+Để test cả hai backend ngay, dùng environment `postman/Docker-Dev.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Spring Boot đang dùng cổng `8080`, Node.js dùng cổng `3002`; MySQL và Redis dev chạy trong cùng network Docker. MySQL lưu dữ liệu trong volume `hit-comemyway_comemyway_dev_mysql`.
+
+Khởi động lại bằng PowerShell:
+
+```powershell
+& "$env:TEMP\comemyway-docker-dev\start.ps1"
+```
+
+Script dùng file Compose bên dưới cùng override local `%TEMP%\comemyway-docker-dev\compose.override.json`. Override chứa cấu hình và thông tin đăng nhập dev; không được commit. Các phần tiếp theo mô tả cách build và chạy file Compose cơ sở với database do bạn cấu hình.
+
 ## 1. Build image
 
 ```bash
