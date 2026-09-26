@@ -45,7 +45,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 ## Docker và Postman
 
-Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng riêng: Spring Boot `8080`, Node.js `3001`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`).
+Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng host riêng: Spring Boot `8080`, Node.js `3002`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`).
 
 Import collection và environment trong [postman/](../postman/README.md) để chạy luồng đăng nhập Spring Boot → đăng tin Node.js và kiểm tra validation. Có environment local riêng cho phiên dữ liệu giả dev đang chạy trên máy.
 

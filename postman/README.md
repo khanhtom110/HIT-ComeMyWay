@@ -2,15 +2,15 @@
 
 ## Test ngay cả Spring Boot và Node.js trên máy này
 
-Môi trường Docker dev đã có MySQL, Redis và tài khoản phòng khám mẫu. Import:
+Môi trường Docker dev đã có MySQL, Redis và tài khoản phòng khám mẫu. Dùng **một environment** cho cả Spring Boot và Node.js:
 
 1. `ComeMyWay.postman_collection.json`.
-2. `Docker-Dev.local.postman_environment.json`, chọn **ComeMyWay - Docker Dev (Spring + Node)**.
+2. `Local.local.postman_environment.json` trên máy này, chọn **ComeMyWay - Local (MySQL)**.
 3. Chạy toàn bộ collection theo thứ tự, hoặc chỉ folder **01 - Spring Boot** nếu muốn test riêng Spring Boot.
 
-Environment đã điền tài khoản dev, `springBaseUrl=http://localhost:8080` và `nodeBaseUrl=http://localhost:3002`. Body đăng nhập hiển thị trực tiếp `{{username}}` và `{{password}}`; chọn environment trên trước khi bấm Send. Các bước đăng nhập, refresh và lấy hồ sơ tự cập nhật token/clinic ID; sau đó Node.js dùng token Spring Boot để đăng tin. File environment có mật khẩu dev nên được Git ignore.
+Environment local đã điền tài khoản dev, `springBaseUrl=http://localhost:8080` và `nodeBaseUrl=http://localhost:3002`. Body đăng nhập hiển thị `{{username}}` và `{{password}}`; chọn environment trên trước khi bấm Send. Đăng nhập tự lưu token; lấy hồ sơ hoặc đăng tin sẽ lưu `clinicId`. File environment có mật khẩu dev nên được Git ignore.
 
-Environment **ComeMyWay - Local (MySQL)** có `nodeBaseUrl` mặc định là `http://127.0.0.1:3001`. Trên máy này, cổng `3001` đang chạy API giả cũ, nên token Spring Boot sẽ bị từ chối ở đó. Để test stack Docker dev, chọn environment **Docker Dev (Spring + Node)**; nếu đang dùng **Local (MySQL)** thì sửa `nodeBaseUrl` thành `http://localhost:3002` và chạy lại bước đăng nhập trong chính environment đó.
+`Local.postman_environment.json` là bản mẫu không có mật khẩu để chia sẻ trong Git, cùng tên và URL với bản local. Nếu environment **Local (MySQL)** đã được import vào Postman từ trước, giá trị cũ trong Postman không tự đổi theo file: sửa `nodeBaseUrl` thành `http://localhost:3002`, lưu lại và đăng nhập lại trong environment đó. Cổng `3001` đang dùng cho API giả cũ trên máy này.
 
 Để khởi động lại stack dev trên máy này, chạy lệnh sau trong PowerShell (chỉ sao chép dòng lệnh bên trong khung):
 
@@ -22,7 +22,7 @@ Script dùng `compose.backends.yaml` cùng file override ở thư mục tạm đ
 
 Môi trường này phục vụ test đăng nhập, refresh, hồ sơ phòng khám và đăng tin. Email, Cloudinary, Gemini và Firebase chưa được cấu hình cho test dev này.
 
-## Test ngay với dữ liệu giả dev
+## Phiên API giả cũ (tùy chọn)
 
 1. Import `ComeMyWay.postman_collection.json`.
 2. Import `Dev-Fake.local.postman_environment.json` có sẵn trên máy này, chọn environment **ComeMyWay - Dev Fake (Node only)**.
@@ -51,7 +51,7 @@ Sau khi khởi động lại, lấy `accessToken` mới từ `session.json` cùn
 | 02 - Node Clinic Posts | Liveness/readiness → feed công khai → đăng tin → danh sách của phòng khám → xác nhận tin xuất hiện công khai |
 | 03 - Node Validation | Tiêu đề trống/quá dài, thiếu/quá dài nội dung, thiếu/sai token, JSON lỗi, body quá 64 KB |
 
-Request đăng nhập và refresh tự lưu `accessToken`, `refreshToken`; lấy hồ sơ lưu `clinicId`. Request đăng tin lưu `createdPostId` cho các bước sau. Response được kiểm tra HTTP status, envelope và dữ liệu. Body tạo tin chỉ gửi `title` và `content`; server lấy phòng khám từ token.
+Request đăng nhập và refresh tự lưu `accessToken`, `refreshToken`; lấy hồ sơ lưu `clinicId`. Nếu gọi đăng tin ngay sau đăng nhập, request xác nhận `clinicId` hợp lệ và lưu nó vào cùng environment; khi đã lấy hồ sơ, request so sánh tác giả bài đăng với hồ sơ. Request đăng tin cũng lưu `createdPostId` cho các bước sau. Body tạo tin chỉ gửi `title` và `content`; server lấy phòng khám từ token.
 
 Nếu muốn gửi thủ công, sao chép body từ [`clinic-post.example.json`](clinic-post.example.json) vào **Body → raw → JSON** của request `POST http://localhost:3002/api/v1/clinic/posts` (Docker dev). Chọn **Authorization → Bearer Token** và dùng `accessToken` lấy từ bước đăng nhập Spring Boot. JSON chỉ có `title` và `content`; server tự gắn phòng khám và thời gian đăng.
 
@@ -62,7 +62,7 @@ Nếu muốn gửi thủ công, sao chép body từ [`clinic-post.example.json`]
 Thay biến environment bằng địa chỉ thực tế sau khi deploy:
 
 - `springBaseUrl`: `http://56.10.63.38` nếu Spring Boot được publish ở cổng 80; nếu dùng Compose mặc định thì `http://56.10.63.38:8080`.
-- `nodeBaseUrl`: `http://56.10.63.38:3001` nếu Node đã deploy và mở cổng 3001.
+- `nodeBaseUrl`: `http://56.10.63.38:3002` nếu Node đã deploy theo cổng mặc định và mở cổng 3002.
 
 Các giá trị trên là địa chỉ cấu hình, không xác nhận dịch vụ Node đã được deploy lên server. Khi dùng Postman web để gọi localhost, chọn Desktop Agent; Postman Desktop gọi trực tiếp được.
 
@@ -72,16 +72,16 @@ Cần Node.js/npm trên máy chạy lệnh. Từ thư mục gốc project:
 
 ```bash
 # Hai backend Docker dev, environment đã điền tài khoản trên máy này
-npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Docker-Dev.local.postman_environment.json
+npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Local.local.postman_environment.json
 
 # Phiên API giả: chỉ test Node
 npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Dev-Fake.local.postman_environment.json --folder "02 - Node Clinic Posts" --folder "03 - Node Validation"
 
-# Backend thật: dùng bản environment local đã điền thông tin đăng nhập
+# Backend khác: dùng bản environment đã điền thông tin đăng nhập
 npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/My.local.postman_environment.json
 ```
 
-Để chạy lệnh thứ hai, sao chép `Local.postman_environment.json` thành `My.local.postman_environment.json` rồi điền biến. Các file `*.local.postman_environment.json` và thư mục báo cáo `newman/` đã được ignore để tránh commit token/mật khẩu.
+Để test backend khác, sao chép `Local.postman_environment.json` thành `My.local.postman_environment.json` rồi điền biến. Các file `*.local.postman_environment.json` và thư mục báo cáo `newman/` đã được ignore để tránh commit token/mật khẩu.
 
 ## Khi test thất bại
 

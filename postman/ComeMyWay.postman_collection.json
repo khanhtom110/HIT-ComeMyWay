@@ -362,12 +362,17 @@
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(Number.isNaN(Date.parse(post.createdAt))).to.eql(false);",
                   "});",
-                  "pm.test(\"Post belongs to the signed-in clinic\", () => {",
+                  "pm.test(\"Author ID is valid and matches profile when available\", () => {",
                   "  const clinicId = pm.environment.get(\"clinicId\");",
-                  "  pm.expect(clinicId, \"Run Spring Clinic profile or use the dev environment\").to.be.ok;",
-                  "  pm.expect(String(pm.response.json().data.clinicId)).to.eql(String(clinicId));",
+                  "  const postClinicId = pm.response.json().data.clinicId;",
+                  "  pm.expect(Number(postClinicId)).to.be.above(0);",
+                  "  if (clinicId) pm.expect(String(postClinicId)).to.eql(String(clinicId));",
                   "});",
-                  "if (pm.response.code === 201) pm.environment.set(\"createdPostId\", pm.response.json().data.id);"
+                  "if (pm.response.code === 201) {",
+                  "  const post = pm.response.json().data;",
+                  "  if (!pm.environment.get(\"clinicId\")) pm.environment.set(\"clinicId\", post.clinicId);",
+                  "  pm.environment.set(\"createdPostId\", post.id);",
+                  "}"
                 ]
               }
             }

@@ -4,7 +4,7 @@ Chạy lệnh từ thư mục gốc project. Cần Docker Engine/Desktop và Doc
 
 ## Stack dev đã chuẩn bị trên máy này
 
-Để test cả hai backend ngay, dùng environment `postman/Docker-Dev.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Spring Boot đang dùng cổng `8080`, Node.js dùng cổng `3002`; MySQL và Redis dev chạy trong cùng network Docker. MySQL lưu dữ liệu trong volume `hit-comemyway_comemyway_dev_mysql`.
+Để test cả hai backend ngay, dùng một environment `postman/Local.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Spring Boot đang dùng cổng `8080`, Node.js dùng cổng `3002`; MySQL và Redis dev chạy trong cùng network Docker. MySQL lưu dữ liệu trong volume `hit-comemyway_comemyway_dev_mysql`.
 
 Khởi động lại bằng PowerShell:
 
@@ -69,20 +69,13 @@ docker compose -f compose.backends.yaml logs --tail=100 springboot nodejs
 | Dịch vụ | URL local | Health endpoint |
 | --- | --- | --- |
 | Spring Boot | `http://localhost:8080` | `/api/v1/public/health` |
-| Node.js | `http://localhost:3001` | `/health/live`, `/health/ready` |
+| Node.js | `http://localhost:3002` | `/health/live`, `/health/ready` |
 
 Node `/health/ready` kiểm tra kết nối MySQL. Docker healthcheck dùng `/health/live` để kiểm tra tiến trình HTTP. Health trả 200 không thay thế việc test đăng nhập và đăng tin trong [Postman](postman/README.md).
 
-Chạy bằng IP server với hai cổng riêng, không cần Nginx hay tên miền. Ví dụ Spring Boot `http://56.10.63.38:8080`, Node.js `http://56.10.63.38:3001` **sau khi deploy** và mở các cổng tương ứng. Client phải gọi đúng base URL của từng dịch vụ. Nếu muốn Spring Boot phục vụ tại `http://56.10.63.38/`, đặt `SPRING_HTTP_PORT=80` trước khi chạy Compose (cổng 80 phải còn trống).
+Chạy bằng IP server với hai cổng riêng, không cần Nginx hay tên miền. Ví dụ Spring Boot `http://56.10.63.38:8080`, Node.js `http://56.10.63.38:3002` **sau khi deploy** và mở các cổng tương ứng. Client phải gọi đúng base URL của từng dịch vụ. Nếu muốn Spring Boot phục vụ tại `http://56.10.63.38/`, đặt `SPRING_HTTP_PORT=80` trước khi chạy Compose (cổng 80 phải còn trống).
 
-Đổi cổng host bằng `SPRING_HTTP_PORT` và `NODE_HTTP_PORT`. Nếu API giả dev đang chiếm cổng `3001`, có thể dùng PowerShell:
-
-```powershell
-$env:NODE_HTTP_PORT = '3002'
-docker compose -f compose.backends.yaml up -d nodejs
-```
-
-Đổi `nodeBaseUrl` trong Postman thành `http://localhost:3002` tương ứng.
+Đổi cổng host bằng `SPRING_HTTP_PORT` và `NODE_HTTP_PORT`; cập nhật `springBaseUrl`, `nodeBaseUrl` trong Postman tương ứng. Cổng `3001` là cổng bên trong container Node.js, cổng host mặc định là `3002`.
 
 ```bash
 docker compose -f compose.backends.yaml down
@@ -92,4 +85,4 @@ Lệnh trên dừng/xóa container và network của stack. Database ở ngoài 
 
 ## Dữ liệu giả dev hiện tại
 
-Phiên API giả đang chạy riêng ở `http://127.0.0.1:3001`, với script/data trong thư mục tạm ngoài repository. Nó **không phải MySQL** và không phục vụ Spring Boot. Import `postman/Dev-Fake.local.postman_environment.json` để test Node ngay theo [hướng dẫn Postman](postman/README.md). Image Docker chạy source bình thường và cần MySQL khi khởi động; không có chế độ fake DB được thêm vào source.
+Phiên API giả cũ đang chạy riêng ở `http://127.0.0.1:3001`, với script/data trong thư mục tạm ngoài repository. Nếu cần kiểm tra riêng phiên này, dùng `postman/Dev-Fake.local.postman_environment.json` theo [hướng dẫn Postman](postman/README.md). Image Docker chạy source bình thường và cần MySQL khi khởi động; không có chế độ fake DB được thêm vào source.
