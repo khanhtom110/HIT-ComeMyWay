@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
 import { after, before, test } from 'node:test';
-import { createApp } from '../src/app.js';
+import { createApp } from '../../src/app.js';
 
 const secret = 'test-secret-at-least-32-characters-long';
 const posts = [];
@@ -49,6 +49,11 @@ test('clinic publishes title and content; its posts are readable', async () => {
   });
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
   assert.equal((await feed.json()).data.length, 1);
+  const ownPosts = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+    headers: { Authorization: `Bearer ${token()}` },
+  });
+  assert.equal(ownPosts.status, 200);
+  assert.deepEqual((await ownPosts.json()).data, posts);
 });
 
 test('rejects empty fields and unauthorized tokens', async () => {
@@ -65,4 +70,21 @@ test('rejects empty fields and unauthorized tokens', async () => {
     body: JSON.stringify({ title: '  ', content: 'text' }),
   });
   assert.equal(response.status, 400);
+});
+
+test('routes preserve health, authentication and JSON error responses', async () => {
+  const health = await fetch(`${baseUrl}/health`);
+  assert.equal(health.status, 200);
+  assert.deepEqual((await health.json()).data, { status: 'ok' });
+
+  const missing = await fetch(`${baseUrl}/not-found`);
+  assert.equal(missing.status, 404);
+  const unauthorized = await fetch(`${baseUrl}/api/v1/clinic/posts`);
+  assert.equal(unauthorized.status, 401);
+
+  const malformed = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+    method: 'POST', headers: { Authorization: `Bearer ${token()}` }, body: '{',
+  });
+  assert.equal(malformed.status, 400);
+  assert.equal((await malformed.json()).message, 'JSON không hợp lệ');
 });

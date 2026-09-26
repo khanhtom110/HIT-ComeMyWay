@@ -1,4 +1,4 @@
-export function createRepository(pool) {
+export function createClinicPostRepository(pool) {
   return {
     async findClinicByUsername(username, jti) {
       const [rows] = await pool.execute(

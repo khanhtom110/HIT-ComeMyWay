@@ -1,5 +1,6 @@
 {
-  "name": "comemyway-clinic-posts",
+  "name": "comemyway-backend-nodejs",
+  "description": "Node.js backend modules for HIT-ComeMyWay",
   "version": "1.0.0",
   "private": true,
   "type": "module",

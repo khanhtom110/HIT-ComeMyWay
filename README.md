@@ -38,6 +38,8 @@
 | API Docs | Swagger UI / OpenAPI 3.0 |
 | Deploy | AWS EC2 (t3.small) |
 
+Chức năng đăng tin phòng khám chạy trong [backend-nodejs](backend-nodejs/README.md), tổ chức theo module tính năng và dùng chung MySQL/JWT với Spring Boot. Xem tài liệu trong thư mục này để cấu hình và chạy dịch vụ Node.js.
+
 ### Frontend
 
 | Thành phần | Công nghệ |
