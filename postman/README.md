@@ -8,7 +8,7 @@ Môi trường Docker dev đã có MySQL, Redis và tài khoản phòng khám m�
 2. `Docker-Dev.local.postman_environment.json`, chọn **ComeMyWay - Docker Dev (Spring + Node)**.
 3. Chạy toàn bộ collection theo thứ tự, hoặc chỉ folder **01 - Spring Boot** nếu muốn test riêng Spring Boot.
 
-Environment đã điền tài khoản dev, `springBaseUrl=http://localhost:8080` và `nodeBaseUrl=http://localhost:3002`. Các bước đăng nhập, refresh và lấy hồ sơ tự cập nhật token/clinic ID; sau đó Node.js dùng token Spring Boot để đăng tin. File environment có mật khẩu dev nên được Git ignore.
+Environment đã điền tài khoản dev, `springBaseUrl=http://localhost:8080` và `nodeBaseUrl=http://localhost:3002`. Body đăng nhập hiển thị trực tiếp `{{username}}` và `{{password}}`; chọn environment trên trước khi bấm Send. Các bước đăng nhập, refresh và lấy hồ sơ tự cập nhật token/clinic ID; sau đó Node.js dùng token Spring Boot để đăng tin. File environment có mật khẩu dev nên được Git ignore.
 
 Để khởi động lại stack dev trên máy này, chạy lệnh sau trong PowerShell (chỉ sao chép dòng lệnh bên trong khung):
 

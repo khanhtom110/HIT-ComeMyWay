@@ -77,7 +77,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{{loginBody}}",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -94,11 +94,7 @@
                   "pm.environment.unset(\"accessToken\");",
                   "pm.environment.unset(\"refreshToken\");",
                   "pm.environment.unset(\"clinicId\");",
-                  "pm.environment.unset(\"createdPostId\");",
-                  "pm.variables.set(\"loginBody\", JSON.stringify({",
-                  "  username: pm.environment.get(\"username\") || \"\",",
-                  "  password: pm.environment.get(\"password\") || \"\"",
-                  "}));"
+                  "pm.environment.unset(\"createdPostId\");"
                 ]
               }
             },
@@ -149,7 +145,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{{refreshBody}}",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -158,15 +154,6 @@
             }
           },
           "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.variables.set(\"refreshBody\", JSON.stringify({refreshToken: pm.environment.get(\"refreshToken\") || \"\"}));"
-                ]
-              }
-            },
             {
               "listen": "test",
               "script": {
