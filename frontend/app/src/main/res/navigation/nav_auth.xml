@@ -7,36 +7,105 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.vetpet.petbeats.ui.auth.home.HomeFragment"
-        android:label="homeFragment"/>
+        android:label="homeFragment">
+        <action
+            android:id="@+id/home_login"
+            app:destination="@+id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/home_register"
+            app:destination="@+id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.vetpet.petbeats.ui.auth.login.LoginFragment"
-        android:label="loginFragment"/>
+        android:label="loginFragment">
+        <action
+            android:id="@+id/login_register"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/login_forgotPassword"
+            app:destination="@id/forgotPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.vetpet.petbeats.ui.auth.register.RegisterFragment"
-        android:label="registerFragment"/>
+        android:label="registerFragment">
+        <action
+            android:id="@+id/register_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/register_otp"
+            app:destination="@id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/registerSuccessFragment"
         android:name="com.vetpet.petbeats.ui.auth.registersuccess.RegisterSuccessFragment"
-        android:label="registerSuccessFragment"/>
+        android:label="registerSuccessFragment">
+        <action
+            android:id="@+id/registerSuccess_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.vetpet.petbeats.ui.auth.forgotpassword_user.ForgotPasswordFragment"
         android:label="forgotPasswordFragment">
         <action
-            android:id="@+id/forgotPassword_login"
-            app:destination="@+id/loginFragment"
+            android:id="@+id/forgotPassword_forgotpasswordClinic"
+            app:destination="@+id/forgotPasswordClinic"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/forgotPassword_otp"
+            app:destination="@+id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -52,6 +121,22 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/otpFragment"
             app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/resetPassword_statesuccess"
+            app:destination="@+id/stateSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/resetPassword_login"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
@@ -61,6 +146,26 @@
         <action
             android:id="@+id/otp_forgotPassword"
             app:destination="@+id/forgotPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/forgotPasswordFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/otp_registerSuccess"
+            app:destination="@+id/registerSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/forgotPasswordFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/otp_resetPassword"
+            app:destination="@+id/resetPasswordFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -107,33 +212,80 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
-
     </fragment>
 
     <fragment
         android:id="@+id/splashClinicFragment"
         android:name="com.vetpet.petbeats.ui.auth.splash_clinic.SplashClinicFragment"
-        android:label="splashClinicFragment"/>
+        android:label="splashClinicFragment">
+        <action
+            android:id="@+id/splashClinic_changePassword"
+            app:destination="@+id/changePasswordFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/changePasswordFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.vetpet.petbeats.ui.auth.changepassword_clinic.ChangePasswordFragment"
-        android:label="changePasswordFragment"/>
+        android:label="changePasswordFragment">
+        <action
+            android:id="@+id/changePasswordClinic_changeSuccess"
+            app:destination="@+id/changeSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/changeSuccessFragment"
         android:name="com.vetpet.petbeats.ui.auth.changesuccess_clinic.ChangeSuccessFragment"
-        android:label="changeSuccessFragment"/>
+        android:label="changeSuccessFragment">
+        <action
+            android:id="@+id/changeSuccess_login"
+            app:destination="@+id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/loginSuccessFragment"
         android:name="com.vetpet.petbeats.ui.auth.loginsuccess_clinic.LoginSuccessFragment"
-        android:label="loginSuccessFragment"/>
+        android:label="loginSuccessFragment">
+        <action
+            android:id="@+id/loginSuccess_informationClinic"
+            app:destination="@+id/informationClinicFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/informationClinicFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/informationClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.informationclinic.InformationClinicFragment"
-        android:label="informationClinicFragment"/>
+        android:label="informationClinicFragment">
+        <action
+            android:id="@+id/informationClinic_informationClinicSuccess"
+            app:destination="@+id/informationClinicSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/informationClinicSuccessFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/informationClinicSuccessFragment"
