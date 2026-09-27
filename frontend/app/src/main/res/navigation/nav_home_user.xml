@@ -7,22 +7,94 @@
     <fragment
         android:id="@+id/bookFragment"
         android:name="com.vetpet.petbeats.ui.home_user.book.BookFragment"
-        android:label="bookFragment"/>
+        android:label="bookFragment">
+        <action
+            android:id="@+id/book_search"
+            app:destination="@+id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/book_historyBook"
+            app:destination="@+id/historyBookFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/book_confirmAppointment"
+            app:destination="@+id/confirmAppointmentFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/chatbotFragment"
         android:name="com.vetpet.petbeats.ui.home_user.chatbot.ChatbotFragment"
-        android:label="chatbotFragmnet"/>
+        android:label="chatbotFragmnet">
+        <action
+            android:id="@+id/chatbot_informationRoom"
+            app:destination="@+id/informationRoomFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/locketFragment"
         android:name="com.vetpet.petbeats.ui.home_user.locket.LocketFragment"
-        android:label="locketFragment"/>
+        android:label="locketFragment">
+        <action
+            android:id="@+id/locket_listFriendLocket"
+            app:destination="@+id/listFriendLocketFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/locket_imageMeLocket"
+            app:destination="@+id/imageMeLocketFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"/>
+
+        <action
+            android:id="@+id/locket_imageEveryBodyLocket"
+            app:destination="@+id/imageEverybodyLocketFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"/>
+    </fragment>
 
     <fragment
         android:id="@+id/settingUserFragment"
         android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
-        android:label="settingUserFragment"/>
+        android:label="settingUserFragment">
+        <action
+            android:id="@+id/settingUser_editInformation"
+            app:destination="@+id/editInformationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/settingUser_editPassword"
+            app:destination="@+id/editPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
@@ -33,14 +105,34 @@
             app:destination="@+id/bookFragment"
             app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
             android:id="@+id/search_resultSearch"
             app:destination="@id/resultSearchFragment"
+            app:popUpTo="@id/resultSearchFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/search_informationRoom"
+            app:destination="@id/informationRoomFragment"
+            app:popUpTo="@id/resultSearchFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/search_historyList"
+            app:destination="@id/historyListAllFragment"
             app:popUpTo="@id/resultSearchFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
@@ -58,6 +150,16 @@
             app:destination="@id/searchFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/resultSearch_informationRoom"
+            app:destination="@id/informationRoomFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -68,6 +170,15 @@
         android:id="@+id/informationRoomFragment"
         android:name="com.vetpet.petbeats.ui.home_user.informationroom.InformationRoomFragment"
         android:label="informationRoomFragment">
+        <action
+            android:id="@+id/informationRoom_calendar"
+            app:destination="@id/calendarFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -79,8 +190,8 @@
             app:destination="@id/searchFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -108,6 +219,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/calendar_successAppointment"
+            app:destination="@id/successAppointFragment"
+            app:popUpTo="@id/bookFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -115,9 +236,9 @@
         android:name="com.vetpet.petbeats.ui.home_user.confirmappointment.ConfirmAppointmentFragment"
         android:label="confirmAppointmentFragment">
         <action
-            android:id="@+id/confirmAppointment_book"
-            app:destination="@+id/bookFragment"
-            app:popUpTo="@id/bookFragment"
+            android:id="@+id/confirmAppointment_search"
+            app:destination="@+id/searchFragment"
+            app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -125,8 +246,8 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/confirmAppointment_search"
-            app:destination="@+id/searchFragment"
+            android:id="@+id/confirmAppointment_editCalendar"
+            app:destination="@+id/editCalendarFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
@@ -171,8 +292,8 @@
             app:destination="@+id/bookFragment"
             app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -203,12 +324,6 @@
     </fragment>
 
     <fragment
-        android:id="@id/settingUserFragment"
-        android:name="com.vetpet.petbeats.ui.home_user.setting.SettingUserFragment"
-        android:label="settingUserFragment"/>
-
-
-    <fragment
         android:id="@+id/editInformationFragment"
         android:name="com.vetpet.petbeats.ui.home_user.edit_information_setting.EditInformationSettingFragment"
         android:label="editInformationFragment">
@@ -217,8 +332,8 @@
             app:destination="@id/settingUserFragment"
             app:popUpTo="@id/settingUserFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -232,8 +347,8 @@
             app:destination="@id/settingUserFragment"
             app:popUpTo="@id/settingUserFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -289,8 +404,8 @@
             app:destination="@id/settingUserFragment"
             app:popUpTo="@id/settingUserFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -335,10 +450,10 @@
             app:destination="@id/locketFragment"
             app:popUpTo="@id/locketFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:enterAnim="@anim/slide_down"
+            app:exitAnim="@anim/slide_up"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"/>
     </fragment>
 
     <fragment
@@ -350,10 +465,10 @@
             app:destination="@id/locketFragment"
             app:popUpTo="@id/locketFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:enterAnim="@anim/slide_down"
+            app:exitAnim="@anim/slide_up"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"/>
     </fragment>
 
     <fragment
@@ -366,8 +481,8 @@
             app:destination="@id/locketFragment"
             app:popUpTo="@id/locketFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
