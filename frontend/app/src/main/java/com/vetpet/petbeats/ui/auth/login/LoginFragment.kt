@@ -25,6 +25,11 @@ import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import com.vetpet.petbeats.ui.home_clinic.activitymain.HomeClinicActivity
 import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
+import com.vetpet.petbeats.core.utils.AnimationUtils.shake
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeOut
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -47,6 +52,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAnimations()
         setOnClick()
         stateData()
         eventData()
@@ -55,6 +61,16 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupAnimations() {
+        staggeredEntrance(
+            binding.logo1, binding.tittle,
+            binding.textName, binding.inputName,
+            binding.textPassword, binding.inputPassword,
+            binding.login, binding.donthave,
+            delayStep = 60
+        )
     }
 
     private fun setOnClick() {
@@ -103,28 +119,30 @@ class LoginFragment : Fragment() {
                     //check error
                     if (state.isName) {
                         binding.inputName.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.nameError.visibility = View.VISIBLE
+                        binding.nameError.fadeIn()
+                        binding.inputName.shake()
 
                         val nameError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputName.setTextColor(nameError)
                     }
                     else {
                         binding.inputName.setBackgroundResource(R.drawable.button_input)
-                        binding.nameError.visibility = View.GONE
+                        binding.nameError.fadeOut()
 
                         val nameSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputName.setTextColor(nameSub)
                     }
                     if (state.isPassword) {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.passwordError.visibility = View.VISIBLE
+                        binding.passwordError.fadeIn()
+                        binding.inputPassword.shake()
 
                         val passwordError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputPassword.setTextColor(passwordError)
                     }
                     else {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
-                        binding.passwordError.visibility = View.GONE
+                        binding.passwordError.fadeOut()
 
                         val passwordSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputPassword.setTextColor(passwordSub)

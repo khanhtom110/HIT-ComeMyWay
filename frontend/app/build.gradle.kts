@@ -110,4 +110,7 @@ dependencies {
 
     //Hiệu ứng shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    //Hiệu ứng Lottie animation (dấu tích thành công, confetti, loading)
+    implementation("com.airbnb.android:lottie:6.6.2")
 }

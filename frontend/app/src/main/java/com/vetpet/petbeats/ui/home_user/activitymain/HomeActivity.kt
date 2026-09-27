@@ -9,6 +9,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.ActivityHomeBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.slideDown
+import com.vetpet.petbeats.core.utils.AnimationUtils.slideUp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -104,10 +106,12 @@ class HomeActivity : AppCompatActivity() {
                 destination.id == R.id.editOtpSettingFragment ||
                 destination.id == R.id.editResetPasswordSettingFragment ||
                 destination.id == R.id.editPasswordSuccessSettingFragment) {
-                binding.bottomUserNav.visibility = View.GONE // Nếu đích đến là màn hình Máy tính -> Giấu thanh điều hướng đi
+                // Smooth slide down thay vì View.GONE đột ngột
+                binding.bottomUserNav.slideDown()
             }
             else {
-                binding.bottomUserNav.visibility = View.VISIBLE // Nếu là các màn hình khác (Home, Blog) -> Hiện thanh điều hướng lên
+                // Smooth slide up thay vì View.VISIBLE đột ngột
+                binding.bottomUserNav.slideUp()
             }
         }
     }

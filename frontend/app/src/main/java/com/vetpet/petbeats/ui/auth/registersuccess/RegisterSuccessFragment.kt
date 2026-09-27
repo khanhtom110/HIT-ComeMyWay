@@ -9,6 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentRegisterSuccessBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.popIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,13 @@ class RegisterSuccessFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Success animation: logo pop-in + title cascade
+        binding.logo1.popIn()
+        binding.tittle.let {
+            it.alpha = 0f
+            it.animate().alpha(1f).setStartDelay(400).setDuration(350).start()
+        }
 
         lifecycleScope.launch {
             delay(2000)

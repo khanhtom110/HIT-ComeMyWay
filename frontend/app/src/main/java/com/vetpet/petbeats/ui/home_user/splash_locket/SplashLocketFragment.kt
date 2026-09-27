@@ -11,6 +11,7 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentSplashLocketBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.vetpet.petbeats.core.utils.AnimationUtils.startHeartbeat
 
 
 class SplashLocketFragment : Fragment() {
@@ -28,6 +29,7 @@ class SplashLocketFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.imgHealth.startHeartbeat()
 
         lifecycleScope.launch {
             delay(2000)

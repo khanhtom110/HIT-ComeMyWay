@@ -31,6 +31,10 @@
         <action
             android:id="@+id/forgotPassword_login"
             app:destination="@+id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -42,6 +46,10 @@
         <action
             android:id="@+id/resetPassword_otp"
             app:destination="@+id/otpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/otpFragment"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -53,6 +61,10 @@
         <action
             android:id="@+id/otp_forgotPassword"
             app:destination="@+id/forgotPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/forgotPasswordFragment"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -64,6 +76,10 @@
         <action
             android:id="@+id/success_login"
             app:destination="@+id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
     </fragment>
@@ -75,12 +91,20 @@
         <action
             android:id="@+id/forgotClinic_forgot"
             app:destination="@id/forgotPasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/forgotPasswordFragment"
             app:popUpToInclusive="true"/>
 
         <action
             android:id="@+id/forgotClinic_login"
             app:destination="@+id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
 
