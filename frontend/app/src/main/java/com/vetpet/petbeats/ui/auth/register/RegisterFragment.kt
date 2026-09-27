@@ -44,23 +44,9 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupAnimations()
         setOnCLick()
         stateData()
         eventData()
-    }
-
-    private fun setupAnimations() {
-        staggeredEntrance(
-            binding.logo1,
-            binding.tittle,
-            binding.inputName,
-            binding.inputEmail,
-            binding.inputPassword,
-            binding.inputPassword1,
-            binding.otp,
-            binding.login1
-        )
     }
 
     override fun onDestroyView() {
@@ -239,7 +225,7 @@ class RegisterFragment : Fragment() {
                     when (event) {
                         is RegisterEvent.NavigationRegisterSendEmail -> {
                             findNavController().navigate(
-                                R.id.otpFragment,
+                                R.id.register_otp,
                                 Bundle().apply {
                                     putString("email", event.email)
                                     putString("nextscreen", "registersuccess")
@@ -248,7 +234,7 @@ class RegisterFragment : Fragment() {
                         }
 
                         is RegisterEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.register_login)
                         }
                     }
                 }

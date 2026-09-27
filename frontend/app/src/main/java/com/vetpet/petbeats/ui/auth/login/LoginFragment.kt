@@ -52,7 +52,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupAnimations()
         setOnClick()
         stateData()
         eventData()
@@ -61,16 +60,6 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun setupAnimations() {
-        staggeredEntrance(
-            binding.logo1, binding.tittle,
-            binding.textName, binding.inputName,
-            binding.textPassword, binding.inputPassword,
-            binding.login, binding.donthave,
-            delayStep = 60
-        )
     }
 
     private fun setOnClick() {
@@ -177,10 +166,10 @@ class LoginFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is LoginEvent.NavigationForgot -> {
-                            findNavController().navigate(R.id.forgotPasswordFragment)
+                            findNavController().navigate(R.id.login_forgotPassword)
                         }
                         is LoginEvent.NavigationRegister -> {
-                            findNavController().navigate(R.id.registerFragment)
+                            findNavController().navigate(R.id.login_register)
                         }
                         is LoginEvent.NavigationUserHome -> {
                             val tokenManager = TokenManager(requireContext())

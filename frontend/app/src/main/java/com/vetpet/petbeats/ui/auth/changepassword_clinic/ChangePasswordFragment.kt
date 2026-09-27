@@ -159,7 +159,7 @@ class ChangePasswordFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is ChangePasswordEvent.NavigationChangeSuccess -> {
-                            findNavController().navigate(R.id.changeSuccessFragment)
+                            findNavController().navigate(R.id.changePasswordClinic_changeSuccess)
                         }
                     }
                 }

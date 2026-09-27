@@ -41,7 +41,7 @@ class RegisterSuccessFragment: Fragment() {
 
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.loginFragment)
+            findNavController().navigate(R.id.registerSuccess_login)
         }
     }
 

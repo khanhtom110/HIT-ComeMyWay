@@ -68,7 +68,7 @@ class StateSuccessFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is StateSuccessEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.success_login)
                         }
                     }
                 }

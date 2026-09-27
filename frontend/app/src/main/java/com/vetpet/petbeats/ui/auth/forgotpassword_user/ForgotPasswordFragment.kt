@@ -106,7 +106,7 @@ class ForgotPasswordFragment : Fragment() {
                     when (event) {
                         is ForgotPasswordEvent.NavigationOTPSendEmail -> {
                             findNavController().navigate(
-                                R.id.otpFragment,
+                                R.id.forgotPassword_otp,
                                 Bundle().apply {
                                     putString("email", event.email)
                                     putString("nextscreen", "resetpassword")
@@ -119,7 +119,7 @@ class ForgotPasswordFragment : Fragment() {
                         }
 
                         is ForgotPasswordEvent.NavigationForgotClinicSuccess -> {
-                            findNavController().navigate(R.id.forgotPasswordClinic)
+                            findNavController().navigate(R.id.forgotPassword_forgotpasswordClinic)
                         }
                     }
                 }

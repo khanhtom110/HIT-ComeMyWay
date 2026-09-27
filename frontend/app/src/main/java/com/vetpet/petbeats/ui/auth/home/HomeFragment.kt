@@ -70,10 +70,10 @@ class HomeFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is HomeEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.home_login)
                         }
                         is HomeEvent.NavigationRegister -> {
-                            findNavController().navigate(R.id.registerFragment)
+                            findNavController().navigate(R.id.home_register)
                         }
                     }
                 }

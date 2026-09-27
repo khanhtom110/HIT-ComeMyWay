@@ -279,11 +279,11 @@ class OtpFragment : Fragment() {
                         //Nút verify chuyển sang màn tiếp theo
                         is OtpEvent.NavigationSendToken -> {
                             if (currenScreen == "registersuccess") {
-                                findNavController().navigate(R.id.registerSuccessFragment)
+                                findNavController().navigate(R.id.otp_registerSuccess)
                             }
                             if (currenScreen == "resetpassword") {
                                 findNavController().navigate(
-                                    R.id.resetPasswordFragment,
+                                    R.id.otp_resetPassword,
                                     Bundle().apply {
                                         putString("token", event.token)
                                         putString("email", event.email)
