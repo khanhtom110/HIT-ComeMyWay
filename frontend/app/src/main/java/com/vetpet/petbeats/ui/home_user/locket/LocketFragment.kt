@@ -403,13 +403,13 @@ class LocketFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is LocketEvent.NavigationListFriendLocket -> {
-                            findNavController().navigate(R.id.listFriendLocketFragment)
+                            findNavController().navigate(R.id.locket_listFriendLocket)
                         }
                         is LocketEvent.NavigationMeLocket -> {
-                            findNavController().navigate(R.id.imageMeLocketFragment)
+                            findNavController().navigate(R.id.locket_imageMeLocket)
                         }
                         is LocketEvent.NavigationEverybodyLocket -> {
-                            findNavController().navigate(R.id.imageEverybodyLocketFragment)
+                            findNavController().navigate(R.id.locket_imageEveryBodyLocket)
                         }
                     }
                 }

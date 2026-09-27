@@ -179,14 +179,14 @@ class SearchFragment : Fragment() {
                         }
                         is SearchEvent.NavigationInformationId -> {
                             findNavController().navigate(
-                                R.id.informationRoomFragment,
+                                R.id.search_informationRoom,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
                             )
                         }
                         is SearchEvent.NavigationHistoryListALl -> {
-                            findNavController().navigate(R.id.historyListAllFragment)
+                            findNavController().navigate(R.id.search_historyList)
                         }
                     }
                 }

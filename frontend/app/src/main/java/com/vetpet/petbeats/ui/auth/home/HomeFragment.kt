@@ -47,9 +47,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupAnimations() {
-        // Logo: scale-in + breathing pulse
         binding.logo.splashEntrance()
-        // Buttons: staggered slide-up entrance
+
         staggeredEntrance(binding.login, binding.register, delayStep = 150)
     }
 

@@ -168,7 +168,7 @@ class ResultSearchFragment : Fragment() {
 
                         is ResultSearchEvent.NavigationInformation -> {
                             findNavController().navigate(
-                                R.id.informationRoomFragment,
+                                R.id.resultSearch_informationRoom,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }

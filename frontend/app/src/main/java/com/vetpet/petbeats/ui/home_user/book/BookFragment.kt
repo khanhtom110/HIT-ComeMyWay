@@ -177,14 +177,14 @@ class BookFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is BookEvent.NavigationSearch -> {
-                            findNavController().navigate(R.id.searchFragment)
+                            findNavController().navigate(R.id.book_search)
                         }
                         is BookEvent.NavigationHistoryBook -> {
-                            findNavController().navigate(R.id.historyBookFragment)
+                            findNavController().navigate(R.id.book_historyBook)
                         }
                         is BookEvent.NavigationBookingAppointment -> {
                             findNavController().navigate(
-                                R.id.confirmAppointmentFragment,
+                                R.id.book_confirmAppointment,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                     putInt("clinicId", event.clinicId)

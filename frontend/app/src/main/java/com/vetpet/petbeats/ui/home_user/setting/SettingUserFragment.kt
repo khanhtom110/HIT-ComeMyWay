@@ -96,14 +96,14 @@ class SettingUserFragment : Fragment() {
                     when(event) {
                         is SettingUserEvent.NavigationEditInformationSetting -> {
                             findNavController().navigate(
-                                R.id.editInformationFragment,
+                                R.id.settingUser_editInformation,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
                             )
                         }
                         is SettingUserEvent.NavigationEditPasswordSetting -> {
-                            findNavController().navigate(R.id.editPasswordFragment)
+                            findNavController().navigate(R.id.settingUser_editPassword)
                         }
                         is SettingUserEvent.NavigationLogin -> {
                             val intent = Intent(requireContext(), AuthActivity::class.java)

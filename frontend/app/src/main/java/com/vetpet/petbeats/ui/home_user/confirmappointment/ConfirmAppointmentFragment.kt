@@ -170,7 +170,7 @@ class ConfirmAppointmentFragment : Fragment() {
                         }
                         is ConfirmAppointmentEvent.NavigationEditAppointment -> {
                             findNavController().navigate(
-                                R.id.editCalendarFragment,
+                                R.id.confirmAppointment_editCalendar,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                     putInt("clinicId", event.clinicId)

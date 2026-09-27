@@ -124,7 +124,7 @@ class ChatbotFragment : Fragment() {
                     when (event) {
                         is ChatbotEventReal.NavigaitonInformation -> {
                             findNavController().navigate(
-                                R.id.informationRoomFragment,
+                                R.id.chatbot_informationRoom,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
