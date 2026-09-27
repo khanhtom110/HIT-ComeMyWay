@@ -23,6 +23,10 @@ import kotlinx.coroutines.launch
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
 
 @AndroidEntryPoint
 class BookFragment : Fragment() {
@@ -64,6 +68,12 @@ class BookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        staggeredEntrance(
+            binding.tittle,
+            binding.title1,
+            binding.logo,
+            binding.search
+        )
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         checkLocationPermissionAndStartSearch()
@@ -121,9 +131,11 @@ class BookFragment : Fragment() {
 
     private fun setOnClick() {
         binding.search.setOnClickListener {
+            it.scaleBounce()
             viewModel.searchClick()
         }
         binding.buttonAll.setOnClickListener {
+            it.scaleBounce()
             viewModel.historyBookClick()
         }
     }
@@ -143,14 +155,14 @@ class BookFragment : Fragment() {
                     }
                     else {
                         binding.shimmerFrameLayout.stopShimmer()
-                        binding.shimmerFrameLayout.visibility = View.GONE
 
                         //Kiểm tra xem list có data không
                         if (state.listBook.isEmpty()) {
+                            binding.shimmerFrameLayout.visibility = View.GONE
                             binding.recycle.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.VISIBLE
+                            binding.tvEmpty.fadeIn()
                         } else {
-                            binding.recycle.visibility = View.VISIBLE
+                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
                             binding.tvEmpty.visibility = View.GONE
                         }
                     }

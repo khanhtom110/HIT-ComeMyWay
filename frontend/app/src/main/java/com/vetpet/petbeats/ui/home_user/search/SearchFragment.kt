@@ -22,6 +22,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -152,8 +154,7 @@ class SearchFragment : Fragment() {
                     }
                     else {
                         binding.shimmerFrameLayout.stopShimmer()
-                        binding.shimmerFrameLayout.visibility = View.GONE
-                        binding.recycleHint.visibility = View.VISIBLE
+                        crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycleHint)
                     }
                 }
             }

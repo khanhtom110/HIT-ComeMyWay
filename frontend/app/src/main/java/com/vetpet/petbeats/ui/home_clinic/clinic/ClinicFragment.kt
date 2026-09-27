@@ -22,6 +22,8 @@ import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 
 @AndroidEntryPoint
 class ClinicFragment : Fragment() {
@@ -55,12 +57,15 @@ class ClinicFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnEdit.setOnClickListener {
+            it.scaleBounce()
             viewModel.editInformationClick()
         }
         binding.btnPassword.setOnClickListener {
+            it.scaleBounce()
             viewModel.editPasswordClick()
         }
         binding.btnLogOut.setOnClickListener {
+            it.scaleBounce()
             viewModel.onLogoutClick()
         }
 
@@ -140,6 +145,7 @@ class ClinicFragment : Fragment() {
                     if (state.image.isNotEmpty()) {
                         Glide.with(requireContext())
                             .load(state.image)
+                            .transition(com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade())
                             .into(binding.imgLibrary)
                     }
 

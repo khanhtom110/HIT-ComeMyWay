@@ -12,6 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentHomeBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.splashEntrance
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +36,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupAnimations()
         setOnClick()
         stateData()
     }
@@ -42,11 +46,20 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    private fun setupAnimations() {
+        // Logo: scale-in + breathing pulse
+        binding.logo.splashEntrance()
+        // Buttons: staggered slide-up entrance
+        staggeredEntrance(binding.login, binding.register, delayStep = 150)
+    }
+
     private fun setOnClick() {
         binding.login.setOnClickListener {
+            binding.login.scaleBounce()
             viewModel.loginClick()
         }
         binding.register.setOnClickListener {
+            binding.register.scaleBounce()
             viewModel.registerClick()
         }
     }

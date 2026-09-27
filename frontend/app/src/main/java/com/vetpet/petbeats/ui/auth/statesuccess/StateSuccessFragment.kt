@@ -12,6 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentStateSuccessBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.popIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +35,17 @@ class StateSuccessFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Success animation
+        binding.logo1.popIn()
+        binding.tittle.let {
+            it.alpha = 0f
+            it.animate().alpha(1f).setStartDelay(400).setDuration(350).start()
+        }
+        binding.backToLogin.let {
+            it.alpha = 0f
+            it.animate().alpha(1f).setStartDelay(600).setDuration(350).start()
+        }
+
         setOnClick()
         eventData()
     }
@@ -44,6 +57,7 @@ class StateSuccessFragment : Fragment() {
 
     private fun setOnClick() {
         binding.backToLogin.setOnClickListener {
+            binding.backToLogin.scaleBounce()
             viewModel.loginClick()
         }
     }
