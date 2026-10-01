@@ -90,7 +90,7 @@ jobs:
             set -e
             cd ~/deploy-aws
 
-            APP_PATTERN='[c]omemyway-0.0.1-SNAPSHOT.jar'
+            APP_PATTERN='^(java|/[^ ]*/java) -jar comemyway-0\.0\.1-SNAPSHOT\.jar([[:space:]]|$)'
             if pgrep -f "$APP_PATTERN" >/dev/null; then
               pkill -f "$APP_PATTERN" || true
               for attempt in 1 2 3 4 5 6 7 8 9 10; do
