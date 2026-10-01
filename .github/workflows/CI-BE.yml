@@ -90,15 +90,19 @@ jobs:
             set -e
             cd ~/deploy-aws
 
-            PID=$(pgrep -f '[c]omemyway-0.0.1-SNAPSHOT.jar' || true)
-            if [ -n "$PID" ]; then
-              kill "$PID"
+            APP_PATTERN='[c]omemyway-0.0.1-SNAPSHOT.jar'
+            if pgrep -f "$APP_PATTERN" >/dev/null; then
+              pkill -f "$APP_PATTERN" || true
               for attempt in 1 2 3 4 5 6 7 8 9 10; do
-                if ! kill -0 "$PID" 2>/dev/null; then
+                if ! pgrep -f "$APP_PATTERN" >/dev/null; then
                   break
                 fi
                 sleep 1
               done
+
+              if pgrep -f "$APP_PATTERN" >/dev/null; then
+                pkill -9 -f "$APP_PATTERN" || true
+              fi
             fi
 
             nohup java -jar comemyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
