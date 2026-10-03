@@ -20,7 +20,7 @@ public class ClinicPostReadService {
     if (limit < 1 || limit > 50 || (lastPostId != null && lastPostId <= 0)) {
       throw new AppException(400, "limit phải từ 1 đến 50 và lastPostId phải lớn hơn 0");
     }
-    List<ClinicPostResponse> rows = repository.findPublished(lastPostId, limit + 1);
+    List<ClinicPostResponse> rows = repository.findPosts(lastPostId, limit + 1);
     List<ClinicPostListItemResponse> items = rows.stream().limit(limit)
         .map(post -> new ClinicPostListItemResponse(post.id(), post.clinicId(), post.clinicName(),
             post.clinicAvatarUrl(), post.title(), excerpt(post.content()), post.imageUrl()))
@@ -34,7 +34,7 @@ public class ClinicPostReadService {
     if (id <= 0) {
       throw new AppException(400, "ID bài viết phải lớn hơn 0");
     }
-    return repository.findPublishedById(id)
+    return repository.findById(id)
         .orElseThrow(() -> new AppException(404, "Không tìm thấy bài viết"));
   }
 

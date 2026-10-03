@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hit.comemyway.dto.response.ClinicPostResponse;
 import java.sql.ResultSet;
 import java.util.List;
@@ -14,35 +15,39 @@ import org.springframework.jdbc.core.RowMapper;
 
 class ClinicPostReadRepositoryTest {
   private final JdbcTemplate jdbc = mock(JdbcTemplate.class);
-  private final ClinicPostReadRepository repository = new ClinicPostReadRepository(jdbc);
+  private final ClinicPostReadRepository repository =
+      new ClinicPostReadRepository(jdbc, new ObjectMapper());
 
   @Test
   @SuppressWarnings("unchecked")
-  void cursorQueryFiltersPublishedRowsAndBindsParameters() {
+  void cursorQueryHasNoStatusFilterAndBindsParameters() {
     when(jdbc.query(anyString(), any(RowMapper.class), eq(20L), eq(11))).thenReturn(List.of());
-    repository.findPublished(20L, 11);
+    repository.findPosts(20L, 11);
     var sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).query(sql.capture(), any(RowMapper.class), eq(20L), eq(11));
-    assertTrue(sql.getValue().contains("p.status = 'PUBLISHED'"));
+    assertFalse(sql.getValue().contains("status"));
+    assertTrue(sql.getValue().contains("p.image_urls"));
     assertTrue(sql.getValue().contains("p.id < ? ORDER BY p.id DESC LIMIT ?"));
   }
 
   @Test
   @SuppressWarnings("unchecked")
-  void firstPageAndDetailKeepPublishedFilter() {
+  void firstPageAndDetailDoNotDependOnStatus() {
     when(jdbc.query(anyString(), any(RowMapper.class), eq(11))).thenReturn(List.of());
     when(jdbc.query(anyString(), any(RowMapper.class), eq(42L))).thenReturn(List.of());
-    assertTrue(repository.findPublished(null, 11).isEmpty());
-    assertTrue(repository.findPublishedById(42).isEmpty());
-    verify(jdbc).query(contains("p.status = 'PUBLISHED'"), any(RowMapper.class), eq(11));
-    verify(jdbc).query(contains("AND p.id = ?"), any(RowMapper.class), eq(42L));
+    assertTrue(repository.findPosts(null, 11).isEmpty());
+    assertTrue(repository.findById(42).isEmpty());
+    verify(jdbc).query(argThat(sql -> !sql.contains("status") && !sql.contains("WHERE")),
+        any(RowMapper.class), eq(11));
+    verify(jdbc).query(argThat(sql -> !sql.contains("status") && sql.contains("WHERE p.id = ?")),
+        any(RowMapper.class), eq(42L));
   }
 
   @Test
   @SuppressWarnings("unchecked")
   void mapsContentAndAllowsMissingImage() throws Exception {
     when(jdbc.query(anyString(), any(RowMapper.class), eq(11))).thenReturn(List.of());
-    repository.findPublished(null, 11);
+    repository.findPosts(null, 11);
     ArgumentCaptor<RowMapper<ClinicPostResponse>> mapper = ArgumentCaptor.forClass(RowMapper.class);
     verify(jdbc).query(anyString(), mapper.capture(), eq(11));
     var rs = mock(ResultSet.class);
@@ -51,5 +56,29 @@ class ClinicPostReadRepositoryTest {
     assertNotNull(post);
     assertEquals("Nội dung đầy đủ", post.content());
     assertNull(post.imageUrl());
+    assertEquals(List.of(), post.imageUrls());
+  }
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void mapsNodeImageJsonInOrderAndUsesFirstImageAsThumbnail() throws Exception {
+    when(jdbc.query(anyString(), any(RowMapper.class), eq(11))).thenReturn(List.of());
+    repository.findPosts(null, 11);
+    ArgumentCaptor<RowMapper<ClinicPostResponse>> mapper = ArgumentCaptor.forClass(RowMapper.class);
+    verify(jdbc).query(anyString(), mapper.capture(), eq(11));
+    var rs = mock(ResultSet.class);
+    when(rs.getString("image_urls"))
+        .thenReturn("[\"https://example.com/first.jpg\",\"https://example.com/second.jpg\"]");
+    var post = mapper.getValue().mapRow(rs, 0);
+    assertEquals("https://example.com/first.jpg", post.imageUrl());
+    assertEquals(List.of("https://example.com/first.jpg", "https://example.com/second.jpg"),
+        post.imageUrls());
+    when(rs.getString("image_urls")).thenReturn("[]");
+    assertNull(mapper.getValue().mapRow(rs, 0).imageUrl());
+    assertTrue(mapper.getValue().mapRow(rs, 0).imageUrls().isEmpty());
+    when(rs.getString("image_urls")).thenReturn("null");
+    assertTrue(mapper.getValue().mapRow(rs, 0).imageUrls().isEmpty());
+    when(rs.getString("image_urls")).thenReturn("not-json");
+    assertThrows(java.sql.SQLException.class, () -> mapper.getValue().mapRow(rs, 0));
   }
 }

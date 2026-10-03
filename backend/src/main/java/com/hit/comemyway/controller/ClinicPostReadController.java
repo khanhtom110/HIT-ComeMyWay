@@ -24,8 +24,9 @@ public class ClinicPostReadController {
   private final ClinicPostReadService service;
 
   @GetMapping
-  @Operation(summary = "Danh sách bài viết", description = "Bài PUBLISHED, mới nhất trước; "
-      + "dùng lastPostId của trang trước để lấy trang tiếp theo. limit từ 1 đến 50.")
+  @Operation(summary = "Danh sách bài viết",
+      description = "Bài đăng hiển thị ngay, mới nhất trước; "
+          + "dùng lastPostId của trang trước để lấy trang tiếp theo. limit từ 1 đến 50.")
   public ApiResponse<CursorResponse<ClinicPostListItemResponse>> list(
       @RequestParam(required = false) Long lastPostId,
       @RequestParam(defaultValue = "10") int limit) {
@@ -33,7 +34,8 @@ public class ClinicPostReadController {
   }
 
   @GetMapping("/{id}")
-  @Operation(summary = "Chi tiết bài viết", description = "Bài nháp, ẩn hoặc đã xóa trả 404.")
+  @Operation(summary = "Chi tiết bài viết",
+      description = "Trả toàn bộ ảnh; bài không tồn tại hoặc đã xóa trả 404.")
   public ApiResponse<ClinicPostResponse> detail(@PathVariable long id) {
     return ApiResponse.ok(service.detail(id));
   }

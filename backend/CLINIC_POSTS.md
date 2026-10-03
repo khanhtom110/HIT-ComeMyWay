@@ -4,20 +4,23 @@ Scope: Spring Boot only. No Node.js, Android, credentials, or deployed database 
 
 ## Shared schema
 
-The original Node.js service writes clinic_posts(id, clinic_id, title, content, created_at).
-Before deploying the reader, apply database/migrations/001_create_clinic_posts.sql if the table
-does not exist, then apply 002_extend_clinic_posts.sql ONCE. Back up the database first.
-The second migration adds image_url (nullable), status (PUBLISHED by default), updated_at
-(nullable), and a status/id index. It adds no summary or published_at columns.
-Existing Node.js inserts still work because the new fields have defaults.
+Both services must connect to the same database. The current Node.js service writes
+clinic_posts(id, clinic_id, title, content, image_urls JSON NULL, created_at).
+The reader uses that schema directly; no approval/status field is required.
+Use Node.js migrations 001_create_clinic_posts.sql and 002_add_clinic_post_images.sql
+when setting up a new database. Inspect the schema and back up the database first;
+only apply the image migration if image_urls does not already exist.
+Do not apply the legacy Spring Boot 002_extend_clinic_posts.sql for new deployments:
+its image_url/status fields are no longer used. Existing legacy columns may remain.
+This change does not drop database columns or migrate legacy image_url data.
+If old posts only have image_url, migrate those images separately into image_urls.
 
-Example commands from the backend directory (password is prompted):
+Example schema inspection (password is prompted):
 ```sh
-mysql -h 127.0.0.1 -u comemyway -p pet_heartbeat_db < database/migrations/001_create_clinic_posts.sql
-mysql -h 127.0.0.1 -u comemyway -p pet_heartbeat_db < database/migrations/002_extend_clinic_posts.sql
+mysql -h 127.0.0.1 -u comemyway -p pet_heartbeat_db -e "SHOW CREATE TABLE clinic_posts;"
 ```
 
-These are manual migrations, not executed by Spring Boot. Do not rerun 002.
+Schema migrations are manual, not executed by Spring Boot.
 No JPA entity is registered for this table, so Hibernate does not manage its schema.
 created_at remains a UTC DATETIME written by Node.js; it is not returned in post responses.
 updated_at is metadata only; the reader does not invent update timestamps.
@@ -32,12 +35,15 @@ Public endpoints under the existing public security rules:
 Response envelope: statusCode, message, data, timestamp.
 List data: content, hasNext, lastPostId.
 Each item: id, clinicId, clinicName, clinicAvatarUrl, title, excerpt, imageUrl.
-Detail includes content instead of excerpt.
+Detail includes content instead of excerpt, and also returns imageUrls (all images).
 
-Only PUBLISHED rows are returned; DRAFT/ARCHIVED, deleted or absent details return 404.
+All existing posts are immediately visible without admin approval or a status filter.
+This includes legacy DRAFT/ARCHIVED rows: review those rows before deploying if they
+must not be public. Deleted or absent details return 404.
 Order is id DESC, with id < lastPostId for the next page; limit accepts 1..50.
 Excerpt is derived from plain text content (up to 180 Unicode code points).
-No image is fabricated: imageUrl may be null until the posting service is extended separately.
+imageUrls preserves the order of the Node.js JSON array; imageUrl is the first image
+(thumbnail), or null when no images exist. SQL NULL and an empty array produce imageUrls: [].
 Clinic avatar comes from clinics.thumbnail_url. Treat content as plain text on clients.
 
 ## Verification
@@ -47,8 +53,9 @@ Run the focused tests:
 ./mvnw -Dtest=ClinicPostReadServiceTest,ClinicPostReadRepositoryTest test
 ```
 
-On a disposable shared database: create a clinic post using Node.js, check that Spring Boot
-returns it, set status to DRAFT or ARCHIVED and verify both list exclusion and detail 404,
-then delete it through Node.js and verify detail 404. Check a feed with more than one page.
-Image URLs and statuses require a separate authorized change to the Node.js writer;
-this implementation does not modify that backend.
+On a disposable shared database: create a clinic post using Node.js and check that Spring Boot
+immediately returns it, with the first image in the feed and all images in detail.
+Test posts without images, multiple pages, and any legacy status values (no filtering).
+After an authorized edit, verify the updated data; after deletion through Node.js,
+verify list exclusion and detail 404. This implementation does not modify Node.js
+or add Spring Boot mutation endpoints.
