@@ -43,4 +43,8 @@
     <!--shimmer-->
     <color name="colorShimmer">#E0E0E0</color>
 
+
+    <!--news-->
+    <color name="colorListNews">#E4E4E6</color>
+
 </resources>
