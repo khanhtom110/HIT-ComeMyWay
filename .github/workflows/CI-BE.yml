@@ -90,6 +90,11 @@ jobs:
             set -e
             cd ~/deploy-aws
 
+            command -v java >/dev/null || { echo 'Install Java 21 on EC2 before deploying.'; exit 1; }
+            java -version
+            test -s comemyway-0.0.1-SNAPSHOT.jar
+            test -f .env || { echo 'Missing ~/deploy-aws/.env: configure backend environment on EC2.'; exit 1; }
+
             APP_PATTERN='^(java|/[^ ]*/java) -jar comemyway-0\.0\.1-SNAPSHOT\.jar([[:space:]]|$)'
             if pgrep -f "$APP_PATTERN" >/dev/null; then
               pkill -f "$APP_PATTERN" || true
@@ -105,10 +110,15 @@ jobs:
               fi
             fi
 
-            nohup java -jar comemyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+            nohup java -jar comemyway-0.0.1-SNAPSHOT.jar > app.log 2>&1 < /dev/null &
+            APP_PID=$!
 
             for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-              if curl --fail --silent http://127.0.0.1:8080/v3/api-docs >/dev/null; then
+              if ! kill -0 "$APP_PID" 2>/dev/null; then
+                echo 'Backend process exited during startup. Check ~/deploy-aws/app.log on EC2.'
+                exit 1
+              fi
+              if curl --max-time 5 --fail --silent http://127.0.0.1:8080/v3/api-docs >/dev/null; then
                 echo "Backend is running on port 8080"
                 exit 0
               fi
