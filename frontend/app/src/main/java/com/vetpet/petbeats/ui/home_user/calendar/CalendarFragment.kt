@@ -647,7 +647,7 @@ class CalendarFragment : Fragment() {
                         }
                         is CalendarEvent.NavigationSuccessAppointment -> {
                             findNavController().navigate(
-                                R.id.successAppointFragment,
+                                R.id.calendar_successAppointment,
                                 Bundle().apply {
                                     putInt("clinicId", event.clinicId)
                                     putInt("id", event.id)

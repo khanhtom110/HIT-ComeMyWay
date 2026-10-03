@@ -18,6 +18,8 @@ import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 
 @AndroidEntryPoint
 class SettingUserFragment : Fragment() {
@@ -51,14 +53,17 @@ class SettingUserFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnEdit.setOnClickListener {
+            it.scaleBounce()
             viewModel.editInformationClick()
         }
         binding.btnPassword.setOnClickListener {
+            it.scaleBounce()
             viewModel.editPasswordClick()
         }
 
 
         binding.btnLogOut.setOnClickListener {
+            it.scaleBounce()
             viewModel.onLogoutClick()
         }
     }
@@ -76,6 +81,7 @@ class SettingUserFragment : Fragment() {
                     if (state.image.isNotEmpty()) {
                         Glide.with(requireContext())
                             .load(state.image)
+                            .transition(com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade())
                             .into(binding.imgLibrary)
                     }
                 }
@@ -90,14 +96,14 @@ class SettingUserFragment : Fragment() {
                     when(event) {
                         is SettingUserEvent.NavigationEditInformationSetting -> {
                             findNavController().navigate(
-                                R.id.editInformationFragment,
+                                R.id.settingUser_editInformation,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
                             )
                         }
                         is SettingUserEvent.NavigationEditPasswordSetting -> {
-                            findNavController().navigate(R.id.editPasswordFragment)
+                            findNavController().navigate(R.id.settingUser_editPassword)
                         }
                         is SettingUserEvent.NavigationLogin -> {
                             val intent = Intent(requireContext(), AuthActivity::class.java)

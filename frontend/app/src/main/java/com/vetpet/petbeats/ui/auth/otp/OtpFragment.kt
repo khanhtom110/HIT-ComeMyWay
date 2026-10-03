@@ -18,6 +18,9 @@ import com.example.VetPet.databinding.FragmentOtpBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.toString
+import com.vetpet.petbeats.core.utils.AnimationUtils.shake
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 
 
 @AndroidEntryPoint
@@ -58,6 +61,7 @@ class OtpFragment : Fragment() {
 
     private fun setOnCLick() {
         binding.verify.setOnClickListener {
+            it.scaleBounce()
             val email = arguments?.getString("email") ?: ""
 
             viewModel.onResetClick(email, currenScreen)
@@ -206,6 +210,12 @@ class OtpFragment : Fragment() {
 
                     //check error
                     if (state.isOtp) {
+                        binding.input1.shake()
+                        binding.input2.shake()
+                        binding.input3.shake()
+                        binding.input4.shake()
+                        binding.input5.shake()
+                        binding.input6.shake()
                         binding.input1.setBackgroundResource(R.drawable.button_input_errol)
                         binding.input2.setBackgroundResource(R.drawable.button_input_errol)
                         binding.input3.setBackgroundResource(R.drawable.button_input_errol)
@@ -213,7 +223,7 @@ class OtpFragment : Fragment() {
                         binding.input5.setBackgroundResource(R.drawable.button_input_errol)
                         binding.input6.setBackgroundResource(R.drawable.button_input_errol)
 
-                        binding.otpError.visibility = View.VISIBLE
+                        binding.otpError.fadeIn()
 
                         val otpError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.input1.setTextColor(otpError)
@@ -269,11 +279,11 @@ class OtpFragment : Fragment() {
                         //Nút verify chuyển sang màn tiếp theo
                         is OtpEvent.NavigationSendToken -> {
                             if (currenScreen == "registersuccess") {
-                                findNavController().navigate(R.id.registerSuccessFragment)
+                                findNavController().navigate(R.id.otp_registerSuccess)
                             }
                             if (currenScreen == "resetpassword") {
                                 findNavController().navigate(
-                                    R.id.resetPasswordFragment,
+                                    R.id.otp_resetPassword,
                                     Bundle().apply {
                                         putString("token", event.token)
                                         putString("email", event.email)

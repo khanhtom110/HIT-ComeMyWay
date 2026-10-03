@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.generativeai)
+    implementation(libs.androidx.room.ktx)
 //    implementation(libs.firebase.messaging.ktx) // Đã xóa: Google đã khai tử bản -ktx, chuyển sang dùng bản gốc kết hợp Firebase BoM.
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -110,4 +111,7 @@ dependencies {
 
     //Hiệu ứng shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    //Hiệu ứng Lottie animation (dấu tích thành công, confetti, loading)
+    implementation("com.airbnb.android:lottie:6.6.2")
 }

@@ -474,7 +474,7 @@ class InformationClinicFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is InformationClinicEvent.NavigationInformationSuccess -> {
-                            findNavController().navigate(R.id.informationClinicSuccessFragment)
+                            findNavController().navigate(R.id.informationClinic_informationClinicSuccess)
                         }
                     }
                 }

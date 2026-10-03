@@ -173,7 +173,7 @@ class InformationRoomFragment : Fragment() {
                         }
                         is InformationRoomEvent.NavigationCalendar -> {
                             findNavController().navigate(
-                                R.id.calendarFragment,
+                                R.id.informationRoom_calendar,
                                 Bundle().apply {
                                     putInt("clinicId", event.clinicId)
                                     putInt("id", event.id)

@@ -19,6 +19,11 @@ import kotlinx.coroutines.launch
 import kotlin.toString
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
+import com.vetpet.petbeats.core.utils.AnimationUtils.shake
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeOut
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -114,56 +119,60 @@ class RegisterFragment : Fragment() {
                     //check error
                     if (state.isName) {
                         binding.inputName.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.nameError.visibility = View.VISIBLE
+                        binding.nameError.fadeIn()
+                        binding.inputName.shake()
 
                         val nameError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputName.setTextColor(nameError)
                     }
                     else {
                         binding.inputName.setBackgroundResource(R.drawable.button_input)
-                        binding.nameError.visibility = View.GONE
+                        binding.nameError.fadeOut()
 
                         val nameSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputName.setTextColor(nameSub)
                     }
                     if (state.isEmail) {
                         binding.inputEmail.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.emailError.visibility = View.VISIBLE
+                        binding.emailError.fadeIn()
+                        binding.inputEmail.shake()
 
                         val emailError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputEmail.setTextColor(emailError)
                     }
                     else {
                         binding.inputEmail.setBackgroundResource(R.drawable.button_input)
-                        binding.emailError.visibility = View.GONE
+                        binding.emailError.fadeOut()
 
                         val emailSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputEmail.setTextColor(emailSub)
                     }
                     if (state.isPassword) {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.passwordError.visibility = View.VISIBLE
+                        binding.passwordError.fadeIn()
+                        binding.inputPassword.shake()
 
                         val passwordError = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputPassword.setTextColor(passwordError)
                     }
                     else {
                         binding.inputPassword.setBackgroundResource(R.drawable.button_input)
-                        binding.passwordError.visibility = View.GONE
+                        binding.passwordError.fadeOut()
 
                         val passwordSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputPassword.setTextColor(passwordSub)
                     }
                     if (state.isPassword1) {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.passwordError1.visibility = View.VISIBLE
+                        binding.passwordError1.fadeIn()
+                        binding.inputPassword1.shake()
 
                         val passwordError1 = ContextCompat.getColor(requireContext(),R.color.colorError)
                         binding.inputPassword1.setTextColor(passwordError1)
                     }
                     else {
                         binding.inputPassword1.setBackgroundResource(R.drawable.button_input)
-                        binding.passwordError1.visibility = View.GONE
+                        binding.passwordError1.fadeOut()
 
                         val passwordSub1 = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
                         binding.inputPassword1.setTextColor(passwordSub1)
@@ -216,7 +225,7 @@ class RegisterFragment : Fragment() {
                     when (event) {
                         is RegisterEvent.NavigationRegisterSendEmail -> {
                             findNavController().navigate(
-                                R.id.otpFragment,
+                                R.id.register_otp,
                                 Bundle().apply {
                                     putString("email", event.email)
                                     putString("nextscreen", "registersuccess")
@@ -225,7 +234,7 @@ class RegisterFragment : Fragment() {
                         }
 
                         is RegisterEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.register_login)
                         }
                     }
                 }

@@ -180,11 +180,11 @@ class ResetPasswordFragment : Fragment() {
                         }
 
                         is ResetPasswordEvent.NavigationSuccess -> {
-                            findNavController().navigate(R.id.stateSuccessFragment)
+                            findNavController().navigate(R.id.resetPassword_statesuccess)
                         }
 
                         is ResetPasswordEvent.NavigationLogin -> {
-                            findNavController().navigate(R.id.loginFragment)
+                            findNavController().navigate(R.id.resetPassword_login)
                         }
                     }
                 }

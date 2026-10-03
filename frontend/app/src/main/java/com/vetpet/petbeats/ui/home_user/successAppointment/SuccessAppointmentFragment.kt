@@ -21,6 +21,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentSuccessAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
+import com.vetpet.petbeats.core.utils.AnimationUtils.popIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
+import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,6 +73,15 @@ class SuccessAppointmentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 🎉 Success celebration animations
+        binding.logoSuccess.popIn()
+        staggeredEntrance(
+            binding.tvTittleSuccess, binding.tvContentSuccess,
+            binding.stateClinic, binding.boxInformationClinic,
+            binding.btnDetail, binding.btnNewBooking, binding.btnHome,
+            delayStep = 100
+        )
+
         //Kiểm tra xem đã được cấp quyền chưa, có rồi thì tự động lấy token
         checkNotifyPermission()
 
@@ -114,14 +126,17 @@ class SuccessAppointmentFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnNewBooking.setOnClickListener {
+            binding.btnNewBooking.scaleBounce()
             viewModel.searchClick()
         }
 
         binding.btnHome.setOnClickListener {
+            binding.btnHome.scaleBounce()
             viewModel.bookingClick()
         }
 
         binding.btnDetail.setOnClickListener {
+            binding.btnDetail.scaleBounce()
             val clinicId = arguments?.getInt("clinicId") ?: 0
             val id = arguments?.getInt("id") ?: 0
 

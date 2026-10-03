@@ -17,6 +17,8 @@ import com.vetpet.petbeats.ui.home_user.chatbot.adapter.ChatbotAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleOut
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
 
 @AndroidEntryPoint
 class ChatbotFragment : Fragment() {
@@ -59,6 +61,7 @@ class ChatbotFragment : Fragment() {
         }
 
         binding.btnPushMessage.setOnClickListener {
+            it.scaleBounce()
             viewModel.onChatBot()
         }
     }
@@ -79,8 +82,8 @@ class ChatbotFragment : Fragment() {
                     }
 
                     if (state.isLogo) {
-                        binding.logo.visibility = View.GONE
-                        binding.textLogo.visibility = View.GONE
+                        binding.logo.scaleOut()
+                        binding.textLogo.scaleOut()
                     }
 
 
@@ -121,7 +124,7 @@ class ChatbotFragment : Fragment() {
                     when (event) {
                         is ChatbotEventReal.NavigaitonInformation -> {
                             findNavController().navigate(
-                                R.id.informationRoomFragment,
+                                R.id.chatbot_informationRoom,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }

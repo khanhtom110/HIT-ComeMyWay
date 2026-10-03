@@ -29,7 +29,7 @@ class LoginSuccessFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.informationClinicFragment)
+            findNavController().navigate(R.id.loginSuccess_informationClinic)
         }
     }
 }

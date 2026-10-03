@@ -39,6 +39,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import java.io.File
 import java.io.OutputStream
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
 
 @AndroidEntryPoint
 class LocketFragment : Fragment() {
@@ -115,11 +116,13 @@ class LocketFragment : Fragment() {
 
 
         binding.btnCamera.setOnClickListener {
+            it.scaleBounce()
             binding.btnCamera.isEnabled = false
             binding.progressBar.visibility = View.VISIBLE
             takePhoto()
         }
         binding.btnReflect.setOnClickListener {
+            binding.btnReflect.animate().rotationBy(180f).setDuration(300).start()
             currentLensFacing = if (currentLensFacing == CameraSelector.LENS_FACING_FRONT) {
                 CameraSelector.LENS_FACING_BACK
 
@@ -400,13 +403,13 @@ class LocketFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is LocketEvent.NavigationListFriendLocket -> {
-                            findNavController().navigate(R.id.listFriendLocketFragment)
+                            findNavController().navigate(R.id.locket_listFriendLocket)
                         }
                         is LocketEvent.NavigationMeLocket -> {
-                            findNavController().navigate(R.id.imageMeLocketFragment)
+                            findNavController().navigate(R.id.locket_imageMeLocket)
                         }
                         is LocketEvent.NavigationEverybodyLocket -> {
-                            findNavController().navigate(R.id.imageEverybodyLocketFragment)
+                            findNavController().navigate(R.id.locket_imageEveryBodyLocket)
                         }
                     }
                 }

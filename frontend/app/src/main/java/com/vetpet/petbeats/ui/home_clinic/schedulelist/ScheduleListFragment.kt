@@ -26,6 +26,8 @@ import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.Appointmen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 
 @AndroidEntryPoint
 class ScheduleListFragment : Fragment() {
@@ -250,6 +252,16 @@ class ScheduleListFragment : Fragment() {
                     }
 
                     if (state.isLoading) {
+                        //Xóa animation cũ đang chạy dở
+                        binding.shimmerFrameLayout.clearAnimation()
+                        binding.recycle.clearAnimation()
+                        binding.tvEmpty.clearAnimation()
+
+                        //Trả lại tọa độ hiển thị
+                        binding.shimmerFrameLayout.alpha = 1f
+                        binding.recycle.alpha = 1f
+
+                        //ẩn hiện
                         binding.shimmerFrameLayout.startShimmer()
                         binding.shimmerFrameLayout.visibility = View.VISIBLE
                         binding.recycle.visibility = View.GONE
@@ -257,15 +269,15 @@ class ScheduleListFragment : Fragment() {
                     }
                     else {
                         binding.shimmerFrameLayout.stopShimmer()
-                        binding.shimmerFrameLayout.visibility = View.GONE
 
                         //Kiểm tra xem list có data không
                         if (state.listAppointmentChild.isEmpty()) {
+                            binding.shimmerFrameLayout.visibility = View.GONE
                             binding.recycle.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.VISIBLE
+                            binding.tvEmpty.fadeIn()
                         } else {
-                            binding.recycle.visibility = View.VISIBLE
                             binding.tvEmpty.visibility = View.GONE
+                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
                         }
                     }
 

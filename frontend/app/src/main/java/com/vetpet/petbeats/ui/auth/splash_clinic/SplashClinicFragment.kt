@@ -32,7 +32,7 @@ class SplashClinicFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.changePasswordFragment)
+            findNavController().navigate(R.id.splashClinic_changePassword)
         }
     }
 

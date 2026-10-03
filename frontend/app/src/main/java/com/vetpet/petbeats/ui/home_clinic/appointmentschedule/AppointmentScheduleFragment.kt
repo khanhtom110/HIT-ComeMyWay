@@ -16,9 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAppointmentScheduleBinding
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
-import com.vetpet.petbeats.data.repository.HomeClinicRepository
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentRefuseAdapter
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentWaitAdapter
 import kotlinx.coroutines.launch
@@ -29,6 +26,9 @@ import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import com.vetpet.petbeats.ui.home_clinic.appointmentschedule.adapter.AppointmentReceiveAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
+import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
 
 @AndroidEntryPoint
 class AppointmentScheduleFragment : Fragment() {
@@ -113,6 +113,7 @@ class AppointmentScheduleFragment : Fragment() {
 
     private fun setOnClick() {
         binding.buttonListAll.setOnClickListener {
+            it.scaleBounce()
             viewModel.scheduleList()
         }
 
@@ -259,6 +260,16 @@ class AppointmentScheduleFragment : Fragment() {
                     }
 
                     if (state.isLoading) {
+                        //Xóa animation cũ đang chạy dở
+                        binding.shimmerFrameLayout.clearAnimation()
+                        binding.recycle.clearAnimation()
+                        binding.tvEmpty.clearAnimation()
+
+                        //Trả lại tọa độ hiển thị
+                        binding.shimmerFrameLayout.alpha = 1f
+                        binding.recycle.alpha = 1f
+
+                        //ẩn hiện
                         binding.shimmerFrameLayout.startShimmer()
                         binding.shimmerFrameLayout.visibility = View.VISIBLE
                         binding.recycle.visibility = View.GONE
@@ -266,15 +277,15 @@ class AppointmentScheduleFragment : Fragment() {
                     }
                     else {
                         binding.shimmerFrameLayout.stopShimmer()
-                        binding.shimmerFrameLayout.visibility = View.GONE
 
                         //Kiểm tra xem list có data không
                         if (state.listAppointmentChild.isEmpty()) {
+                            binding.shimmerFrameLayout.visibility = View.GONE
                             binding.recycle.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.VISIBLE
+                            binding.tvEmpty.fadeIn()
                         } else {
-                            binding.recycle.visibility = View.VISIBLE
                             binding.tvEmpty.visibility = View.GONE
+                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
                         }
                     }
 
