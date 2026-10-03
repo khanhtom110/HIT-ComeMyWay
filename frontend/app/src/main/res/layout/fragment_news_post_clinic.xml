@@ -1,0 +1,136 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_clinic.news_post.NewsPostClinicFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/vector"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/back_left"
+            android:layout_marginTop="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo tin tức mới"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintTop_toTopOf="@id/vector"
+            app:layout_constraintBottom_toBottomOf="@id/vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/imgClinic"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:src="@drawable/image_test"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/vector"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe1"
+            android:id="@+id/tvClinicName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Phòng khám thú y FunPet"
+            android:textColor="@color/colorTextSub"
+            android:paddingVertical="@dimen/_4sdp"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            app:layout_constraintTop_toTopOf="@id/imgClinic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgClinic"/>
+
+        <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:hint="Tiêu đề"
+            android:background="@drawable/ground_news"
+            android:textColor="@color/colorTextSub"
+            android:textColorHint="@color/colorTextContent"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:inputType="text"
+            android:gravity="top"
+            app:layout_constraintTop_toBottomOf="@id/tvClinicName"/>
+
+        <ImageView
+            android:id="@+id/btnImgNews"
+            android:layout_width="@dimen/_21sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:src="@drawable/image_news"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="@id/editTitle"
+            app:layout_constraintEnd_toEndOf="@id/editTitle"/>
+
+        <EditText
+            android:id="@+id/editContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:hint="Nội dung tin tức"
+            android:background="@drawable/ground_news"
+            android:textColor="@color/colorTextSub"
+            android:textColorHint="@color/colorTextContent"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginVertical="@dimen/_16sdp"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:inputType="text"
+            android:gravity="top"
+            app:layout_constraintTop_toBottomOf="@id/imgNews"
+            app:layout_constraintBottom_toTopOf="@id/btnPost"/>
+
+        <ImageView
+            android:id="@+id/imgNews"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:src="@drawable/image_test"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/editTitle"/>
+
+        <ImageView
+            android:id="@+id/btnCancelImgNews"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/cancel_news"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTitle"/>
+
+        <TextView
+            style="@style/Nut2"
+            android:id="@+id/btnPost"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:background="@drawable/button_auth_white"
+            android:gravity="center"
+            android:text="Đăng tin"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -1,0 +1,115 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_clinic.news_success.NewsSuccessClinicFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/vector"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/back_left"
+            android:layout_marginTop="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo tin tức mới"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintTop_toTopOf="@id/vector"
+            app:layout_constraintBottom_toBottomOf="@id/vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/imgState"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:src="@drawable/icon_camera_send_success"
+            android:layout_marginTop="@dimen/_28sdp"
+            app:layout_constraintTop_toBottomOf="@id/vector"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            style="@style/TieuDe1"
+            android:id="@+id/tvState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tin tức đã được đăng thành công"
+            android:textColor="@color/colorTextSub"
+            android:layout_marginTop="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/imgState"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/boxInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginVertical="@dimen/_16sdp"
+            android:background="@drawable/ground_book_child"
+            app:layout_constraintTop_toBottomOf="@id/tvState">
+
+            <TextView
+                style="@style/Nut2"
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cảnh báo gia tăng ca nhiễm Parvovirus ở chó: Mối nguy tiềm ẩn trong mùa mưa ẩm"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:layout_marginVertical="@dimen/_8sdp"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/imgNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_list_test"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvClinicName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Nhiều phòng khám thú y tại các đô thị lớn ghi nhận số lượng chó nhập viện vì bệnh Parvovirus (Canine Parvovirus - CPV) tăng rõ rệt trong những tuần gần đây. Đây là một trong những căn bệnh truyền nhiễm nguy hiểm nhất ở loài chó, có tốc độ lây lan nhanh và tỷ lệ tử vong lên tới hơn 80% nếu không được can thiệp kịp thời."
+                android:textColor="@color/colorTextContent"
+                android:layout_marginVertical="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/imgNews"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            style="@style/Nut2"
+            android:id="@+id/btnNews"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:background="@drawable/button_auth_white"
+            android:gravity="center"
+            android:text="Quay lại trang danh sách"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/boxInformation"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
