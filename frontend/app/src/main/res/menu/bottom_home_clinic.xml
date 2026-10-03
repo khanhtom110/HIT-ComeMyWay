@@ -6,6 +6,11 @@
         android:title="Lịch khám"/>
 
     <item
+        android:id="@+id/newsClinicFragment"
+        android:icon="@drawable/news_clinic"
+        android:title="Đăng tin"/>
+
+    <item
         android:id="@+id/clinicFragment"
         android:icon="@drawable/clinic"
         android:title="Phòng khám"/>

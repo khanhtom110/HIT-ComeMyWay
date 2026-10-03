@@ -240,8 +240,8 @@
             app:destination="@+id/searchFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
 
@@ -317,8 +317,8 @@
             app:destination="@id/bookFragment"
             app:popUpTo="@id/bookFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -486,5 +486,15 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/newsUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.news.NewsUserFragment"
+        android:label="newsFragment"/>
+
+    <fragment
+        android:id="@+id/newsDetailUserFragment"
+        android:name="com.vetpet.petbeats.ui.home_user.news_detail.NewsDetailUserFragment"
+        android:label="newsDetailUserFragment"/>
 
 </navigation>

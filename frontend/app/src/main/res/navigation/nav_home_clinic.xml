@@ -104,4 +104,19 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/newsClinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.news.NewsClinicFragment"
+        android:label="newsClinicFragment"/>
+
+    <fragment
+        android:id="@+id/newsPostClinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.news_post.NewsPostClinicFragment"
+        android:label="newsPostClinicFragment"/>
+
+    <fragment
+        android:id="@+id/NewsSuccessClinicFragment"
+        android:name="com.vetpet.petbeats.ui.home_clinic.news_success.NewsSuccessClinicFragment"
+        android:label="newsSuccessClinicFragment"/>
+
 </navigation>
