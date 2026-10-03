@@ -11,5 +11,6 @@ export function createClinicPostRouter({ controller, authenticateClinic }) {
   router.delete('/clinic/posts/:id', authenticateClinic, validate(deleteClinicPostValidation),
     catchAsync(controller.remove));
   router.get('/public/clinic-posts', catchAsync(controller.listPublic));
+  router.get('/public/clinic-posts/:id', validate(deleteClinicPostValidation), catchAsync(controller.detailPublic));
   return router;
 }

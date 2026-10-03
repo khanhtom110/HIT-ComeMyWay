@@ -37,7 +37,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
 2. Sao chép `.env.example` thành `.env`, rồi điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
-3. Chạy `database/migrations/001_create_clinic_posts.sql` trên database đó.
+3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql` và `database/migrations/002_add_clinic_post_images.sql` trên database đó. Migration 002 chỉ chạy một lần.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3001`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
@@ -53,10 +53,13 @@ Import collection và environment trong [postman/](../postman/README.md) để c
 
 Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `http://localhost:3001/api-docs/` khi chạy Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize** và dán access token nhận từ API đăng nhập Spring Boot để thử các endpoint dành cho phòng khám. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
-- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"..."}`. Trả 201 và bài đăng. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự.
+- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201 và bài đăng. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) không trùng, mỗi URL tối đa 2048 ký tự. `imageUrls` là tùy chọn; tin cũ trả `imageUrls: []`.
 - `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.
 - `DELETE /api/v1/clinic/posts/:id`: xóa bài của phòng khám hiện tại; trả 200 với `data.id`, hoặc 404 nếu không tìm thấy bài thuộc phòng khám đó.
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất công khai.
+- `GET /api/v1/public/clinic-posts/:id`: xem nội dung và tất cả ảnh của một bài đăng công khai. Thứ tự ảnh được giữ nguyên; client có thể dùng ảnh đầu tiên làm thumbnail.
+
+Node.js chỉ nhận URL ảnh. Có thể upload file qua API Spring Boot `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL nhận được tới Node.js. Phần này chỉ gồm API đăng tin của phòng khám; không thay đổi API admin.
 - `GET /health/live` (hoặc `/health`): trả 200 khi tiến trình xử lý HTTP được.
 - `GET /health/ready`: trả 200 khi truy vấn kiểm tra MySQL thành công, 503 khi database không sẵn sàng.
 

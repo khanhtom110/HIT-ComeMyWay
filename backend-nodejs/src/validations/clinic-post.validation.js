@@ -3,6 +3,8 @@ import { CLINIC_POST_LIMITS } from '../constants/clinic-post.constant.js';
 
 export const createClinicPostValidation = {
   body: Joi.object({
+    imageUrls: Joi.array().items(Joi.string().uri({ scheme: ['http', 'https'] }).max(2048))
+      .max(10).unique().default([]),
     title: Joi.string().trim().min(1).max(CLINIC_POST_LIMITS.TITLE_LENGTH).required()
       .messages({
         'any.required': 'Tiêu đề là bắt buộc',

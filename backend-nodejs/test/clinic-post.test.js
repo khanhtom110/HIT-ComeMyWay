@@ -16,8 +16,8 @@ const clinicModel = {
 };
 let failPublicQuery = false;
 const clinicPostModel = {
-  async create(clinicId, title, content) {
-    const post = { id: posts.length + 1, clinicId, title, content };
+  async create(clinicId, title, content, imageUrls) {
+    const post = { id: posts.length + 1, clinicId, title, content, imageUrls };
     posts.push(post);
     return post;
   },
@@ -26,6 +26,7 @@ const clinicPostModel = {
     if (failPublicQuery) throw new Error('Sensitive database error');
     return posts;
   },
+  async findPublic(id) { return posts.find(post => post.id === id) ?? null; },
   async deleteByClinic(id, clinicId) {
     const index = posts.findIndex(post => post.id === id && post.clinicId === clinicId);
     if (index === -1) return false;
@@ -69,7 +70,7 @@ test('clinic publishes title and content; its posts are readable', async () => {
   });
   assert.equal(response.status, 201);
   assert.deepEqual((await response.json()).data, {
-    id: 1, clinicId: 7, title: 'Lịch tiêm phòng', content: 'Có lịch mới',
+    id: 1, clinicId: 7, title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [],
   });
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
   assert.equal((await feed.json()).data.length, 1);
@@ -78,6 +79,53 @@ test('clinic publishes title and content; its posts are readable', async () => {
   });
   assert.equal(ownPosts.status, 200);
   assert.deepEqual((await ownPosts.json()).data, posts);
+});
+
+test('clinic publishes ordered image URLs and public detail returns all images', async () => {
+  const imageUrls = ['https://example.com/cover.jpg', 'https://example.com/detail.png'];
+  const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: 'Ảnh dịch vụ', content: 'Chi tiết', imageUrls }),
+  });
+  assert.equal(created.status, 201);
+  const post = (await created.json()).data;
+  assert.deepEqual(post.imageUrls, imageUrls);
+  const detail = await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`);
+  assert.equal(detail.status, 200);
+  assert.deepEqual((await detail.json()).data.imageUrls, imageUrls);
+  const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
+  assert.deepEqual((await feed.json()).data.find(item => item.id === post.id).imageUrls, imageUrls);
+  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/999999`)).status, 404);
+});
+
+test('rejects invalid image lists before writing', async () => {
+  const count = posts.length;
+  for (const imageUrls of ['url', [null], ['file:///tmp/one.jpg'],
+    ['https://example.com/a', 'https://example.com/a'],
+    Array.from({ length: 11 }, (_, i) => `https://example.com/${i}`)]) {
+    const response = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Tin', content: 'Nội dung', imageUrls }),
+    });
+    assert.equal(response.status, 400);
+  }
+  assert.equal(posts.length, count);
+});
+
+test('SQL model persists ordered image JSON and reads old posts as an empty list', async () => {
+  const calls = [];
+  const model = createClinicPostModel({ async execute(sql, params) {
+    calls.push({ sql, params });
+    if (sql.startsWith('INSERT')) return [{ insertId: 42 }];
+    return [[{ id: 42, imageUrls: '["https://example.com/a.jpg"]' }]];
+  } });
+  assert.deepEqual((await model.create(7, 'Title', 'Content', ['https://example.com/a.jpg'])).imageUrls,
+    ['https://example.com/a.jpg']);
+  assert.deepEqual(calls[0].params, [7, 'Title', 'Content', '["https://example.com/a.jpg"]']);
+  const oldPostModel = createClinicPostModel({ async execute() { return [[{ id: 1, imageUrls: null }]]; } });
+  assert.deepEqual((await oldPostModel.findPublic(1)).imageUrls, []);
 });
 
 test('rejects empty fields and unauthorized tokens', async () => {

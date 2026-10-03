@@ -15,6 +15,10 @@ const response = (description, dataSchema) => ({
 const errorResponse = description => response(description, { nullable: true, example: null });
 const post = { $ref: '#/components/schemas/ClinicPost' };
 const posts = { type: 'array', items: post };
+const imageUrls = { type: 'array', maxItems: 10, uniqueItems: true,
+  items: { type: 'string', format: 'uri', maxLength: 2048 },
+  description: 'URL ảnh HTTP(S), tối đa 10 ảnh. Giữ nguyên thứ tự; ảnh đầu tiên có thể dùng làm thumbnail.',
+  example: ['https://res.cloudinary.com/demo/image/upload/sample.jpg'], default: [] };
 
 export const openApiDocument = {
   openapi: '3.0.3',
@@ -48,14 +52,16 @@ export const openApiDocument = {
         required: ['title', 'content'],
         additionalProperties: false,
         properties: {
+          imageUrls,
           title: { type: 'string', minLength: 1, maxLength: 200, example: 'Lịch khám thú cưng' },
           content: { type: 'string', minLength: 1, maxLength: 10000, example: 'Phòng khám nhận lịch khám từ thứ Hai đến thứ Sáu.' },
         },
       },
       ClinicPost: {
         type: 'object',
-        required: ['id', 'clinicId', 'clinicName', 'title', 'content', 'createdAt'],
+        required: ['id', 'clinicId', 'clinicName', 'title', 'content', 'imageUrls', 'createdAt'],
         properties: {
+          imageUrls,
           id: { type: 'integer', format: 'int64', example: 10 },
           clinicId: { type: 'integer', format: 'int64', example: 1 },
           clinicName: { type: 'string', example: 'Phòng khám thú y' },
@@ -91,15 +97,21 @@ export const openApiDocument = {
     '/api/v1/clinic/posts': {
       post: {
         tags: ['Clinic posts'], summary: 'Phòng khám đăng tin',
-        description: 'Phòng khám được lấy từ access token; thời gian đăng do server tạo.',
+        description: 'Phòng khám được lấy từ access token; thời gian đăng do server tạo. Upload ảnh qua API media hiện có của Spring Boot rồi gửi URL trong imageUrls.',
         security: [{ clinicBearer: [] }],
         requestBody: {
           required: true,
-          content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateClinicPost' } } },
+          content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateClinicPost' },
+            examples: {
+              withImages: { summary: 'Tin có ảnh', value: { title: 'Lịch khám thú cưng',
+                content: 'Phòng khám nhận lịch khám từ thứ Hai đến thứ Sáu.', imageUrls: imageUrls.example } },
+              textOnly: { summary: 'Tin không kèm ảnh', value: { title: 'Lịch khám thú cưng',
+                content: 'Phòng khám nhận lịch khám từ thứ Hai đến thứ Sáu.' } },
+            } } },
         },
         responses: {
           201: response('Đăng tin thành công', post),
-          400: errorResponse('Tiêu đề hoặc nội dung không hợp lệ'),
+          400: errorResponse('Tiêu đề, nội dung hoặc danh sách URL ảnh không hợp lệ'),
           401: errorResponse('Thiếu hoặc sai access token'),
           403: errorResponse('Tài khoản không phải phòng khám đang hoạt động'),
           413: errorResponse('Body vượt quá 64 KB'),
@@ -145,6 +157,19 @@ export const openApiDocument = {
         description: 'Trả tối đa 50 tin mới nhất.',
         responses: {
           200: response('Danh sách tin', posts),
+          500: errorResponse('Lỗi xử lý phía server'),
+        },
+      },
+    },
+    '/api/v1/public/clinic-posts/{id}': {
+      get: {
+        tags: ['Clinic posts'], summary: 'Chi tiết tin phòng khám công khai',
+        parameters: [{ in: 'path', name: 'id', required: true,
+          schema: { type: 'integer', format: 'int64', minimum: 1 } }],
+        responses: {
+          200: response('Chi tiết bài đăng và danh sách ảnh', post),
+          400: errorResponse('ID bài đăng không hợp lệ'),
+          404: errorResponse('Không tìm thấy bài đăng'),
           500: errorResponse('Lỗi xử lý phía server'),
         },
       },

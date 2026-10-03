@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
     "name": "ComeMyWay - Spring Boot + Node.js",
-    "description": "Test đăng nhập Spring Boot, dùng JWT đăng tin và xóa bài trên Node.js. Chọn ComeMyWay - Local (MySQL), rồi chạy collection theo thứ tự. Mỗi lượt chạy tạo rồi xóa một bài đăng.",
+    "description": "Kiểm thử đăng nhập Spring Boot và API Node.js đăng tin phòng khám có ảnh.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -25,6 +25,11 @@
       "key": "postContent",
       "value": "Phòng khám nhận lịch khám cho thú cưng. Vui lòng liên hệ để đặt lịch.",
       "type": "string"
+    },
+    {
+      "key": "postImageUrls",
+      "value": "[\"https://res.cloudinary.com/demo/image/upload/sample.jpg\"]",
+      "type": "string"
     }
   ],
   "item": [
@@ -32,7 +37,7 @@
       "name": "01 - Spring Boot",
       "item": [
         {
-          "name": "01 Health",
+          "name": "01 Kiểm tra hoạt động",
           "request": {
             "method": "GET",
             "header": [],
@@ -61,7 +66,7 @@
           ]
         },
         {
-          "name": "02 Login clinic",
+          "name": "02 Đăng nhập phòng khám",
           "request": {
             "method": "POST",
             "header": [
@@ -129,7 +134,7 @@
           ]
         },
         {
-          "name": "03 Refresh token",
+          "name": "03 Làm mới token",
           "request": {
             "method": "POST",
             "header": [
@@ -185,7 +190,7 @@
           ]
         },
         {
-          "name": "04 Clinic profile",
+          "name": "04 Hồ sơ phòng khám",
           "request": {
             "method": "GET",
             "header": [],
@@ -214,10 +219,10 @@
       ]
     },
     {
-      "name": "02 - Node Clinic Posts",
+      "name": "02 - Node.js - Bài đăng phòng khám",
       "item": [
         {
-          "name": "01 Liveness",
+          "name": "01 Kiểm tra tiến trình",
           "request": {
             "method": "GET",
             "header": [],
@@ -246,7 +251,7 @@
           ]
         },
         {
-          "name": "02 Readiness",
+          "name": "02 Kiểm tra database",
           "request": {
             "method": "GET",
             "header": [],
@@ -275,7 +280,7 @@
           ]
         },
         {
-          "name": "03 Public feed",
+          "name": "03 Danh sách bài công khai",
           "request": {
             "method": "GET",
             "header": [],
@@ -312,7 +317,7 @@
           ]
         },
         {
-          "name": "04 Create post",
+          "name": "04 Tạo bài đăng có ảnh",
           "request": {
             "method": "POST",
             "header": [
@@ -322,10 +327,10 @@
               }
             ],
             "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
-            "description": "Mỗi lần chạy tạo một bài trong môi trường được chọn. Đăng nhập Spring Boot trước để lưu accessToken.",
+            "description": "Tạo bài kèm tối đa 10 URL ảnh HTTP(S); imageUrls là tùy chọn.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"{{postTitle}}\",\n  \"content\": \"{{postContent}}\"\n}",
+              "raw": "{\n  \"title\": \"{{postTitle}}\",\n  \"content\": \"{{postContent}}\",\n  \"imageUrls\": {{postImageUrls}}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -359,6 +364,7 @@
                   "  pm.expect(Number(post.id)).to.be.above(0);",
                   "  pm.expect(post.title).to.eql(pm.variables.get(\"postTitle\").trim());",
                   "  pm.expect(post.content).to.eql(pm.variables.get(\"postContent\").trim());",
+                  "  pm.expect(post.imageUrls).to.deep.eql(JSON.parse(pm.variables.get(\"postImageUrls\")));",
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(Number.isNaN(Date.parse(post.createdAt))).to.eql(false);",
                   "});",
@@ -379,7 +385,7 @@
           ]
         },
         {
-          "name": "05 My clinic posts",
+          "name": "05 Bài đăng của phòng khám",
           "request": {
             "method": "GET",
             "header": [],
@@ -422,7 +428,7 @@
           ]
         },
         {
-          "name": "06 Public feed includes new post",
+          "name": "06 Danh sách công khai có bài mới",
           "request": {
             "method": "GET",
             "header": [],
@@ -464,7 +470,35 @@
           ]
         },
         {
-          "name": "07 Delete own post",
+          "name": "07 Chi tiết bài công khai có ảnh",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}",
+            "description": "Trả nội dung và toàn bộ URL ảnh đúng thứ tự."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200 và đủ ảnh', () => {",
+                  "  pm.response.to.have.status(200);",
+                  "  const post = pm.response.json().data;",
+                  "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('createdPostId')));",
+                  "  pm.expect(post.imageUrls).to.deep.eql(JSON.parse(pm.variables.get('postImageUrls')));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Xóa bài đăng của mình",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -489,12 +523,14 @@
           ]
         },
         {
-          "name": "08 Public feed excludes deleted post",
+          "name": "09 Bài đã xóa không còn công khai",
           "request": {
             "method": "GET",
             "header": [],
             "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
-            "auth": { "type": "noauth" }
+            "auth": {
+              "type": "noauth"
+            }
           },
           "event": [
             {
@@ -515,10 +551,10 @@
       ]
     },
     {
-      "name": "03 - Node Validation",
+      "name": "03 - Node.js - Kiểm tra dữ liệu đầu vào",
       "item": [
         {
-          "name": "01 Blank title",
+          "name": "01 Tiêu đề trống",
           "request": {
             "method": "POST",
             "header": [
@@ -563,7 +599,7 @@
           ]
         },
         {
-          "name": "02 Missing content",
+          "name": "02 Thiếu nội dung",
           "request": {
             "method": "POST",
             "header": [
@@ -608,7 +644,7 @@
           ]
         },
         {
-          "name": "03 Title longer than 200 characters",
+          "name": "03 Tiêu đề vượt 200 ký tự",
           "request": {
             "method": "POST",
             "header": [
@@ -662,7 +698,7 @@
           ]
         },
         {
-          "name": "04 Content longer than 10000 characters",
+          "name": "04 Nội dung vượt 10000 ký tự",
           "request": {
             "method": "POST",
             "header": [
@@ -716,7 +752,7 @@
           ]
         },
         {
-          "name": "05 Missing bearer token",
+          "name": "05 Thiếu token",
           "request": {
             "method": "POST",
             "header": [
@@ -764,7 +800,7 @@
           ]
         },
         {
-          "name": "06 Invalid bearer token",
+          "name": "06 Token không hợp lệ",
           "request": {
             "method": "POST",
             "header": [
@@ -819,7 +855,7 @@
           ]
         },
         {
-          "name": "07 Malformed JSON",
+          "name": "07 JSON sai định dạng",
           "request": {
             "method": "POST",
             "header": [
@@ -864,7 +900,7 @@
           ]
         },
         {
-          "name": "08 Body over 64 KB",
+          "name": "08 Dữ liệu vượt 64 KB",
           "request": {
             "method": "POST",
             "header": [
@@ -911,6 +947,43 @@
                   "  pm.expect(body.data).to.eql(null);",
                   "  pm.expect(body.message).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(body).not.to.have.property(\"stack\");",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 URL ảnh không hợp lệ",
+          "request": {
+            "method": "POST",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tin có ảnh\",\n  \"content\": \"Nội dung\",\n  \"imageUrls\": [\n    \"file:///tmp/photo.jpg\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Chỉ chấp nhận URL HTTP(S)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('URL ảnh không hợp lệ trả 400', () => {",
+                  "  pm.response.to.have.status(400);",
+                  "  pm.expect(pm.response.json().statusCode).to.eql(400);",
                   "});"
                 ]
               }
