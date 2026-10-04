@@ -45,13 +45,13 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 ## Docker và Postman
 
-Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng host riêng: Spring Boot `8080`, Node.js `3002`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`, `/api/v1/admin/statistics`).
+Xem [hướng dẫn Docker](../DOCKER.md) để build/chạy cả Node.js và Spring Boot bằng `compose.backends.yaml`. Hai dịch vụ dùng cổng host riêng: Spring Boot `8080`, Node.js `3000`; có thể gọi trực tiếp bằng IP, không cần Nginx. Client cần base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`, `/api/v1/admin/statistics`).
 
 Import collection và environment trong [postman/](../postman/README.md) để chạy riêng luồng đăng tin phòng khám hoặc thống kê admin.
 
 ## API
 
-Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `http://localhost:3000/api-docs/` khi chạy Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
+Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
 - `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "PENDING"` (Chưa duyệt). Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không được tự duyệt tin.
 - `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.

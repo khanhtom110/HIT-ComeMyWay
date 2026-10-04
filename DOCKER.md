@@ -27,9 +27,9 @@ Trước khi chạy:
 
 1. MySQL phải truy cập được từ container, database `pet_heartbeat_db` đã tồn tại và tài khoản có quyền kết nối. Nếu dùng Docker Engine trên Linux, MySQL cần lắng nghe trên địa chỉ mà container truy cập được.
 2. `backend/.env` chứa các biến Spring Boot đang dùng: `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_ACCESS_EXPIRATION`, `JWT_REFRESH_EXPIRATION`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`, `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `GEMINI_API_KEY`.
-3. `backend-nodejs/.env` chứa `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` giống Spring Boot. Có thể thêm `CORS_ORIGINS` nếu gọi từ trình duyệt. Compose đặt lại `HOST=0.0.0.0`, `PORT=3001` và các biến địa chỉ database.
+3. `backend-nodejs/.env` chứa `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` giống Spring Boot. Có thể thêm `CORS_ORIGINS` nếu gọi từ trình duyệt. Compose đặt lại `HOST=0.0.0.0`, `PORT=3000` và các biến địa chỉ database.
 4. Spring Boot cần Redis theo cấu hình hiện tại (SSL đang bật); đăng nhập/refresh cần Redis hoạt động.
-5. Khởi động Spring Boot để tạo/cập nhật schema, rồi chạy SQL trong `backend-nodejs/database/migrations/001_create_clinic_posts.sql` trên cùng database trước khi dùng API đăng tin. Tài khoản phòng khám cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
+5. Khởi động Spring Boot để tạo/cập nhật schema, rồi chạy lần lượt các migration `001_create_clinic_posts.sql`, `002_add_clinic_post_images.sql`, `003_clinic_post_moderation.sql` trong `backend-nodejs/database/migrations/` trên cùng database trước khi dùng API đăng tin. Mỗi migration chỉ chạy một lần. Tài khoản phòng khám cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
 
 Compose ưu tiên `DOCKER_DB_URL` cho Spring Boot và `DOCKER_DB_HOST`, `DOCKER_DB_PORT`, `DOCKER_DB_NAME` cho Node.js. Đặt các biến này khi dùng MySQL ở máy khác. Ví dụ PowerShell (thay `mysql-host` bằng hostname/IP thực):
 
@@ -57,13 +57,13 @@ docker compose -f compose.backends.yaml logs --tail=100 springboot nodejs
 | Dịch vụ | URL local | Health endpoint | Swagger UI |
 | --- | --- | --- | --- |
 | Spring Boot | `http://localhost:8080` | `/api/v1/public/health` | `/swagger-ui/index.html` |
-| Node.js | `http://localhost:3002` | `/health/live`, `/health/ready` | `/api-docs/` |
+| Node.js | `http://localhost:3000` | `/health/live`, `/health/ready` | `/api-docs/` |
 
 Node `/health/ready` kiểm tra kết nối MySQL. Docker healthcheck dùng `/health/live` để kiểm tra tiến trình HTTP. Health trả 200 không thay thế việc test đăng nhập và đăng tin trong [Postman](postman/README.md).
 
-Chạy bằng IP server với hai cổng riêng, không cần Nginx hay tên miền. Ví dụ Spring Boot `http://56.10.63.38:8080`, Node.js `http://56.10.63.38:3002` **sau khi deploy** và mở các cổng tương ứng. Client phải gọi đúng base URL của từng dịch vụ. Nếu muốn Spring Boot phục vụ tại `http://56.10.63.38/`, đặt `SPRING_HTTP_PORT=80` trước khi chạy Compose (cổng 80 phải còn trống).
+Chạy bằng IP server với hai cổng riêng, không cần Nginx hay tên miền. Ví dụ Spring Boot `http://56.10.63.38:8080`, Node.js `http://56.10.63.38:3000` **sau khi deploy** và mở các cổng tương ứng. Client phải gọi đúng base URL của từng dịch vụ. Nếu muốn Spring Boot phục vụ tại `http://56.10.63.38/`, đặt `SPRING_HTTP_PORT=80` trước khi chạy Compose (cổng 80 phải còn trống).
 
-Đổi cổng host bằng `SPRING_HTTP_PORT` và `NODE_HTTP_PORT`; cập nhật `springBaseUrl`, `nodeBaseUrl` trong Postman tương ứng. Cổng `3001` là cổng bên trong container Node.js, cổng host mặc định là `3002`.
+Đổi cổng host bằng `SPRING_HTTP_PORT` và `NODE_HTTP_PORT`; cập nhật `springBaseUrl`, `nodeBaseUrl` trong Postman tương ứng. Cổng `3000` là cổng bên trong container Node.js và cổng host mặc định.
 
 ```bash
 docker compose -f compose.backends.yaml down

@@ -3,10 +3,10 @@
 ## Thiết lập
 
 1. Import `ComeMyWay.postman_collection.json` và `Local.postman_environment.json`.
-2. Chọn environment **ComeMyWay - Local (MySQL)**. Điền `username`/`password` của tài khoản phòng khám đang hoạt động và `adminUsername`/`adminPassword` của tài khoản admin nếu chạy toàn bộ collection. Spring Boot mặc định dùng `http://localhost:8080`, Node.js chạy trực tiếp tại `http://localhost:3000`.
+2. Chọn environment **ComeMyWay - Local (MySQL)**. Điền `username`/`password` của tài khoản phòng khám đang hoạt động và `adminUsername`/`adminPassword` của tài khoản admin nếu chạy toàn bộ collection. Spring Boot mặc định dùng `http://localhost:8080`, Node.js dùng `http://localhost:3000` khi chạy trực tiếp hoặc bằng Docker.
 3. Chạy toàn bộ collection, hoặc chạy riêng các folder cần thử. **02 Đăng nhập phòng khám** tự lưu `accessToken`; **04 Tạo bài đăng** tự lưu `clinicId` và `createdPostId`; **07 Xóa bài đăng của mình** xóa bài vừa tạo.
 
-Nếu đã import collection hoặc environment cũ, Postman không tự cập nhật theo file trên đĩa: import lại environment và kiểm tra `nodeBaseUrl` trong environment đang chọn. Tài liệu API trên trình duyệt: Spring Boot `http://localhost:8080/swagger-ui/index.html`, Node.js chạy trực tiếp `http://localhost:3000/api-docs/` (Docker mặc định `http://localhost:3002/api-docs/`).
+Nếu đã import collection hoặc environment cũ, Postman không tự cập nhật theo file trên đĩa: import lại environment và kiểm tra `nodeBaseUrl` trong environment đang chọn. Tài liệu API trên trình duyệt: Spring Boot `http://localhost:8080/swagger-ui/index.html`, Node.js `http://localhost:3000/api-docs/`.
 
 ## Request đăng tin
 
@@ -51,7 +51,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 
 Đây là endpoint chưa tồn tại trên server đang chạy (thường do container còn dùng image cũ), không phải trạng thái chờ duyệt. Không đổi test của danh sách chờ duyệt từ 200 sang 404 để làm test đạt.
 
-1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp dùng `http://localhost:3000`; Docker local mặc định dùng `http://localhost:3002`.
+1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp hoặc bằng Docker local mặc định dùng `http://localhost:3000`.
 2. Chạy migration `backend-nodejs/database/migrations/002_add_clinic_post_images.sql` rồi `backend-nodejs/database/migrations/003_clinic_post_moderation.sql` **mỗi file một lần** trên database dùng chung nếu chưa có các cột `image_urls`, `status`, `approved_by`, `approved_at`.
 3. Cập nhật riêng Node.js, giữ nguyên cấu hình Compose local đang dùng:
 
