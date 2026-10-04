@@ -38,7 +38,9 @@
 | API Docs | Swagger UI / OpenAPI 3.0 |
 | Deploy | AWS EC2 (t3.small) |
 
-Chức năng đăng tin phòng khám chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi và cấu trúc theo tầng của base HITProduct, kết nối MySQL/JWT chung với Spring Boot. Xem tài liệu trong thư mục này để cấu hình và chạy dịch vụ Node.js.
+Chức năng đăng tin phòng khám, duyệt bài và thống kê admin chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi, kết nối MySQL/JWT chung với Spring Boot. Tài khoản phòng khám được tính là đang hoạt động sau khi đổi mật khẩu mặc định (`PENDING_PROFILE` hoặc `ACTIVE`).
+
+Với database đã tồn tại, chạy [migration cho `users.home_address`](backend/database/migrations/001_allow_nullable_home_address.sql) một lần trước khi cho phép tài khoản không có địa chỉ nhà; đổi annotation trong Spring Boot không bảo đảm bỏ ràng buộc `NOT NULL` cũ trong MySQL.
 
 - [Build và chạy hai backend bằng Docker](DOCKER.md) — publish cổng riêng, gọi trực tiếp bằng IP.
 - [Collection và environment Postman](postman/README.md) — test đăng nhập, đăng tin và validation.
