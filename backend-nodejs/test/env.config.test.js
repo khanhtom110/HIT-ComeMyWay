@@ -20,3 +20,10 @@ test('environment loads MySQL and the configured browser origin list', () => {
   assert.equal(config.database.database, 'pet_heartbeat_db');
   assert.deepEqual(config.corsOrigins, ['http://localhost:3000', 'https://example.test']);
 });
+
+test('Node.js listens on port 3000 by default', () => {
+  const config = loadConfig({
+    JWT_SECRET: 'test-secret-at-least-32-characters-long', DB_USERNAME: 'root', DB_PASSWORD: '',
+  });
+  assert.equal(config.server.port, 3000);
+});

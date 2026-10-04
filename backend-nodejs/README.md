@@ -38,7 +38,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
 2. Sao chép `.env.example` thành `.env`, rồi điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
 3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql`, `database/migrations/002_add_clinic_post_images.sql` và `database/migrations/003_clinic_post_moderation.sql` trên database đó. Mỗi migration chỉ chạy một lần. Migration 003 đưa tin cũ về `PENDING` để admin duyệt trước khi công khai.
-4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3001`; có thể đổi `HOST`/`PORT` trong `.env`.
+4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3000`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
 `CORS_ORIGINS` là danh sách origin trình duyệt, phân cách bằng dấu phẩy, ví dụ `http://localhost:3000,https://app.example.com`. Request Android không gửi `Origin` vẫn được chấp nhận. JSON body giới hạn 64 KB; response dùng `{ statusCode, message, data, timestamp }` để tương thích Android.
@@ -51,7 +51,7 @@ Import collection và environment trong [postman/](../postman/README.md) để c
 
 ## API
 
-Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `http://localhost:3001/api-docs/` khi chạy Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
+Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `http://localhost:3000/api-docs/` khi chạy Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
 - `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "PENDING"` (Chưa duyệt). Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không được tự duyệt tin.
 - `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.

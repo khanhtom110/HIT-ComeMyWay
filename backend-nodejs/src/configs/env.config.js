@@ -3,7 +3,7 @@ import Joi from 'joi';
 const envSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   HOST: Joi.string().default('127.0.0.1'),
-  PORT: Joi.number().integer().min(1).max(65535).default(3001),
+  PORT: Joi.number().integer().min(1).max(65535).default(3000),
   JWT_SECRET: Joi.string().min(32).required(),
   DB_HOST: Joi.string().default('localhost'),
   DB_PORT: Joi.number().integer().min(1).max(65535).default(3306),
