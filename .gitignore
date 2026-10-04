@@ -33,3 +33,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Keep database migrations local; do not publish them to GitHub.
+**/database/migrations/
+
+# New Markdown files require explicit approval before publishing.
+*.md
