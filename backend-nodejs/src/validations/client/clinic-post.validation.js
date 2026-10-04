@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { CLINIC_POST_LIMITS } from '../constants/clinic-post.constant.js';
+import { CLINIC_POST_LIMITS } from '../../constants/index.js';
 
 export const createClinicPostValidation = {
   body: Joi.object({

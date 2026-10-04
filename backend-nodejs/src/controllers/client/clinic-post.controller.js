@@ -1,4 +1,4 @@
-import { sendResponse } from '../utils/response.js';
+import { sendResponse } from '../../utils/response.js';
 
 export function createClinicPostController(service) {
   return {

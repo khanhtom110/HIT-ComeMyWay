@@ -1,4 +1,4 @@
-import { ApiError } from '../utils/ApiError.js';
+import { ApiError } from '../../utils/ApiError.js';
 
 export function createClinicPostService(clinicPostModel) {
   return {
@@ -13,6 +13,12 @@ export function createClinicPostService(clinicPostModel) {
     },
     async detailPublic(id) {
       const post = await clinicPostModel.findPublic(id);
+      if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
+      return post;
+    },
+    listForAdmin(status) { return clinicPostModel.listForAdmin(status); },
+    async approve(id, adminId) {
+      const post = await clinicPostModel.approve(id, adminId);
       if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
       return post;
     },

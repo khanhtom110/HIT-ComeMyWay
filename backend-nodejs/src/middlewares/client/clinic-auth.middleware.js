@@ -1,6 +1,6 @@
-import { ApiError } from '../utils/ApiError.js';
-import { catchAsync } from '../utils/catchAsync.js';
-import { verifyClinicToken } from '../utils/jwt.js';
+import { ApiError } from '../../utils/ApiError.js';
+import { catchAsync } from '../../utils/catchAsync.js';
+import { verifyClinicToken } from '../../utils/jwt.js';
 
 export function createClinicAuth({ clinicModel, jwtSecret }) {
   return catchAsync(async (request, response, next) => {

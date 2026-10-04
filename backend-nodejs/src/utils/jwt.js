@@ -4,7 +4,7 @@ function decodeBase64Url(value) {
   return Buffer.from(value, 'base64url');
 }
 
-export function verifyClinicToken(authorization, secret) {
+export function verifyAccessToken(authorization, secret, authority) {
   if (typeof authorization !== 'string' || !authorization.startsWith('Bearer ')) return null;
   const token = authorization.slice(7);
   const parts = token.split('.');
@@ -21,10 +21,14 @@ export function verifyClinicToken(authorization, secret) {
     const now = Math.floor(Date.now() / 1000);
     if (claims.exp == null || !Number.isInteger(claims.exp) || claims.exp <= now ||
         (claims.nbf != null && claims.nbf > now) || claims.isRefresh !== false ||
-        claims.authorities !== 'CLINIC' || typeof claims.sub !== 'string' ||
+        claims.authorities !== authority || typeof claims.sub !== 'string' ||
         !claims.sub || typeof claims.jti !== 'string' || !claims.jti) return null;
     return claims;
   } catch {
     return null;
   }
+}
+
+export function verifyClinicToken(authorization, secret) {
+  return verifyAccessToken(authorization, secret, 'CLINIC');
 }

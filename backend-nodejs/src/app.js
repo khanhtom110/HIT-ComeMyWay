@@ -3,18 +3,17 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import { openApiDocument } from './docs/openapi.js';
 import { ApiError } from './utils/ApiError.js';
-import { createClinicAuth } from './middlewares/clinic-auth.middleware.js';
-import { handleError, notFound } from './middlewares/error.middleware.js';
-import { createClinicPostController } from './controllers/clinic-post.controller.js';
-import { createHealthController } from './controllers/health.controller.js';
-import { createApiRouter } from './routers/index.js';
-import { createHealthRouter } from './routers/health.route.js';
-import { createClinicPostService } from './services/clinic-post.service.js';
+import { createClinicAuth, createAdminAuth, handleError, notFound } from './middlewares/index.js';
+import { createClinicPostController, createAdminStatisticsController,
+  createHealthController } from './controllers/index.js';
+import { createApiRouter, createHealthRouter } from './routers/index.js';
+import { createClinicPostService } from './services/index.js';
 
 export function createApp({
-  clinicPostModel, clinicModel, jwtSecret, corsOrigins = [], checkReadiness = async () => false,
+  clinicPostModel, clinicModel, adminStatisticsModel, jwtSecret,
+  corsOrigins = [], checkReadiness = async () => false,
 }) {
-  if (!clinicPostModel || !clinicModel || !jwtSecret) {
+  if (!clinicPostModel || !clinicModel || !adminStatisticsModel || !jwtSecret) {
     throw new Error('Missing models or JWT_SECRET');
   }
 
@@ -34,8 +33,12 @@ export function createApp({
   const service = createClinicPostService(clinicPostModel);
   const controller = createClinicPostController(service);
   const authenticateClinic = createClinicAuth({ clinicModel, jwtSecret });
+  const authenticateAdmin = createAdminAuth({ adminStatisticsModel, jwtSecret });
+  const adminStatisticsController = createAdminStatisticsController(adminStatisticsModel);
   app.use('/health', createHealthRouter(createHealthController(checkReadiness)));
-  app.use('/api/v1', createApiRouter({ controller, authenticateClinic }));
+  app.use('/api/v1', createApiRouter({
+    controller, authenticateClinic, adminStatisticsController, authenticateAdmin, clinicPostService: service,
+  }));
   app.get('/api-docs/openapi.json', (request, response) => response.json(openApiDocument));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
   app.use(notFound);

@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import { createApp } from './app.js';
 import { createDatabasePool } from './configs/db.config.js';
 import { loadConfig } from './configs/env.config.js';
-import { createClinicPostModel } from './models/clinic-post.model.js';
-import { createClinicModel } from './models/clinic.model.js';
+import { createClinicPostModel, createClinicModel,
+  createAdminStatisticsModel } from './models/index.js';
 
 dotenv.config({ path: fileURLToPath(new URL('../.env', import.meta.url)), quiet: true });
 const config = loadConfig();
@@ -16,6 +16,7 @@ try {
   const app = createApp({
     clinicPostModel: createClinicPostModel(pool),
     clinicModel: createClinicModel(pool),
+    adminStatisticsModel: createAdminStatisticsModel(pool),
     jwtSecret: config.jwtSecret,
     corsOrigins: config.corsOrigins,
     checkReadiness: async () => {

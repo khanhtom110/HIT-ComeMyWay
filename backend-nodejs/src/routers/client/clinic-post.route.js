@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { validate } from '../middlewares/validate.middleware.js';
-import { catchAsync } from '../utils/catchAsync.js';
-import { createClinicPostValidation, deleteClinicPostValidation } from '../validations/clinic-post.validation.js';
+import { validate } from '../../middlewares/index.js';
+import { catchAsync } from '../../utils/catchAsync.js';
+import { createClinicPostValidation, deleteClinicPostValidation } from '../../validations/index.js';
 
 export function createClinicPostRouter({ controller, authenticateClinic }) {
   const router = Router();
