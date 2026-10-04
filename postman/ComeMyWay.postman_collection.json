@@ -1073,7 +1073,7 @@
               "type": "noauth"
             },
             "header": [],
-            "description": "Kiểm tra phiên bản API trước khi tạo tin. Nếu thiếu endpoint, cập nhật Node.js và kiểm tra schema database."
+            "description": "Kiểm tra phiên bản API trước khi tạo tin. Nếu thiếu endpoint, cập nhật container Node.js và chạy migration 003 sau migration ảnh 002."
           },
           "event": [
             {
