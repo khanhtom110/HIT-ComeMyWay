@@ -10,7 +10,7 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 ## Request đăng tin
 
-`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`. Chạy migration 003 sau migration ảnh 002 trước khi sử dụng API kiểm duyệt. Bước **06 Ẩn bài chưa duyệt khỏi danh sách công khai** kiểm tra tin chưa duyệt không công khai.
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`. Đảm bảo database đã có các cột kiểm duyệt trước khi dùng API. Bước **06 Ẩn bài chưa duyệt khỏi danh sách công khai** kiểm tra tin chưa duyệt không công khai.
 
 Để kiểm tra duyệt tin, chạy **04 Tạo bài đăng**, đăng nhập admin qua **01 Đăng nhập quản trị viên**, rồi gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts` và `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{createdPostId}}/approve` với Bearer `{{adminAccessToken}}`. Sau khi duyệt, tin có `status=APPROVED`, `approvedBy`, `approvedAt`; feed công khai và `GET {{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}` trả ảnh cùng nội dung. Có thể thao tác trực tiếp trong Swagger Node.js.
 
@@ -35,7 +35,7 @@ Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ
 - Biến collection `postImageUrls` là chuỗi JSON chứa danh sách URL ảnh; mặc định dùng một ảnh mẫu Cloudinary. Có thể thay bằng URL từ API upload hiện có.
 - `moderationPostId`, `moderationApprovedBy`, `moderationApprovedAt` tự lưu trong environment; không cần điền thủ công. Không dùng chung `createdPostId` của folder đăng tin cũ.
 - Chạy trên môi trường kiểm thử: folder tạo, duyệt và xóa bài của chính lần chạy đó. Nếu dừng giữa chừng, gọi request **17 Phòng khám xóa bài thử nghiệm** để xóa bài đã tạo trước khi chạy lại.
-- Import lại collection sau khi cập nhật file. Chạy migration `003_clinic_post_moderation.sql` một lần sau migration ảnh 002 trước khi dùng API kiểm duyệt.
+- Import lại collection sau khi cập nhật file. Database cần có `status`, `approved_by`, `approved_at` trước khi dùng API kiểm duyệt.
 
 ## Thống kê admin
 
@@ -52,7 +52,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 Đây là endpoint chưa tồn tại trên server đang chạy (thường do container còn dùng image cũ), không phải trạng thái chờ duyệt. Không đổi test của danh sách chờ duyệt từ 200 sang 404 để làm test đạt.
 
 1. Kiểm tra `nodeBaseUrl`: môi trường Docker local của dự án dùng `http://localhost:3002`.
-2. Chạy migration `backend-nodejs/database/migrations/002_add_clinic_post_images.sql` rồi `backend-nodejs/database/migrations/003_clinic_post_moderation.sql` **mỗi file một lần** trên database dùng chung nếu chưa có các cột `image_urls`, `status`, `approved_by`, `approved_at`.
+2. Kiểm tra database dùng chung đã có các cột `image_urls`, `status`, `approved_by`, `approved_at`; nếu thiếu, cập nhật schema theo quy trình quản lý database của dự án trước khi chạy API.
 3. Cập nhật riêng Node.js, giữ nguyên cấu hình Compose local đang dùng:
 
 ```powershell

@@ -40,7 +40,7 @@
 
 Chức năng đăng tin phòng khám, duyệt bài và thống kê admin chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi, kết nối MySQL/JWT chung với Spring Boot. Tài khoản phòng khám được tính là đang hoạt động sau khi đổi mật khẩu mặc định (`PENDING_PROFILE` hoặc `ACTIVE`).
 
-Với database đã tồn tại, chạy [migration cho `users.home_address`](backend/database/migrations/001_allow_nullable_home_address.sql) một lần trước khi cho phép tài khoản không có địa chỉ nhà; đổi annotation trong Spring Boot không bảo đảm bỏ ràng buộc `NOT NULL` cũ trong MySQL.
+Với database đã tồn tại, cột `users.home_address` cũng cần cho phép `NULL` để khớp entity Spring Boot. Việc cập nhật schema được quản lý riêng ngoài branch này.
 
 - [Build và chạy hai backend bằng Docker](DOCKER.md) — publish cổng riêng, gọi trực tiếp bằng IP.
 - [Collection và environment Postman](postman/README.md) — test đăng nhập, đăng tin và validation.

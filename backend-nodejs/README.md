@@ -37,7 +37,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
 2. Sao chép `.env.example` thành `.env`, rồi điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
-3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql`, `database/migrations/002_add_clinic_post_images.sql` và `database/migrations/003_clinic_post_moderation.sql` trên database đó. Mỗi migration chỉ chạy một lần. Migration 003 đưa tin cũ về `PENDING` để admin duyệt trước khi công khai.
+3. Đảm bảo database dùng chung đã có bảng `clinic_posts` với các cột ảnh từ tính năng phòng khám và các cột kiểm duyệt `status`, `approved_by`, `approved_at`. Giá trị mặc định của `status` là `PENDING`; tin cũ cần được admin duyệt trước khi công khai. Việc cập nhật schema database được quản lý riêng ngoài branch này.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3001`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
@@ -61,7 +61,7 @@ Swagger UI: `http://localhost:3002/api-docs/` khi chạy bằng Docker, hoặc `
 - `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem tối đa 50 tin chờ duyệt, đầy đủ nội dung và ảnh. Có thể lọc `APPROVED`.
 - `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Lưu `approvedBy`, `approvedAt` và công khai tin. Gọi lại không thay đổi thông tin lần duyệt đầu.
 
-Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Cần chạy migration 003 trước khi triển khai API kiểm duyệt.
+Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Cần chuẩn bị các cột kiểm duyệt trong database trước khi triển khai API.
 
 ### Kiểm duyệt bằng Swagger/Postman
 
