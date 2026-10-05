@@ -155,16 +155,19 @@ public class AuthService {
     String token = request.refreshToken();
 
     String username = jwtService.extractUsername(token);
+    if (username == null || username.isBlank()) {
+      throw new AppException(401, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
+    }
 
     // Tim user trong db
     User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new AppException(404, ErrorMessage.User.USER_NOT_EXISTED));
+        .orElseThrow(() -> new AppException(401, ErrorMessage.Auth.INVALID_REFRESH_TOKEN));
 
     CustomUserDetails userDetails = new CustomUserDetails(user);
 
     // Neu token khong hop le
     if (!jwtService.isTokenValid(token, userDetails) || jwtService.isAccessToken(token)) {
-      throw new AppException(400, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
+      throw new AppException(401, ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
     }
 
     // Dua token cu vao InvalidatedToken

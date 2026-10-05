@@ -59,7 +59,7 @@ public class JwtService {
     try {
       return SignedJWT.parse(token).getJWTClaimsSet().getSubject();
     } catch (ParseException e) {
-      throw new AppException(400, ErrorMessage.Auth.MALFORMED_TOKEN);
+      throw new AppException(401, ErrorMessage.Auth.MALFORMED_TOKEN);
     }
   }
 
@@ -67,9 +67,16 @@ public class JwtService {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
 
-      String jti = signedJWT.getJWTClaimsSet().getJWTID();
-
-      if (invalidatedRepository.existsById(jti)) {
+      JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+      String jti = claims.getJWTID();
+      String username = claims.getSubject();
+      Date expirationTime = claims.getExpirationTime();
+      Date notBefore = claims.getNotBeforeTime();
+      Date now = new Date();
+      if (!JWSAlgorithm.HS256.equals(signedJWT.getHeader().getAlgorithm()) || jti == null
+          || jti.isBlank() || username == null || username.isBlank() || expirationTime == null
+          || !expirationTime.after(now) || (notBefore != null && notBefore.after(now))
+          || claims.getBooleanClaim("isRefresh") == null) {
         return false;
       }
 
@@ -77,15 +84,8 @@ public class JwtService {
       JWSVerifier verifier = new MACVerifier(secretKey.getBytes());
       boolean isSignatureValid = signedJWT.verify(verifier);
 
-      // Kiem tra thoi gian
-      Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-      boolean isTokenExpired = expirationTime.before(new Date());
-
-      // Kiem tra username
-      String username = signedJWT.getJWTClaimsSet().getSubject();
-      boolean isUsernameMatch = username.equals(userDetails.getUsername());
-
-      return isSignatureValid && !isTokenExpired && isUsernameMatch;
+      return isSignatureValid && username.equals(userDetails.getUsername())
+          && !invalidatedRepository.existsById(jti);
 
     } catch (JOSEException | ParseException e) {
       return false;
@@ -112,7 +112,7 @@ public class JwtService {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
       Boolean isRefresh = signedJWT.getJWTClaimsSet().getBooleanClaim("isRefresh");
-      return isRefresh == null || !isRefresh;
+      return Boolean.FALSE.equals(isRefresh);
     } catch (ParseException e) {
       return false;
     }
