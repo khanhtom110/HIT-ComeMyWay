@@ -3,7 +3,7 @@ package com.hit.comemyway.config;
 import com.hit.comemyway.constant.RoleConstant;
 import com.hit.comemyway.security.CustomUserDetailService;
 import com.hit.comemyway.security.JwtAuthenticationFilter;
-import com.hit.comemyway.security.JwtService;
+import jakarta.servlet.DispatcherType;
 import com.hit.comemyway.security.RateLimitingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,11 +69,17 @@ public class SecurityConfig {
     http.csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-        .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_END_POINT).permitAll()
-            .requestMatchers(USER_END_POINT).hasAuthority(RoleConstant.USER)
-            .requestMatchers(CLINIC_END_POINT).hasAuthority(RoleConstant.CLINIC)
-            .requestMatchers(ADMIN_END_POINT).hasAuthority(RoleConstant.ADMIN)
-            .requestMatchers(OPEN_API).permitAll().anyRequest().authenticated())
+        .exceptionHandling(errors -> errors
+            .authenticationEntryPoint((request, response, exception) -> jwtAuthFilter
+                .writeSecurityError(response, 401, "Yêu cầu xác thực bằng access token hợp lệ"))
+            .accessDeniedHandler((request, response, exception) -> jwtAuthFilter
+                .writeSecurityError(response, 403, "Bạn không có quyền truy cập")))
+        .authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+            .requestMatchers(PUBLIC_END_POINT).permitAll().requestMatchers(USER_END_POINT)
+            .hasAuthority(RoleConstant.USER).requestMatchers(CLINIC_END_POINT)
+            .hasAuthority(RoleConstant.CLINIC).requestMatchers(ADMIN_END_POINT)
+            .hasAuthority(RoleConstant.ADMIN).requestMatchers(OPEN_API).permitAll().anyRequest()
+            .authenticated())
         .authenticationProvider(authenticationProvider())
 
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
