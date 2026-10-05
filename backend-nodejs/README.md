@@ -53,25 +53,24 @@ Import collection và environment trong [postman/](../postman/README.md) để c
 
 Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
-- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "PENDING"` (Chưa duyệt). Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không được tự duyệt tin.
+- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "APPROVED"`; bài xuất hiện công khai ngay. `approvedBy` là `null`, `approvedAt` là thời điểm đăng. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không thể tự đặt trạng thái.
 - `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.
 - `DELETE /api/v1/clinic/posts/:id`: xóa bài của phòng khám hiện tại; trả 200 với `data.id`, hoặc 404 nếu không tìm thấy bài thuộc phòng khám đó.
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất có `status: "APPROVED"` (Đã duyệt).
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt trả 404.
-- `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem tối đa 50 tin chờ duyệt, đầy đủ nội dung và ảnh. Có thể lọc `APPROVED`.
-- `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Lưu `approvedBy`, `approvedAt` và công khai tin. Gọi lại không thay đổi thông tin lần duyệt đầu.
+- `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem tối đa 50 tin cũ còn chờ duyệt, đầy đủ nội dung và ảnh. Có thể lọc `APPROVED` để xem tin mới đã tự động công khai.
+- `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Duyệt tin cũ còn `PENDING`, lưu `approvedBy`, `approvedAt` và công khai tin. Gọi với tin đã tự động duyệt trả 200 mà không thay đổi thông tin duyệt.
 
-Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Cần chạy migration 003 trước khi triển khai API kiểm duyệt.
+Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Cần chạy migration 003 trước khi dùng API đăng tin tự động công khai.
 
-### Kiểm duyệt bằng Swagger/Postman
+### Kiểm tra đăng tin tự động công khai bằng Swagger/Postman
 
-1. Đăng nhập Spring Boot bằng tài khoản CLINIC và ADMIN để lấy hai access token.
-2. Mở `/api-docs/`, chọn **Authorize** và điền token tương ứng vào `clinicBearer`/`adminBearer`.
-3. Tạo tin bằng `POST /api/v1/clinic/posts`, dùng `imageUrls` trong ví dụ Swagger. Tin mới có `status=PENDING`; endpoint chi tiết công khai trả 404.
-4. Admin gọi `GET /api/v1/admin/clinic-posts?status=PENDING`, rồi `PATCH /api/v1/admin/clinic-posts/{id}/approve` (không có body).
-5. Kiểm tra `status=APPROVED`, `approvedBy`, `approvedAt`; tin xuất hiện trong feed công khai. Duyệt lại trả 200 và giữ nguyên thông tin lần duyệt đầu.
+1. Đăng nhập Spring Boot bằng tài khoản CLINIC để lấy access token.
+2. Mở `/api-docs/`, chọn **Authorize** và điền token vào `clinicBearer`.
+3. Tạo tin bằng `POST /api/v1/clinic/posts`, dùng `imageUrls` trong ví dụ Swagger. Tin mới có `status=APPROVED`, `approvedBy=null` và `approvedAt` cùng thời điểm đăng.
+4. Kiểm tra bài xuất hiện ngay trong `GET /api/v1/public/clinic-posts` và endpoint chi tiết công khai, không cần admin gọi API duyệt. Nếu còn bài cũ `PENDING`, admin có thể dùng endpoint duyệt riêng.
 
-Postman có folder **05 - Node.js - Duyệt bài phòng khám** chạy trọn luồng, gồm kiểm tra quyền, validation, trạng thái và xóa bài thử nghiệm. Xem [hướng dẫn Postman](../postman/README.md). Phạm vi tính năng là API Node.js; không bao gồm giao diện.
+Postman có folder **05 - Node.js - Đăng tin tự động công khai** chạy trọn luồng, gồm kiểm tra quyền, validation, trạng thái và xóa bài thử nghiệm. Xem [hướng dẫn Postman](../postman/README.md). Phạm vi tính năng là API Node.js; không bao gồm giao diện.
 
 ### API khác
 

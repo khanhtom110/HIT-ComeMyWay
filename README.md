@@ -38,7 +38,7 @@
 | API Docs | Swagger UI / OpenAPI 3.0 |
 | Deploy | AWS EC2 (t3.small) |
 
-Chức năng đăng tin phòng khám, duyệt bài và thống kê admin chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi, kết nối MySQL/JWT chung với Spring Boot. Tài khoản phòng khám được tính là đang hoạt động sau khi đổi mật khẩu mặc định (`PENDING_PROFILE` hoặc `ACTIVE`).
+Chức năng đăng tin phòng khám (tự động công khai), duyệt các tin cũ còn chờ và thống kê admin chạy trong [backend-nodejs](backend-nodejs/README.md), dùng Express + Joi, kết nối MySQL/JWT chung với Spring Boot. Tài khoản phòng khám được tính là đang hoạt động sau khi đổi mật khẩu mặc định (`PENDING_PROFILE` hoặc `ACTIVE`).
 
 Với database đã tồn tại, cột `users.home_address` cũng cần cho phép `NULL` để khớp entity Spring Boot. Việc cập nhật schema được quản lý riêng ngoài branch này.
 

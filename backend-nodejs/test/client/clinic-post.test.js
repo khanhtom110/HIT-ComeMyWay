@@ -17,7 +17,8 @@ const clinicModel = {
 let failPublicQuery = false;
 const clinicPostModel = {
   async create(clinicId, title, content, imageUrls) {
-    const post = { id: posts.length + 1, clinicId, title, content, imageUrls, status: 'PENDING' };
+    const post = { id: posts.length + 1, clinicId, title, content, imageUrls,
+      status: 'APPROVED', approvedBy: null, approvedAt: new Date().toISOString() };
     posts.push(post);
     return post;
   },
@@ -80,11 +81,14 @@ test('clinic publishes title and content; its posts are readable', async () => {
     body: JSON.stringify({ title: '  Lịch tiêm phòng  ', content: '  Có lịch mới  ', clinicId: 999 }),
   });
   assert.equal(response.status, 201);
-  assert.deepEqual((await response.json()).data, {
-    id: 1, clinicId: 7, title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [], status: 'PENDING',
+  const post = (await response.json()).data;
+  assert.deepEqual({ ...post, approvedAt: null }, {
+    id: 1, clinicId: 7, title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [],
+    status: 'APPROVED', approvedBy: null, approvedAt: null,
   });
+  assert.equal(Number.isNaN(Date.parse(post.approvedAt)), false);
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
-  assert.equal((await feed.json()).data.length, 0);
+  assert.ok((await feed.json()).data.some(item => item.id === post.id));
   const ownPosts = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     headers: { Authorization: `Bearer ${token()}` },
   });
@@ -111,7 +115,7 @@ test('rejects empty fields and unauthorized tokens', async () => {
   assert.equal(response.status, 400);
 });
 
-test('images and approval: pending stays private and only an admin can approve', async () => {
+test('new posts with images publish immediately; only admin can approve legacy pending posts', async () => {
   const imageUrls = ['https://example.com/clinic.jpg', 'https://example.com/service.png'];
   const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     method: 'POST', headers: { authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
@@ -119,10 +123,11 @@ test('images and approval: pending stays private and only an admin can approve',
   });
   assert.equal(created.status, 201);
   const post = (await created.json()).data;
-  assert.equal(post.status, 'PENDING');
-  assert.equal(post.approvedBy, undefined);
+  assert.equal(post.status, 'APPROVED');
+  assert.equal(post.approvedBy, null);
+  assert.equal(Number.isNaN(Date.parse(post.approvedAt)), false);
   assert.deepEqual(post.imageUrls, imageUrls);
-  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`)).status, 404);
+  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`)).status, 200);
   const url = `${baseUrl}/api/v1/admin/clinic-posts/${post.id}/approve`;
   for (const claims of [{}, { authorities: 'USER' }, { authorities: 'ADMIN', sub: 'admin', jti: 'revoked' },
     { authorities: 'ADMIN', sub: 'admin', isRefresh: true }]) {
@@ -134,10 +139,12 @@ test('images and approval: pending stays private and only an admin can approve',
   const headers = { authorization: `Bearer ${token({ authorities: 'ADMIN', sub: 'admin' })}` };
   const pending = await fetch(`${baseUrl}/api/v1/admin/clinic-posts`, { headers });
   assert.equal(pending.status, 200);
-  assert.ok((await pending.json()).data.some(item => item.id === post.id));
+  assert.equal((await pending.json()).data.some(item => item.id === post.id), false);
   const approved = await fetch(url, { method: 'PATCH', headers });
   assert.equal(approved.status, 200);
-  assert.equal((await approved.json()).data.approvedBy, 99);
+  const approvedPost = (await approved.json()).data;
+  assert.equal(approvedPost.approvedBy, null);
+  assert.equal(approvedPost.approvedAt, post.approvedAt);
   const detail = await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`);
   assert.equal(detail.status, 200);
   assert.deepEqual((await detail.json()).data.imageUrls, imageUrls);
@@ -147,11 +154,19 @@ test('images and approval: pending stays private and only an admin can approve',
   const pendingAfter = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?status=PENDING`, { headers });
   assert.equal((await pendingAfter.json()).data.some(item => item.id === post.id), false);
   const approvedList = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?status=APPROVED`, { headers });
-  assert.ok((await approvedList.json()).data.some(item => item.id === post.id && item.approvedBy === 99));
+  assert.ok((await approvedList.json()).data.some(item => item.id === post.id && item.approvedBy === null));
   const ownerList = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     headers: { authorization: `Bearer ${token()}` },
   });
   assert.equal((await ownerList.json()).data.find(item => item.id === post.id).status, 'APPROVED');
+  const legacyPost = { id: 900001, clinicId: 7, title: 'Tin cũ', content: 'Chờ duyệt',
+    imageUrls: [], status: 'PENDING', approvedBy: null, approvedAt: null };
+  posts.push(legacyPost);
+  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${legacyPost.id}`)).status, 404);
+  const legacyApproved = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${legacyPost.id}/approve`,
+    { method: 'PATCH', headers });
+  assert.equal(legacyApproved.status, 200);
+  assert.equal((await legacyApproved.json()).data.approvedBy, 99);
   for (const claims of [{}, { authorities: 'USER' }]) {
     const deniedList = await fetch(`${baseUrl}/api/v1/admin/clinic-posts`, {
       headers: { authorization: `Bearer ${token(claims)}` },
@@ -176,7 +191,7 @@ test('invalid image arrays are rejected without creating posts', async () => {
   assert.equal(posts.length, beforeCount);
 });
 
-test('SQL model persists image JSON and enforces public visibility and approval attribution', async () => {
+test('SQL model auto-publishes new posts and preserves admin approval for legacy posts', async () => {
   const calls = [];
   const model = createClinicPostModel({ async execute(sql, params) {
     calls.push({ sql, params });
@@ -187,7 +202,7 @@ test('SQL model persists image JSON and enforces public visibility and approval 
   assert.deepEqual((await model.create(7, 'Title', 'Content', ['https://example.com/a.jpg'])).imageUrls,
     ['https://example.com/a.jpg']);
   assert.deepEqual(calls[0].params, [7, 'Title', 'Content', '["https://example.com/a.jpg"]']);
-  assert.match(calls[0].sql, /'PENDING'/);
+  assert.match(calls[0].sql, /'APPROVED', UTC_TIMESTAMP\(3\), UTC_TIMESTAMP\(3\)/);
   await model.listPublic();
   assert.match(calls.at(-1).sql, /WHERE p.status = 'APPROVED'/);
   await model.findPublic(42);

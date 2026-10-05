@@ -10,9 +10,9 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 ## Request đăng tin
 
-`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`. Chạy migration 003 sau migration ảnh 002 trước khi sử dụng API kiểm duyệt. Bước **06 Ẩn bài chưa duyệt khỏi danh sách công khai** kiểm tra tin chưa duyệt không công khai.
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=APPROVED`, `approvedBy=null`, `approvedAt` bằng thời điểm đăng; bài công khai ngay. Chạy migration 003 sau migration ảnh 002 trước khi sử dụng API. Bước **06 Bài mới xuất hiện ngay trong danh sách công khai** kiểm tra hành vi này.
 
-Để kiểm tra duyệt tin, chạy **04 Tạo bài đăng**, đăng nhập admin qua **01 Đăng nhập quản trị viên**, rồi gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts` và `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{createdPostId}}/approve` với Bearer `{{adminAccessToken}}`. Sau khi duyệt, tin có `status=APPROVED`, `approvedBy`, `approvedAt`; feed công khai và `GET {{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}` trả ảnh cùng nội dung. Có thể thao tác trực tiếp trong Swagger Node.js.
+Sau **04 Tạo bài đăng**, gọi ngay `GET {{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}` hoặc danh sách công khai để xem tin. Admin vẫn có thể gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING` và `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` với Bearer `{{adminAccessToken}}` để xử lý tin cũ còn chờ duyệt; không cần gọi API này cho tin mới.
 
 `DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.
 
@@ -25,15 +25,15 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 Các folder trong collection kiểm tra health, đăng nhập/refresh, hồ sơ phòng khám, đăng tin, xóa tin, danh sách tin và validation. Mỗi lần chạy **04 Tạo bài đăng** sẽ tạo một tin mới; chạy toàn bộ collection sẽ xóa tin đó ở bước **07 Xóa bài đăng của mình**.
 
-## Duyệt bài admin
+## Đăng tin tự động công khai và API admin
 
 Request **00 Kiểm tra backend hỗ trợ duyệt bài** kiểm tra Swagger của server trước khi đăng nhập/tạo tin. Nếu request này thất bại, kiểm tra `nodeBaseUrl` và cập nhật backend trước khi chạy tiếp. Những request dùng `moderationPostId` yêu cầu bước tạo bài đã thành công. Lỗi 404 chỉ được chấp nhận khi `message` là **Không tìm thấy bài đăng**, không chấp nhận **Không tìm thấy API**.
 
-Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ tự. Folder tự đăng nhập clinic và admin, tạo bài riêng có ảnh, kiểm tra tin chưa duyệt không công khai, chặn clinic tự duyệt, duyệt bằng ADMIN, kiểm tra duyệt lặp giữ nguyên `approvedBy`/`approvedAt`, kiểm tra danh sách và chi tiết công khai, rồi xóa bài thử nghiệm. Tổng cộng 20 request, gồm các trường hợp 400, 401, 404.
+Chạy toàn bộ folder **05 - Node.js - Đăng tin tự động công khai** theo thứ tự. Folder tự đăng nhập clinic và admin, tạo bài riêng có ảnh, kiểm tra bài công khai ngay mà không vào danh sách chờ, chặn clinic gọi API admin, kiểm tra gọi duyệt lặp không thay đổi `approvedBy`/`approvedAt`, kiểm tra danh sách và chi tiết công khai, rồi xóa bài thử nghiệm. Tổng cộng 20 request, gồm các trường hợp 400, 401, 404.
 
 - Điền `username`, `password`, `adminUsername`, `adminPassword` trong environment trên máy local.
 - Biến collection `postImageUrls` là chuỗi JSON chứa danh sách URL ảnh; mặc định dùng một ảnh mẫu Cloudinary. Có thể thay bằng URL từ API upload hiện có.
-- `moderationPostId`, `moderationApprovedBy`, `moderationApprovedAt` tự lưu trong environment; không cần điền thủ công. Không dùng chung `createdPostId` của folder đăng tin cũ.
+- `moderationPostId`, `moderationApprovedAt` tự lưu trong environment; không cần điền thủ công. Không dùng chung `createdPostId` của folder đăng tin cũ. Bài tự động công khai có `approvedBy=null`.
 - Chạy trên môi trường kiểm thử: folder tạo, duyệt và xóa bài của chính lần chạy đó. Nếu dừng giữa chừng, gọi request **17 Phòng khám xóa bài thử nghiệm** để xóa bài đã tạo trước khi chạy lại.
 - Import lại collection sau khi cập nhật file. Chạy migration `003_clinic_post_moderation.sql` một lần sau migration ảnh 002 trước khi dùng API kiểm duyệt.
 
