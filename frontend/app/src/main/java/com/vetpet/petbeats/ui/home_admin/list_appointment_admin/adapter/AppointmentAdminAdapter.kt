@@ -3,13 +3,14 @@ package com.vetpet.petbeats.ui.home_admin.list_appointment_admin.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.VetPet.R
 
 class AppointmentAdminAdapter(
-    private val onSettingClick: (Int) -> (Unit)
+    private val onSettingClick: (Int, View) -> (Unit)
 ): ListAdapter<AppointmentAdminChild, AppointmentAdminAdapter.ViewHolder>(AppointmentAdminDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.item_account_clinic, holder, false)
@@ -25,14 +26,15 @@ class AppointmentAdminAdapter(
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tvNameClinic: TextView = itemView.findViewById(R.id.tvNameClinic)
         val tvNameAccount: TextView = itemView.findViewById(R.id.tvNameAccount)
+        val btnSetting: ImageView = itemView.findViewById(R.id.btnSetting)
 
 
-        fun bind(item: AppointmentAdminChild, onSettingClick: (Int) -> Unit) {
+        fun bind(item: AppointmentAdminChild, onSettingClick: (Int, View) -> Unit) {
             tvNameClinic.text = item.nameClinic
             tvNameAccount.text = item.nameAccount
 
-            itemView.setOnClickListener {
-                onSettingClick(item.id)
+            btnSetting.setOnClickListener { view ->
+                onSettingClick(item.id, view)
             }
         }
     }

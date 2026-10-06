@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentListAppointmentAdminBinding
+import com.example.VetPet.databinding.LayoutPopupClinicActionBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
@@ -63,14 +65,32 @@ class ListAppointmentAdminFragment : Fragment() {
 
     private fun clickList() {
         adapter = AppointmentAdminAdapter(
-            onSettingClick = { id ->
+            onSettingClick = { id, view ->
                 when {
                     viewModel.state.value.isReceive -> {
-                        viewModel.itemReceiveClick(id)
+                        showPopupClinic(
+                            anchorView = view,
+                            clinicId = id,
+                            onDeleteClick = { id ->
+                                viewModel.itemDeleteAccountClick(id)
+                            },
+                            onLockClick = { id ->
+                                viewModel.itemLockAccountClick(id)
+                            }
+                        )
                     }
 
                     viewModel.state.value.isWait -> {
-                        viewModel.itemWaitClick(id)
+                        showPopupClinic(
+                            anchorView = view,
+                            clinicId = id,
+                            onDeleteClick = { id ->
+                                viewModel.itemDeleteAccountClick(id)
+                            },
+                            onLockClick = { id ->
+                                viewModel.itemLockAccountClick(id)
+                            }
+                        )
                     }
                 }
 
@@ -94,39 +114,51 @@ class ListAppointmentAdminFragment : Fragment() {
         }
     }
 
-    private fun showPopupDialog(
-        message: String,
-        leftButton: String,
-        rightButton: String,
-
-        onLeftButtonClick: (() -> Unit)? = null,
-        onRightButtonClick: (() -> Unit)? = null
+    private fun showPopupClinic(
+        anchorView: View,
+        clinicId: Int,
+        onDeleteClick: (Int) -> Unit,
+        onLockClick: (Int) -> Unit
     ) {
-        //Khởi tạo binding
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
-        dialog.setContentView(dialogBinding.root)
+        val popupBinding = LayoutPopupClinicActionBinding.inflate(layoutInflater)
 
-        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        val popupWindow = PopupWindow(
+            popupBinding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
 
-        //Xử lý giao diện
-        dialogBinding.tvDialogTitle.text = message
-        dialogBinding.btnLeft.text = leftButton
-        dialogBinding.btnRight.text = rightButton
+        // Background trong suốt
+        popupWindow.setBackgroundDrawable(
+            Color.TRANSPARENT.toDrawable()
+        )
 
-        dialogBinding.btnLeft.setOnClickListener {
-            dialog.dismiss()
-            onLeftButtonClick?.invoke()
+        // Cho phép bấm ra ngoài để đóng popup
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+
+        // Xóa tài khoản
+        popupBinding.tvDelete.setOnClickListener {
+            popupWindow.dismiss()
+
+            onDeleteClick(clinicId)
         }
 
-        dialogBinding.btnRight.setOnClickListener {
-            dialog.dismiss()
-            onRightButtonClick?.invoke()
+        // Khóa tài khoản
+        popupBinding.tvLock.setOnClickListener {
+            popupWindow.dismiss()
+
+            onLockClick(clinicId)
         }
 
-        dialog.show()
+        // Hiện popup ngay dưới dấu 3 chấm
+        popupWindow.showAsDropDown(
+            anchorView,
+            -140,
+            -10
+        )
     }
 
 

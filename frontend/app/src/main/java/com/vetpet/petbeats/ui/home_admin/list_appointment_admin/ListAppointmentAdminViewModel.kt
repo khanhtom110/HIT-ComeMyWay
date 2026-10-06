@@ -35,6 +35,8 @@ class ListAppointmentAdminViewModel @Inject constructor(
 
 
 
+
+
     fun onWaitClick() {
         _state.value = _state.value.copy(isWait = true, isReceive = false, isLoading = true, listAppointmentAdmin = emptyList())
 
@@ -47,12 +49,12 @@ class ListAppointmentAdminViewModel @Inject constructor(
     }
 
 
-    fun itemReceiveClick(id: Int) {
+    fun itemDeleteAccountClick(id: Int) {
         viewModelScope.launch {
 
         }
     }
-    fun itemWaitClick(id: Int) {
+    fun itemLockAccountClick(id: Int) {
         viewModelScope.launch {
 
         }
