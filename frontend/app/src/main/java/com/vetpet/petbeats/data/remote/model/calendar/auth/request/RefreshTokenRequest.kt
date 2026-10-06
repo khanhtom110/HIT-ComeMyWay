@@ -1,5 +1,8 @@
 package com.vetpet.petbeats.data.remote.model.calendar.auth.request
 
+import com.google.gson.annotations.SerializedName
+
 data class RefreshTokenRequest (
-    val refreshTokenRequest: String
+    @SerializedName("refreshToken")
+    val refreshTokenRequest: String?
 )

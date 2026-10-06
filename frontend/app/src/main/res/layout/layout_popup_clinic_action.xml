@@ -1,0 +1,33 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@drawable/bg_popup_clinic">
+
+    <TextView
+        android:id="@+id/tvDelete"
+        style="@style/Nut3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:text="Xóa tài khoản"
+        android:textColor="@color/colorPrimary"
+        android:drawableStart="@drawable/icon_bin_1"
+        android:drawablePadding="10dp" />
+
+    <TextView
+        android:id="@+id/tvLock"
+        style="@style/Nut3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:text="Khóa tài khoản"
+        android:textColor="@color/colorPrimary"
+        android:drawableStart="@drawable/icon_lock"
+        android:drawablePadding="10dp" />
+
+</LinearLayout>

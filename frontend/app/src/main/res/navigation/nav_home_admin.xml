@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_home_admin"
+    app:startDestination="@id/listAppointmentAdminFragment">
+
+    <fragment
+        android:id="@+id/listAppointmentAdminFragment"
+        android:name="com.vetpet.petbeats.ui.home_admin.list_appointment_admin.ListAppointmentAdminFragment"
+        android:label="listAppointmentAdminFragment"/>
+
+    <fragment
+        android:id="@+id/statisticAdminFragment"
+        android:name="com.vetpet.petbeats.ui.home_admin.statistic_admin.StatisticAdminFragment"
+        android:label="statisticAdminFragment"/>
+
+    <fragment
+        android:id="@+id/addClinicAdminFragment"
+        android:name="com.vetpet.petbeats.ui.home_admin.add_clinic_admin.AddClinicAdminFragment"
+        android:label="addClinicAdminFragment"/>
+
+    <fragment
+        android:id="@+id/addClinicSuccessAdminFragment"
+        android:name="com.vetpet.petbeats.ui.home_admin.add_clinic_success_admin.AddClinicSuccessAdminFragment"
+        android:label="addClinicSuccessAdminFragment"/>
+
+</navigation>

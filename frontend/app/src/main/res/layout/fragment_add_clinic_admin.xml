@@ -1,0 +1,200 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context="com.vetpet.petbeats.ui.home_admin.add_clinic_admin.AddClinicAdminFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/back_left"
+            android:layout_marginTop="@dimen/_40sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TieuDe1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo tài khoản mới"
+            android:textColor="@color/colorTextSub"
+            app:layout_constraintTop_toTopOf="@id/btnBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/boxInformation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/ground_information"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginVertical="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintBottom_toTopOf="@id/btnAddAccount">
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvNameClinic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên phòng khám"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/editNameClinic"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:textColor="@color/colorTextTitle"
+                android:textColorHint="@color/colorTextHint"
+                android:inputType="textPassword"
+                android:hint="Nhập tên phòng khám đăng ký"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvNameClinic"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/nameClinicError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editNameClinic" />
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvNameAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên tài khoản"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/nameClinicError"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/editNameAccount"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:textColor="@color/colorTextTitle"
+                android:textColorHint="@color/colorTextHint"
+                android:inputType="textPassword"
+                android:hint="Nhập email phòng khám đăng ký"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvNameAccount"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/nameAccountError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editNameAccount" />
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mật khẩu"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/nameAccountError"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <EditText
+                style="@style/Chu3"
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/tittle_search"
+                android:layout_marginHorizontal="@dimen/_16sdp"
+                android:textColor="@color/colorTextTitle"
+                android:textColorHint="@color/colorTextHint"
+                android:inputType="textPassword"
+                android:hint="Tạo mật khẩu"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingEnd="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@id/tvPassword"/>
+
+            <ImageView
+                android:id="@+id/eye2"
+                android:layout_width="@dimen/_13sdp"
+                android:layout_height="@dimen/_8sdp"
+                android:src="@drawable/close_eye"
+                android:layout_marginEnd="@dimen/_16sdp"
+                app:layout_constraintEnd_toEndOf="@id/editPassword"
+                app:layout_constraintTop_toTopOf="@id/editPassword"
+                app:layout_constraintBottom_toBottomOf="@id/editPassword"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/passwordError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:text=""
+                android:textColor="@color/colorError"
+                android:visibility="gone"
+                android:drawablePadding="2dp"
+                app:drawableStartCompat="@drawable/warning"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editPassword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/btnAddAccount"
+            style="@style/Nut2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/button_auth_blue"
+            android:gravity="center"
+            android:text="Cập nhật"
+            android:textColor="@color/colorBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

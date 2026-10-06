@@ -114,4 +114,8 @@ dependencies {
 
     //Hiệu ứng Lottie animation (dấu tích thành công, confetti, loading)
     implementation("com.airbnb.android:lottie:6.6.2")
+
+
+    //Thư viện biểu đồ B1
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
