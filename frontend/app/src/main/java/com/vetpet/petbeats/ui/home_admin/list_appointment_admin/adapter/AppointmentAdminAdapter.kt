@@ -1,0 +1,39 @@
+package com.vetpet.petbeats.ui.home_admin.list_appointment_admin.adapter
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.VetPet.R
+
+class AppointmentAdminAdapter(
+    private val onSettingClick: (Int) -> (Unit)
+): ListAdapter<AppointmentAdminChild, AppointmentAdminAdapter.ViewHolder>(AppointmentAdminDiffCallback()) {
+    override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_account_clinic, holder, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val currentBook = getItem(position)
+
+        holder.bind(currentBook, onSettingClick)
+    }
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        val tvNameClinic: TextView = itemView.findViewById(R.id.tvNameClinic)
+        val tvNameAccount: TextView = itemView.findViewById(R.id.tvNameAccount)
+
+
+        fun bind(item: AppointmentAdminChild, onSettingClick: (Int) -> Unit) {
+            tvNameClinic.text = item.nameClinic
+            tvNameAccount.text = item.nameAccount
+
+            itemView.setOnClickListener {
+                onSettingClick(item.id)
+            }
+        }
+    }
+}
