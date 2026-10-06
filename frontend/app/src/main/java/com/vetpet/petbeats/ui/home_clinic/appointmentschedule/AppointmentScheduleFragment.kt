@@ -204,7 +204,6 @@ class AppointmentScheduleFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-
                     if (state.isWait) {
                         binding.btnWait.setBackgroundResource(R.drawable.button_wait)
                         binding.linePending.visibility = View.VISIBLE
