@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.data.local.dao.HistoryDao
 import com.vetpet.petbeats.data.local.entity.HistoryEntity
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.repository.HomeUserRepository
+import com.vetpet.petbeats.data.repository.repository_springboot.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.search.adapterhistory.HistoryChild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
