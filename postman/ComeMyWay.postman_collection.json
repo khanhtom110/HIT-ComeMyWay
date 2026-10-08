@@ -367,6 +367,7 @@
                   "  pm.expect(post.status).to.eql(\"APPROVED\");",
                   "  pm.expect(post.imageUrls).to.be.an(\"array\");",
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(post).to.have.property(\"clinicThumbnailUrl\");",
                   "  pm.expect(Number.isNaN(Date.parse(post.createdAt))).to.eql(false);",
                   "});",
                   "pm.test(\"Author ID is valid and matches profile when available\", () => {",

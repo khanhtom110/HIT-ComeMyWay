@@ -2,6 +2,7 @@ import { CLINIC_POST_LIMITS } from '../../constants/index.js';
 
 export function createClinicPostModel(pool) {
   const select = `SELECT p.id, p.clinic_id AS clinicId, c.name AS clinicName,
+    c.thumbnail_url AS clinicThumbnailUrl,
     p.title, p.content, p.image_urls AS imageUrls, p.status,
     p.approved_by AS approvedBy, p.approved_at AS approvedAt, p.created_at AS createdAt
     FROM clinic_posts p JOIN clinics c ON c.id = p.clinic_id`;

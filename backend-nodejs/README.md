@@ -58,6 +58,7 @@ Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc No
 - `DELETE /api/v1/clinic/posts/:id`: xóa bài của phòng khám hiện tại; trả 200 với `data.id`, hoặc 404 nếu không tìm thấy bài thuộc phòng khám đó.
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất có `status: "APPROVED"` (Đã duyệt).
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt trả 404.
+- Response bài đăng (tạo, danh sách của phòng khám, danh sách/chi tiết công khai và danh sách admin) có `clinicThumbnailUrl`: URL ảnh đại diện lấy từ hồ sơ phòng khám hiện tại (`clinics.thumbnail_url`), hoặc `null` nếu chưa có. Trường này khác `imageUrls` là ảnh của chính bài đăng.
 - `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem tối đa 50 tin cũ còn chờ duyệt, đầy đủ nội dung và ảnh. Có thể lọc `APPROVED` để xem tin mới đã tự động công khai.
 - `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Duyệt tin cũ còn `PENDING`, lưu `approvedBy`, `approvedAt` và công khai tin. Gọi với tin đã tự động duyệt trả 200 mà không thay đổi thông tin duyệt.
 

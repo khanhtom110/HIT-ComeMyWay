@@ -12,6 +12,8 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 `POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=APPROVED`, `approvedBy=null`, `approvedAt` bằng thời điểm đăng; bài công khai ngay. Chạy migration 003 sau migration ảnh 002 trước khi sử dụng API. Bước **06 Bài mới xuất hiện ngay trong danh sách công khai** kiểm tra hành vi này.
 
+Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
+
 Sau **04 Tạo bài đăng**, gọi ngay `GET {{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}` hoặc danh sách công khai để xem tin. Admin vẫn có thể gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING` và `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` với Bearer `{{adminAccessToken}}` để xử lý tin cũ còn chờ duyệt; không cần gọi API này cho tin mới.
 
 `DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.

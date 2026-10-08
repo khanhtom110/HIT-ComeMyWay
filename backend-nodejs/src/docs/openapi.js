@@ -22,6 +22,7 @@ const imageUrls = { type: 'array', maxItems: 10, uniqueItems: true,
   description: 'Tối đa 10 URL HTTP(S), không trùng. Giữ nguyên thứ tự; client có thể dùng ảnh đầu làm thumbnail. Node.js nhận URL, không nhận file multipart.',
   example: ['https://res.cloudinary.com/demo/image/upload/sample.jpg'], default: [] };
 const pendingExample = { id: 10, clinicId: 1, clinicName: 'Phòng khám thú y',
+  clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
   title: 'Lịch tiêm phòng', content: 'Nhận lịch tiêm phòng cho thú cưng.',
   imageUrls: imageUrls.example, status: 'PENDING', approvedBy: null, approvedAt: null,
   createdAt: '2026-10-03T07:00:00.000Z' };
@@ -75,9 +76,12 @@ export const openApiDocument = {
       },
       ClinicPost: {
         type: 'object',
-        required: ['id', 'clinicId', 'clinicName', 'title', 'content', 'createdAt', 'imageUrls', 'status'],
+        required: ['id', 'clinicId', 'clinicName', 'clinicThumbnailUrl', 'title', 'content', 'createdAt', 'imageUrls', 'status'],
         properties: {
           imageUrls,
+          clinicThumbnailUrl: { type: 'string', format: 'uri', nullable: true,
+            description: 'URL ảnh đại diện phòng khám từ clinics.thumbnail_url; null nếu phòng khám chưa có ảnh.',
+            example: 'https://example.com/clinic-avatar.jpg' },
           status: { type: 'string', enum: ['PENDING', 'APPROVED'], description: 'Tin mới tự động APPROVED; PENDING chỉ còn ở tin cũ chưa duyệt.' },
           approvedBy: { type: 'integer', format: 'int64', nullable: true, description: 'null khi tự động duyệt; ID admin khi duyệt tin cũ.' },
           approvedAt: { type: 'string', format: 'date-time', nullable: true, description: 'Thời điểm đăng khi tự động duyệt; thời điểm admin duyệt với tin cũ.' },

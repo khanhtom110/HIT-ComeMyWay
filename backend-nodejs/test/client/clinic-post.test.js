@@ -17,7 +17,8 @@ const clinicModel = {
 let failPublicQuery = false;
 const clinicPostModel = {
   async create(clinicId, title, content, imageUrls) {
-    const post = { id: posts.length + 1, clinicId, title, content, imageUrls,
+    const post = { id: posts.length + 1, clinicId, clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
+      title, content, imageUrls,
       status: 'APPROVED', approvedBy: null, approvedAt: new Date().toISOString() };
     posts.push(post);
     return post;
@@ -83,12 +84,15 @@ test('clinic publishes title and content; its posts are readable', async () => {
   assert.equal(response.status, 201);
   const post = (await response.json()).data;
   assert.deepEqual({ ...post, approvedAt: null }, {
-    id: 1, clinicId: 7, title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [],
+    id: 1, clinicId: 7, clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
+    title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [],
     status: 'APPROVED', approvedBy: null, approvedAt: null,
   });
   assert.equal(Number.isNaN(Date.parse(post.approvedAt)), false);
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
-  assert.ok((await feed.json()).data.some(item => item.id === post.id));
+  assert.equal((await feed.json()).data.find(item => item.id === post.id).clinicThumbnailUrl,
+    'https://example.com/clinic-avatar.jpg');
+  assert.equal(post.clinicThumbnailUrl, 'https://example.com/clinic-avatar.jpg');
   const ownPosts = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     headers: { Authorization: `Bearer ${token()}` },
   });
@@ -147,7 +151,9 @@ test('new posts with images publish immediately; only admin can approve legacy p
   assert.equal(approvedPost.approvedAt, post.approvedAt);
   const detail = await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`);
   assert.equal(detail.status, 200);
-  assert.deepEqual((await detail.json()).data.imageUrls, imageUrls);
+  const detailPost = (await detail.json()).data;
+  assert.deepEqual(detailPost.imageUrls, imageUrls);
+  assert.equal(detailPost.clinicThumbnailUrl, 'https://example.com/clinic-avatar.jpg');
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
   assert.ok((await feed.json()).data.some(item => item.id === post.id && item.status === 'APPROVED'));
   assert.equal((await fetch(url, { method: 'PATCH', headers })).status, 200);
@@ -159,7 +165,8 @@ test('new posts with images publish immediately; only admin can approve legacy p
     headers: { authorization: `Bearer ${token()}` },
   });
   assert.equal((await ownerList.json()).data.find(item => item.id === post.id).status, 'APPROVED');
-  const legacyPost = { id: 900001, clinicId: 7, title: 'Tin cũ', content: 'Chờ duyệt',
+  const legacyPost = { id: 900001, clinicId: 7, clinicThumbnailUrl: null,
+    title: 'Tin cũ', content: 'Chờ duyệt',
     imageUrls: [], status: 'PENDING', approvedBy: null, approvedAt: null };
   posts.push(legacyPost);
   assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${legacyPost.id}`)).status, 404);
@@ -197,10 +204,12 @@ test('SQL model auto-publishes new posts and preserves admin approval for legacy
     calls.push({ sql, params });
     if (sql.startsWith('INSERT')) return [{ insertId: 42 }];
     if (sql.startsWith('UPDATE')) return [{ affectedRows: 1 }];
-    return [[{ id: 42, imageUrls: '["https://example.com/a.jpg"]' }]];
+    return [[{ id: 42, clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
+      imageUrls: '["https://example.com/a.jpg"]' }]];
   } });
   assert.deepEqual((await model.create(7, 'Title', 'Content', ['https://example.com/a.jpg'])).imageUrls,
     ['https://example.com/a.jpg']);
+  assert.match(calls[1].sql, /c\.thumbnail_url AS clinicThumbnailUrl/);
   assert.deepEqual(calls[0].params, [7, 'Title', 'Content', '["https://example.com/a.jpg"]']);
   assert.match(calls[0].sql, /'APPROVED', UTC_TIMESTAMP\(3\), UTC_TIMESTAMP\(3\)/);
   await model.listPublic();
@@ -351,6 +360,7 @@ test('Swagger UI serves the clinic post contract and accepts same-origin request
   assert.deepEqual(spec.paths['/api/v1/clinic/posts/{id}'].delete.security, [{ clinicBearer: [] }]);
   assert.deepEqual(spec.components.schemas.CreateClinicPost.required, ['title', 'content']);
   assert.equal(spec.components.schemas.CreateClinicPost.properties.imageUrls.maxItems, 10);
+  assert.equal(spec.components.schemas.ClinicPost.properties.clinicThumbnailUrl.nullable, true);
   assert.deepEqual(spec.components.schemas.ClinicPost.properties.status.enum, ['PENDING', 'APPROVED']);
   assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/{id}/approve'].patch.security, [{ adminBearer: [] }]);
   assert.ok(spec.paths['/api/v1/public/clinic-posts/{id}'].get.responses[404]);
