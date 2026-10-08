@@ -98,6 +98,8 @@ class ComemywayApplicationTests {
     assertEquals(401, response.getStatus());
     var body = JsonMapper.builder().build().readTree(response.getContentAsString());
     assertEquals(401, body.get("statusCode").asInt());
+    assertEquals(token == null ? "A valid access token is required."
+        : "The access token is invalid or has expired.", body.get("message").asText());
     assertTrue(body.get("data").isNull());
     assertNotNull(body.get("timestamp"));
     assertEquals("Bearer", response.getHeader("WWW-Authenticate"));
@@ -150,6 +152,8 @@ class ComemywayApplicationTests {
     assertEquals(403, denied.getStatus());
     assertEquals(403, JsonMapper.builder().build().readTree(denied.getContentAsString())
         .get("statusCode").asInt());
+    assertEquals("You do not have permission to access this resource.",
+        JsonMapper.builder().build().readTree(denied.getContentAsString()).get("message").asText());
   }
 
   @Test
