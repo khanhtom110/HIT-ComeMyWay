@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     if (!authHeader.regionMatches(true, 0, "Bearer ", 0, 7) || authHeader.substring(7).isBlank()) {
       SecurityContextHolder.clearContext();
-      writeSecurityError(response, 401, "Token đã hết hạn hoặc không hợp lệ");
+      writeSecurityError(response, 401, "The access token is invalid or has expired.");
       return;
     }
     final String token = authHeader.substring(7).trim();
@@ -82,21 +82,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
           SecurityContextHolder.getContext().setAuthentication(authToken);
         } else {
-          throw new AppException(401, "Token đã hết hạn hoặc không hợp lệ");
+          throw new AppException(401, "The access token is invalid or has expired.");
         }
       } else {
-        throw new AppException(401, "Token đã hết hạn hoặc không hợp lệ");
+        throw new AppException(401, "The access token is invalid or has expired.");
       }
     } catch (AppException e) {
       if (e.getErrorCode() != 401 && e.getErrorCode() != 404) {
         throw e;
       }
       SecurityContextHolder.clearContext();
-      writeSecurityError(response, 401, "Token đã hết hạn hoặc không hợp lệ");
+      writeSecurityError(response, 401, "The access token is invalid or has expired.");
       return;
     } catch (UsernameNotFoundException e) {
       SecurityContextHolder.clearContext();
-      writeSecurityError(response, 401, "Token đã hết hạn hoặc không hợp lệ");
+      writeSecurityError(response, 401, "The access token is invalid or has expired.");
       return;
     }
 

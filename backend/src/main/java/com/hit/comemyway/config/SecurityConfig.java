@@ -71,9 +71,9 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
         .exceptionHandling(errors -> errors
             .authenticationEntryPoint((request, response, exception) -> jwtAuthFilter
-                .writeSecurityError(response, 401, "Yêu cầu xác thực bằng access token hợp lệ"))
-            .accessDeniedHandler((request, response, exception) -> jwtAuthFilter
-                .writeSecurityError(response, 403, "Bạn không có quyền truy cập")))
+                .writeSecurityError(response, 401, "A valid access token is required."))
+            .accessDeniedHandler((request, response, exception) -> jwtAuthFilter.writeSecurityError(
+                response, 403, "You do not have permission to access this resource.")))
         .authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
             .requestMatchers(PUBLIC_END_POINT).permitAll().requestMatchers(USER_END_POINT)
             .hasAuthority(RoleConstant.USER).requestMatchers(CLINIC_END_POINT)
