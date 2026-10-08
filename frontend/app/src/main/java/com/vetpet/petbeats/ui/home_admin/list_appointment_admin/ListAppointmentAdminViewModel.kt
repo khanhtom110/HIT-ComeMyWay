@@ -2,7 +2,7 @@ package com.vetpet.petbeats.ui.home_admin.list_appointment_admin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vetpet.petbeats.data.repository.HomeAdminRepository
+import com.vetpet.petbeats.data.repository.repository_nodejs.HomeAdminRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow

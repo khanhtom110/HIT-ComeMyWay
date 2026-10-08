@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFriendRequest
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LinkFriendRequest
-import com.vetpet.petbeats.data.repository.HomeUserRepository
+import com.vetpet.petbeats.data.repository.repository_springboot.HomeUserRepository
 import com.vetpet.petbeats.ui.home_user.list_friend_locket.adapter.FriendChild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
