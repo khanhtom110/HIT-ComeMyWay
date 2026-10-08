@@ -13,6 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.databinding.FragmentNewsUserBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 import com.vetpet.petbeats.ui.home_user.news.adapter.AdapterNews
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -43,7 +45,6 @@ class NewsUserFragment : Fragment() {
         binding.recycle.adapter = adapter
 
 
-        setOnClick()
         stateData()
         eventData()
     }
@@ -59,15 +60,34 @@ class NewsUserFragment : Fragment() {
         }
     }
 
-    private fun setOnClick() {
-
-    }
-
     private fun stateData() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     adapter.submitList(state.listNews)
+
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+
+
+                        binding.boxNews.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+
+                        //Kiểm tra xem list có data không
+                        if (state.listNews.isEmpty()) {
+                            binding.shimmerFrameLayout.visibility = View.GONE
+                            binding.recycle.visibility = View.GONE
+
+                            binding.boxNews.visibility = View.VISIBLE
+                        } else {
+                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
+                            binding.boxNews.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }
