@@ -9,7 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentNewsClinicBinding
+import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
+import com.vetpet.petbeats.ui.home_clinic.news.adapter.AdapterNewsClinic
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -19,6 +24,7 @@ class NewsClinicFragment : Fragment() {
     private var _binding: FragmentNewsClinicBinding?= null
     private val binding get() = _binding!!
     private val viewModel: NewsClinicViewModel by viewModels()
+    private lateinit var adapterNews: AdapterNewsClinic
 
 
     override fun onCreateView(
@@ -33,7 +39,11 @@ class NewsClinicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setOnClick()
+        listClick()
+
+        binding.recycle.layoutManager = LinearLayoutManager(requireContext())
+        binding.recycle.adapter = adapterNews
+
         stateData()
         eventData()
     }
@@ -43,15 +53,41 @@ class NewsClinicFragment : Fragment() {
         _binding = null
     }
 
-    private fun setOnClick() {
 
+    private fun listClick() {
+        adapterNews = AdapterNewsClinic { id ->
+            viewModel.itemNewsPostClick(id)
+        }
     }
 
     private fun stateData() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
+                    adapterNews.submitList(state.listNews)
 
+                    if (state.isLoading) {
+                        binding.shimmerFrameLayout.startShimmer()
+                        binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.recycle.visibility = View.GONE
+
+
+                        binding.boxNews.visibility = View.GONE
+                    }
+                    else {
+                        binding.shimmerFrameLayout.stopShimmer()
+
+                        //Kiểm tra xem list có data không
+                        if (state.listNews.isEmpty()) {
+                            binding.shimmerFrameLayout.visibility = View.GONE
+                            binding.recycle.visibility = View.VISIBLE
+
+                            binding.boxNews.visibility = View.VISIBLE
+                        } else {
+                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
+                            binding.boxNews.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }
@@ -61,7 +97,16 @@ class NewsClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when(event) {
+                        is NewsClinicEvent.NavigationClinicPost -> {
+                            findNavController().navigate(
+                                R.id.newsPostClinicFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
