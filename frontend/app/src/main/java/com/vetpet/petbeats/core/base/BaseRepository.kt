@@ -2,7 +2,7 @@ package com.vetpet.petbeats.core.base
 
 import android.util.Log
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.repository.ErrorTarget
+import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
 import com.vetpet.petbeats.data.utils.ErrorUtils.getErrorTargetAndMessage
 import com.google.gson.JsonParser
 import kotlinx.coroutines.CancellationException

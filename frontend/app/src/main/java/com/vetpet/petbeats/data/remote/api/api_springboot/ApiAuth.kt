@@ -1,8 +1,7 @@
-package com.vetpet.petbeats.data.remote.api
+package com.vetpet.petbeats.data.remote.api.api_springboot
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest

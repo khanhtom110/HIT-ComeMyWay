@@ -1,6 +1,6 @@
 package com.vetpet.petbeats.data.utils
 
-import com.vetpet.petbeats.data.repository.ErrorTarget
+import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
 
 object ErrorUtils {
     fun getErrorTargetAndMessage(englishMessage: String?): Pair<ErrorTarget, String> {

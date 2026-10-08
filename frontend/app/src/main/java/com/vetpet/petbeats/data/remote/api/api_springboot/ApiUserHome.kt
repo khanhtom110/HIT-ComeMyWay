@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.data.remote.api
+package com.vetpet.petbeats.data.remote.api.api_springboot
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
@@ -19,6 +19,8 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdatePr
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostConstainResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostDetailResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LinkFriendResponse
@@ -184,4 +186,15 @@ interface ApiUserHome {
     suspend fun deletePost(
         @Path("postId") postId: Int?
     ): ApiResponse<Unit>
+
+    @GET(ApiConstants.CLINICPOST)
+    suspend fun clinicPost(
+        @Query("lastPostId") lastPostId: Int?,
+        @Query("limit") limit: Int = 10
+    ): ApiResponse<ClinicPostConstainResponse>
+
+    @GET(ApiConstants.CLINICPOSTDETAIL)
+    suspend fun clinicPostDetail(
+        @Path("id") id: Int
+    ): ApiResponse<ClinicPostDetailResponse>
 }

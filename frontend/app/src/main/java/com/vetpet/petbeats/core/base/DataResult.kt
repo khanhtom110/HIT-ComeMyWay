@@ -1,6 +1,6 @@
 package com.vetpet.petbeats.core.base
 
-import com.vetpet.petbeats.data.repository.ErrorTarget
+import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
 
 sealed class DataResult<out T> {
     data class Success<out T>(val data: T, val message: String? = null): DataResult<T>()
