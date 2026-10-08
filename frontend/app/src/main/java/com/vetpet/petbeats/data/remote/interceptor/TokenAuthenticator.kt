@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.remote.api.ApiAuth
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response

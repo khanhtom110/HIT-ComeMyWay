@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.data.repository
+package com.vetpet.petbeats.data.repository.repository_springboot
 
 enum class ErrorTarget {
     //Auth

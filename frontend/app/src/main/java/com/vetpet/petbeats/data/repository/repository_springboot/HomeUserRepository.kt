@@ -1,8 +1,8 @@
-package com.vetpet.petbeats.data.repository
+package com.vetpet.petbeats.data.repository.repository_springboot
 
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
 import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
@@ -25,6 +25,8 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdatePr
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostConstainResponse
+import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostDetailResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LinkFriendResponse
@@ -256,4 +258,15 @@ class HomeUserRepository @Inject constructor(
         }
     }
 
+    suspend fun clinicPost(lastPostId: Int?, limit: Int): DataResult<ClinicPostConstainResponse> {
+        return safeApiCall {
+            apiUserHome.clinicPost(lastPostId, limit)
+        }
+    }
+
+    suspend fun clinicPostDetail(id: Int): DataResult<ClinicPostDetailResponse> {
+        return safeApiCall {
+            apiUserHome.clinicPostDetail(id)
+        }
+    }
 }

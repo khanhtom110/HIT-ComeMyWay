@@ -1,6 +1,7 @@
 package com.vetpet.petbeats.ui.home_clinic.news_post
 
 data class NewsPostClinicState (
+    val id: Int = 0,
     val imageClinic: String = "",
     val imageNews: String = "",
     val nameClinic: String = "",
@@ -10,5 +11,7 @@ data class NewsPostClinicState (
     val content: String = "",
 
 
-    val imagePet: Boolean = false,
+    val isImageNews: Boolean = false,
+    val isTitle: Boolean = false,
+    val isContent: Boolean = false
 )

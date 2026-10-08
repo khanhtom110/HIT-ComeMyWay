@@ -13,7 +13,7 @@ class AdapterNews(
     private val onItemClick: (Int) -> Unit
 ): ListAdapter<NewsChild, AdapterNews.ViewHolder>(NewsDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_hint_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_new_user, holder, false)
         return ViewHolder(view)
     }
 
@@ -28,18 +28,19 @@ class AdapterNews(
         val imgClinic: ImageView = itemView.findViewById(R.id.imgClinic)
         val tvClinicName: TextView = itemView.findViewById(R.id.tvClinicName)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        val tvContent: TextView = itemView.findViewById(R.id.tvContent)
 
         fun bind(item: NewsChild, onItemClick: (Int) -> Unit) {
-            tvClinicName.text = item.nameClinic
+            tvClinicName.text = item.clinicName
             tvTitle.text = item.titleClinic
+            tvContent.text = item.excerpt
 
             Glide.with(itemView.context)
-                .load(item.thumbnailUrlNews)
-                .circleCrop()
+                .load(item.imageUrl)
                 .into(imgNews)
 
             Glide.with(itemView.context)
-                .load(item.thumbnailUrlClinic)
+                .load(item.clinicAvatarUrl)
                 .circleCrop()
                 .into(imgClinic)
 

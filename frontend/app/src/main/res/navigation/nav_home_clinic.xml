@@ -107,16 +107,56 @@
     <fragment
         android:id="@+id/newsClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.news.NewsClinicFragment"
-        android:label="newsClinicFragment"/>
+        android:label="newsClinicFragment">
+        <action
+            android:id="@+id/newsClinic_newsPostClinic"
+            app:destination="@id/newsPostClinicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/newsPostClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.news_post.NewsPostClinicFragment"
-        android:label="newsPostClinicFragment"/>
+        android:label="newsPostClinicFragment">
+        <action
+            android:id="@+id/newsPostClinic_newsClinic"
+            app:destination="@id/newsClinicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/newsClinicFragment"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
 
     <fragment
-        android:id="@+id/NewsSuccessClinicFragment"
+        android:id="@+id/newsSuccessClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.news_success.NewsSuccessClinicFragment"
-        android:label="newsSuccessClinicFragment"/>
+        android:label="newsSuccessClinicFragment">
+        <action
+            android:id="@+id/newsSuccessClinic_newsClinic"
+            app:destination="@id/newsClinicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/newsClinicFragment"
+            app:popUpToInclusive="true"/>
+
+        <action
+            android:id="@+id/newsSuccessClinic_newsPostClinic"
+            app:destination="@id/newsPostClinicFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/newsPostClinicFragment"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
 
 </navigation>

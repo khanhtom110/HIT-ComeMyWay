@@ -15,10 +15,11 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentNewsClinicBinding
 import com.example.VetPet.databinding.FragmentNewsSuccessClinicBinding
 import com.vetpet.petbeats.ui.home_clinic.news.NewsClinicViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class NewsSuccessClinicFragment : Fragment() {
     private var _binding: FragmentNewsSuccessClinicBinding?= null
     private val binding get() = _binding!!
@@ -35,6 +36,10 @@ class NewsSuccessClinicFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val id = arguments?.getInt("id") ?: 0
+        viewModel.onInformationList(id)
+
 
         setOnClick()
         stateData()
@@ -53,6 +58,10 @@ class NewsSuccessClinicFragment : Fragment() {
         binding.btnNews.setOnClickListener {
             viewModel.newsClick()
         }
+        binding.btnTry.setOnClickListener {
+            val id = arguments?.getInt("id") ?: 0
+            viewModel.onInformationList(id)
+        }
     }
 
     private fun stateData() {
@@ -61,8 +70,7 @@ class NewsSuccessClinicFragment : Fragment() {
                 viewModel.state.collect { state ->
                     binding.tvState.text = state.tvState
                     binding.tvTitle.text = state.tvTitle
-                    binding.tvClinicName.text = state.tvClinicName
-
+                    binding.tvContent.text = state.tvContent
 
 
                     if (state.imgState.isNotEmpty()) {
@@ -76,6 +84,24 @@ class NewsSuccessClinicFragment : Fragment() {
                             .load(state.imgNews)
                             .into(binding.imgNews)
                     }
+
+                    if (state.imgClinic.isNotEmpty()) {
+                        Glide.with(requireContext())
+                            .load(state.imgClinic)
+                            .circleCrop()
+                            .into(binding.imgClinic)
+                    }
+
+
+
+                    if (state.checkState) {
+                        binding.imgState.setImageResource(R.drawable.icon_camera_send_cancel)
+                        binding.tvState.text = "Tin tức đã được đăng thành công"
+                    }
+                    else {
+                        binding.imgState.setImageResource(R.drawable.icon_camera_send_success)
+                        binding.tvState.text = "Có lỗi trong quá trình đăng tin"
+                    }
                 }
             }
         }
@@ -87,10 +113,10 @@ class NewsSuccessClinicFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when(event) {
                         is NewsSuccessClinicEvent.NavigationNewsPost -> {
-                            findNavController().navigate(R.id.newsPostClinicFragment)
+                            findNavController().navigate(R.id.newsSuccessClinic_newsPostClinic)
                         }
                         is NewsSuccessClinicEvent.NavigationNews -> {
-                            findNavController().navigate(R.id.newsClinicFragment)
+                            findNavController().navigate(R.id.newsSuccessClinic_newsClinic)
                         }
                     }
                 }

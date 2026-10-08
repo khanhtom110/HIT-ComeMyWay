@@ -2,9 +2,9 @@ package com.vetpet.petbeats.data.remote.retrofitInstance
 
 import android.content.Context
 import com.vetpet.petbeats.core.network.ApiConstants
-import com.vetpet.petbeats.data.remote.api.ApiAuth
-import com.vetpet.petbeats.data.remote.api.ApiClinicHome
-import com.vetpet.petbeats.data.remote.api.ApiUserHome
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
 import com.vetpet.petbeats.data.remote.interceptor.AuthInterceptor
 import com.vetpet.petbeats.data.remote.interceptor.TokenAuthenticator
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
@@ -22,7 +22,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitInstance {
-
     // Provide TokenManager để Hilt tự quản lý
     @Provides
     @Singleton
@@ -36,7 +35,7 @@ object RetrofitInstance {
     @Named("BaseRetrofit")
     fun provideBaseRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.BASE_URL)
+            .baseUrl(ApiConstants.SPRING_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -63,7 +62,7 @@ object RetrofitInstance {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.BASE_URL)
+            .baseUrl(ApiConstants.SPRING_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

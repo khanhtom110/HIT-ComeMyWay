@@ -64,6 +64,29 @@
             android:background="@drawable/ground_book_child"
             app:layout_constraintTop_toBottomOf="@id/tvState">
 
+            <ImageView
+                android:id="@+id/imgClinic"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:src="@drawable/image_test"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                style="@style/Chu3"
+                android:id="@+id/tvClinicName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phòng khám thú y FunPet"
+                android:textColor="@color/colorTextSub"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_50sdp"
+                android:layout_marginEnd="@dimen/_17sdp"
+                app:layout_constraintTop_toTopOf="@id/imgClinic"
+                app:layout_constraintStart_toEndOf="@id/imgClinic"/>
+
             <TextView
                 style="@style/Nut2"
                 android:id="@+id/tvTitle"
@@ -73,7 +96,7 @@
                 android:textColor="@color/colorTextSub"
                 android:layout_marginHorizontal="@dimen/_16sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/imgClinic"/>
 
             <ImageView
                 android:id="@+id/imgNews"
@@ -86,7 +109,7 @@
 
             <TextView
                 style="@style/Chu3"
-                android:id="@+id/tvClinicName"
+                android:id="@+id/tvContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Nhiều phòng khám thú y tại các đô thị lớn ghi nhận số lượng chó nhập viện vì bệnh Parvovirus (Canine Parvovirus - CPV) tăng rõ rệt trong những tuần gần đây. Đây là một trong những căn bệnh truyền nhiễm nguy hiểm nhất ở loài chó, có tốc độ lây lan nhanh và tỷ lệ tử vong lên tới hơn 80% nếu không được can thiệp kịp thời."
@@ -99,6 +122,19 @@
 
         <TextView
             style="@style/Nut2"
+            android:id="@+id/btnTry"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:background="@drawable/button_auth_blue"
+            android:gravity="center"
+            android:text="Thử lại"
+            android:textColor="@color/colorBackground"
+            android:layout_marginTop="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/boxInformation"/>
+
+        <TextView
+            style="@style/Nut2"
             android:id="@+id/btnNews"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -107,8 +143,8 @@
             android:gravity="center"
             android:text="Quay lại trang danh sách"
             android:textColor="@color/colorPrimary"
-            android:layout_marginTop="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/boxInformation"/>
+            android:layout_marginTop="@dimen/_8sdp"
+            app:layout_constraintTop_toBottomOf="@id/btnTry"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

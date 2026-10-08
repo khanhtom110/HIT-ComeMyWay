@@ -37,12 +37,13 @@
             <TextView
                 style="@style/Chu3"
                 android:id="@+id/tvClinicName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Phòng khám thú y FunPet"
                 android:textColor="@color/colorTextSub"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_80sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
                 app:layout_constraintTop_toTopOf="@id/imgClinic"
                 app:layout_constraintStart_toEndOf="@id/imgClinic"/>
 

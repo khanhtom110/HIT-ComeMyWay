@@ -8,15 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.VetPet.R
 import com.vetpet.petbeats.ui.home_user.news.adapter.NewsChild
 import com.vetpet.petbeats.ui.home_user.news.adapter.NewsDiffCallback
 
 class AdapterNewsClinic(
     private val onItemClick: (Int) -> Unit
-): ListAdapter<NewsChild, AdapterNewsClinic.ViewHolder>(NewsDiffCallback()) {
+): ListAdapter<NewsChildClinic, AdapterNewsClinic.ViewHolder>(NewsClinicDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
-        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_hint_child, holder, false)
+        val view = LayoutInflater.from(holder.context).inflate(R.layout.item_new_user, holder, false)
         return ViewHolder(view)
     }
 
@@ -29,23 +30,22 @@ class AdapterNewsClinic(
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val imgNews: ImageView = itemView.findViewById(R.id.imgNews)
         val imgClinic: ImageView = itemView.findViewById(R.id.imgClinic)
-        val tvClinicName: TextView = itemView.findViewById(R.id.tvClinicName)
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        val tvContent: TextView = itemView.findViewById(R.id.tvContent)
 
-        fun bind(item: NewsChild, onItemClick: (Int) -> Unit) {
-            tvClinicName.text = item.nameClinic
-            tvTitle.text = item.titleClinic
+        fun bind(item: NewsChildClinic, onItemClick: (Int) -> Unit) {
+            tvTitle.text = item.title
+            tvContent.text = item.content
+
 
             Glide.with(itemView.context)
-                .load(item.thumbnailUrlNews)
-                .circleCrop()
+                .load(item.imageUrls)
                 .into(imgNews)
 
             Glide.with(itemView.context)
-                .load(item.thumbnailUrlClinic)
+                .load(item.imageClinic)
                 .circleCrop()
                 .into(imgClinic)
-
 
             itemView.setOnClickListener {
                 onItemClick(item.id)

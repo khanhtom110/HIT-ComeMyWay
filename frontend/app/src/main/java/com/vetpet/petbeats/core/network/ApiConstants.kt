@@ -3,7 +3,8 @@ package com.vetpet.petbeats.core.network
 object ApiConstants {
 
     //Servers
-    const val BASE_URL = "http://56.10.115.197:8080"
+    const val SPRING_BASE_URL = "http://56.10.115.197:8080"
+    const val NODE_BASE_URL = "http://56.10.115.197:3000/"
 
 
     //Authentication
@@ -42,6 +43,11 @@ object ApiConstants {
     const val UNFRIEND = "/api/v1/user/locket/unfriend/{friendId}"
 
 
+    //Clinic Posts
+    const val CLINICPOST = "/api/v1/public/clinic-posts"
+    const val CLINICPOSTDETAIL = "/api/v1/public/clinic-posts/{id}"
+
+
     //ClinicController
     const val UPDATEPROFILE = "/api/v1/clinic/update-profile"
     const val COMPLETEPROFILE = "/api/v1/clinic/complete-profile"
@@ -76,4 +82,22 @@ object ApiConstants {
     //Chatbot
     const val CHATBOT = "/api/v1/chat"
 
+
+    //Health
+    const val HEALTH = "/health"
+    const val LIVE = "/health/live"
+    const val READY = "/health/ready"
+
+
+    //Clinic posts
+    const val CLINICPOSTIDNODEJS = "/api/v1/public/clinic-posts/{id}"
+    const val CLINICPOSTNODEJS = "/api/v1/clinic/posts"
+    const val CLINICDELETE = "/api/v1/clinic/posts/{id}"
+    const val CLINICPOSTGLOBAL = "/api/v1/public/clinic-posts"
+
+
+    //Admin
+    const val CLINICPOSTADMIN = "/api/v1/admin/clinic-posts"
+    const val APPROVEADMIN = "/api/v1/admin/clinic-posts/{id}/approve"
+    const val STATISTICADMIN = "/api/v1/admin/statistics"
 }

@@ -1,7 +1,5 @@
-package com.vetpet.petbeats.data.remote.api
+package com.vetpet.petbeats.data.remote.api.api_springboot
 
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
@@ -11,8 +9,6 @@ import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.Appoi
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.GetClinicProfileResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
