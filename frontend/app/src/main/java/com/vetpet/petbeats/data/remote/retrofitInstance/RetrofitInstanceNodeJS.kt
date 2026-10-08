@@ -2,6 +2,8 @@ package com.vetpet.petbeats.data.remote.retrofitInstance
 
 import android.content.Context
 import com.vetpet.petbeats.core.network.ApiConstants
+import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiAuthAdmin
+import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiClinicPost
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
@@ -21,36 +23,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitInstance {
-    // Provide TokenManager để Hilt tự quản lý
-    @Provides
-    @Singleton
-    fun provideTokenManager(@ApplicationContext context: Context): TokenManager {
-        return TokenManager(context)
-    }
-
-    // Base Retrofit dùng để Login, Register hoặc Refresh Token
-    @Provides
-    @Singleton
-    @Named("BaseRetrofit")
-    fun provideBaseRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(ApiConstants.SPRING_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    // Provide ApiAuth dùng để sử dụng Base Retrofit
-    @Provides
-    @Singleton
-    fun provideApiAuth(@Named("BaseRetrofit") retrofit: Retrofit): ApiAuth {
-        return retrofit.create(ApiAuth::class.java)
-    }
-
+object RetrofitInstanceNodeJS {
     //Authenticated Retrofit dùng cho các API cần đăng nhập
     @Provides
     @Singleton
-    @Named("AuthRetrofit")
+    @Named("NodeAuthRetrofit")
     fun provideAuthRetrofit(
         @ApplicationContext context: Context,
         tokenManager: TokenManager,
@@ -62,24 +39,23 @@ object RetrofitInstance {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.SPRING_BASE_URL)
+            .baseUrl(ApiConstants.NODE_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    //User dùng cho các API bên user
+    //User dùng cho các API bên admin
     @Provides
     @Singleton
-    fun provideApiUserHome(@Named("AuthRetrofit") retrofit: Retrofit): ApiUserHome {
-        return retrofit.create(ApiUserHome::class.java)
+    fun provideApiAdminHome(@Named("NodeAuthRetrofit") retrofit: Retrofit): ApiAuthAdmin {
+        return retrofit.create(ApiAuthAdmin::class.java)
     }
 
     //Clinic dùng cho các API bên clinic
     @Provides
     @Singleton
-    fun provideApiClinicHome(@Named("AuthRetrofit") retrofit: Retrofit): ApiClinicHome {
-        return retrofit.create(ApiClinicHome::class.java)
+    fun provideApiClinicHome(@Named("NodeAuthRetrofit") retrofit: Retrofit): ApiClinicPost {
+        return retrofit.create(ApiClinicPost::class.java)
     }
-
 }
