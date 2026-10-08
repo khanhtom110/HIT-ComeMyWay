@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.api.ApiAuth
-import com.vetpet.petbeats.data.repository.AuthRepository
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
-import com.vetpet.petbeats.data.remote.retrofitInstance.RetrofitInstance
 import com.example.VetPet.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
@@ -28,8 +24,6 @@ import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
 import com.vetpet.petbeats.core.utils.AnimationUtils.shake
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeOut
-import com.vetpet.petbeats.core.utils.AnimationUtils.scaleBounce
-import com.vetpet.petbeats.core.utils.AnimationUtils.staggeredEntrance
 import dagger.hilt.android.AndroidEntryPoint
 
 
