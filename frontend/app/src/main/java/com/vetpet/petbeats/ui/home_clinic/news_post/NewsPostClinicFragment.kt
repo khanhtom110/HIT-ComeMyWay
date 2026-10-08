@@ -1,32 +1,82 @@
 package com.vetpet.petbeats.ui.home_clinic.news_post
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentNewsPostClinicBinding
 import com.example.VetPet.databinding.FragmentNewsUserBinding
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.ui.home_user.news.NewsUserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import java.io.FileOutputStream
 import kotlin.getValue
 
-
+@AndroidEntryPoint
 class NewsPostClinicFragment : Fragment() {
     private var _binding: FragmentNewsPostClinicBinding?= null
     private val binding get() = _binding!!
     private val viewModel: NewsPostClinicViewModel by viewModels()
+
+
+    //Khởi tạo Photo Picker Launcher
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            Glide.with(requireContext())
+                .load(uri)
+                .circleCrop()
+                .into(binding.imgNews)
+
+            val file = createMultipartFromUri(requireContext(), uri)
+            if (file != null) {
+                viewModel.onUploadImage(file)
+            }
+        }
+        else {
+            return@registerForActivityResult
+        }
+    }
+
+    private fun createMultipartFromUri(context: Context, uri: Uri): MultipartBody.Part? {
+        val inputStream = context.contentResolver.getType(uri) ?: "image/*"
+        val tempFile = File(context.cacheDir, "clinic_avatar.jpg")
+
+        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            FileOutputStream(tempFile).use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        } ?: return null
+
+        val mediaType = MediaType.parse(inputStream)
+        val requestBody = RequestBody.create(mediaType, tempFile)
+
+        return MultipartBody.Part.createFormData("file", tempFile.name, requestBody)
+    }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +90,11 @@ class NewsPostClinicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val id = arguments?.getInt("id") ?: 0
+        viewModel.onImageClinic(id)
+
+
         setOnClick()
         stateData()
         eventData()
@@ -50,6 +105,11 @@ class NewsPostClinicFragment : Fragment() {
         _binding = null
     }
 
+    //Lọc lấy ảnh
+    private fun openGallery() {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
     private fun setOnClick() {
         binding.vector.setOnClickListener {
             viewModel.newsClinicClick()
@@ -57,7 +117,7 @@ class NewsPostClinicFragment : Fragment() {
 
 
         binding.btnImgNews.setOnClickListener {
-            viewModel.checkImageClickTrue()
+            openGallery()
         }
         binding.btnCancelImgNews.setOnClickListener {
             showPopupDialog(
@@ -71,11 +131,19 @@ class NewsPostClinicFragment : Fragment() {
         }
 
 
-
-        binding.btnPost.setOnClickListener {
-            viewModel.onNewsPostClinicClick()
+        binding.editTitle.addTextChangedListener {
+            viewModel.onTitleChange(it.toString())
+        }
+        binding.editContent.addTextChangedListener {
+            viewModel.onContentChange(it.toString())
         }
 
+
+
+        binding.btnPost.setOnClickListener {
+            val id = arguments?.getInt("id") ?: 0
+            viewModel.onNewsPostClinicClick(id)
+        }
     }
 
 
@@ -128,7 +196,7 @@ class NewsPostClinicFragment : Fragment() {
                     if (binding.editTitle.text.toString() != state.title) {
                         binding.editTitle.setText(state.title)
                     }
-                    if (binding.editContent.toString() != state.content) {
+                    if (binding.editContent.text.toString() != state.content) {
                         binding.editContent.setText(state.content)
                     }
 
@@ -137,6 +205,7 @@ class NewsPostClinicFragment : Fragment() {
                     if (state.imageClinic.isNotEmpty()) {
                         Glide.with(requireContext())
                             .load(state.imageClinic)
+                            .circleCrop()
                             .into(binding.imgClinic)
                     }
                     if (state.imageNews.isNotEmpty()) {
@@ -148,15 +217,26 @@ class NewsPostClinicFragment : Fragment() {
 
 
 
-
-
-                    if (state.imagePet) {
+                    if (state.isImageNews) {
                         binding.btnCancelImgNews.visibility = View.VISIBLE
-                        binding.btnImgNews.visibility = View.VISIBLE
+                        binding.imgNews.visibility = View.VISIBLE
+
+                        binding.btnImgNews.isEnabled = false
                     }
                     else {
                         binding.btnCancelImgNews.visibility = View.GONE
-                        binding.btnImgNews.visibility = View.GONE
+                        binding.imgNews.visibility = View.GONE
+
+                        binding.btnImgNews.isEnabled = true
+                    }
+
+
+
+                    if (binding.editTitle.text.toString() != state.title) {
+                        binding.editTitle.setText(state.title)
+                    }
+                    if (binding.editContent.text.toString() != state.content) {
+                        binding.editContent.setText(state.content)
                     }
                 }
             }
@@ -167,7 +247,19 @@ class NewsPostClinicFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when (event) {
+                        is NewsPostClinicEvent.NavigationNewsClinic -> {
+                            findNavController().navigate(R.id.newsPostClinic_newsClinic)
+                        }
+                        is NewsPostClinicEvent.NavigationNewsSuccessClinic -> {
+                            findNavController().navigate(
+                                R.id.newsSuccessClinicFragment,
+                                Bundle().apply {
+                                    putInt("id", event.id)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
