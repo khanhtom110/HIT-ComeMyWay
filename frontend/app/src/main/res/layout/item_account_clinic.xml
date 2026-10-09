@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Tài khoản: funpet123@gmail.com"
             android:textColor="@color/colorTextContent"
-            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -31,7 +31,7 @@
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_16sdp"
             android:src="@drawable/icon_setting_admin"
-            android:layout_marginEnd="@dimen/_22sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:layout_marginHorizontal="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

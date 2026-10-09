@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.VetPet.R
 
 class AppointmentAdminCurrentAdapter(
-    private val onSettingClick: (Int, View) -> (Unit)
+    private val onSettingClick: (Int, View) -> (Unit),
+    private val onClinicDetailClick: (Int) -> (Unit)
 ): ListAdapter<AppointmentAdminChild, AppointmentAdminCurrentAdapter.ViewHolder>(AppointmentAdminDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.item_account_clinic, holder, false)
@@ -20,21 +21,23 @@ class AppointmentAdminCurrentAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBook = getItem(position)
 
-        holder.bind(currentBook, onSettingClick)
+        holder.bind(currentBook, onSettingClick, onClinicDetailClick)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val tvNameClinic: TextView = itemView.findViewById(R.id.tvNameClinic)
         val tvNameAccount: TextView = itemView.findViewById(R.id.tvNameAccount)
         val btnSetting: ImageView = itemView.findViewById(R.id.btnSetting)
 
 
-        fun bind(item: AppointmentAdminChild, onSettingClick: (Int, View) -> Unit) {
-            tvNameClinic.text = item.nameClinic
+        fun bind(item: AppointmentAdminChild, onSettingClick: (Int, View) -> Unit, onClinicDetailClick: (Int) -> Unit) {
             tvNameAccount.text = item.nameAccount
 
             btnSetting.setOnClickListener { view ->
                 onSettingClick(item.id, view)
+            }
+
+            tvNameAccount.setOnClickListener {
+                onClinicDetailClick(item.clinicId)
             }
         }
     }

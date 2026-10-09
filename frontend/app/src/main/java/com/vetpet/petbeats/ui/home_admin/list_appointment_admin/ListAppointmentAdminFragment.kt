@@ -75,6 +75,10 @@ class ListAppointmentAdminFragment : Fragment() {
                         viewModel.itemLockAccountClick(clinicId)
                     }
                 )
+            },
+
+            onClinicDetailClick = { clinicId ->
+                viewModel.itemClinicDetailClick(clinicId)
             }
         )
 
@@ -249,6 +253,14 @@ class ListAppointmentAdminFragment : Fragment() {
                     when (event) {
                         is ListAppointmentAdminEvent.NavigationAddClinic -> {
                             findNavController().navigate(R.id.addClinicAdminFragment)
+                        }
+                        is ListAppointmentAdminEvent.NavigationClinicDetail -> {
+                            findNavController().navigate(
+                                R.id.clinicDetailAdminFragment,
+                                Bundle().apply {
+                                    putInt("clinicId", event.clinicId)
+                                }
+                            )
                         }
                     }
                 }
