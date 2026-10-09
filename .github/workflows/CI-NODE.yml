@@ -1,0 +1,172 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [dev, feat/clinic-posts-from-dev]
+    paths:
+      - "backend-nodejs/**"
+      - ".github/workflows/CI-NODE.yml"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [dev]
+    paths:
+      - "backend-nodejs/**"
+      - ".github/workflows/CI-NODE.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./backend-nodejs
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: backend-nodejs/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run tests
+        run: npm test
+
+      - name: Package deployment artifact
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/dev'
+        working-directory: .
+        run: tar -czf node-backend.tar.gz -C backend-nodejs src database package.json package-lock.json
+
+      - name: Upload deployment artifact
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-backend
+          path: node-backend.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
+  deploy:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/dev'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: nodejs-ec2-deploy
+      cancel-in-progress: false
+    steps:
+      - name: Download deployment artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: node-backend
+          path: deploy-artifact
+
+      - name: Copy Node.js artifact to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || '22' }}
+          source: deploy-artifact/node-backend.tar.gz
+          target: ~/deploy-nodejs/incoming/${{ github.run_id }}-${{ github.run_attempt }}/
+          strip_components: 1
+
+      - name: Install release, restart Node.js and verify it
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || '22' }}
+          command_timeout: 10m
+          script: |
+            set -eu
+            DEPLOY_DIR="$HOME/deploy-nodejs"
+            RELEASE_ID='${{ github.run_id }}-${{ github.run_attempt }}'
+            RELEASE_DIR="$DEPLOY_DIR/releases/$RELEASE_ID"
+
+            command -v node >/dev/null || { echo 'Install Node.js 24 on EC2 first.'; exit 1; }
+            command -v npm >/dev/null
+            command -v curl >/dev/null
+            command -v ss >/dev/null
+            node -e 'if (Number(process.versions.node.split(".")[0]) !== 24) { console.error("EC2 requires Node.js 24 to match CI"); process.exit(1); }'
+            test -f "$DEPLOY_DIR/.env" || { echo 'Create ~/deploy-nodejs/.env with DB credentials and the Java JWT_SECRET first.'; exit 1; }
+            chmod 600 "$DEPLOY_DIR/.env"
+
+            mkdir -p "$RELEASE_DIR"
+            tar -xzf "$DEPLOY_DIR/incoming/$RELEASE_ID/node-backend.tar.gz" -C "$RELEASE_DIR"
+            ln -s "$DEPLOY_DIR/.env" "$RELEASE_DIR/.env"
+            cd "$RELEASE_DIR"
+            npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+
+            # Check configuration, MySQL and migrations before stopping the current release.
+            NODE_ENV=production HOST=0.0.0.0 PORT=3000 DB_NAME=pet_heartbeat_import node --input-type=module -e '
+              import dotenv from "dotenv";
+              import { loadConfig } from "./src/configs/env.config.js";
+              import { createDatabasePool } from "./src/configs/db.config.js";
+              import { runMigrations } from "./src/utils/migrations.js";
+              dotenv.config({ quiet: true });
+              const pool = createDatabasePool(loadConfig().database);
+              try { await pool.query("SELECT 1"); await runMigrations(pool); }
+              catch (error) { console.error("MySQL preflight failed:", error.code ?? error.name); process.exitCode = 1; }
+              finally { await pool.end(); }
+            '
+
+            if [ -f "$DEPLOY_DIR/app.pid" ]; then
+              OLD_PID=$(cat "$DEPLOY_DIR/app.pid")
+              case "$OLD_PID" in ''|*[!0-9]*) echo 'Invalid app.pid; inspect it before deploying.'; exit 1;; esac
+              if kill -0 "$OLD_PID" 2>/dev/null; then
+                OLD_COMMAND=$(ps -p "$OLD_PID" -o args=)
+                case "$OLD_COMMAND" in
+                  "node $DEPLOY_DIR/releases/"*/src/server.js) ;;
+                  *) echo 'PID does not belong to this Node.js deployment; refusing to stop it.'; exit 1;;
+                esac
+                kill "$OLD_PID"
+                for attempt in $(seq 1 20); do
+                  kill -0 "$OLD_PID" 2>/dev/null || break
+                  sleep 1
+                done
+                if kill -0 "$OLD_PID" 2>/dev/null; then
+                  echo 'Previous Node.js process did not stop; inspect it before retrying.'
+                  exit 1
+                fi
+              fi
+            fi
+
+            if ss -H -ltn 'sport = :3000' | grep -q .; then
+              echo 'Port 3000 is occupied. Stop the existing Node.js service before the first deployment.'
+              exit 1
+            fi
+
+            NODE_ENV=production HOST=0.0.0.0 PORT=3000 DB_NAME=pet_heartbeat_import \
+              nohup node "$RELEASE_DIR/src/server.js" > "$DEPLOY_DIR/app.log" 2>&1 < /dev/null &
+            APP_PID=$!
+            printf '%s\n' "$APP_PID" > "$DEPLOY_DIR/app.pid"
+
+            for attempt in $(seq 1 12); do
+              if ! kill -0 "$APP_PID" 2>/dev/null; then
+                echo 'Node.js exited during startup.'
+                tail -n 100 "$DEPLOY_DIR/app.log"
+                exit 1
+              fi
+              if curl --max-time 5 --fail --silent http://127.0.0.1:3000/health/ready >/dev/null; then
+                if kill -0 "$APP_PID" 2>/dev/null; then
+                  echo 'Node.js is ready on port 3000, database pet_heartbeat_import.'
+                  exit 0
+                fi
+              fi
+              sleep 5
+            done
+            echo 'Node.js readiness check failed. Recent logs:'
+            tail -n 100 "$DEPLOY_DIR/app.log"
+            exit 1
