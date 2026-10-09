@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ListAppointmentAdminViewModel @Inject constructor(
-    private val repository: AuthAdminRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(ListAppointmentAdminState())
     val state = _state.asStateFlow()

@@ -64,40 +64,32 @@ class ListAppointmentAdminFragment : Fragment() {
 
     private fun clickList() {
         adapterCurrent = AppointmentAdminCurrentAdapter(
-            onSettingClick = { id, view ->
-                when {
-                    viewModel.state.value.isReceive -> {
-                        showPopupClinic(
-                            anchorView = view,
-                            clinicId = id,
-                            onDeleteClick = { id ->
-                                viewModel.itemDeleteAccountClick(id)
-                            },
-                            onLockClick = { id ->
-                                viewModel.itemLockAccountClick(id)
-                            }
-                        )
+            onSettingClick = { id, anchorView ->
+                showPopupClinic(
+                    anchorView = anchorView,
+                    clinicId = id,
+                    onDeleteClick = { clinicId ->
+                        viewModel.itemDeleteAccountClick(clinicId)
+                    },
+                    onLockClick = { clinicId ->
+                        viewModel.itemLockAccountClick(clinicId)
                     }
-                }
+                )
             }
         )
 
-        adapterCurrent = AppointmentAdminCurrentAdapter(
-            onSettingClick = { id, view ->
-                when {
-                    viewModel.state.value.isWait -> {
-                        showPopupClinic(
-                            anchorView = view,
-                            clinicId = id,
-                            onDeleteClick = { id ->
-                                viewModel.itemDeleteAccountClick(id)
-                            },
-                            onLockClick = { id ->
-                                viewModel.itemLockAccountClick(id)
-                            }
-                        )
+        adapterNotCurrent = AppointmentAdminNotCurrentAdapter(
+            onSettingClick = { id, anchorView ->
+                showPopupClinic(
+                    anchorView = anchorView,
+                    clinicId = id,
+                    onDeleteClick = { clinicId ->
+                        viewModel.itemDeleteAccountClick(clinicId)
+                    },
+                    onLockClick = { clinicId ->
+                        viewModel.itemLockAccountClick(clinicId)
                     }
-                }
+                )
             }
         )
     }
@@ -167,85 +159,84 @@ class ListAppointmentAdminFragment : Fragment() {
 
 
     private fun stateData() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
+                    // Tab đang hoạt động
+                    binding.btnReceive.setBackgroundResource(
+                        if (state.isReceive) {
+                            R.drawable.button_receive
+                        } else {
+                            R.color.colorBackground
+                        }
+                    )
+
+                    binding.btnReceive.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            if (state.isReceive) {
+                                R.color.colorTextReceive
+                            } else {
+                                R.color.colorPrimary
+                            }
+                        )
+                    )
+
+                    binding.lineReceive.visibility = if (state.isReceive) View.VISIBLE else View.GONE
+
+                    // Tab chưa hoạt động
+                    binding.btnWait.setBackgroundResource(
+                        if (state.isWait) {
+                            R.drawable.button_wait
+                        } else {
+                            R.color.colorBackground
+                        }
+                    )
+
+                    binding.btnWait.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            if (state.isWait) {
+                                R.color.colorTextWait
+                            } else {
+                                R.color.colorPrimary
+                            }
+                        )
+                    )
+
+                    binding.lineWait.visibility = if (state.isWait) View.VISIBLE else View.GONE
+
+                    // Chọn adapter và cập nhật danh sách
                     if (state.isReceive) {
-                        binding.btnReceive.setBackgroundResource(R.drawable.button_receive)
-                        binding.lineReceive.visibility = View.VISIBLE
+                        if (binding.recycle.adapter !== adapterCurrent) {
+                            binding.recycle.adapter = adapterCurrent
+                        }
 
-                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorTextReceive)
-                        binding.btnReceive.setTextColor(clinic)
+                        adapterCurrent.submitList(state.listAppointmentAdmin)
+                    } else {
+                        if (binding.recycle.adapter !== adapterNotCurrent) {
+                            binding.recycle.adapter = adapterNotCurrent
+                        }
 
-                        binding.recycle.adapter = adapterCurrent
-                    }
-                    else {
-                        binding.btnReceive.setBackgroundResource(R.color.colorBackground)
-                        binding.lineReceive.visibility = View.GONE
-
-                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorPrimary)
-                        binding.btnReceive.setTextColor(clinic)
+                        adapterNotCurrent.submitList(state.listAppointmentAdmin)
                     }
 
-                    if (state.isWait) {
-                        binding.btnWait.setBackgroundResource(R.drawable.button_wait)
-                        binding.lineWait.visibility = View.VISIBLE
-
-                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorTextWait)
-                        binding.btnWait.setTextColor(clinic)
-
-
-                        binding.recycle.adapter = adapterNotCurrent
-                    }
-                    else {
-                        binding.btnWait.setBackgroundResource(R.color.colorBackground)
-                        binding.lineWait.visibility = View.GONE
-
-                        val clinic = ContextCompat.getColor(requireContext(),R.color.colorPrimary)
-                        binding.btnWait.setTextColor(clinic)
-                    }
-
-
-
+                    // Hiển thị loading, danh sách hoặc thông báo trống
                     if (state.isLoading) {
-                        //Xóa animation cũ đang chạy dở
-                        binding.shimmerFrameLayout.clearAnimation()
-                        binding.recycle.clearAnimation()
-                        binding.tvEmpty.clearAnimation()
-
-                        //Trả lại tọa độ hiển thị
-                        binding.shimmerFrameLayout.alpha = 1f
-                        binding.recycle.alpha = 1f
-
-                        //ẩn hiện
-                        binding.shimmerFrameLayout.startShimmer()
                         binding.shimmerFrameLayout.visibility = View.VISIBLE
+                        binding.shimmerFrameLayout.startShimmer()
+
                         binding.recycle.visibility = View.GONE
                         binding.tvEmpty.visibility = View.GONE
-                    }
-                    else {
+                    } else {
                         binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
 
-                        //Kiểm tra xem list có data không
-                        if (state.listAppointmentAdmin.isEmpty()) {
-                            binding.shimmerFrameLayout.visibility = View.GONE
-                            binding.recycle.visibility = View.GONE
-                            binding.tvEmpty.fadeIn()
-                        } else {
-                            binding.tvEmpty.visibility = View.GONE
-                            crossFadeShimmerToContent(binding.shimmerFrameLayout, binding.recycle)
-                        }
+                        val isEmpty = state.listAppointmentAdmin.isEmpty()
+
+                        binding.recycle.visibility = if (isEmpty) View.GONE else View.VISIBLE
+                        binding.tvEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
                     }
-
-                    if (!state.isLoading) {
-                        if (state.isReceive) {
-                            adapterCurrent.submitList(state.listAppointmentAdmin)
-                        }
-                        else {
-                            adapterNotCurrent.submitList(state.listAppointmentAdmin)
-                        }
-                    }
-
                 }
             }
         }
