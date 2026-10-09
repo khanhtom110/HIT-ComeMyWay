@@ -73,3 +73,11 @@ npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Loca
 ```
 
 Điền cả tài khoản phòng khám và admin trong environment trước khi chạy toàn bộ collection bằng Newman; tránh commit file có mật khẩu. Trong Postman UI có thể chạy riêng folder **04 - Node.js - Thống kê quản trị** khi chỉ muốn kiểm tra thống kê.
+
+## Màn bài đã đăng của phòng khám
+
+Folder **06 - Node.js - Bài của phòng khám theo trạng thái** kiểm tra 4 tab, tổng số bài/huy hiệu Từ chối, phân trang và validation. Đăng nhập phòng khám trước để có `accessToken`, `clinicId`. Các request chỉ đọc dữ liệu.
+
+- `GET /api/v1/clinic/posts?status=ALL`: Tất cả; thay bằng `PENDING`, `APPROVED`, `REJECTED` cho 3 tab còn lại.
+- `GET /api/v1/clinic/posts/counts`: dùng `data.REJECTED` cho huy hiệu; số đếm thuộc phòng khám trong token và không giới hạn 50.
+- Lượt tiếp theo dùng `beforeId=pagination.nextBeforeId`, giữ bộ lọc; đổi tab thì bỏ `beforeId`.

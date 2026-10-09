@@ -27,3 +27,11 @@ export const deleteClinicPostValidation = {
     id: Joi.number().integer().positive().max(Number.MAX_SAFE_INTEGER).required(),
   }).required(),
 };
+
+export const listClinicPostsValidation = {
+  query: Joi.object({
+    status: Joi.string().valid('ALL', 'PENDING', 'APPROVED', 'REJECTED').default('ALL'),
+    limit: Joi.number().integer().min(1).max(CLINIC_POST_LIMITS.LIST_SIZE).default(CLINIC_POST_LIMITS.LIST_SIZE),
+    beforeId: Joi.number().integer().positive().max(Number.MAX_SAFE_INTEGER),
+  }),
+};

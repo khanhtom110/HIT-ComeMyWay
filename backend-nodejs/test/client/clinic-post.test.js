@@ -23,14 +23,17 @@ const clinicPostModel = {
     posts.push(post);
     return post;
   },
-  async listByClinic(clinicId) { return posts.filter(post => post.clinicId === clinicId); },
+  async listByClinic(clinicId, { status, beforeId, limit }) {
+    return posts.filter(post => post.clinicId === clinicId && (status === 'ALL' || post.status === status)
+      && (beforeId === undefined || post.id < beforeId)).sort((a, b) => b.id - a.id).slice(0, limit + 1);
+  },
   async listPublic() {
     if (failPublicQuery) throw new Error('Sensitive database error');
     return posts.filter(post => post.status === 'APPROVED');
   },
   async findForAdmin(id) { return posts.find(post => post.id === id); },
-  async countByStatus() {
-    return Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status, posts.filter(post => post.status === status).length]));
+  async countByStatus(clinicId) {
+    return Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status, posts.filter(post => post.status === status && (clinicId === undefined || post.clinicId === clinicId)).length]));
   },
   async findPublic(id) { return posts.find(post => post.id === id && post.status === 'APPROVED'); },
   async listForAdmin(status, { beforeId, limit }) {
@@ -108,7 +111,7 @@ test('clinic publishes title and content; its posts are readable', async () => {
     headers: { Authorization: `Bearer ${token()}` },
   });
   assert.equal(ownPosts.status, 200);
-  assert.deepEqual((await ownPosts.json()).data, posts);
+  assert.deepEqual((await ownPosts.json()).data, [...posts].sort((a, b) => b.id - a.id));
 });
 
 test('rejects empty fields and unauthorized tokens', async () => {
@@ -348,6 +351,67 @@ test('admin SQL details include private posts and counts cover all rows', async 
   assert.doesNotMatch(calls[1].sql, /LIMIT/);
 });
 
+test('clinic tabs, badge and pagination expose only the signed-in clinic posts', async () => {
+  const headers = { authorization: `Bearer ${token()}` };
+  const url = `${baseUrl}/api/v1/clinic/posts`;
+  const fixtures = Array.from({ length: 60 }, (_, i) => ({ id: 2000000 + i, clinicId: 7,
+    title: 'Clinic fixture', content: 'Test', imageUrls: [], status: ['PENDING', 'APPROVED', 'REJECTED'][i % 3] }));
+  fixtures.push({ id: 3000000, clinicId: 8, title: 'Private', content: 'Other clinic', status: 'REJECTED', imageUrls: [] });
+  posts.push(...fixtures);
+  try {
+    const first = await fetch(url, { headers });
+    assert.equal(first.status, 200);
+    const firstBody = await first.json();
+    assert.equal(firstBody.data.length, 50);
+    assert.equal(firstBody.pagination.hasMore, true);
+    assert.ok(firstBody.data.every(post => post.clinicId === 7));
+    const next = await fetch(`${url}?beforeId=${firstBody.pagination.nextBeforeId}`, { headers });
+    const nextBody = await next.json();
+    const ids = [...firstBody.data, ...nextBody.data].filter(post => post.id >= 2000000).map(post => post.id);
+    assert.equal(ids.length, 60);
+    assert.equal(new Set(ids).size, 60);
+    assert.equal(nextBody.pagination.hasMore, false);
+    for (const status of ['ALL', 'PENDING', 'APPROVED', 'REJECTED']) {
+      const result = await fetch(`${url}?status=${status}&limit=10&clinicId=8`, { headers });
+      assert.equal(result.status, 200);
+      const body = await result.json();
+      assert.equal(body.pagination.limit, 10);
+      assert.ok(body.data.every(post => post.clinicId === 7 && (status === 'ALL' || post.status === status)));
+    }
+    const counts = await fetch(`${url}/counts?clinicId=8`, { headers });
+    assert.equal(counts.status, 200);
+    const expected = Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status,
+      posts.filter(post => post.clinicId === 7 && post.status === status).length]));
+    assert.deepEqual((await counts.json()).data, { ...expected, ALL: Object.values(expected).reduce((a,b) => a+b,0) });
+    const other = await fetch(`${url}/counts`, { headers: { authorization: `Bearer ${token({ sub: 'other-clinic' })}` } });
+    assert.deepEqual((await other.json()).data, { PENDING: 0, APPROVED: 0, REJECTED: 1, ALL: 1 });
+    assert.equal((await fetch(`${url}/counts`)).status, 401);
+    assert.equal((await fetch(`${url}/counts`, { headers: { authorization: `Bearer ${token({ authorities: 'USER' })}` } })).status, 401);
+    for (const query of ['status=INVALID', 'limit=0', 'limit=51', 'beforeId=abc']) {
+      assert.equal((await fetch(`${url}?${query}`, { headers })).status, 400);
+    }
+  } finally {
+    for (let i=posts.length-1;i>=0;i--) if(posts[i].id>=2000000) posts.splice(i,1);
+  }
+});
+
+test('clinic list and count SQL always filter by clinic identity', async () => {
+  const calls = [];
+  const model = createClinicPostModel({ async execute(sql, params) { calls.push({ sql, params }); return [[]]; } });
+  await model.listByClinic(7, { status: 'REJECTED', beforeId: 100, limit: 10 });
+  assert.deepEqual(calls[0].params, [7, 'REJECTED', 100]);
+  assert.match(calls[0].sql, /p.clinic_id = \? AND p.status = \? AND p.id < \?/);
+  assert.match(calls[0].sql, /LIMIT 11/);
+  await model.listByClinic(7);
+  assert.deepEqual(calls[1].params, [7]);
+  assert.doesNotMatch(calls[1].sql, /p.status = \?/);
+  assert.match(calls[1].sql, /LIMIT 51/);
+  assert.deepEqual(await model.countByStatus(7), { PENDING: 0, APPROVED: 0, REJECTED: 0 });
+  assert.deepEqual(calls[2].params, [7]);
+  assert.match(calls[2].sql, /WHERE p.clinic_id = \? GROUP BY p.status/);
+  assert.doesNotMatch(calls[2].sql, /LIMIT/);
+});
+
 test('admin SQL pagination applies status and cursor before limiting rows', async () => {
   const calls = [];
   const model = createClinicPostModel({ async execute(sql, params) { calls.push({ sql, params }); return [[]]; } });
@@ -536,6 +600,8 @@ test('Swagger UI serves the clinic post contract and accepts same-origin request
   const spec = await specResponse.json();
   assert.equal(spec.openapi, '3.0.3');
   assert.deepEqual(spec.paths['/api/v1/clinic/posts'].post.security, [{ clinicBearer: [] }]);
+  assert.deepEqual(spec.paths['/api/v1/clinic/posts'].get.parameters[0].schema.enum, ['ALL', 'PENDING', 'APPROVED', 'REJECTED']);
+  assert.deepEqual(spec.paths['/api/v1/clinic/posts/counts'].get.security, [{ clinicBearer: [] }]);
   assert.deepEqual(spec.paths['/api/v1/clinic/posts/{id}'].delete.security, [{ clinicBearer: [] }]);
   assert.deepEqual(spec.components.schemas.CreateClinicPost.required, ['title', 'content']);
   assert.equal(spec.components.schemas.CreateClinicPost.properties.imageUrls.maxItems, 10);

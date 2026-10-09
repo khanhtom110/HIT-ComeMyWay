@@ -53,6 +53,9 @@ moderationListResponse.content['application/json'].examples = Object.fromEntries
       timestamp: '2026-10-09T08:00:00.000Z' },
   }]),
 );
+const clinicListResponse = response('OK', posts, [pendingExample, approvedExample, rejectedExample]);
+clinicListResponse.content['application/json'].schema = moderationListResponse.content['application/json'].schema;
+clinicListResponse.content['application/json'].example.pagination = { limit: 50, hasMore: false, nextBeforeId: null };
 const postId = { in: 'path', name: 'id', required: true, description: 'ID bài đăng phòng khám',
   schema: { type: 'integer', format: 'int64', minimum: 1, maximum: Number.MAX_SAFE_INTEGER } };
 
@@ -133,6 +136,14 @@ export const openApiDocument = {
           APPROVED: { type: 'integer', minimum: 0, example: 2, description: 'Tổng bài đã duyệt.' },
           REJECTED: { type: 'integer', minimum: 0, example: 1, description: 'Tổng bài bị từ chối.' },
         },
+      },
+      ClinicOwnPostCounts: {
+        allOf: [
+          { $ref: '#/components/schemas/ClinicPostCounts' },
+          { type: 'object', required: ['ALL'], properties: {
+            ALL: { type: 'integer', minimum: 0, example: 6, description: 'Tổng số bài của phòng khám hiện tại ở cả 3 trạng thái.' },
+          } },
+        ],
       },
       AdminStatistics: {
         type: 'object',
@@ -289,15 +300,38 @@ export const openApiDocument = {
         },
       },
       get: {
-        tags: ['Clinic posts'], summary: 'Tin của phòng khám hiện tại',
-        description: 'Trả tối đa 50 bài mới nhất của phòng khám trong token, gồm đủ 3 trạng thái PENDING, APPROVED và REJECTED.',
+        tags: ['Clinic posts'], summary: 'Bài đã đăng của phòng khám — 4 tab trạng thái',
+        description: 'Chỉ trả bài thuộc phòng khám trong token, mới nhất trước. Tab Tất cả dùng ALL (mặc định); Chưa duyệt dùng PENDING; Đã duyệt dùng APPROVED; Từ chối dùng REJECTED. Dùng clinicName/clinicThumbnailUrl cho tên và ảnh đại diện, title/content cho nội dung thẻ, imageUrls cho ảnh bài, createdAt cho thời gian gửi. PENDING hiển thị Đang chờ admin duyệt. Khi đổi tab, bỏ beforeId và tải lại từ đầu. Nếu pagination.hasMore=true, truyền nextBeforeId vào beforeId để tải tiếp cùng bộ lọc. Gọi GET /api/v1/clinic/posts/counts để lấy số huy hiệu Từ chối.',
         security: [{ clinicBearer: [] }],
+        parameters: [
+          { in: 'query', name: 'status', required: false,
+            description: 'Bộ lọc tab: ALL = Tất cả; PENDING = Chưa duyệt; APPROVED = Đã duyệt; REJECTED = Từ chối.',
+            schema: { type: 'string', enum: ['ALL', 'PENDING', 'APPROVED', 'REJECTED'], default: 'ALL' },
+            examples: { all: { value: 'ALL' }, pending: { value: 'PENDING' }, approved: { value: 'APPROVED' }, rejected: { value: 'REJECTED' } } },
+          { in: 'query', name: 'limit', required: false, description: 'Số bài mỗi lượt.',
+            schema: { type: 'integer', minimum: 1, maximum: 50, default: 50 } },
+          { in: 'query', name: 'beforeId', required: false,
+            description: 'Bỏ trống lượt đầu; lượt tiếp theo dùng pagination.nextBeforeId. Giữ nguyên status.',
+            schema: { type: 'integer', format: 'int64', minimum: 1, maximum: Number.MAX_SAFE_INTEGER } },
+        ],
         responses: {
-          200: response('Danh sách tin', posts),
-          401: errorResponse('Thiếu hoặc sai access token'),
-          403: errorResponse('Tài khoản không phải phòng khám đang hoạt động'),
-          500: errorResponse('Lỗi xử lý phía server'),
+          200: clinicListResponse,
+          400: errorResponse('Trạng thái, limit hoặc beforeId không hợp lệ', 400),
+          401: errorResponse('Thiếu hoặc sai access token CLINIC', 401),
+          403: errorResponse('Tài khoản không phải phòng khám đang hoạt động', 403),
+          500: errorResponse('Lỗi xử lý phía server', 500),
         },
+      },
+    },
+    '/api/v1/clinic/posts/counts': {
+      get: {
+        tags: ['Clinic posts'], summary: 'Số bài từng trạng thái của phòng khám hiện tại', operationId: 'countOwnClinicPosts',
+        security: [{ clinicBearer: [] }],
+        description: 'Chỉ đếm bài thuộc phòng khám trong token. Không nhận clinicId. Trả ALL, PENDING, APPROVED và REJECTED trên toàn bộ bài, không giới hạn 50, không phụ thuộc bộ lọc hoặc phân trang. Dùng data.REJECTED cho huy hiệu Từ chối; gọi lại khi mở màn hình, tải lại hoặc sau khi đăng/xóa bài.',
+        responses: { 200: response('OK', { $ref: '#/components/schemas/ClinicOwnPostCounts' }, { PENDING: 3, APPROVED: 2, REJECTED: 1, ALL: 6 }),
+          401: errorResponse('Thiếu hoặc sai access token CLINIC', 401),
+          403: errorResponse('Tài khoản không phải phòng khám đang hoạt động', 403),
+          500: errorResponse('Lỗi xử lý phía server', 500) },
       },
     },
     '/api/v1/clinic/posts/{id}': {

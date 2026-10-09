@@ -21,12 +21,13 @@ export function createClinicPostModel(pool) {
       );
       return find(result.insertId);
     },
-    async listByClinic(clinicId) {
+    async listByClinic(clinicId, { status = 'ALL', beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
+      const filters = ['p.clinic_id = ?'];
+      const params = [clinicId];
+      if (status !== 'ALL') { filters.push('p.status = ?'); params.push(status); }
+      if (beforeId !== undefined) { filters.push('p.id < ?'); params.push(beforeId); }
       const [rows] = await pool.execute(
-        `${select}
-         WHERE p.clinic_id = ? ORDER BY p.id DESC LIMIT ${CLINIC_POST_LIMITS.LIST_SIZE}`,
-        [clinicId],
-      );
+        `${select} WHERE ${filters.join(' AND ')} ORDER BY p.id DESC LIMIT ${limit + 1}`, params);
       return rows.map(decode);
     },
     async listPublic() {
@@ -38,10 +39,11 @@ export function createClinicPostModel(pool) {
     },
     findPublic(id) { return find(id, true); },
     findForAdmin(id) { return find(id); },
-    async countByStatus() {
+    async countByStatus(clinicId) {
       const [rows] = await pool.execute(
         `SELECT p.status, COUNT(*) AS total FROM clinic_posts p
-         JOIN clinics c ON c.id = p.clinic_id GROUP BY p.status`);
+         JOIN clinics c ON c.id = p.clinic_id${clinicId === undefined ? '' : ' WHERE p.clinic_id = ?'} GROUP BY p.status`,
+        clinicId === undefined ? [] : [clinicId]);
       const counts = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
       for (const row of rows) counts[row.status] = Number(row.total);
       return counts;

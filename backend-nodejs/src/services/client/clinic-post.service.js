@@ -6,8 +6,15 @@ export function createClinicPostService(clinicPostModel) {
     create(clinicId, { title, content, imageUrls }) {
       return clinicPostModel.create(clinicId, title, content, imageUrls);
     },
-    listByClinic(clinicId) {
-      return clinicPostModel.listByClinic(clinicId);
+    async listByClinic(clinicId, { status = 'ALL', beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
+      const rows = await clinicPostModel.listByClinic(clinicId, { status, beforeId, limit });
+      const hasMore = rows.length > limit;
+      const items = rows.slice(0, limit);
+      return { items, pagination: { limit, hasMore, nextBeforeId: hasMore ? items.at(-1).id : null } };
+    },
+    async countsByClinic(clinicId) {
+      const counts = await clinicPostModel.countByStatus(clinicId);
+      return { ...counts, ALL: counts.PENDING + counts.APPROVED + counts.REJECTED };
     },
     listPublic() {
       return clinicPostModel.listPublic();

@@ -2572,6 +2572,347 @@
           ]
         }
       ]
+    },
+    {
+      "name": "06 - Node.js - Bài của phòng khám theo trạng thái",
+      "description": "Màn phòng khám: 4 tab ALL/PENDING/APPROVED/REJECTED, huy hiệu Từ chối và phân trang. Đăng nhập CLINIC trước; các request chỉ đọc dữ liệu.",
+      "item": [
+        {
+          "name": "01 Tab ALL",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?status=ALL",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bài thuộc phòng khám và phân trang hợp lệ', () => {",
+                  "  const body=pm.response.json(); pm.expect(body.data).to.be.an('array'); pm.expect(body.data.length).to.be.at.most(50);",
+                  "  pm.expect(body.pagination.limit).to.eql(50); pm.expect(body.pagination.hasMore).to.be.a('boolean');",
+                  "  body.data.forEach((post,index) => {",
+                  "    pm.expect(String(post.clinicId)).to.eql(String(pm.environment.get('clinicId')));",
+                  "    pm.expect(post).to.include.all.keys('status','clinicName','clinicThumbnailUrl','createdAt','imageUrls','title','content');",
+                  "    if(index>0) pm.expect(Number(body.data[index-1].id)).to.be.above(Number(post.id));",
+                  "    pm.expect(post.status).to.be.oneOf(['PENDING','APPROVED','REJECTED']);",
+                  "  });",
+                  "  if(body.pagination.hasMore) pm.expect(body.pagination.nextBeforeId).to.eql(body.data[body.data.length-1].id);",
+                  "  else pm.expect(body.pagination.nextBeforeId).to.eql(null);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Tab PENDING",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?status=PENDING",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bài thuộc phòng khám và phân trang hợp lệ', () => {",
+                  "  const body=pm.response.json(); pm.expect(body.data).to.be.an('array'); pm.expect(body.data.length).to.be.at.most(50);",
+                  "  pm.expect(body.pagination.limit).to.eql(50); pm.expect(body.pagination.hasMore).to.be.a('boolean');",
+                  "  body.data.forEach((post,index) => {",
+                  "    pm.expect(String(post.clinicId)).to.eql(String(pm.environment.get('clinicId')));",
+                  "    pm.expect(post).to.include.all.keys('status','clinicName','clinicThumbnailUrl','createdAt','imageUrls','title','content');",
+                  "    if(index>0) pm.expect(Number(body.data[index-1].id)).to.be.above(Number(post.id));",
+                  "    pm.expect(post.status).to.eql('PENDING');",
+                  "  });",
+                  "  if(body.pagination.hasMore) pm.expect(body.pagination.nextBeforeId).to.eql(body.data[body.data.length-1].id);",
+                  "  else pm.expect(body.pagination.nextBeforeId).to.eql(null);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Tab APPROVED",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?status=APPROVED",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bài thuộc phòng khám và phân trang hợp lệ', () => {",
+                  "  const body=pm.response.json(); pm.expect(body.data).to.be.an('array'); pm.expect(body.data.length).to.be.at.most(50);",
+                  "  pm.expect(body.pagination.limit).to.eql(50); pm.expect(body.pagination.hasMore).to.be.a('boolean');",
+                  "  body.data.forEach((post,index) => {",
+                  "    pm.expect(String(post.clinicId)).to.eql(String(pm.environment.get('clinicId')));",
+                  "    pm.expect(post).to.include.all.keys('status','clinicName','clinicThumbnailUrl','createdAt','imageUrls','title','content');",
+                  "    if(index>0) pm.expect(Number(body.data[index-1].id)).to.be.above(Number(post.id));",
+                  "    pm.expect(post.status).to.eql('APPROVED');",
+                  "  });",
+                  "  if(body.pagination.hasMore) pm.expect(body.pagination.nextBeforeId).to.eql(body.data[body.data.length-1].id);",
+                  "  else pm.expect(body.pagination.nextBeforeId).to.eql(null);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Tab REJECTED",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?status=REJECTED",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bài thuộc phòng khám và phân trang hợp lệ', () => {",
+                  "  const body=pm.response.json(); pm.expect(body.data).to.be.an('array'); pm.expect(body.data.length).to.be.at.most(50);",
+                  "  pm.expect(body.pagination.limit).to.eql(50); pm.expect(body.pagination.hasMore).to.be.a('boolean');",
+                  "  body.data.forEach((post,index) => {",
+                  "    pm.expect(String(post.clinicId)).to.eql(String(pm.environment.get('clinicId')));",
+                  "    pm.expect(post).to.include.all.keys('status','clinicName','clinicThumbnailUrl','createdAt','imageUrls','title','content');",
+                  "    if(index>0) pm.expect(Number(body.data[index-1].id)).to.be.above(Number(post.id));",
+                  "    pm.expect(post.status).to.eql('REJECTED');",
+                  "  });",
+                  "  if(body.pagination.hasMore) pm.expect(body.pagination.nextBeforeId).to.eql(body.data[body.data.length-1].id);",
+                  "  else pm.expect(body.pagination.nextBeforeId).to.eql(null);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Tổng số bài và huy hiệu Từ chối",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts/counts",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Số bài của phòng khám', () => { const counts=pm.response.json().data; ['ALL','PENDING','APPROVED','REJECTED'].forEach(status=>pm.expect(counts[status]).to.be.a('number').and.at.least(0)); pm.expect(counts.ALL).to.eql(counts.PENDING+counts.APPROVED+counts.REJECTED); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Lượt đầu mỗi lần 1 bài",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?limit=1",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Mỗi lượt tối đa 1 bài',()=>{ const body=pm.response.json(); pm.expect(body.data.length).to.be.at.most(1); pm.expect(body.pagination.limit).to.eql(1); });",
+                  "pm.environment.set('clinicPostsBeforeId',pm.response.json().pagination.nextBeforeId || 1);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Lượt tiếp theo",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?limit=1&beforeId={{clinicPostsBeforeId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Không trùng bài lượt trước',()=>{ const body=pm.response.json(); pm.expect(body.data.length).to.be.at.most(1); body.data.forEach(post=>pm.expect(Number(post.id)).to.be.below(Number(pm.environment.get('clinicPostsBeforeId')))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Trạng thái không hợp lệ",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?status=INVALID",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 Không thể lấy quá 50 bài mỗi lượt",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts?limit=51",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10 Huy hiệu yêu cầu đăng nhập",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts/counts",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "event": [

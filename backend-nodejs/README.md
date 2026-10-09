@@ -54,7 +54,8 @@ Import collection và environment trong [postman/](../postman/README.md) để c
 Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
 - `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "PENDING"` (chưa duyệt); bài chỉ công khai sau khi admin duyệt. `approvedBy` và `approvedAt` đều là `null`. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không thể tự đặt trạng thái.
-- `GET /api/v1/clinic/posts`: tối đa 50 tin mới nhất của phòng khám hiện tại.
+- `GET /api/v1/clinic/posts?status=ALL`: bài của phòng khám trong token, mới nhất trước. Bộ lọc `ALL` (mặc định), `PENDING`, `APPROVED`, `REJECTED` tương ứng 4 tab trên màn đăng tin. Hỗ trợ `limit=1..50`, `beforeId`; response giữ `data` là mảng và thêm `pagination` như danh sách admin. Đổi tab thì bỏ `beforeId`.
+- `GET /api/v1/clinic/posts/counts`: tổng số bài của chính phòng khám theo `ALL`, `PENDING`, `APPROVED`, `REJECTED`, không giới hạn 50. Dùng `data.REJECTED` cho huy hiệu Từ chối. API lấy danh tính từ token, không cho client chọn phòng khám khác.
 - `DELETE /api/v1/clinic/posts/:id`: xóa bài của phòng khám hiện tại; trả 200 với `data.id`, hoặc 404 nếu không tìm thấy bài thuộc phòng khám đó.
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất có `status: "APPROVED"` (Đã duyệt).
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt hoặc bị từ chối trả 404.
