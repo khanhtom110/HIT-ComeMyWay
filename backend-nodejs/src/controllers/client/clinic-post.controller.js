@@ -1,0 +1,27 @@
+import { sendResponse } from '../../utils/response.js';
+
+export function createClinicPostController(service) {
+  return {
+    async create(request, response) {
+      const post = await service.create(request.clinic.id, request.validated.body);
+      return sendResponse(response, 201, post, 'Đăng tin thành công');
+    },
+    async listByClinic(request, response) {
+      const { items, pagination } = await service.listByClinic(request.clinic.id, request.validated.query);
+      return sendResponse(response, 200, items, 'OK', pagination);
+    },
+    async countsByClinic(request, response) {
+      return sendResponse(response, 200, await service.countsByClinic(request.clinic.id));
+    },
+    async listPublic(request, response) {
+      return sendResponse(response, 200, await service.listPublic());
+    },
+    async detailPublic(request, response) {
+      return sendResponse(response, 200, await service.detailPublic(request.validated.params.id));
+    },
+    async remove(request, response) {
+      const result = await service.remove(request.clinic.id, request.validated.params.id);
+      return sendResponse(response, 200, result, 'Xóa bài đăng thành công');
+    },
+  };
+}
