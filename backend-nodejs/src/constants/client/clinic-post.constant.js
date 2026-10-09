@@ -1,0 +1,5 @@
+export const CLINIC_POST_LIMITS = Object.freeze({
+  TITLE_LENGTH: 200,
+  CONTENT_LENGTH: 10000,
+  LIST_SIZE: 50,
+});

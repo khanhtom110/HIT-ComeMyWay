@@ -1,0 +1,84 @@
+# Kiểm thử API Node.js bằng Postman
+
+## Thiết lập
+
+1. Import `ComeMyWay.postman_collection.json` và `Local.postman_environment.json`.
+2. Chọn environment **ComeMyWay - Local (MySQL)**. Điền `username`/`password` của tài khoản phòng khám đang hoạt động và `adminUsername`/`adminPassword` của tài khoản admin nếu chạy toàn bộ collection. Spring Boot mặc định dùng `http://localhost:8080`, Node.js dùng `http://localhost:3000` khi chạy trực tiếp hoặc bằng Docker.
+3. Chạy toàn bộ collection, hoặc chạy riêng các folder cần thử. **02 Đăng nhập phòng khám** tự lưu `accessToken`; **04 Tạo bài đăng** tự lưu `clinicId` và `createdPostId`; **07 Xóa bài đăng của mình** xóa bài vừa tạo.
+
+Nếu đã import collection hoặc environment cũ, Postman không tự cập nhật theo file trên đĩa: import lại environment và kiểm tra `nodeBaseUrl` trong environment đang chọn. Tài liệu API trên trình duyệt: Spring Boot `http://localhost:8080/swagger-ui/index.html`, Node.js `http://localhost:3000/api-docs/`.
+
+## Request đăng tin
+
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=APPROVED`, `approvedBy=null`, `approvedAt=createdAt`; bài công khai ngay. Backend tự chạy migration còn thiếu khi khởi động; schema Spring Boot phải có trước. Bước **06 Bài mới tự động duyệt và công khai** kiểm tra hành vi này.
+
+Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
+
+Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình và công khai ngay. Chỉ bài APPROVED được xem công khai. API admin approve/reject dùng cho bài cũ PENDING; danh sách hỗ trợ limit và beforeId.
+
+`DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.
+
+| Kết quả | Ý nghĩa |
+| --- | --- |
+| `201` | Bài đăng được tạo; `data.id` là ID của tin |
+| `400` | Tiêu đề hoặc nội dung không hợp lệ |
+| `401` | Thiếu hoặc sai access token |
+| `503` ở `/health/ready` | Node.js chưa kết nối được MySQL |
+
+Các folder trong collection kiểm tra health, đăng nhập/refresh, hồ sơ phòng khám, đăng tin, xóa tin, danh sách tin và validation. Mỗi lần chạy **04 Tạo bài đăng** sẽ tạo một tin mới; chạy toàn bộ collection sẽ xóa tin đó ở bước **07 Xóa bài đăng của mình**.
+
+## Tự động duyệt bài và API admin
+
+Chạy folder **05 - Node.js - Đăng tin tự động duyệt** theo thứ tự. Folder đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài tự động APPROVED và xem công khai ngay trước mọi thao tác admin. Sau đó kiểm tra danh sách, số đếm, phân quyền, phân trang, API approve giữ nguyên approvedBy=null/approvedAt, và xóa bài thử nghiệm.
+
+- Điền username, password, adminUsername, adminPassword trong environment local.
+- postImageUrls chứa chuỗi JSON danh sách URL ảnh; moderationPostId và moderationApprovedAt tự lưu.
+- Bài mới có approvedBy=null và approvedAt=createdAt. Không cần admin duyệt.
+- API approve/reject chỉ xử lý bài cũ PENDING; bài REJECTED vẫn không công khai. Bộ unit test giữ kiểm tra luồng bài cũ.
+- Import lại collection sau khi cập nhật backend. Không thay đổi trạng thái bài cũ trong database.
+
+## Thống kê admin
+
+Folder **04 - Node.js - Thống kê quản trị** chạy độc lập với luồng phòng khám. Điền `adminUsername` và `adminPassword` của tài khoản vai trò `ADMIN` trong environment, rồi chạy lần lượt **01 Đăng nhập quản trị viên** và **02 Thống kê tài khoản**. Login lưu `adminAccessToken` riêng, không ghi đè `accessToken` phòng khám. **03 Thiếu token quản trị viên** kiểm tra API trả 401 khi thiếu token.
+
+Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_admin` và lấy `adminPassword` từ file local `backend-nodejs/.env.seed.local`. File này chứa mật khẩu ngẫu nhiên và được Git ignore; không đưa mật khẩu vào collection được commit.
+
+`GET {{nodeBaseUrl}}/api/v1/admin/statistics` trả `data.activeClinics` (phòng khám đã hoàn tất hồ sơ, trạng thái `ACTIVE`), `data.inactiveClinics` (trạng thái khác `ACTIVE`, gồm `PENDING_PASSWORD_CHANGE`, `PENDING_PROFILE` và `NULL`) và `data.totalUsers` (chỉ vai trò `USER`). API yêu cầu access token `ADMIN` từ Spring Boot; token `CLINIC` không dùng được.
+
+## Chạy tự động
+
+### Khi gặp 404 “Không tìm thấy API”
+
+Đây là endpoint chưa tồn tại trên server đang chạy (thường do container còn dùng image cũ), không phải trạng thái chờ duyệt. Không đổi test của danh sách chờ duyệt từ 200 sang 404 để làm test đạt.
+
+1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp hoặc bằng Docker local mặc định dùng `http://localhost:3000`.
+2. Đảm bảo schema Spring Boot đã có và tài khoản MySQL Node.js có quyền chạy migration. Backend tự áp dụng SQL còn thiếu khi khởi động. Kiểm tra log container nếu migration lỗi.
+3. Khởi động lại Node.js với code mới: nếu chạy trực tiếp, dừng tiến trình cũ rồi chạy `npm start` trong thư mục `backend-nodejs`; nếu dùng Docker, cập nhật image và container bằng cấu hình triển khai đang có. Cần tạo `backend-nodejs/.env` và chuẩn bị schema Spring Boot trước.
+
+4. Import lại collection để nhận tên request tiếng Việt và kiểm thử mới, rồi chạy folder **05 - Node.js - Đăng tin tự động duyệt** từ bước 00.
+
+### Chạy collection
+
+Từ thư mục gốc project:
+
+```bash
+npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Local.postman_environment.json
+```
+
+Điền cả tài khoản phòng khám và admin trong environment trước khi chạy toàn bộ collection bằng Newman; tránh commit file có mật khẩu. Trong Postman UI có thể chạy riêng folder **04 - Node.js - Thống kê quản trị** khi chỉ muốn kiểm tra thống kê.
+
+## Màn bài đã đăng của phòng khám
+
+Folder **06 - Node.js - Bài của phòng khám theo trạng thái** kiểm tra 4 tab, tổng số bài/huy hiệu Từ chối, phân trang và validation. Đăng nhập phòng khám trước để có `accessToken`, sau đó chạy **00 Lấy ID phòng khám hiện tại** trong folder 06 để lưu `clinicId` từ hồ sơ. Response đăng nhập không chứa `clinicId`. Các request trong folder này chỉ đọc dữ liệu.
+
+- `GET /api/v1/clinic/posts?status=ALL`: Tất cả; thay bằng `PENDING`, `APPROVED`, `REJECTED` cho 3 tab còn lại.
+- `GET /api/v1/clinic/posts/counts`: dùng `data.REJECTED` cho huy hiệu; số đếm thuộc phòng khám trong token và không giới hạn 50.
+- Lượt tiếp theo dùng `beforeId=pagination.nextBeforeId`, giữ bộ lọc; đổi tab thì bỏ `beforeId`.
+
+Đăng bài có ảnh hiện được kiểm thử bằng URL ảnh mẫu trong folder 05. API upload file đã có ở Spring Boot: `POST /api/v1/media/upload`, body `form-data` với trường `file`; lấy URL ở `data` đưa vào `imageUrls` khi tạo bài. Collection chưa có request upload file.
+
+## Khi nhận “Token không hợp lệ”
+
+Sau khi import lại environment, token có thể trống. Chạy **01 Đăng nhập phòng khám** để lưu `accessToken`, **02 Đăng nhập quản trị viên** để lưu `adminAccessToken` trong folder 05. Token chỉ được lưu nếu đăng nhập thành công đúng vai trò; API admin dùng `adminAccessToken`, API phòng khám dùng `accessToken`. Không nhập chữ `Bearer ` vào giá trị biến và không dùng refresh token. Khi token hết hạn, đăng nhập lại.
+
+Collection lấy token từ environment đang chọn, kiểm tra định dạng, vai trò, loại access token và hạn dùng, rồi đặt giá trị ở local scope cho request để tránh biến cùng tên ghi đè. Nếu bị chặn, xem Postman Console để biết lý do. Nếu token hợp lệ nhưng server vẫn trả 401, kiểm tra request Authorization dùng đúng biến, không có header Authorization thủ công cũ và hai backend dùng cùng JWT_SECRET. Các request cố ý kiểm thử thiếu/sai token vẫn được gửi.
