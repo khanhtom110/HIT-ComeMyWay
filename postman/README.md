@@ -10,11 +10,11 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 ## Request đăng tin
 
-`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`, `approvedBy=null`, `approvedAt=null`; bài chưa công khai. Backend tự chạy migration còn thiếu khi khởi động; schema Spring Boot phải có trước. Bước **06 Bài chưa duyệt không công khai** kiểm tra hành vi này.
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=APPROVED`, `approvedBy=null`, `approvedAt=createdAt`; bài công khai ngay. Backend tự chạy migration còn thiếu khi khởi động; schema Spring Boot phải có trước. Bước **06 Bài mới tự động duyệt và công khai** kiểm tra hành vi này.
 
 Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
 
-Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình. Admin gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING`, rồi `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` hoặc `/reject` với Bearer `{{adminAccessToken}}`. Có 3 trạng thái: `PENDING` (chưa duyệt), `APPROVED` (đã duyệt), `REJECTED` (từ chối duyệt). Chỉ bài `APPROVED` được xem công khai. Danh sách admin hỗ trợ `limit` (1–50) và `beforeId`: nếu response có `pagination.hasMore=true`, truyền `pagination.nextBeforeId` vào `beforeId` ở request tiếp theo, giữ nguyên bộ lọc `status`.
+Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình và công khai ngay. Chỉ bài APPROVED được xem công khai. API admin approve/reject dùng cho bài cũ PENDING; danh sách hỗ trợ limit và beforeId.
 
 `DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.
 
@@ -27,18 +27,15 @@ Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình
 
 Các folder trong collection kiểm tra health, đăng nhập/refresh, hồ sơ phòng khám, đăng tin, xóa tin, danh sách tin và validation. Mỗi lần chạy **04 Tạo bài đăng** sẽ tạo một tin mới; chạy toàn bộ collection sẽ xóa tin đó ở bước **07 Xóa bài đăng của mình**.
 
-## Duyệt bài và API admin
+## Tự động duyệt bài và API admin
 
-Request **00 Kiểm tra backend hỗ trợ duyệt bài** kiểm tra Swagger của server trước khi đăng nhập/tạo tin. Nếu request này thất bại, kiểm tra `nodeBaseUrl` và cập nhật backend trước khi chạy tiếp. Những request dùng `moderationPostId` yêu cầu bước tạo bài đã thành công. Lỗi 404 chỉ được chấp nhận khi `message` là **Không tìm thấy bài đăng**, không chấp nhận **Không tìm thấy API**.
+Chạy folder **05 - Node.js - Đăng tin tự động duyệt** theo thứ tự. Folder đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài tự động APPROVED và xem công khai ngay trước mọi thao tác admin. Sau đó kiểm tra danh sách, số đếm, phân quyền, phân trang, API approve giữ nguyên approvedBy=null/approvedAt, và xóa bài thử nghiệm.
 
-Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ tự. Folder tự đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài chờ duyệt chưa công khai, chặn clinic gọi API admin, duyệt và kiểm tra công khai. Sau đó tạo bài riêng để kiểm tra từ chối, danh sách `REJECTED`, phân quyền, ID không hợp lệ và việc không công khai bài bị từ chối. Có bước xem chi tiết admin ở cả 3 trạng thái, kiểm tra số huy hiệu qua `/counts`, phân trang với `limit`/`beforeId`, và kiểm tra phân quyền. Các bài thử nghiệm được xóa cuối luồng.
-
-- Điền `username`, `password`, `adminUsername`, `adminPassword` trong environment trên máy local.
-- Biến collection `postImageUrls` chứa chuỗi JSON danh sách URL ảnh.
-- `moderationPostId`, `moderationApprovedAt`, `rejectedPostId` tự lưu; không cần điền thủ công.
-- Gọi duyệt hoặc từ chối lặp trả 200; đổi quyết định đã xử lý trả 409.
-- Import lại collection sau khi cập nhật. Backend tự chạy migration 004 khi khởi động và giữ nguyên trạng thái bài đã có.
-- Nếu dừng giữa luồng, dùng API xóa bài của phòng khám để xóa các ID bài thử nghiệm trước khi chạy lại.
+- Điền username, password, adminUsername, adminPassword trong environment local.
+- postImageUrls chứa chuỗi JSON danh sách URL ảnh; moderationPostId và moderationApprovedAt tự lưu.
+- Bài mới có approvedBy=null và approvedAt=createdAt. Không cần admin duyệt.
+- API approve/reject chỉ xử lý bài cũ PENDING; bài REJECTED vẫn không công khai. Bộ unit test giữ kiểm tra luồng bài cũ.
+- Import lại collection sau khi cập nhật backend. Không thay đổi trạng thái bài cũ trong database.
 
 ## Thống kê admin
 
@@ -62,7 +59,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 docker compose -p hit-comemyway --env-file .env.local-db -f compose.backends.yaml -f compose.local-db.yaml up -d --no-deps --build nodejs
 ```
 
-4. Import lại collection để nhận tên request tiếng Việt và kiểm thử mới, rồi chạy folder **05 - Node.js - Duyệt bài phòng khám** từ bước 00.
+4. Import lại collection để nhận tên request tiếng Việt và kiểm thử mới, rồi chạy folder **05 - Node.js - Đăng tin tự động duyệt** từ bước 00.
 
 ### Chạy collection
 

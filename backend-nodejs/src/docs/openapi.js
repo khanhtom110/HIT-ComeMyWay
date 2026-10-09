@@ -34,6 +34,8 @@ const pendingExample = { id: 10, clinicId: 1, clinicName: 'Phòng khám thú y',
   createdAt: '2026-10-03T07:00:00.000Z' };
 const approvedExample = { ...pendingExample, status: 'APPROVED', approvedBy: 2,
   approvedAt: '2026-10-03T08:00:00.000Z' };
+const autoApprovedExample = { ...pendingExample, status: 'APPROVED', approvedBy: null,
+  approvedAt: pendingExample.createdAt };
 const rejectedExample = { ...pendingExample, status: 'REJECTED' };
 const moderationListResponse = response('Danh sách tin', posts);
 moderationListResponse.content['application/json'].schema.allOf.push({
@@ -65,11 +67,11 @@ export const openApiDocument = {
     title: 'ComeMyWay Node.js API',
     version: '1.0.0',
     description: [
-      'API đăng tin phòng khám có ảnh, duyệt bài và thống kê quản trị.',
+      'API đăng tin phòng khám có ảnh, tự động duyệt bài mới và thống kê quản trị.',
       '### Luồng duyệt bài',
       '1. Đăng nhập Spring Boot để lấy access token. Chọn **Authorize**: `clinicBearer` cho CLINIC, `adminBearer` cho ADMIN.',
-      '2. Phòng khám tạo bài qua `POST /api/v1/clinic/posts`. Bài mới ở trạng thái `PENDING` (chưa duyệt).',
-      '3. Admin xem `GET /api/v1/admin/clinic-posts?status=PENDING`, rồi gọi `PATCH /api/v1/admin/clinic-posts/{id}/approve` hoặc `/reject`. Hai API không cần body.',
+      '2. Phòng khám tạo bài qua `POST /api/v1/clinic/posts`. Bài mới tự động `APPROVED` và công khai ngay; `approvedBy=null`, `approvedAt=createdAt`.',
+      '3. Bài mới không cần admin duyệt. Với bài cũ còn PENDING, admin xem `GET /api/v1/admin/clinic-posts?status=PENDING`, rồi gọi `PATCH /api/v1/admin/clinic-posts/{id}/approve` hoặc `/reject`. Hai API không cần body.',
       'Màn admin: 3 tab Chưa duyệt/Đã duyệt/Từ chối tương ứng PENDING/APPROVED/REJECTED. Lấy số huy hiệu từ `GET /api/v1/admin/clinic-posts/counts` và mở chi tiết bằng `GET /api/v1/admin/clinic-posts/{id}`.',
       '4. `APPROVED` (đã duyệt) được công khai; `PENDING` và `REJECTED` (từ chối duyệt) không công khai.',
       'Gọi lại cùng quyết định trả 200 và giữ nguyên dữ liệu; đổi quyết định đã xử lý trả 409.',
@@ -118,9 +120,9 @@ export const openApiDocument = {
           clinicThumbnailUrl: { type: 'string', format: 'uri', nullable: true,
             description: 'URL ảnh đại diện phòng khám từ clinics.thumbnail_url; null nếu phòng khám chưa có ảnh.',
             example: 'https://example.com/clinic-avatar.jpg' },
-          status: { type: 'string', enum: ['PENDING', 'APPROVED', 'REJECTED'], description: 'PENDING: chưa duyệt; APPROVED: đã duyệt; REJECTED: từ chối duyệt. Tin mới luôn PENDING.' },
-          approvedBy: { type: 'integer', format: 'int64', nullable: true, description: 'ID admin duyệt bài; null nếu chưa duyệt hoặc bị từ chối.' },
-          approvedAt: { type: 'string', format: 'date-time', nullable: true, description: 'Thời điểm admin duyệt; null nếu chưa duyệt hoặc bị từ chối.' },
+          status: { type: 'string', enum: ['PENDING', 'APPROVED', 'REJECTED'], description: 'PENDING: chưa duyệt; APPROVED: đã duyệt; REJECTED: từ chối duyệt. Tin mới tự động APPROVED; PENDING và REJECTED dùng cho bài cũ.' },
+          approvedBy: { type: 'integer', format: 'int64', nullable: true, description: 'null với bài tự động duyệt, chưa duyệt hoặc bị từ chối; ID admin khi duyệt bài cũ.' },
+          approvedAt: { type: 'string', format: 'date-time', nullable: true, description: 'Thời điểm đăng với bài tự động duyệt; thời điểm admin duyệt bài cũ; null nếu chưa duyệt hoặc bị từ chối.' },
           id: { type: 'integer', format: 'int64', example: 10 },
           clinicId: { type: 'integer', format: 'int64', example: 1 },
           clinicName: { type: 'string', example: 'Phòng khám thú y' },
@@ -214,7 +216,7 @@ export const openApiDocument = {
       patch: {
         tags: ['Admin'], summary: 'Duyệt tin phòng khám', security: [{ adminBearer: [] }], parameters: [postId],
         operationId: 'approveClinicPost',
-        description: 'Không cần request body. Chuyển PENDING thành APPROVED, lấy admin từ token và thời gian từ server. Gọi duyệt lặp trả 200 và giữ nguyên thông tin duyệt. Tin REJECTED trả 409. Phòng khám không thể tự đặt trạng thái khi tạo tin.',
+        description: 'Chỉ dùng cho bài cũ PENDING; bài mới đã tự động duyệt. Không cần request body. Chuyển PENDING thành APPROVED, lấy admin từ token và thời gian từ server. Gọi với bài APPROVED trả 200 và giữ nguyên thông tin duyệt, kể cả approvedBy=null của bài tự động duyệt. Tin REJECTED trả 409. Phòng khám không thể tự đặt trạng thái khi tạo tin.',
         responses: { 200: response('Đã duyệt bài đăng', post, approvedExample), 400: errorResponse('ID phải là số nguyên dương an toàn', 400),
           401: errorResponse('Thiếu token, token hết hạn, refresh token hoặc sai vai trò ADMIN', 401),
           403: errorResponse('Tài khoản ADMIN không tồn tại hoặc token bị thu hồi', 403),
@@ -279,7 +281,7 @@ export const openApiDocument = {
     '/api/v1/clinic/posts': {
       post: {
         tags: ['Clinic posts'], summary: 'Phòng khám đăng tin',
-        description: 'Phòng khám được lấy từ access token; thời gian đăng do server tạo. Tin mới PENDING, approvedBy=null và approvedAt=null; cần admin duyệt trước khi công khai. Upload ảnh qua Spring Boot /api/v1/media/upload rồi gửi imageUrls.',
+        description: 'Phòng khám được lấy từ access token; thời gian đăng do server tạo. Tin mới tự động APPROVED và công khai ngay, approvedBy=null và approvedAt=createdAt; không cần gọi API admin duyệt. Upload ảnh qua Spring Boot /api/v1/media/upload rồi gửi imageUrls.',
         security: [{ clinicBearer: [] }],
         requestBody: {
           required: true,
@@ -291,7 +293,7 @@ export const openApiDocument = {
             } } },
         },
         responses: {
-          201: response('Đăng tin thành công', post, pendingExample, 201),
+          201: response('Đăng tin thành công', post, autoApprovedExample, 201),
           400: errorResponse('Tiêu đề, nội dung hoặc danh sách URL ảnh không hợp lệ'),
           401: errorResponse('Thiếu hoặc sai access token'),
           403: errorResponse('Tài khoản không phải phòng khám đang hoạt động'),
@@ -301,7 +303,7 @@ export const openApiDocument = {
       },
       get: {
         tags: ['Clinic posts'], summary: 'Bài đã đăng của phòng khám — 4 tab trạng thái',
-        description: 'Chỉ trả bài thuộc phòng khám trong token, mới nhất trước. Tab Tất cả dùng ALL (mặc định); Chưa duyệt dùng PENDING; Đã duyệt dùng APPROVED; Từ chối dùng REJECTED. Dùng clinicName/clinicThumbnailUrl cho tên và ảnh đại diện, title/content cho nội dung thẻ, imageUrls cho ảnh bài, createdAt cho thời gian gửi. PENDING hiển thị Đang chờ admin duyệt. Khi đổi tab, bỏ beforeId và tải lại từ đầu. Nếu pagination.hasMore=true, truyền nextBeforeId vào beforeId để tải tiếp cùng bộ lọc. Gọi GET /api/v1/clinic/posts/counts để lấy số huy hiệu Từ chối.',
+        description: 'Chỉ trả bài thuộc phòng khám trong token, mới nhất trước. Tab Tất cả dùng ALL (mặc định); Chưa duyệt dùng PENDING; Đã duyệt dùng APPROVED; Từ chối dùng REJECTED. Dùng clinicName/clinicThumbnailUrl cho tên và ảnh đại diện, title/content cho nội dung thẻ, imageUrls cho ảnh bài, createdAt cho thời gian gửi. Bài mới vào tab Đã duyệt ngay. PENDING hiển thị Đang chờ admin duyệt cho bài cũ. Khi đổi tab, bỏ beforeId và tải lại từ đầu. Nếu pagination.hasMore=true, truyền nextBeforeId vào beforeId để tải tiếp cùng bộ lọc. Gọi GET /api/v1/clinic/posts/counts để lấy số huy hiệu Từ chối.',
         security: [{ clinicBearer: [] }],
         parameters: [
           { in: 'query', name: 'status', required: false,
@@ -358,7 +360,7 @@ export const openApiDocument = {
     '/api/v1/public/clinic-posts': {
       get: {
         tags: ['Clinic posts'], summary: 'Tin phòng khám công khai',
-        description: 'Trả tối đa 50 tin mới nhất đã được admin duyệt (APPROVED). Tin PENDING hoặc REJECTED không công khai.',
+        description: 'Trả tối đa 50 tin mới nhất APPROVED, gồm bài tự động duyệt và bài cũ được admin duyệt. Tin PENDING hoặc REJECTED không công khai.',
         responses: {
           200: response('Danh sách tin', posts),
           500: errorResponse('Lỗi xử lý phía server'),

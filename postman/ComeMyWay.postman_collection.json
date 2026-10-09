@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
     "name": "ComeMyWay - Spring Boot + Node.js",
-    "description": "API Node.js: đăng tin có ảnh, admin duyệt hoặc từ chối bài và thống kê. Tin mới PENDING; chỉ APPROVED công khai. Folder 05 kiểm tra đủ 3 trạng thái.",
+    "description": "API Node.js: bài mới tự động APPROVED và công khai ngay, admin xem bài và thống kê. API duyệt/từ chối thủ công chỉ dùng cho bài cũ PENDING.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -389,7 +389,7 @@
                   "  pm.expect(Number(post.id)).to.be.above(0);",
                   "  pm.expect(post.title).to.eql(pm.variables.get(\"postTitle\").trim());",
                   "  pm.expect(post.content).to.eql(pm.variables.get(\"postContent\").trim());",
-                  "  pm.expect(post.status).to.eql(\"PENDING\");",
+                  "  pm.expect(post.status).to.eql(\"APPROVED\");",
                   "  pm.expect(post.imageUrls).to.be.an(\"array\");",
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(post).to.have.property(\"clinicThumbnailUrl\");",
@@ -488,7 +488,7 @@
           ]
         },
         {
-          "name": "06 Bài chưa duyệt không công khai",
+          "name": "06 Bài mới tự động duyệt và công khai",
           "request": {
             "method": "GET",
             "header": [],
@@ -519,10 +519,10 @@
                   "    if (index > 0) pm.expect(Number(posts[index - 1].id)).to.be.at.least(Number(post.id));",
                   "  });",
                   "});",
-                  "pm.test(\"Pending post is absent\", () => {",
+                  "pm.test(\"Auto-approved post is public\", () => {",
                   "  const id = pm.environment.get(\"createdPostId\");",
                   "  pm.expect(id, \"Run Create post first\").to.be.ok;",
-                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(false);",
+                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(true);",
                   "  pm.response.json().data.forEach(post => pm.expect(post.status).to.eql('APPROVED'));",
                   "});"
                 ]
@@ -1360,8 +1360,8 @@
       ]
     },
     {
-      "name": "05 - Node.js - Duyệt bài phòng khám",
-      "description": "API hỗ trợ màn admin: 3 tab trạng thái, huy hiệu tổng bài chờ, chi tiết mọi trạng thái, duyệt/từ chối chỉ bài PENDING, phân trang và xóa bài thử nghiệm.",
+      "name": "05 - Node.js - Đăng tin tự động duyệt",
+      "description": "Tạo bài có ảnh được tự động APPROVED, xem công khai ngay trước mọi thao tác admin; kiểm tra danh sách, số đếm, phân quyền và xóa bài thử nghiệm. API admin approve giữ nguyên thông tin tự động duyệt.",
       "item": [
         {
           "name": "00 Kiểm tra backend hỗ trợ duyệt bài",
@@ -1387,7 +1387,8 @@
                   "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/{id}/reject']).to.have.property('patch');",
                   "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/counts']).to.have.property('get');",
                   "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/{id}']).to.have.property('get');",
-                  "});"
+                  "});",
+                  "pm.test('Bài mới được tự động duyệt', () => pm.expect(spec.paths['/api/v1/clinic/posts'].post.responses[201].content['application/json'].example.data.status).to.eql('APPROVED'));"
                 ]
               }
             }
@@ -1519,7 +1520,7 @@
           ]
         },
         {
-          "name": "03 Tạo bài chờ duyệt có ảnh",
+          "name": "03 Tạo bài tự động duyệt có ảnh",
           "request": {
             "method": "POST",
             "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
@@ -1594,10 +1595,10 @@
                   "pm.test('Response envelope', () => pm.expect(pm.response.json().statusCode).to.eql(201));",
                   "pm.test('Moderation contract', () => {",
                   "const post = pm.response.json().data;",
-                  "pm.expect(post.status).to.eql('PENDING');",
+                  "pm.expect(post.status).to.eql('APPROVED');",
                   "pm.expect(post.imageUrls).to.deep.eql(JSON.parse(pm.variables.get('postImageUrls')));",
                   "pm.expect(post.approvedBy).to.eql(null);",
-                  "pm.expect(post.approvedAt).to.eql(null);",
+                  "pm.expect(post.approvedAt).to.eql(post.createdAt); pm.expect(Number.isNaN(Date.parse(post.approvedAt))).to.eql(false);",
                   "});",
                   "if (pm.response.code === 201) { const post = pm.response.json().data; pm.environment.set('moderationPostId', post.id); pm.environment.set('moderationApprovedAt', post.approvedAt); }"
                 ]
@@ -1606,7 +1607,7 @@
           ]
         },
         {
-          "name": "03a Chi tiết admin PENDING",
+          "name": "03a Chi tiết admin bài tự động duyệt",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}",
@@ -1664,7 +1665,7 @@
                   "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
                   "pm.test('Chi tiết đúng trạng thái và có dữ liệu màn hình', () => {",
                   "  const post = pm.response.json().data;",
-                  "  pm.expect(post.status).to.eql('PENDING');",
+                  "  pm.expect(post.status).to.eql('APPROVED');",
                   "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('moderationPostId')));",
                   "  pm.expect(post).to.include.all.keys('clinicName', 'clinicThumbnailUrl', 'createdAt', 'title', 'content', 'imageUrls');",
                   "});"
@@ -1732,7 +1733,7 @@
                   "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
                   "pm.test('Số bài theo 3 trạng thái', () => { const counts=pm.response.json().data;",
                   "  ['PENDING','APPROVED','REJECTED'].forEach(status => { pm.expect(counts[status]).to.be.a('number').and.at.least(0); });",
-                  "  pm.expect(counts.PENDING).to.be.above(0);",
+                  "  pm.expect(counts.APPROVED).to.be.above(0);",
                   "});"
                 ]
               }
@@ -1740,7 +1741,7 @@
           ]
         },
         {
-          "name": "04 Bài mới nằm trong danh sách chưa duyệt",
+          "name": "04 Bài mới không nằm trong danh sách chưa duyệt",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING",
@@ -1801,7 +1802,7 @@
                   "const posts = pm.response.json().data;",
                   "pm.expect(posts.length).to.be.at.most(50);",
                   "posts.forEach(post => pm.expect(post.status).to.eql('PENDING'));",
-                  "pm.expect(posts.some(post => String(post.id) === String(pm.environment.get('moderationPostId')))).to.eql(true);",
+                  "pm.expect(posts.some(post => String(post.id) === String(pm.environment.get('moderationPostId')))).to.eql(false);",
                   "});"
                 ]
               }
@@ -1809,7 +1810,7 @@
           ]
         },
         {
-          "name": "05 Bài chưa duyệt không xem được công khai",
+          "name": "05 Bài mới công khai ngay không cần admin duyệt",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts/{{moderationPostId}}",
@@ -1825,7 +1826,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1834,8 +1835,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
-                  "pm.test('Bài chưa được duyệt', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng')); "
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bài tự động duyệt đã công khai', () => { const post = pm.response.json().data; pm.expect(post.status).to.eql('APPROVED'); pm.expect(post.approvedBy).to.eql(null); pm.expect(post.approvedAt).to.eql(pm.environment.get('moderationApprovedAt')); });"
                 ]
               }
             }
@@ -1890,7 +1891,7 @@
                   "}",
                   "pm.variables.set('accessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1923,7 +1924,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1940,7 +1941,7 @@
           ]
         },
         {
-          "name": "08 Admin duyệt bài",
+          "name": "08 API admin giữ nguyên thông tin tự động duyệt",
           "request": {
             "method": "PATCH",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}/approve",
@@ -1988,7 +1989,7 @@
                   "}",
                   "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1999,9 +2000,9 @@
                 "exec": [
                   "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
                   "const post = pm.response.json().data;",
-                  "pm.test('Đã duyệt bởi admin', () => {",
+                  "pm.test('Giữ nguyên tự động duyệt', () => {",
                   "  pm.expect(post.status).to.eql('APPROVED');",
-                  "  pm.expect(Number(post.approvedBy)).to.be.above(0);",
+                  "  pm.expect(post.approvedBy).to.eql(null); pm.expect(post.approvedAt).to.eql(pm.environment.get('moderationApprovedAt'));",
                   "  pm.expect(Number.isNaN(Date.parse(post.approvedAt))).to.eql(false);",
                   "});",
                   "pm.environment.set('moderationApprovedAt', post.approvedAt);",
@@ -2146,7 +2147,7 @@
           ]
         },
         {
-          "name": "09 Duyệt lặp giữ nguyên thông tin admin",
+          "name": "09 Gọi lặp giữ nguyên thông tin tự động duyệt",
           "request": {
             "method": "PATCH",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}/approve",
@@ -2194,7 +2195,7 @@
                   "}",
                   "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -2366,7 +2367,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -2667,7 +2668,7 @@
                   "}",
                   "pm.variables.set('accessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -2732,7 +2733,7 @@
                   "}",
                   "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -2768,7 +2769,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -2782,787 +2783,6 @@
                   "pm.test('404 do bài đăng, không phải thiếu API', () => {",
                   "  pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng');",
                   "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "20 Tạo bài để từ chối",
-          "request": {
-            "method": "POST",
-            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"{{postTitle}}\",\n  \"content\": \"{{postContent}}\",\n  \"imageUrls\": {{postImageUrls}}\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('accessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('accessToken', requestToken);",
-                  "pm.environment.unset('rejectedPostId');"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
-                  "pm.test('Tin mới chưa duyệt', () => pm.expect(pm.response.json().data.status).to.eql('PENDING'));",
-                  "if (pm.response.code === 201) pm.environment.set('rejectedPostId', pm.response.json().data.id);"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "21 Clinic không được từ chối bài",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('accessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('accessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "22 Từ chối khi thiếu token",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "23 Admin từ chối bài",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Đã từ chối', () => { const post=pm.response.json().data; pm.expect(post.status).to.eql('REJECTED'); pm.expect(post.approvedBy).to.eql(null); pm.expect(post.approvedAt).to.eql(null); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "23a Chi tiết admin REJECTED",
-          "request": {
-            "method": "GET",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Chi tiết đúng trạng thái và có dữ liệu màn hình', () => {",
-                  "  const post = pm.response.json().data;",
-                  "  pm.expect(post.status).to.eql('REJECTED');",
-                  "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('rejectedPostId')));",
-                  "  pm.expect(post).to.include.all.keys('clinicName', 'clinicThumbnailUrl', 'createdAt', 'title', 'content', 'imageUrls');",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "23b Tổng số bài cho huy hiệu",
-          "request": {
-            "method": "GET",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/counts",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Số bài theo 3 trạng thái', () => { const counts=pm.response.json().data;",
-                  "  ['PENDING','APPROVED','REJECTED'].forEach(status => { pm.expect(counts[status]).to.be.a('number').and.at.least(0); });",
-                  "  pm.expect(counts.REJECTED).to.be.above(0);",
-                  "});"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "24 Danh sách bài từ chối",
-          "request": {
-            "method": "GET",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=REJECTED",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Có bài bị từ chối', () => { const posts=pm.response.json().data; posts.forEach(p=>pm.expect(p.status).to.eql('REJECTED')); pm.expect(posts.some(p=>String(p.id)===String(pm.environment.get('rejectedPostId')))).to.eql(true); });"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "25 Chi tiết bài từ chối không công khai",
-          "request": {
-            "method": "GET",
-            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts/{{rejectedPostId}}",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
-                  "pm.test('Bài không công khai', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "26 Bài từ chối không có trong feed",
-          "request": {
-            "method": "GET",
-            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
-            "auth": {
-              "type": "noauth"
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Không có bài bị từ chối', () => pm.expect(pm.response.json().data.some(p=>String(p.id)===String(pm.environment.get('rejectedPostId')))).to.eql(false));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "27 Không thể duyệt bài đã từ chối",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/approve",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "28 Từ chối lặp",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Vẫn từ chối', () => pm.expect(pm.response.json().data.status).to.eql('REJECTED'));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "29 ID từ chối không hợp lệ",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/abc/reject",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "30 Xóa bài bị từ chối",
-          "request": {
-            "method": "DELETE",
-            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts/{{rejectedPostId}}",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{accessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('accessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('accessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "31 Không thể từ chối bài đã xóa",
-          "request": {
-            "method": "PATCH",
-            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{adminAccessToken}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "header": []
-          },
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const requestToken = pm.environment.get('adminAccessToken');",
-                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
-                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
-                  "}",
-                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
-                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}",
-                  "let tokenClaims;",
-                  "try {",
-                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
-                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
-                  "  let bits = 0, count = 0, decoded = '';",
-                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
-                  "  tokenClaims = JSON.parse(decoded);",
-                  "} catch (_) { tokenClaims = null; }",
-                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
-                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
-                  "  pm.execution.skipRequest();",
-                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
-                  "}",
-                  "pm.variables.set('adminAccessToken', requestToken);"
-                ]
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
-                  "pm.test('Không tìm thấy bài', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng'));"
                 ]
               }
             }

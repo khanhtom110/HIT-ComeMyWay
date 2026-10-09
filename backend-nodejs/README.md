@@ -63,13 +63,14 @@ Import collection và environment trong [postman/](../postman/README.md) để c
 
 Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc Node.js trực tiếp. Tài liệu OpenAPI dạng JSON ở `/api-docs/openapi.json`. Chọn **Authorize**: dùng `clinicBearer` cho tài khoản phòng khám và `adminBearer` cho tài khoản admin; cả hai access token lấy từ API đăng nhập Spring Boot. Swagger của Spring Boot ở `http://localhost:8080/swagger-ui/index.html`.
 
-- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "PENDING"` (chưa duyệt); bài chỉ công khai sau khi admin duyệt. `approvedBy` và `approvedAt` đều là `null`. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không thể tự đặt trạng thái.
+- `POST /api/v1/clinic/posts` với Bearer access token của phòng khám và JSON `{"title":"...","content":"...","imageUrls":["https://example.com/photo.jpg"]}`. Trả 201, ảnh và `status: "APPROVED"` (tự động duyệt); bài công khai ngay khi đăng. `approvedBy=null`, `approvedAt` bằng thời gian đăng `createdAt`. Không cần gọi API admin duyệt. Tiêu đề tối đa 200 ký tự, nội dung tối đa 10000 ký tự; tối đa 10 URL HTTP(S) khác nhau, mỗi URL tối đa 2048 ký tự. `imageUrls` không bắt buộc để tương thích client cũ. Client không thể tự đặt trạng thái.
 - `GET /api/v1/clinic/posts?status=ALL`: bài của phòng khám trong token, mới nhất trước. Bộ lọc `ALL` (mặc định), `PENDING`, `APPROVED`, `REJECTED` tương ứng 4 tab trên màn đăng tin. Hỗ trợ `limit=1..50`, `beforeId`; response giữ `data` là mảng và thêm `pagination` như danh sách admin. Đổi tab thì bỏ `beforeId`.
 - `GET /api/v1/clinic/posts/counts`: tổng số bài của chính phòng khám theo `ALL`, `PENDING`, `APPROVED`, `REJECTED`, không giới hạn 50. Dùng `data.REJECTED` cho huy hiệu Từ chối. API lấy danh tính từ token, không cho client chọn phòng khám khác.
 - `DELETE /api/v1/clinic/posts/:id`: xóa bài của phòng khám hiện tại; trả 200 với `data.id`, hoặc 404 nếu không tìm thấy bài thuộc phòng khám đó.
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất có `status: "APPROVED"` (Đã duyệt).
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt hoặc bị từ chối trả 404.
 - Response bài đăng (tạo, danh sách của phòng khám, danh sách/chi tiết công khai và danh sách admin) có `clinicThumbnailUrl`: URL ảnh đại diện lấy từ hồ sơ phòng khám hiện tại (`clinics.thumbnail_url`), hoặc `null` nếu chưa có. Trường này khác `imageUrls` là ảnh của chính bài đăng.
+- Bài mới tự động duyệt; các API duyệt/từ chối thủ công bên dưới chỉ xử lý bài cũ còn `PENDING`.
 - `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem danh sách chưa duyệt, đầy đủ nội dung và ảnh; mỗi lượt tối đa 50 bài. Thêm `limit=1..50` để đổi số bài. Response giữ `data` là mảng và thêm `pagination: {limit, hasMore, nextBeforeId}`. Khi `hasMore=true`, gọi tiếp với `beforeId=nextBeforeId`, giữ nguyên `status`; hết bài khi `hasMore=false`. Bỏ `beforeId` để tải lại từ bài mới nhất. Có thể lọc `APPROVED` (đã duyệt) hoặc `REJECTED` (từ chối duyệt). Mặc định `PENDING`.
 - `GET /api/v1/admin/clinic-posts/counts`: tổng số bài theo `PENDING`, `APPROVED`, `REJECTED`, không giới hạn 50. Dùng `data.PENDING` cho huy hiệu trên tab chưa duyệt.
 - `GET /api/v1/admin/clinic-posts/:id`: admin xem chi tiết bài ở cả 3 trạng thái. Có tên/ảnh đại diện phòng khám, thời gian gửi, tiêu đề, nội dung và ảnh bài. Màn chi tiết chỉ hiện Duyệt/Từ chối với `PENDING`; `APPROVED`/`REJECTED` chỉ xem. Sau thao tác, tải lại danh sách và số huy hiệu; khi gặp 409 thì tải lại chi tiết.
@@ -86,7 +87,7 @@ Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spr
 4. Đăng nhập ADMIN, điền token vào `adminBearer`, xem danh sách `PENDING` rồi gọi `/approve` hoặc `/reject`. Chỉ tin `APPROVED` xuất hiện trong danh sách và chi tiết công khai.
 5. Xem danh sách `REJECTED` để kiểm tra tin bị từ chối; phòng khám vẫn xem được trạng thái trong danh sách bài của mình.
 
-Postman có folder **05 - Node.js - Duyệt bài phòng khám** chạy trọn luồng, gồm kiểm tra quyền, validation, trạng thái và xóa bài thử nghiệm. Xem [hướng dẫn Postman](../postman/README.md). Phạm vi tính năng là API Node.js; không bao gồm giao diện.
+Postman có folder **05 - Node.js - Đăng tin tự động duyệt** chạy trọn luồng, gồm kiểm tra quyền, validation, trạng thái và xóa bài thử nghiệm. Xem [hướng dẫn Postman](../postman/README.md). Phạm vi tính năng là API Node.js; không bao gồm giao diện.
 
 ### API khác
 

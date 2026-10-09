@@ -16,7 +16,7 @@ export function createClinicPostModel(pool) {
   return {
     async create(clinicId, title, content, imageUrls = []) {
       const [result] = await pool.execute(
-        "INSERT INTO clinic_posts (clinic_id, title, content, image_urls, status, created_at) VALUES (?, ?, ?, ?, 'PENDING', UTC_TIMESTAMP(3))",
+        "INSERT INTO clinic_posts (clinic_id, title, content, image_urls, status, approved_by, approved_at, created_at) VALUES (?, ?, ?, ?, 'APPROVED', NULL, UTC_TIMESTAMP(3), UTC_TIMESTAMP(3))",
         [clinicId, title, content, JSON.stringify(imageUrls)],
       );
       return find(result.insertId);

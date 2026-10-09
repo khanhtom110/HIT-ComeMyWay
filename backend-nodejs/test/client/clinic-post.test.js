@@ -19,7 +19,7 @@ const clinicPostModel = {
   async create(clinicId, title, content, imageUrls) {
     const post = { id: posts.length + 1, clinicId, clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
       title, content, imageUrls,
-      status: 'PENDING', approvedBy: null, approvedAt: null };
+      status: 'APPROVED', approvedBy: null, approvedAt: new Date().toISOString() };
     posts.push(post);
     return post;
   },
@@ -101,11 +101,11 @@ test('clinic publishes title and content; its posts are readable', async () => {
   assert.deepEqual(post, {
     id: 1, clinicId: 7, clinicThumbnailUrl: 'https://example.com/clinic-avatar.jpg',
     title: 'Lịch tiêm phòng', content: 'Có lịch mới', imageUrls: [],
-    status: 'PENDING', approvedBy: null, approvedAt: null,
+    status: 'APPROVED', approvedBy: null, approvedAt: post.approvedAt,
   });
-  assert.equal(post.approvedAt, null);
+  assert.equal(Number.isNaN(Date.parse(post.approvedAt)), false);
   const feed = await fetch(`${baseUrl}/api/v1/public/clinic-posts`);
-  assert.equal((await feed.json()).data.some(item => item.id === post.id), false);
+  assert.equal((await feed.json()).data.some(item => item.id === post.id), true);
   assert.equal(post.clinicThumbnailUrl, 'https://example.com/clinic-avatar.jpg');
   const ownPosts = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     headers: { Authorization: `Bearer ${token()}` },
@@ -133,19 +133,20 @@ test('rejects empty fields and unauthorized tokens', async () => {
   assert.equal(response.status, 400);
 });
 
-test('new posts wait for admin approval before becoming public', async () => {
+test('new posts are automatically approved and public without admin action', async () => {
   const imageUrls = ['https://example.com/clinic.jpg', 'https://example.com/service.png'];
   const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     method: 'POST', headers: { authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: 'Có ảnh', content: 'Nội dung', imageUrls, status: 'APPROVED', approvedBy: 7 }),
+    body: JSON.stringify({ title: 'Có ảnh', content: 'Nội dung', imageUrls, status: 'PENDING', approvedBy: 7, approvedAt: '2000-01-01T00:00:00Z' }),
   });
   assert.equal(created.status, 201);
   const post = (await created.json()).data;
-  assert.equal(post.status, 'PENDING');
+  assert.equal(post.status, 'APPROVED');
   assert.equal(post.approvedBy, null);
-  assert.equal(post.approvedAt, null);
+  assert.equal(Number.isNaN(Date.parse(post.approvedAt)), false);
+  assert.notEqual(post.approvedAt, '2000-01-01T00:00:00Z');
   assert.deepEqual(post.imageUrls, imageUrls);
-  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`)).status, 404);
+  assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`)).status, 200);
   const url = `${baseUrl}/api/v1/admin/clinic-posts/${post.id}/approve`;
   for (const claims of [{}, { authorities: 'USER' }, { authorities: 'ADMIN', sub: 'admin', jti: 'revoked' },
     { authorities: 'ADMIN', sub: 'admin', isRefresh: true }]) {
@@ -157,11 +158,12 @@ test('new posts wait for admin approval before becoming public', async () => {
   const headers = { authorization: `Bearer ${token({ authorities: 'ADMIN', sub: 'admin' })}` };
   const pending = await fetch(`${baseUrl}/api/v1/admin/clinic-posts`, { headers });
   assert.equal(pending.status, 200);
-  assert.equal((await pending.json()).data.some(item => item.id === post.id), true);
+  assert.equal((await pending.json()).data.some(item => item.id === post.id), false);
   const approved = await fetch(url, { method: 'PATCH', headers });
   assert.equal(approved.status, 200);
   const approvedPost = (await approved.json()).data;
-  assert.equal(approvedPost.approvedBy, 99);
+  assert.equal(approvedPost.approvedBy, null);
+  assert.equal(approvedPost.approvedAt, post.approvedAt);
   assert.equal(Number.isNaN(Date.parse(approvedPost.approvedAt)), false);
   const detail = await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`);
   assert.equal(detail.status, 200);
@@ -176,7 +178,7 @@ test('new posts wait for admin approval before becoming public', async () => {
   const pendingAfter = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?status=PENDING`, { headers });
   assert.equal((await pendingAfter.json()).data.some(item => item.id === post.id), false);
   const approvedList = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?status=APPROVED`, { headers });
-  assert.ok((await approvedList.json()).data.some(item => item.id === post.id && item.approvedBy === 99));
+  assert.ok((await approvedList.json()).data.some(item => item.id === post.id && item.approvedBy === null));
   const ownerList = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
     headers: { authorization: `Bearer ${token()}` },
   });
@@ -202,11 +204,9 @@ test('new posts wait for admin approval before becoming public', async () => {
 });
 
 test('only admin can reject pending posts; rejected posts stay private', async () => {
-  const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
-    method: 'POST', headers: { authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: 'Tin bị từ chối', content: 'Nội dung', status: 'REJECTED' }),
-  });
-  const post = (await created.json()).data;
+  const post = { id: 900002, clinicId: 7, title: 'Tin cũ bị từ chối', content: 'Nội dung',
+    imageUrls: [], status: 'PENDING', approvedBy: null, approvedAt: null };
+  posts.push(post);
   assert.equal(post.status, 'PENDING');
   const url = `${baseUrl}/api/v1/admin/clinic-posts/${post.id}/reject`;
   assert.equal((await fetch(url, { method: 'PATCH' })).status, 401);
@@ -293,6 +293,8 @@ test('admin can browse more than 50 posts without skipping posts after moderatio
 });
 
 test('admin sees details of every status and counts update after moderation', async () => {
+  posts.push({ id: 900005, clinicId: 7, title: 'Legacy pending detail', content: 'Test',
+    imageUrls: [], status: 'PENDING', approvedBy: null, approvedAt: null });
   const headers = { authorization: `Bearer ${token({ authorities: 'ADMIN', sub: 'admin' })}` };
   const expectedCounts = () => Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status, posts.filter(post => post.status === status).length]));
   const getCounts = async () => {
@@ -319,11 +321,9 @@ test('admin sees details of every status and counts update after moderation', as
   assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/999999`, { headers })).status, 404);
   assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/abc`, { headers })).status, 400);
   for (const action of ['approve', 'reject']) {
-    const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
-      method: 'POST', headers: { authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'Count fixture', content: 'Test' }),
-    });
-    const id = (await created.json()).data.id;
+    const id = action === 'approve' ? 900003 : 900004;
+    posts.push({ id, clinicId: 7, title: 'Legacy count fixture', content: 'Test',
+      imageUrls: [], status: 'PENDING', approvedBy: null, approvedAt: null });
     const beforeCounts = await getCounts();
     const result = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${id}/${action}`, { method: 'PATCH', headers });
     assert.equal(result.status, 200);
@@ -436,7 +436,7 @@ test('invalid image arrays are rejected without creating posts', async () => {
   assert.equal(posts.length, beforeCount);
 });
 
-test('SQL model creates pending posts and supports moderation', async () => {
+test('SQL model auto-approves new posts and supports legacy moderation', async () => {
   const calls = [];
   const model = createClinicPostModel({ async execute(sql, params) {
     calls.push({ sql, params });
@@ -449,8 +449,8 @@ test('SQL model creates pending posts and supports moderation', async () => {
     ['https://example.com/a.jpg']);
   assert.match(calls[1].sql, /c\.thumbnail_url AS clinicThumbnailUrl/);
   assert.deepEqual(calls[0].params, [7, 'Title', 'Content', '["https://example.com/a.jpg"]']);
-  assert.match(calls[0].sql, /'PENDING', UTC_TIMESTAMP\(3\)/);
-  assert.doesNotMatch(calls[0].sql, /approved_at/);
+  assert.match(calls[0].sql, /'APPROVED', NULL, UTC_TIMESTAMP\(3\), UTC_TIMESTAMP\(3\)/);
+  assert.match(calls[0].sql, /approved_by, approved_at, created_at/);
   await model.listPublic();
   assert.match(calls.at(-1).sql, /WHERE p.status = 'APPROVED'/);
   await model.findPublic(42);
@@ -613,7 +613,7 @@ test('Swagger UI serves the clinic post contract and accepts same-origin request
   assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/counts'].get.security, [{ adminBearer: [] }]);
   assert.deepEqual(Object.keys(spec.paths['/api/v1/admin/clinic-posts/{id}'].get.responses[200].content['application/json'].examples), ['PENDING', 'APPROVED', 'REJECTED']);
   assert.ok(spec.paths['/api/v1/admin/clinic-posts/{id}/reject'].patch.responses[409]);
-  assert.equal(spec.paths['/api/v1/clinic/posts'].post.responses[201].content['application/json'].example.data.status, 'PENDING');
+  assert.equal(spec.paths['/api/v1/clinic/posts'].post.responses[201].content['application/json'].example.data.status, 'APPROVED');
   assert.ok(spec.paths['/api/v1/public/clinic-posts/{id}'].get.responses[404]);
 
   const sameOrigin = await fetch(`${baseUrl}/api/v1/public/clinic-posts`, {
