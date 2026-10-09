@@ -1074,7 +1074,7 @@
               "type": "noauth"
             },
             "header": [],
-            "description": "Cập nhật backend và chạy migration 004 sau 003 trước khi dùng tính năng từ chối duyệt."
+            "description": "Cập nhật backend; migration còn thiếu tự chạy khi khởi động. Schema Spring Boot phải có trước."
           },
           "event": [
             {

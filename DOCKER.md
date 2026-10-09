@@ -29,7 +29,7 @@ Trước khi chạy:
 2. `backend/.env` chứa các biến Spring Boot đang dùng: `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_ACCESS_EXPIRATION`, `JWT_REFRESH_EXPIRATION`, `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD`, `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `GEMINI_API_KEY`.
 3. `backend-nodejs/.env` chứa `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` giống Spring Boot. Có thể thêm `CORS_ORIGINS` nếu gọi từ trình duyệt. Compose đặt lại `HOST=0.0.0.0`, `PORT=3000` và các biến địa chỉ database.
 4. Spring Boot cần Redis theo cấu hình hiện tại (SSL đang bật); đăng nhập/refresh cần Redis hoạt động.
-5. Khởi động Spring Boot để tạo/cập nhật schema, rồi chạy lần lượt các migration `001_create_clinic_posts.sql`, `002_add_clinic_post_images.sql`, `003_clinic_post_moderation.sql`, `004_clinic_post_rejection.sql` trong `backend-nodejs/database/migrations/` trên cùng database trước khi dùng API đăng tin. Mỗi migration chỉ chạy một lần. Tài khoản phòng khám cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
+5. Khởi động Spring Boot để tạo/cập nhật schema dùng chung trước. Node.js tự chạy các migration còn thiếu khi khởi động; không cần chạy SQL thủ công. Tài khoản MySQL Node.js cần quyền `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`. Tài khoản phòng khám cần role `CLINIC`, trạng thái `ACTIVE` và có hồ sơ clinic.
 
 Compose ưu tiên `DOCKER_DB_URL` cho Spring Boot và `DOCKER_DB_HOST`, `DOCKER_DB_PORT`, `DOCKER_DB_NAME` cho Node.js. Đặt các biến này khi dùng MySQL ở máy khác. Ví dụ PowerShell (thay `mysql-host` bằng hostname/IP thực):
 
@@ -48,7 +48,7 @@ Firebase push notification cần file service account riêng. Khi sử dụng ch
 
 ```bash
 docker compose -f compose.backends.yaml up -d springboot
-# Sau khi schema Spring Boot sẵn sàng, chạy migration SQL nêu trên.
+# Sau khi schema Spring Boot sẵn sàng, Node.js tự chạy migration khi khởi động.
 docker compose -f compose.backends.yaml up -d nodejs
 docker compose -f compose.backends.yaml ps
 docker compose -f compose.backends.yaml logs --tail=100 springboot nodejs

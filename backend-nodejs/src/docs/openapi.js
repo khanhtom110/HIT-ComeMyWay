@@ -73,7 +73,7 @@ export const openApiDocument = {
       'Màn admin: 3 tab Chưa duyệt/Đã duyệt/Từ chối tương ứng PENDING/APPROVED/REJECTED. Lấy số huy hiệu từ `GET /api/v1/admin/clinic-posts/counts` và mở chi tiết bằng `GET /api/v1/admin/clinic-posts/{id}`.',
       '4. `APPROVED` (đã duyệt) được công khai; `PENDING` và `REJECTED` (từ chối duyệt) không công khai.',
       'Gọi lại cùng quyết định trả 200 và giữ nguyên dữ liệu; đổi quyết định đã xử lý trả 409.',
-      'Chạy lần lượt migration 001–004 trước khi sử dụng. Migration 004 thêm REJECTED và giữ nguyên trạng thái bài hiện có.',
+      'Backend tự chạy migration 001–004 còn thiếu trước khi mở HTTP. Schema Spring Boot phải có trước. Migration 004 thêm REJECTED và giữ nguyên trạng thái bài hiện có.',
     ].join('\n\n'),
   },
   servers: [{ url: '/', description: 'Cùng host và cổng với Node.js' }],

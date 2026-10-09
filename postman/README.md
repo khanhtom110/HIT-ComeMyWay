@@ -10,7 +10,7 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 ## Request đăng tin
 
-`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`, `approvedBy=null`, `approvedAt=null`; bài chưa công khai. Chạy migration 003 sau migration ảnh 002, rồi migration 004 để thêm trạng thái từ chối. Bước **06 Bài chưa duyệt không công khai** kiểm tra hành vi này.
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`, `approvedBy=null`, `approvedAt=null`; bài chưa công khai. Backend tự chạy migration còn thiếu khi khởi động; schema Spring Boot phải có trước. Bước **06 Bài chưa duyệt không công khai** kiểm tra hành vi này.
 
 Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
 
@@ -37,7 +37,7 @@ Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ
 - Biến collection `postImageUrls` chứa chuỗi JSON danh sách URL ảnh.
 - `moderationPostId`, `moderationApprovedAt`, `rejectedPostId` tự lưu; không cần điền thủ công.
 - Gọi duyệt hoặc từ chối lặp trả 200; đổi quyết định đã xử lý trả 409.
-- Import lại collection sau khi cập nhật. Chạy migration 004 sau 003 một lần; migration giữ nguyên trạng thái bài đã có.
+- Import lại collection sau khi cập nhật. Backend tự chạy migration 004 khi khởi động và giữ nguyên trạng thái bài đã có.
 - Nếu dừng giữa luồng, dùng API xóa bài của phòng khám để xóa các ID bài thử nghiệm trước khi chạy lại.
 
 ## Thống kê admin
@@ -55,7 +55,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 Đây là endpoint chưa tồn tại trên server đang chạy (thường do container còn dùng image cũ), không phải trạng thái chờ duyệt. Không đổi test của danh sách chờ duyệt từ 200 sang 404 để làm test đạt.
 
 1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp hoặc bằng Docker local mặc định dùng `http://localhost:3000`.
-2. Chạy migration `backend-nodejs/database/migrations/002_add_clinic_post_images.sql` rồi `backend-nodejs/database/migrations/003_clinic_post_moderation.sql` rồi `backend-nodejs/database/migrations/004_clinic_post_rejection.sql` **mỗi file một lần** trên database dùng chung. Bỏ qua migration 002/003 nếu đã có các cột tương ứng; chạy 004 nếu enum `status` chưa có `REJECTED`.
+2. Đảm bảo schema Spring Boot đã có và tài khoản MySQL Node.js có quyền chạy migration. Backend tự áp dụng SQL còn thiếu khi khởi động. Kiểm tra log container nếu migration lỗi.
 3. Cập nhật riêng Node.js, giữ nguyên cấu hình Compose local đang dùng:
 
 ```powershell

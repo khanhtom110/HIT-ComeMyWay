@@ -37,11 +37,21 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
 2. Sao chép `.env.example` thành `.env`, rồi điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
-3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql`, `database/migrations/002_add_clinic_post_images.sql`, `database/migrations/003_clinic_post_moderation.sql` và `database/migrations/004_clinic_post_rejection.sql` trên database đó. Mỗi migration chỉ chạy một lần. Migration 003 đưa tin cũ về `PENDING`; migration 004 thêm `REJECTED` và giữ nguyên trạng thái bài hiện có.
+3. Khởi động Spring Boot để có schema dùng chung (đặc biệt bảng `clinics`). Tài khoản MySQL của Node.js cần quyền `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT` để chạy migration.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3000`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
 `CORS_ORIGINS` là danh sách origin trình duyệt, phân cách bằng dấu phẩy, ví dụ `http://localhost:3000,https://app.example.com`. Request Android không gửi `Origin` vẫn được chấp nhận. JSON body giới hạn 64 KB; response dùng `{ statusCode, message, data, timestamp }` để tương thích Android.
+
+## Migration tự động
+
+Khi khởi động, backend chạy các file `database/migrations/*.sql` theo thứ tự tên trước khi mở cổng HTTP. Có thể chạy riêng bằng `npm run migrate`. Mỗi file chứa một câu lệnh SQL; thêm migration mới thay vì sửa file đã chạy.
+
+- Bảng `node_schema_migrations` lưu tên file, checksum và thời điểm chạy. Checksum chuẩn hóa CRLF/LF để dùng chung Windows/Linux.
+- Các migration 001–004 đã chạy thủ công được nhận biết qua schema và ghi nhận mà không chạy lại. Migration 004 giữ nguyên trạng thái bài hiện có.
+- Khóa MySQL ngăn hai tiến trình chạy migration đồng thời; lỗi migration dừng khởi động, không ghi nhận thành công cho file bị lỗi.
+- Không sửa SQL đã được ghi nhận: checksum khác sẽ dừng khởi động. DDL MySQL không rollback như transaction dữ liệu; runner nhận biết schema đã áp dụng để phục hồi các migration ban đầu khi thiếu bản ghi lịch sử.
+- Docker đóng gói SQL trong image. CI/CD đóng gói SQL và chạy migration trước khi dừng bản backend đang hoạt động.
 
 ## Docker và Postman
 
@@ -66,7 +76,7 @@ Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc No
 - `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Duyệt tin `PENDING`, lưu `approvedBy`, `approvedAt` và công khai tin. Gọi duyệt lặp trả 200, giữ nguyên thông tin duyệt; tin `REJECTED` trả 409.
 - `PATCH /api/v1/admin/clinic-posts/:id/reject`: access token ADMIN, không cần body. Chuyển tin `PENDING` sang `REJECTED`, không công khai. Gọi từ chối lặp trả 200; tin `APPROVED` trả 409. Các trường thông tin duyệt vẫn là `null`.
 
-Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Cần chạy migration 004 sau 003 trước khi dùng tính năng từ chối duyệt.
+Node.js nhận `imageUrls`, không upload file. Có thể lấy URL từ API Spring Boot có sẵn `POST /api/v1/media/upload` (multipart field `file`), rồi gửi URL tới Node.js. Thứ tự ảnh được giữ nguyên; client có thể dùng `imageUrls[0]` làm thumbnail, chưa có trường thumbnail riêng. Backend tự chạy các migration còn thiếu trước khi nhận request.
 
 ### Kiểm tra duyệt bài bằng Swagger/Postman
 

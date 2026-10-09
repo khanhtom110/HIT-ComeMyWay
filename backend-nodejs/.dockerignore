@@ -4,5 +4,7 @@
 !package-lock.json
 !src/
 !src/**
+!database/
+!database/**
 **/.env*
 **/*.log

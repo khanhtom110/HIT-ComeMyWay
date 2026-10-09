@@ -44,7 +44,7 @@ jobs:
       - name: Package deployment artifact
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/feat/admin-clinic-posts')
         working-directory: .
-        run: tar -czf node-backend.tar.gz -C backend-nodejs src package.json package-lock.json
+        run: tar -czf node-backend.tar.gz -C backend-nodejs src database package.json package-lock.json
 
       - name: Upload deployment artifact
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/feat/admin-clinic-posts')
@@ -109,14 +109,15 @@ jobs:
             cd "$RELEASE_DIR"
             npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 
-            # Check configuration and MySQL before stopping the current release.
+            # Check configuration, MySQL and migrations before stopping the current release.
             NODE_ENV=production HOST=0.0.0.0 PORT=3000 DB_NAME=pet_heartbeat_import node --input-type=module -e '
               import dotenv from "dotenv";
               import { loadConfig } from "./src/configs/env.config.js";
               import { createDatabasePool } from "./src/configs/db.config.js";
+              import { runMigrations } from "./src/utils/migrations.js";
               dotenv.config({ quiet: true });
               const pool = createDatabasePool(loadConfig().database);
-              try { await pool.query("SELECT 1"); }
+              try { await pool.query("SELECT 1"); await runMigrations(pool); }
               catch (error) { console.error("MySQL preflight failed:", error.code ?? error.name); process.exitCode = 1; }
               finally { await pool.end(); }
             '

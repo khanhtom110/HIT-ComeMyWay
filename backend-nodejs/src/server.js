@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
+import { runMigrations } from './utils/migrations.js';
 import { createApp } from './app.js';
 import { createDatabasePool } from './configs/db.config.js';
 import { loadConfig } from './configs/env.config.js';
@@ -13,6 +14,7 @@ const pool = createDatabasePool(config.database);
 
 try {
   await pool.query('SELECT 1');
+  await runMigrations(pool);
   const app = createApp({
     clinicPostModel: createClinicPostModel(pool),
     clinicModel: createClinicModel(pool),
