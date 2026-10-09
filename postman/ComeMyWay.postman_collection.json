@@ -344,6 +344,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.environment.unset(\"createdPostId\");"
                 ]
               }
@@ -395,6 +406,25 @@
             "description": ""
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -482,6 +512,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -552,6 +601,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -596,6 +664,25 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -646,6 +733,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"x\".repeat(201), content: \"Test\"}));"
                 ]
               }
@@ -700,6 +798,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(10001)}));"
                 ]
               }
@@ -853,6 +962,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -902,6 +1030,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(70000)}));"
                 ]
               }
@@ -1010,6 +1149,25 @@
             "description": "Đang hoạt động: phòng khám đã đổi mật khẩu mặc định, gồm PENDING_PROFILE và ACTIVE. Chưa hoạt động: PENDING_PASSWORD_CHANGE, NULL hoặc trạng thái ngoài hai trạng thái trên. totalUsers chỉ tính vai trò USER."
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1257,6 +1415,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.environment.unset('moderationPostId');",
                   "pm.environment.unset('moderationApprovedAt');"
                 ]
@@ -1301,6 +1470,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1336,6 +1524,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1368,6 +1575,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1442,6 +1668,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1515,6 +1752,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1558,6 +1806,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1592,6 +1859,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1630,6 +1916,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1671,6 +1968,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1705,6 +2021,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1805,6 +2140,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1834,6 +2188,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1879,6 +2252,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1913,6 +2305,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1953,6 +2356,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -2046,6 +2460,17 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
                   "pm.environment.unset('rejectedPostId');"
                 ]
               }
@@ -2081,6 +2506,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2133,6 +2577,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2162,6 +2625,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2198,6 +2680,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2230,6 +2731,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2307,6 +2827,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2335,6 +2874,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2366,6 +2924,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2394,6 +2971,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2424,6 +3020,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2453,6 +3068,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2486,6 +3120,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2561,6 +3214,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2595,6 +3267,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2637,6 +3328,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2677,6 +3387,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2719,6 +3448,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2760,6 +3508,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2789,6 +3556,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2821,6 +3607,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2851,6 +3656,25 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -2879,6 +3703,25 @@
             "header": []
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.variables.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {

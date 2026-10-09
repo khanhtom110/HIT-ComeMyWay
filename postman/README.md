@@ -81,3 +81,9 @@ Folder **06 - Node.js - Bài của phòng khám theo trạng thái** kiểm tra 
 - `GET /api/v1/clinic/posts?status=ALL`: Tất cả; thay bằng `PENDING`, `APPROVED`, `REJECTED` cho 3 tab còn lại.
 - `GET /api/v1/clinic/posts/counts`: dùng `data.REJECTED` cho huy hiệu; số đếm thuộc phòng khám trong token và không giới hạn 50.
 - Lượt tiếp theo dùng `beforeId=pagination.nextBeforeId`, giữ bộ lọc; đổi tab thì bỏ `beforeId`.
+
+## Khi nhận “Token không hợp lệ”
+
+Sau khi import lại environment, token có thể trống. Chạy **01 Đăng nhập phòng khám** để lưu `accessToken`, **02 Đăng nhập quản trị viên** để lưu `adminAccessToken` trong folder 05. Token chỉ được lưu nếu đăng nhập thành công đúng vai trò; API admin dùng `adminAccessToken`, API phòng khám dùng `accessToken`. Không nhập chữ `Bearer ` vào giá trị biến và không dùng refresh token. Khi token hết hạn, đăng nhập lại.
+
+Collection chặn request cần token nếu biến trống hoặc sai định dạng và báo rõ bước đăng nhập cần chạy. Nếu vẫn lỗi, kiểm tra biến cùng tên ở các scope: giá trị Postman thực sự gửi có thể bị ghi đè. Các request cố ý kiểm thử thiếu/sai token vẫn được gửi.
