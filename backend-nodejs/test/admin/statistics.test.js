@@ -57,14 +57,14 @@ test('statistics rejects missing, clinic, refresh, and revoked credentials', asy
   }
 });
 
-test('statistics counts changed-password clinics as active even before profile completion', async () => {
+test('statistics counts only ACTIVE clinics as active and both pending statuses as inactive', async () => {
   let sql;
   const model = createAdminStatisticsModel({
     async execute(query) { sql = query; return [[statistics]]; },
   });
   assert.deepEqual(await model.getStatistics(), statistics);
-  assert.match(sql, /role = 'CLINIC' AND status IN \('PENDING_PROFILE', 'ACTIVE'\) THEN 1 END\) AS activeClinics/);
-  assert.match(sql, /role = 'CLINIC' AND \(status IS NULL OR status NOT IN \('PENDING_PROFILE', 'ACTIVE'\)\) THEN 1 END\) AS inactiveClinics/);
+  assert.match(sql, /role = 'CLINIC' AND status = 'ACTIVE' THEN 1 END\) AS activeClinics/);
+  assert.match(sql, /role = 'CLINIC' AND \(status IS NULL OR status <> 'ACTIVE'\) THEN 1 END\) AS inactiveClinics/);
   assert.match(sql, /role = 'USER'/);
 });
 

@@ -98,9 +98,9 @@ export const openApiDocument = {
         required: ['activeClinics', 'inactiveClinics', 'totalUsers'],
         properties: {
           activeClinics: { type: 'integer', minimum: 0, example: 3,
-            description: 'Tài khoản CLINIC đã đổi mật khẩu mặc định: PENDING_PROFILE hoặc ACTIVE, không yêu cầu hoàn tất hồ sơ.' },
+            description: 'Tài khoản CLINIC ở trạng thái ACTIVE: đã đổi mật khẩu mặc định và hoàn tất hồ sơ.' },
           inactiveClinics: { type: 'integer', minimum: 0, example: 4,
-            description: 'Tài khoản CLINIC chưa xác nhận đã đổi mật khẩu mặc định: PENDING_PASSWORD_CHANGE, NULL hoặc trạng thái ngoài PENDING_PROFILE/ACTIVE.' },
+            description: 'Tài khoản CLINIC chưa hoạt động: PENDING_PASSWORD_CHANGE, PENDING_PROFILE, NULL hoặc trạng thái khác ACTIVE.' },
           totalUsers: { type: 'integer', minimum: 0, example: 12,
             description: 'Tài khoản có vai trò USER; không gồm ADMIN và CLINIC.' },
         },
@@ -142,7 +142,7 @@ export const openApiDocument = {
     '/api/v1/admin/statistics': {
       get: {
         tags: ['Admin'], summary: 'Thống kê tài khoản phòng khám và người dùng',
-        description: 'Đang hoạt động nghĩa là đã đổi mật khẩu mặc định do admin cấp: tính cả PENDING_PROFILE và ACTIVE. PENDING_PASSWORD_CHANGE, NULL hoặc trạng thái ngoài hai trạng thái trên được tính là chưa hoạt động. Tổng người dùng chỉ tính vai trò USER. Yêu cầu access token ADMIN từ Spring Boot.',
+        description: 'Chỉ tài khoản CLINIC ở trạng thái ACTIVE được tính là đang hoạt động: đã đổi mật khẩu mặc định và hoàn tất hồ sơ. PENDING_PASSWORD_CHANGE, PENDING_PROFILE, NULL hoặc trạng thái khác ACTIVE được tính là chưa hoạt động. Tổng người dùng chỉ tính vai trò USER. Yêu cầu access token ADMIN từ Spring Boot.',
         security: [{ adminBearer: [] }],
         responses: {
           200: response('Thống kê tài khoản', { $ref: '#/components/schemas/AdminStatistics' }),

@@ -75,7 +75,7 @@ Postman có folder **05 - Node.js - Đăng tin tự động công khai** chạy 
 
 ### API khác
 
-- `GET /api/v1/admin/statistics`: yêu cầu Bearer access token `ADMIN`. Trả `data.activeClinics` (tài khoản `CLINIC` đã đổi mật khẩu mặc định: `PENDING_PROFILE` hoặc `ACTIVE`, kể cả chưa hoàn tất hồ sơ), `data.inactiveClinics` (tài khoản `CLINIC` ở trạng thái ngoài `PENDING_PROFILE`/`ACTIVE`, gồm `PENDING_PASSWORD_CHANGE` và `NULL`) và `data.totalUsers` (chỉ tài khoản vai trò `USER`). Ví dụ: `{"activeClinics":3,"inactiveClinics":4,"totalUsers":12}`.
+- `GET /api/v1/admin/statistics`: yêu cầu Bearer access token `ADMIN`. Trả `data.activeClinics` (tài khoản `CLINIC` ở trạng thái `ACTIVE`, đã đổi mật khẩu mặc định và hoàn tất hồ sơ), `data.inactiveClinics` (tài khoản `CLINIC` ở trạng thái khác `ACTIVE`, gồm `PENDING_PASSWORD_CHANGE`, `PENDING_PROFILE` và `NULL`) và `data.totalUsers` (chỉ tài khoản vai trò `USER`). Ví dụ: `{"activeClinics":3,"inactiveClinics":4,"totalUsers":12}`.
 - `GET /health/live` (hoặc `/health`): trả 200 khi tiến trình xử lý HTTP được.
 - `GET /health/ready`: trả 200 khi truy vấn kiểm tra MySQL thành công, 503 khi database không sẵn sàng.
 

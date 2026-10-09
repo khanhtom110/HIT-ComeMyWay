@@ -13,8 +13,8 @@ export function createAdminStatisticsModel(pool) {
     async getStatistics() {
       const [rows] = await pool.execute(
         `SELECT
-           COUNT(CASE WHEN role = 'CLINIC' AND status IN ('PENDING_PROFILE', 'ACTIVE') THEN 1 END) AS activeClinics,
-           COUNT(CASE WHEN role = 'CLINIC' AND (status IS NULL OR status NOT IN ('PENDING_PROFILE', 'ACTIVE')) THEN 1 END) AS inactiveClinics,
+           COUNT(CASE WHEN role = 'CLINIC' AND status = 'ACTIVE' THEN 1 END) AS activeClinics,
+           COUNT(CASE WHEN role = 'CLINIC' AND (status IS NULL OR status <> 'ACTIVE') THEN 1 END) AS inactiveClinics,
            COUNT(CASE WHEN role = 'USER' THEN 1 END) AS totalUsers
          FROM users`,
       );
