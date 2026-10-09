@@ -76,11 +76,13 @@ npx --yes newman@6 run postman/ComeMyWay.postman_collection.json -e postman/Loca
 
 ## Màn bài đã đăng của phòng khám
 
-Folder **06 - Node.js - Bài của phòng khám theo trạng thái** kiểm tra 4 tab, tổng số bài/huy hiệu Từ chối, phân trang và validation. Đăng nhập phòng khám trước để có `accessToken`, `clinicId`. Các request chỉ đọc dữ liệu.
+Folder **06 - Node.js - Bài của phòng khám theo trạng thái** kiểm tra 4 tab, tổng số bài/huy hiệu Từ chối, phân trang và validation. Đăng nhập phòng khám trước để có `accessToken`, sau đó chạy **00 Lấy ID phòng khám hiện tại** trong folder 06 để lưu `clinicId` từ hồ sơ. Response đăng nhập không chứa `clinicId`. Các request trong folder này chỉ đọc dữ liệu.
 
 - `GET /api/v1/clinic/posts?status=ALL`: Tất cả; thay bằng `PENDING`, `APPROVED`, `REJECTED` cho 3 tab còn lại.
 - `GET /api/v1/clinic/posts/counts`: dùng `data.REJECTED` cho huy hiệu; số đếm thuộc phòng khám trong token và không giới hạn 50.
 - Lượt tiếp theo dùng `beforeId=pagination.nextBeforeId`, giữ bộ lọc; đổi tab thì bỏ `beforeId`.
+
+Đăng bài có ảnh hiện được kiểm thử bằng URL ảnh mẫu trong folder 05. API upload file đã có ở Spring Boot: `POST /api/v1/media/upload`, body `form-data` với trường `file`; lấy URL ở `data` đưa vào `imageUrls` khi tạo bài. Collection chưa có request upload file.
 
 ## Khi nhận “Token không hợp lệ”
 

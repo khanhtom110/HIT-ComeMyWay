@@ -3810,6 +3810,77 @@
       "description": "Màn phòng khám: 4 tab ALL/PENDING/APPROVED/REJECTED, huy hiệu Từ chối và phân trang. Đăng nhập CLINIC trước; các request chỉ đọc dữ liệu.",
       "item": [
         {
+          "name": "00 Lấy ID phòng khám hiện tại",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{springBaseUrl}}/api/v1/clinic/profile",
+            "description": "Chạy sau đăng nhập phòng khám. Lưu clinicId từ hồ sơ để kiểm tra quyền sở hữu bài trong các tab; response đăng nhập không có clinicId.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const requestToken = pm.environment.get('accessToken');",
+                  "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
+                  "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
+                  "}",
+                  "if (requestToken !== requestToken.trim() || requestToken.startsWith('Bearer ') || requestToken.trim().split('.').length !== 3) {",
+                  "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
+                  "pm.environment.unset('clinicId');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Response envelope\", () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.statusCode).to.eql(200);",
+                  "  pm.expect(body).to.have.property(\"data\");",
+                  "});",
+                  "pm.test(\"Clinic profile contains an ID\", () => pm.expect(Number(pm.response.json().data.id)).to.be.above(0));",
+                  "if (pm.response.code === 200) pm.environment.set(\"clinicId\", pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "01 Tab ALL",
           "request": {
             "method": "GET",
