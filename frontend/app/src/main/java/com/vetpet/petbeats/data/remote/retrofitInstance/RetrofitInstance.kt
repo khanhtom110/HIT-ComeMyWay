@@ -3,6 +3,7 @@ package com.vetpet.petbeats.data.remote.retrofitInstance
 import android.content.Context
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
+import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuthAdmin
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
 import com.vetpet.petbeats.data.remote.interceptor.AuthInterceptor
@@ -47,6 +48,7 @@ object RetrofitInstance {
         return retrofit.create(ApiAuth::class.java)
     }
 
+
     //Authenticated Retrofit dùng cho các API cần đăng nhập
     @Provides
     @Singleton
@@ -80,6 +82,12 @@ object RetrofitInstance {
     @Singleton
     fun provideApiClinicHome(@Named("AuthRetrofit") retrofit: Retrofit): ApiClinicHome {
         return retrofit.create(ApiClinicHome::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiAuthAdmin(@Named("AuthRetrofit") retrofit: Retrofit): ApiAuthAdmin {
+        return retrofit.create(ApiAuthAdmin::class.java)
     }
 
 }

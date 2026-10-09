@@ -96,6 +96,10 @@ class LoginViewModel @Inject constructor(
                                 }
                             }
                         }
+
+                        "ADMIN" -> {
+                            _event.emit(LoginEvent.NavigationAdmin(accessToken, refreshToken, userId))
+                        }
                     }
                 }
 

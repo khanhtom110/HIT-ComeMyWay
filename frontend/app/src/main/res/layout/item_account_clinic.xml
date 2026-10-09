@@ -11,20 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
+        android:padding="@dimen/_10sdp"
         android:background="@drawable/ground_hint_information_service">
-
-        <TextView
-            style="@style/Chu2"
-            android:id="@+id/tvNameCLinic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Phòng khám thú y FunPet"
-            android:textColor="@color/colorTextSub"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             style="@style/Chu2"
@@ -34,7 +22,8 @@
             android:text="Tài khoản: funpet123@gmail.com"
             android:textColor="@color/colorTextContent"
             android:layout_marginStart="@dimen/_16sdp"
-            app:layout_constraintTop_toBottomOf="@id/tvNameCLinic"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
@@ -43,7 +32,7 @@
             android:layout_height="@dimen/_16sdp"
             android:src="@drawable/icon_setting_admin"
             android:layout_marginEnd="@dimen/_22sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

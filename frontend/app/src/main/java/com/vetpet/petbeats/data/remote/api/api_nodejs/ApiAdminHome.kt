@@ -9,7 +9,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiAuthAdmin {
+interface ApiAdminHome {
     @GET(ApiConstants.CLINICPOSTADMIN)
     suspend fun clinicPostAdmin(
         @Query("status") status: String

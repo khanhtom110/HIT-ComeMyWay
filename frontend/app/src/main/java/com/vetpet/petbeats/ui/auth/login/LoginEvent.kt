@@ -10,5 +10,6 @@ sealed class LoginEvent {
     data class NavigationClinicHome(val accessToken: String, val refreshToken: String, val userId: Int): LoginEvent()
     data class NavigationChangePassword(val accessToken: String, val refreshToken: String, val userId: Int): LoginEvent()
     data class NavigationLoginSuccess(val accessToken: String, val refreshToken: String, val userId: Int): LoginEvent()
+    data class NavigationAdmin(val accessToken: String, val refreshToken: String, val userId: Int): LoginEvent()
 
 }

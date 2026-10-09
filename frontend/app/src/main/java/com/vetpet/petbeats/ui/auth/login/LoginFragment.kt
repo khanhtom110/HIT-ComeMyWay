@@ -24,6 +24,7 @@ import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
 import com.vetpet.petbeats.core.utils.AnimationUtils.shake
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeOut
+import com.vetpet.petbeats.ui.home_admin.activitymain.HomeAdminActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -193,6 +194,14 @@ class LoginFragment : Fragment() {
                             tokenManager.saveUserId(event.userId)
 
                             val intent = Intent(requireContext(), HomeClinicActivity::class.java)
+                            startActivity(intent)
+                        }
+                        is LoginEvent.NavigationAdmin -> {
+                            val tokenManager = TokenManager(requireContext())
+                            tokenManager.saveTokens(event.accessToken, event.refreshToken)
+                            tokenManager.saveUserId(event.userId)
+
+                            val intent = Intent(requireContext(), HomeAdminActivity::class.java)
                             startActivity(intent)
                         }
                     }
