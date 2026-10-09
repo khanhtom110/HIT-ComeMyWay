@@ -37,9 +37,11 @@ export function createClinicPostModel(pool) {
       return rows.map(decode);
     },
     findPublic(id) { return find(id, true); },
-    async listForAdmin(status) {
+    async listForAdmin(status, { beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
+      const params = beforeId === undefined ? [status] : [status, beforeId];
       const [rows] = await pool.execute(
-        `${select} WHERE p.status = ? ORDER BY p.id DESC LIMIT ${CLINIC_POST_LIMITS.LIST_SIZE}`, [status]);
+        `${select} WHERE p.status = ?${beforeId === undefined ? '' : ' AND p.id < ?'}
+         ORDER BY p.id DESC LIMIT ${limit + 1}`, params);
       return rows.map(decode);
     },
     async approve(id, adminId) {

@@ -59,7 +59,7 @@ Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc No
 - `GET /api/v1/public/clinic-posts`: tối đa 50 tin mới nhất có `status: "APPROVED"` (Đã duyệt).
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt hoặc bị từ chối trả 404.
 - Response bài đăng (tạo, danh sách của phòng khám, danh sách/chi tiết công khai và danh sách admin) có `clinicThumbnailUrl`: URL ảnh đại diện lấy từ hồ sơ phòng khám hiện tại (`clinics.thumbnail_url`), hoặc `null` nếu chưa có. Trường này khác `imageUrls` là ảnh của chính bài đăng.
-- `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem tối đa 50 tin chưa duyệt, đầy đủ nội dung và ảnh. Có thể lọc `APPROVED` (đã duyệt) hoặc `REJECTED` (từ chối duyệt). Mặc định `PENDING`.
+- `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem danh sách chưa duyệt, đầy đủ nội dung và ảnh; mỗi lượt tối đa 50 bài. Thêm `limit=1..50` để đổi số bài. Response giữ `data` là mảng và thêm `pagination: {limit, hasMore, nextBeforeId}`. Khi `hasMore=true`, gọi tiếp với `beforeId=nextBeforeId`, giữ nguyên `status`; hết bài khi `hasMore=false`. Bỏ `beforeId` để tải lại từ bài mới nhất. Có thể lọc `APPROVED` (đã duyệt) hoặc `REJECTED` (từ chối duyệt). Mặc định `PENDING`.
 - `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Duyệt tin `PENDING`, lưu `approvedBy`, `approvedAt` và công khai tin. Gọi duyệt lặp trả 200, giữ nguyên thông tin duyệt; tin `REJECTED` trả 409.
 - `PATCH /api/v1/admin/clinic-posts/:id/reject`: access token ADMIN, không cần body. Chuyển tin `PENDING` sang `REJECTED`, không công khai. Gọi từ chối lặp trả 200; tin `APPROVED` trả 409. Các trường thông tin duyệt vẫn là `null`.
 

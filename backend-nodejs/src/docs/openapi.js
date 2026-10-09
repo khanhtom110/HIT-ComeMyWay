@@ -36,10 +36,21 @@ const approvedExample = { ...pendingExample, status: 'APPROVED', approvedBy: 2,
   approvedAt: '2026-10-03T08:00:00.000Z' };
 const rejectedExample = { ...pendingExample, status: 'REJECTED' };
 const moderationListResponse = response('Danh sách tin', posts);
+moderationListResponse.content['application/json'].schema.allOf.push({
+  type: 'object', required: ['pagination'], properties: { pagination: {
+    type: 'object', required: ['limit', 'hasMore', 'nextBeforeId'], properties: {
+      limit: { type: 'integer', minimum: 1, maximum: 50, example: 50 },
+      hasMore: { type: 'boolean', description: 'Còn bài ở lượt tiếp theo.', example: true },
+      nextBeforeId: { type: 'integer', format: 'int64', nullable: true,
+        description: 'Truyền ID này vào beforeId để lấy lượt tiếp theo; null khi hết bài.', example: 10 },
+    },
+  } },
+});
 moderationListResponse.content['application/json'].examples = Object.fromEntries(
   [['PENDING', 'Chưa duyệt', pendingExample], ['APPROVED', 'Đã duyệt', approvedExample],
     ['REJECTED', 'Từ chối duyệt', rejectedExample]].map(([status, summary, example]) => [status, {
-    summary, value: { statusCode: 200, message: 'OK', data: [example], timestamp: '2026-10-09T08:00:00.000Z' },
+    summary, value: { statusCode: 200, message: 'OK', data: [example], pagination: { limit: 50, hasMore: false, nextBeforeId: null },
+      timestamp: '2026-10-09T08:00:00.000Z' },
   }]),
 );
 const postId = { in: 'path', name: 'id', required: true, description: 'ID bài đăng phòng khám',
@@ -137,9 +148,14 @@ export const openApiDocument = {
           description: 'PENDING = chưa duyệt; APPROVED = đã duyệt; REJECTED = từ chối duyệt. Bỏ trống dùng PENDING.',
           examples: { pending: { summary: 'Chưa duyệt', value: 'PENDING' },
             approved: { summary: 'Đã duyệt', value: 'APPROVED' }, rejected: { summary: 'Từ chối duyệt', value: 'REJECTED' } },
-          schema: { type: 'string', enum: ['PENDING', 'APPROVED', 'REJECTED'], default: 'PENDING' } }],
-        description: 'Tối đa 50 tin mới nhất theo trạng thái PENDING, APPROVED hoặc REJECTED. Mặc định PENDING (chưa duyệt).',
-        responses: { 200: moderationListResponse, 400: errorResponse('Trạng thái không hợp lệ', 400),
+          schema: { type: 'string', enum: ['PENDING', 'APPROVED', 'REJECTED'], default: 'PENDING' } },
+          { in: 'query', name: 'limit', required: false, description: 'Số bài mỗi lượt, từ 1 đến 50.',
+            schema: { type: 'integer', minimum: 1, maximum: 50, default: 50 } },
+          { in: 'query', name: 'beforeId', required: false,
+            description: 'Bỏ trống ở lượt đầu. Lượt tiếp theo truyền pagination.nextBeforeId của response trước, giữ nguyên status.',
+            schema: { type: 'integer', format: 'int64', minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, example: 100 }],
+        description: 'Danh sách bài theo trạng thái, mới nhất trước. Mỗi lượt tối đa 50 bài. Nếu pagination.hasMore=true, truyền pagination.nextBeforeId vào beforeId để lấy tiếp. data vẫn là mảng bài đăng. Dùng ID làm mốc để không bỏ sót bài cũ khi bài ở lượt trước vừa được duyệt hoặc từ chối. Bài mới đăng sau lượt đầu sẽ xuất hiện khi tải lại từ đầu. Mặc định status=PENDING.',
+        responses: { 200: moderationListResponse, 400: errorResponse('Trạng thái, limit hoặc beforeId không hợp lệ', 400),
           401: errorResponse('Thiếu token, token hết hạn, refresh token hoặc sai vai trò ADMIN', 401),
           403: errorResponse('Tài khoản ADMIN không tồn tại hoặc token bị thu hồi', 403),
           500: errorResponse('Lỗi xử lý phía server', 500) },

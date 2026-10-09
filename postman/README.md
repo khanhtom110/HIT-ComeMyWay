@@ -14,7 +14,7 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
 
-Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình. Admin gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING`, rồi `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` hoặc `/reject` với Bearer `{{adminAccessToken}}`. Có 3 trạng thái: `PENDING` (chưa duyệt), `APPROVED` (đã duyệt), `REJECTED` (từ chối duyệt). Chỉ bài `APPROVED` được xem công khai.
+Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình. Admin gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING`, rồi `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` hoặc `/reject` với Bearer `{{adminAccessToken}}`. Có 3 trạng thái: `PENDING` (chưa duyệt), `APPROVED` (đã duyệt), `REJECTED` (từ chối duyệt). Chỉ bài `APPROVED` được xem công khai. Danh sách admin hỗ trợ `limit` (1–50) và `beforeId`: nếu response có `pagination.hasMore=true`, truyền `pagination.nextBeforeId` vào `beforeId` ở request tiếp theo, giữ nguyên bộ lọc `status`.
 
 `DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.
 

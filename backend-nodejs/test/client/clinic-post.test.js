@@ -29,7 +29,10 @@ const clinicPostModel = {
     return posts.filter(post => post.status === 'APPROVED');
   },
   async findPublic(id) { return posts.find(post => post.id === id && post.status === 'APPROVED'); },
-  async listForAdmin(status) { return posts.filter(post => post.status === status); },
+  async listForAdmin(status, { beforeId, limit }) {
+    return posts.filter(post => post.status === status && (beforeId === undefined || post.id < beforeId))
+      .sort((a, b) => b.id - a.id).slice(0, limit + 1);
+  },
   async approve(id, adminId) {
     const post = posts.find(post => post.id === id);
     if (post && post.status === 'PENDING') Object.assign(post, { status: 'APPROVED', approvedBy: adminId, approvedAt: new Date().toISOString() });
@@ -231,6 +234,64 @@ test('only admin can reject pending posts; rejected posts stay private', async (
   assert.equal(approvedPost.status, 'APPROVED');
   assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/999999/reject`, { method: 'PATCH', headers })).status, 404);
   assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/no/reject`, { method: 'PATCH', headers })).status, 400);
+});
+
+test('admin can browse more than 50 posts without skipping posts after moderation', async () => {
+  const headers = { authorization: `Bearer ${token({ authorities: 'ADMIN', sub: 'admin' })}` };
+  const fixtures = [];
+  for (const [index, status] of ['PENDING', 'APPROVED', 'REJECTED'].entries()) {
+    for (let i = 1; i <= 55; i++) fixtures.push({ id: 1000000 + index * 100 + i, clinicId: 7,
+      title: 'Pagination fixture', content: 'Test', imageUrls: [], status, approvedBy: null, approvedAt: null });
+  }
+  posts.push(...fixtures);
+  try {
+    for (const status of ['PENDING', 'APPROVED', 'REJECTED']) {
+      const url = `${baseUrl}/api/v1/admin/clinic-posts?status=${status}`;
+      const first = await fetch(url, { headers });
+      assert.equal(first.status, 200);
+      const firstBody = await first.json();
+      assert.equal(firstBody.data.length, 50);
+      assert.deepEqual(firstBody.pagination, { limit: 50, hasMore: true, nextBeforeId: firstBody.data.at(-1).id });
+      assert.ok(firstBody.data.every(post => post.status === status));
+      if (status === 'PENDING') {
+        const approved = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${firstBody.data[0].id}/approve`, { method: 'PATCH', headers });
+        assert.equal(approved.status, 200);
+      }
+      const next = await fetch(`${url}&beforeId=${firstBody.pagination.nextBeforeId}`, { headers });
+      assert.equal(next.status, 200);
+      const nextBody = await next.json();
+      const actual = [...firstBody.data, ...nextBody.data].filter(post => post.id >= (status === 'PENDING' ? 1000000 : status === 'APPROVED' ? 1000100 : 1000200)
+        && post.id < (status === 'PENDING' ? 1000100 : status === 'APPROVED' ? 1000200 : 1000300)).map(post => post.id);
+      assert.equal(actual.length, 55);
+      assert.equal(new Set(actual).size, 55);
+      assert.equal(nextBody.pagination.hasMore, false);
+      assert.equal(nextBody.pagination.nextBeforeId, null);
+    }
+    const small = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?limit=10`, { headers });
+    const smallBody = await small.json();
+    assert.equal(smallBody.data.length, 10);
+    assert.equal(smallBody.pagination.limit, 10);
+    const empty = await fetch(`${baseUrl}/api/v1/admin/clinic-posts?beforeId=1`, { headers });
+    const emptyBody = await empty.json();
+    assert.deepEqual(emptyBody.data, []);
+    assert.deepEqual(emptyBody.pagination, { limit: 50, hasMore: false, nextBeforeId: null });
+    for (const query of ['limit=0', 'limit=51', 'limit=1.5', 'beforeId=0', 'beforeId=abc', 'beforeId=9007199254740992']) {
+      assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts?${query}`, { headers })).status, 400);
+    }
+  } finally {
+    for (let i = posts.length - 1; i >= 0; i--) if (posts[i].id >= 1000000) posts.splice(i, 1);
+  }
+});
+
+test('admin SQL pagination applies status and cursor before limiting rows', async () => {
+  const calls = [];
+  const model = createClinicPostModel({ async execute(sql, params) { calls.push({ sql, params }); return [[]]; } });
+  await model.listForAdmin('PENDING', { beforeId: 123, limit: 10 });
+  assert.deepEqual(calls[0].params, ['PENDING', 123]);
+  assert.match(calls[0].sql, /p.status = \? AND p.id < \?\s+ORDER BY p.id DESC LIMIT 11/);
+  await model.listForAdmin('REJECTED');
+  assert.deepEqual(calls[1].params, ['REJECTED']);
+  assert.match(calls[1].sql, /p.status = \?\s+ORDER BY p.id DESC LIMIT 51/);
 });
 
 test('invalid image arrays are rejected without creating posts', async () => {

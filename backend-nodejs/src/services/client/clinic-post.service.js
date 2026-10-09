@@ -1,3 +1,4 @@
+import { CLINIC_POST_LIMITS } from '../../constants/index.js';
 import { ApiError } from '../../utils/ApiError.js';
 
 export function createClinicPostService(clinicPostModel) {
@@ -16,7 +17,12 @@ export function createClinicPostService(clinicPostModel) {
       if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
       return post;
     },
-    listForAdmin(status) { return clinicPostModel.listForAdmin(status); },
+    async listForAdmin(status, { beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
+      const rows = await clinicPostModel.listForAdmin(status, { beforeId, limit });
+      const hasMore = rows.length > limit;
+      const items = rows.slice(0, limit);
+      return { items, pagination: { limit, hasMore, nextBeforeId: hasMore ? items.at(-1).id : null } };
+    },
     async approve(id, adminId) {
       const post = await clinicPostModel.approve(id, adminId);
       if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
