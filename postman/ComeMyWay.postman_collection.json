@@ -344,7 +344,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -355,6 +355,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.environment.unset(\"createdPostId\");"
                 ]
               }
@@ -411,7 +425,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -421,7 +435,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -516,7 +544,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -526,7 +554,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -605,7 +647,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -615,7 +657,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -669,7 +725,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -679,7 +735,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -733,7 +803,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -744,6 +814,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"x\".repeat(201), content: \"Test\"}));"
                 ]
               }
@@ -798,7 +882,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -809,6 +893,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(10001)}));"
                 ]
               }
@@ -966,7 +1064,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -976,7 +1074,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -1030,7 +1142,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1041,6 +1153,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.variables.set(\"invalidBody\", JSON.stringify({title: \"Test\", content: \"x\".repeat(70000)}));"
                 ]
               }
@@ -1154,7 +1280,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1164,7 +1290,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1415,7 +1555,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1426,6 +1566,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.environment.unset('moderationPostId');",
                   "pm.environment.unset('moderationApprovedAt');"
                 ]
@@ -1474,7 +1628,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1484,7 +1638,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1528,7 +1696,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1538,7 +1706,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1580,7 +1762,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1590,7 +1772,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1668,7 +1864,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1679,6 +1875,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1752,7 +1962,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1763,6 +1973,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1810,7 +2034,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1820,7 +2044,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1864,7 +2102,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1874,7 +2112,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -1916,7 +2168,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1927,6 +2179,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -1972,7 +2238,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -1982,7 +2248,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2026,7 +2306,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2036,7 +2316,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2144,7 +2438,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2154,7 +2448,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2193,7 +2501,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2203,7 +2511,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2256,7 +2578,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2266,7 +2588,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -2305,7 +2641,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2316,6 +2652,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -2356,7 +2706,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2367,6 +2717,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);",
                   "const postId = pm.environment.get('moderationPostId');",
                   "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
@@ -2460,7 +2824,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2471,6 +2835,20 @@
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);",
                   "pm.environment.unset('rejectedPostId');"
                 ]
               }
@@ -2511,7 +2889,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2521,7 +2899,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -2581,7 +2973,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2591,7 +2983,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2630,7 +3036,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2640,7 +3046,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2684,7 +3104,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2694,7 +3114,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2736,7 +3170,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2746,7 +3180,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2831,7 +3279,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2841,7 +3289,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2879,7 +3341,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2889,7 +3351,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2928,7 +3404,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2938,7 +3414,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -2976,7 +3466,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -2986,7 +3476,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3024,7 +3528,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3034,7 +3538,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -3073,7 +3591,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3083,7 +3601,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -3125,7 +3657,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3135,7 +3667,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -3218,7 +3764,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('adminAccessToken');",
+                  "const requestToken = pm.environment.get('adminAccessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có adminAccessToken. Chạy request 02 Đăng nhập quản trị viên thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3228,7 +3774,21 @@
                   "  console.error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('adminAccessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'ADMIN' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến adminAccessToken trong environment phải là access token ADMIN còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('adminAccessToken', requestToken);"
                 ]
               }
             },
@@ -3272,7 +3832,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3282,7 +3842,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3332,7 +3906,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3342,7 +3916,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3392,7 +3980,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3402,7 +3990,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3452,7 +4054,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3462,7 +4064,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3512,7 +4128,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3522,7 +4138,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3561,7 +4191,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3571,7 +4201,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3611,7 +4255,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3621,7 +4265,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3660,7 +4318,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3670,7 +4328,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
@@ -3708,7 +4380,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const requestToken = pm.variables.get('accessToken');",
+                  "const requestToken = pm.environment.get('accessToken');",
                   "if (!requestToken || typeof requestToken !== 'string' || requestToken.trim() === '') {",
                   "  console.error('Chưa có accessToken. Chạy request 01 Đăng nhập phòng khám thành công trong environment đang chọn trước; sau khi import lại environment cần đăng nhập lại.');",
                   "  pm.execution.skipRequest();",
@@ -3718,7 +4390,21 @@
                   "  console.error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
                   "  pm.execution.skipRequest();",
                   "  throw new Error('accessToken phải chứa riêng chuỗi access token JWT, không kèm Bearer và không dùng refresh token. Kiểm tra biến trùng tên trong các scope.');",
-                  "}"
+                  "}",
+                  "let tokenClaims;",
+                  "try {",
+                  "  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';",
+                  "  const encoded = requestToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, '');",
+                  "  let bits = 0, count = 0, decoded = '';",
+                  "  for (const char of encoded) { const value = alphabet.indexOf(char); if (value < 0) throw new Error('JWT payload invalid'); bits = (bits << 6) | value; count += 6; if (count >= 8) { count -= 8; decoded += String.fromCharCode((bits >> count) & 255); } }",
+                  "  tokenClaims = JSON.parse(decoded);",
+                  "} catch (_) { tokenClaims = null; }",
+                  "if (!tokenClaims || tokenClaims.isRefresh !== false || tokenClaims.authorities !== 'CLINIC' || !Number.isInteger(tokenClaims.exp) || tokenClaims.exp <= Math.floor(Date.now() / 1000)) {",
+                  "  console.error('Biến accessToken trong environment phải là access token CLINIC còn hạn. Đăng nhập lại đúng tài khoản; kiểm tra response role và không dùng refreshToken.');",
+                  "  pm.execution.skipRequest();",
+                  "  throw new Error('Sai vai trò, refresh token, JWT lỗi hoặc token đã hết hạn');",
+                  "}",
+                  "pm.variables.set('accessToken', requestToken);"
                 ]
               }
             },
