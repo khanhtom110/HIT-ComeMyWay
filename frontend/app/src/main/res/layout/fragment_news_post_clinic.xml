@@ -38,6 +38,7 @@
             android:src="@drawable/image_test"
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_16sdp"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/vector"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -52,6 +53,7 @@
             android:paddingHorizontal="@dimen/_8sdp"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_16sdp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="@id/imgClinic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgClinic"/>
