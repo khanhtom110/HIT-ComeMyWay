@@ -34,9 +34,7 @@ class NewsPostClinicViewModel @Inject constructor(
     }
 
 
-    fun checkImageClickTrue() {
-        _state.value = _state.value.copy(isImageNews = true)
-    }
+
     fun checkImageClickFalse() {
         _state.value = _state.value.copy(isImageNews = false)
     }
@@ -100,14 +98,22 @@ class NewsPostClinicViewModel @Inject constructor(
         viewModelScope.launch {
             val title = _state.value.title
             val content = _state.value.content
-            val imageUrls = _state.value.imageNews
+            val imageUrl = _state.value.imageNews
+
+            val imageUrls = if (imageUrl.isNotBlank()) {
+                listOf(imageUrl)
+            } else {
+                emptyList()
+            }
 
             val request = ClinicPostRequestNodeJs(title, content, imageUrls)
             val result = repositoryClinicPost.clinicPostNodeJS(request)
 
             when (result) {
                 is DataResult.Success -> {
-                    _event.emit(NewsPostClinicEvent.NavigationNewsSuccessClinic(id))
+                    val newPostId = result.data.id
+
+                    _event.emit(NewsPostClinicEvent.NavigationNewsSuccessClinic(newPostId))
                 }
                 is DataResult.Error -> {
                     return@launch

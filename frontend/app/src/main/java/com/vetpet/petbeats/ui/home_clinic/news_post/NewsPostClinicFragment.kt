@@ -253,7 +253,7 @@ class NewsPostClinicFragment : Fragment() {
                         }
                         is NewsPostClinicEvent.NavigationNewsSuccessClinic -> {
                             findNavController().navigate(
-                                R.id.newsSuccessClinicFragment,
+                                R.id.newsPostClinic_newsSuccessClinic,
                                 Bundle().apply {
                                     putInt("id", event.id)
                                 }
