@@ -39,11 +39,12 @@ class NewsClinicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listClick()
+        adapterNews = AdapterNewsClinic()
 
         binding.recycle.layoutManager = LinearLayoutManager(requireContext())
         binding.recycle.adapter = adapterNews
 
+        setOnClick()
         stateData()
         eventData()
     }
@@ -53,12 +54,12 @@ class NewsClinicFragment : Fragment() {
         _binding = null
     }
 
-
-    private fun listClick() {
-        adapterNews = AdapterNewsClinic { id ->
-            viewModel.itemNewsPostClick(id)
+    private fun setOnClick() {
+        binding.tvClinicName.setOnClickListener {
+            viewModel.newsPostClick()
         }
     }
+
 
     private fun stateData() {
         lifecycleScope.launch {

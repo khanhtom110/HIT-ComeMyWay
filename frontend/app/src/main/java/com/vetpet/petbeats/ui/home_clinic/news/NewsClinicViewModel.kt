@@ -33,11 +33,16 @@ class NewsClinicViewModel @Inject constructor(
         onNewsList()
     }
 
-    fun itemNewsPostClick(id: Int) {
+
+    fun newsPostClick() {
         viewModelScope.launch {
+            val id = _state.value.id
+
             _event.emit(NewsClinicEvent.NavigationClinicPost(id))
         }
     }
+
+
 
     fun onNewsList() {
         viewModelScope.launch {
@@ -63,7 +68,7 @@ class NewsClinicViewModel @Inject constructor(
                         )
                     }
 
-                    _state.value = _state.value.copy(isLoading = false, listNews = showList)
+                    _state.value = _state.value.copy(id = apiDataList.firstOrNull()?.id ?: 0,isLoading = false, listNews = showList)
                 }
                 is DataResult.Error -> {
                     Log.d("tesst", "error: ${result.message}")

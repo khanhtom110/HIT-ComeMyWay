@@ -108,13 +108,6 @@
         android:id="@+id/newsClinicFragment"
         android:name="com.vetpet.petbeats.ui.home_clinic.news.NewsClinicFragment"
         android:label="newsClinicFragment">
-        <action
-            android:id="@+id/newsClinic_newsPostClinic"
-            app:destination="@id/newsPostClinicFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -124,13 +117,16 @@
         <action
             android:id="@+id/newsPostClinic_newsClinic"
             app:destination="@id/newsClinicFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/newsClinicFragment"
             app:popUpToInclusive="true"/>
 
+        <action
+            android:id="@+id/newsPostClinic_newsSuccessClinic"
+            app:destination="@id/newsSuccessClinicFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -150,8 +146,8 @@
         <action
             android:id="@+id/newsSuccessClinic_newsPostClinic"
             app:destination="@id/newsPostClinicFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/newsPostClinicFragment"

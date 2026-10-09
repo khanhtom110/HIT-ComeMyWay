@@ -49,11 +49,10 @@ class NewsSuccessClinicViewModel @Inject constructor(
                         imgNews = data.imageUrls.firstOrNull().orEmpty(),
                         imgClinic = data.clinicThumbnailUrl.orEmpty(),
                         checkState = true,
-                        checkTry = true
                     )
                 }
                 is DataResult.Error -> {
-                    _state.value = _state.value.copy(checkState = false, checkTry = false)
+                    _state.value = _state.value.copy(checkState = false)
                     return@launch
                 }
             }
