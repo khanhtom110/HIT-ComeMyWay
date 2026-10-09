@@ -30,4 +30,15 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/clinicDetailAdminFragment"
+        android:name="com.vetpet.petbeats.ui.home_admin.clinic_detail_admin.ClinicDetailAdminFragment"
+        android:label="clinicDetailAdminFragment">
+        <action
+            android:id="@+id/clinicDetail_listAppointment"
+            app:destination="@id/listAppointmentAdminFragment"
+            app:popUpTo="@id/listAppointmentAdminFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
 </navigation>

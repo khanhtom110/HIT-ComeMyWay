@@ -63,7 +63,7 @@
                 android:layout_marginHorizontal="@dimen/_16sdp"
                 android:textColor="@color/colorTextTitle"
                 android:textColorHint="@color/colorTextHint"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:hint="Nhập tên phòng khám đăng ký"
                 android:paddingStart="@dimen/_16sdp"
                 android:paddingEnd="@dimen/_40sdp"
