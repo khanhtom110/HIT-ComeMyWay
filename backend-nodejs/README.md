@@ -55,7 +55,7 @@ Khi khởi động, backend chạy các file `database/migrations/*.sql` theo th
 
 ## Docker và Postman
 
-Sau khi tạo `backend-nodejs/.env` và chuẩn bị schema Spring Boot, chạy từ thư mục gốc: `docker compose -p hit-comemyway -f compose.nodejs.yaml up -d --build nodejs`. Compose này chỉ quản lý Node.js trên cổng `3000`; Spring Boot và MySQL dùng môi trường đang có. Các biến `DOCKER_DB_HOST`, `DOCKER_DB_PORT`, `DOCKER_DB_NAME` điều chỉnh kết nối MySQL trong container. Client dùng base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`, `/api/v1/admin/statistics`).
+Sau khi tạo `backend-nodejs/.env` và chuẩn bị schema Spring Boot, chạy `npm start` trong thư mục `backend-nodejs`. Node.js mặc định dùng cổng `3000`. Nếu dùng Docker, sử dụng Dockerfile trong `backend-nodejs/` với cấu hình container của môi trường đang có. Client dùng base URL riêng cho API Node.js (`/api/v1/clinic/posts`, `/api/v1/public/clinic-posts`, `/api/v1/admin/statistics`).
 
 CI chạy test khi push `dev`, `feat/clinic-posts-from-dev` hoặc mở PR vào `dev`. Deploy EC2 chỉ chạy trên `dev`; workflow dispatch trên nhánh tính năng chỉ chạy test.
 
@@ -103,7 +103,7 @@ JWT được kiểm tra chữ ký, hạn dùng, loại access token, vai trò v�
 
 Chạy `npm run seed:test` khi MySQL dev trong `.env` có thể truy cập được từ nơi chạy lệnh. Script chỉ nhận `NODE_ENV` khác `production` và `DB_HOST` là `localhost`, `127.0.0.1` hoặc `devmysql`. Có thể chạy `npm run seed:test -- --prepare` để tạo file mật khẩu trước khi kết nối database. File `.env.seed.local` được Git ignore; giữ file này để chạy seed lại với cùng mật khẩu.
 
-Nếu MySQL chỉ truy cập được từ container, chạy `powershell -File backend-nodejs/scripts/seed-dev-docker.ps1` từ thư mục gốc sau khi khởi động container bằng lệnh Compose ở trên. Script dùng container `hit-comemyway-nodejs-1`; truyền `-ContainerName` nếu tên khác. Cần cài dependency Node.js local để chạy bước chuẩn bị seed. Chỉ chạy trên database thử nghiệm, không đưa mật khẩu seed vào repository.
+Nếu MySQL chỉ truy cập được từ container, chạy `powershell -File backend-nodejs/scripts/seed-dev-docker.ps1` từ thư mục gốc sau khi khởi động container Node.js trong môi trường đang có. Script dùng container `hit-comemyway-nodejs-1`; truyền `-ContainerName` nếu tên khác. Cần cài dependency Node.js local để chạy bước chuẩn bị seed. Chỉ chạy trên database thử nghiệm, không đưa mật khẩu seed vào repository.
 
 Seed tạo `cmw_test_admin`, một phòng khám `ACTIVE` có hồ sơ và hai dịch vụ, hai tài khoản phòng khám lần lượt ở `PENDING_PASSWORD_CHANGE`/`PENDING_PROFILE`, cùng hai tài khoản `USER`. Script cập nhật các tài khoản seed khi chạy lại mà không tạo trùng; nếu username hoặc email trùng tài khoản không thuộc seed, script dừng và rollback. Mật khẩu admin, phòng khám và người dùng được sinh ngẫu nhiên và băm bằng bcrypt. Đọc `.env.seed.local` trên máy dev để lấy mật khẩu; không commit hoặc dùng các tài khoản này trên production.
 

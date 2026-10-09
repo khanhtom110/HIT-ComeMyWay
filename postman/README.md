@@ -53,11 +53,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 
 1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp hoặc bằng Docker local mặc định dùng `http://localhost:3000`.
 2. Đảm bảo schema Spring Boot đã có và tài khoản MySQL Node.js có quyền chạy migration. Backend tự áp dụng SQL còn thiếu khi khởi động. Kiểm tra log container nếu migration lỗi.
-3. Cập nhật Node.js bằng Compose riêng (đã tạo `backend-nodejs/.env` và chuẩn bị schema Spring Boot):
-
-```powershell
-docker compose -p hit-comemyway -f compose.nodejs.yaml up -d --no-deps --build nodejs
-```
+3. Khởi động lại Node.js với code mới: nếu chạy trực tiếp, dừng tiến trình cũ rồi chạy `npm start` trong thư mục `backend-nodejs`; nếu dùng Docker, cập nhật image và container bằng cấu hình triển khai đang có. Cần tạo `backend-nodejs/.env` và chuẩn bị schema Spring Boot trước.
 
 4. Import lại collection để nhận tên request tiếng Việt và kiểm thử mới, rồi chạy folder **05 - Node.js - Đăng tin tự động duyệt** từ bước 00.
 
