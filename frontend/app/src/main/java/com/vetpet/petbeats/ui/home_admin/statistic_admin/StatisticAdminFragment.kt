@@ -2,11 +2,14 @@ package com.vetpet.petbeats.ui.home_admin.statistic_admin
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -50,13 +53,25 @@ class StatisticAdminFragment : Fragment() {
         binding.progressUser.max = userTarget
 
 
-        viewModel.onQuantityClick()
+        observeStatistics()
         stateData()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+
+    private fun observeStatistics() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                viewModel.observeStatistics()
+            }
+        }
     }
 
 
@@ -79,8 +94,12 @@ class StatisticAdminFragment : Fragment() {
 
             setDrawCenterText(true)
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
-            setCenterTextSize(12f)
-            setCenterTextColor(R.color.black)
+            setCenterTextSize(16f)
+            setCenterTextColor(
+                ContextCompat.getColor(requireContext(), R.color.black)
+            )
+
+            rotationAngle = 270f
 
             setTouchEnabled(false)
             setExtraOffsets(0f, 0f, 0f, 0f)
@@ -98,6 +117,7 @@ class StatisticAdminFragment : Fragment() {
         val active = activeClinics.coerceAtLeast(0)
         val inactive = inactiveClinics.coerceAtLeast(0)
         val total = active + inactive
+
 
         val activeColor = ContextCompat.getColor(
             requireContext(),
@@ -128,18 +148,44 @@ class StatisticAdminFragment : Fragment() {
             this.colors = colors
             sliceSpace = 0f
 
-            valueTextColor = R.color.colorBackground
-            valueTextSize = 10f
-
+            valueTextColor = android.graphics.Color.WHITE
+            valueTextSize = 14f
+            valueTypeface = Typeface.DEFAULT
+            yValuePosition = PieDataSet.ValuePosition.INSIDE_SLICE
             // Khi tổng = 0, không hiển thị phần trăm của vòng nền
             setDrawValues(total > 0)
         }
 
         chart.data = PieData(dataSet).apply {
-            setValueFormatter(PercentFormatter(chart))
+            setValueFormatter(
+                object : PercentFormatter(chart) {
+                    override fun getFormattedValue(value: Float): String {
+                        return "${value.roundToInt()}%"
+                    }
+                }
+            )
         }
 
-        chart.centerText = "$total\nTổng"
+        val totalText = total.toString()
+
+        chart.centerText = SpannableString("$totalText\nTổng").apply {
+            // Chỉ số tổng in đậm
+            setSpan(
+                StyleSpan(Typeface.BOLD),
+                0,
+                totalText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            // Số tổng lớn hơn chữ "Tổng"
+            setSpan(
+                RelativeSizeSpan(1.4f),
+                0,
+                totalText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
         chart.notifyDataSetChanged()
         chart.invalidate()
     }

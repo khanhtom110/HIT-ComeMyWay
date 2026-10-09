@@ -45,10 +45,9 @@
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChartClinic"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_100sdp"
+                android:layout_width="@dimen/_140sdp"
+                android:layout_height="@dimen/_140sdp"
                 android:layout_marginTop="@dimen/_16sdp"
-                android:layout_marginStart="@dimen/_15sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvState" />
 
@@ -59,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintStart_toEndOf="@id/pieChartClinic"
                 app:layout_constraintTop_toTopOf="@id/pieChartClinic"/>
 
@@ -70,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="Đang hoạt động"
                 android:textColor="@color/colorTextSub"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="@id/tvCurrrentNumber"
                 app:layout_constraintBottom_toBottomOf="@id/tvCurrrentNumber"
                 app:layout_constraintStart_toEndOf="@id/tvCurrrentNumber"/>
@@ -82,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintStart_toEndOf="@id/pieChartClinic"
                 app:layout_constraintTop_toBottomOf="@id/tvCurrrentNumber"/>
 
@@ -93,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:text="Chưa hoạt động"
                 android:textColor="@color/colorTextSub"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="@id/tvNotCurrrentNumber"
                 app:layout_constraintBottom_toBottomOf="@id/tvNotCurrrentNumber"
                 app:layout_constraintStart_toEndOf="@id/tvNotCurrrentNumber"/>
@@ -105,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintStart_toEndOf="@id/pieChartClinic"
                 app:layout_constraintTop_toBottomOf="@id/tvNotCurrrentNumber"/>
 
@@ -116,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tổng"
                 android:textColor="@color/colorTextSub"
-                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="@id/tvCurrrentTotal"
                 app:layout_constraintBottom_toBottomOf="@id/tvCurrrentTotal"
                 app:layout_constraintStart_toEndOf="@id/tvCurrrentTotal"/>
