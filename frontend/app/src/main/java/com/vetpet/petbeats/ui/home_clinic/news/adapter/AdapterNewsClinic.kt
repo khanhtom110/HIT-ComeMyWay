@@ -13,9 +13,7 @@ import com.example.VetPet.R
 import com.vetpet.petbeats.ui.home_user.news.adapter.NewsChild
 import com.vetpet.petbeats.ui.home_user.news.adapter.NewsDiffCallback
 
-class AdapterNewsClinic(
-    private val onItemClick: (Int) -> Unit
-): ListAdapter<NewsChildClinic, AdapterNewsClinic.ViewHolder>(NewsClinicDiffCallback()) {
+class AdapterNewsClinic: ListAdapter<NewsChildClinic, AdapterNewsClinic.ViewHolder>(NewsClinicDiffCallback()) {
     override fun onCreateViewHolder(holder: ViewGroup, position: Int): ViewHolder {
         val view = LayoutInflater.from(holder.context).inflate(R.layout.item_new_user, holder, false)
         return ViewHolder(view)
@@ -24,7 +22,7 @@ class AdapterNewsClinic(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentNews = getItem(position)
 
-        holder.bind(currentNews, onItemClick)
+        holder.bind(currentNews)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -33,7 +31,7 @@ class AdapterNewsClinic(
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvContent: TextView = itemView.findViewById(R.id.tvContent)
 
-        fun bind(item: NewsChildClinic, onItemClick: (Int) -> Unit) {
+        fun bind(item: NewsChildClinic) {
             tvTitle.text = item.title
             tvContent.text = item.content
 
@@ -47,9 +45,6 @@ class AdapterNewsClinic(
                 .circleCrop()
                 .into(imgClinic)
 
-            itemView.setOnClickListener {
-                onItemClick(item.id)
-            }
         }
     }
 }
