@@ -7,6 +7,10 @@ object ApiConstants {
     const val NODE_BASE_URL = "http://56.10.115.197:3000/"
 
 
+    //Admin
+    const val CREATECLINIC = "/api/v1/admin/create-clinic"
+
+
     //Authentication
     const val LOGOUT = "/api/v1/user/logout"
     const val RESETOTP = "/api/v1/auth/verify-otp"

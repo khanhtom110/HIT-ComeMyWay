@@ -2,11 +2,9 @@ package com.vetpet.petbeats.data.remote.retrofitInstance
 
 import android.content.Context
 import com.vetpet.petbeats.core.network.ApiConstants
-import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiAuthAdmin
+import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiAdminHome
 import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiClinicPost
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
-import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
-import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
 import com.vetpet.petbeats.data.remote.interceptor.AuthInterceptor
 import com.vetpet.petbeats.data.remote.interceptor.TokenAuthenticator
 import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
@@ -48,8 +46,8 @@ object RetrofitInstanceNodeJS {
     //User dùng cho các API bên admin
     @Provides
     @Singleton
-    fun provideApiAdminHome(@Named("NodeAuthRetrofit") retrofit: Retrofit): ApiAuthAdmin {
-        return retrofit.create(ApiAuthAdmin::class.java)
+    fun provideApiAdminHome(@Named("NodeAuthRetrofit") retrofit: Retrofit): ApiAdminHome {
+        return retrofit.create(ApiAdminHome::class.java)
     }
 
     //Clinic dùng cho các API bên clinic
