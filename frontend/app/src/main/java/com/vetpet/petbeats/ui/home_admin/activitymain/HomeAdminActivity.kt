@@ -9,7 +9,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.ActivityHomeAdminBinding
 import com.example.VetPet.databinding.ActivityHomeClinicBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeAdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeAdminBinding
     private lateinit var navController: NavController
