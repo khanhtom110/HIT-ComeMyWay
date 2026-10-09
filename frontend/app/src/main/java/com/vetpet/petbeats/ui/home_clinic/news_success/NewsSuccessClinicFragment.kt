@@ -95,12 +95,16 @@ class NewsSuccessClinicFragment : Fragment() {
 
 
                     if (state.checkState) {
-                        binding.imgState.setImageResource(R.drawable.icon_camera_send_cancel)
+                        binding.imgState.setImageResource(R.drawable.icon_camera_send_success)
                         binding.tvState.text = "Tin tức đã được đăng thành công"
+
+                        binding.btnTry.visibility = View.GONE
                     }
                     else {
-                        binding.imgState.setImageResource(R.drawable.icon_camera_send_success)
+                        binding.imgState.setImageResource(R.drawable.icon_camera_send_cancel)
                         binding.tvState.text = "Có lỗi trong quá trình đăng tin"
+
+                        binding.btnTry.visibility = View.VISIBLE
                     }
                 }
             }

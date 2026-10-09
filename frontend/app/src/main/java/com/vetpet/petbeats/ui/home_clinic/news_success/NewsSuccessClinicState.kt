@@ -11,5 +11,4 @@ data class NewsSuccessClinicState (
 
 
     val checkState: Boolean = false,
-    val checkTry: Boolean = false
 )
