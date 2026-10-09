@@ -24,13 +24,11 @@ class AppointmentAdminNotCurrentAdapter(
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val tvNameClinic: TextView = itemView.findViewById(R.id.tvNameClinic)
         val tvNameAccount: TextView = itemView.findViewById(R.id.tvNameAccount)
         val btnSetting: ImageView = itemView.findViewById(R.id.btnSetting)
 
 
         fun bind(item: AppointmentAdminChild, onSettingClick: (Int, View) -> Unit) {
-            tvNameClinic.text = item.nameClinic
             tvNameAccount.text = item.nameAccount
 
             btnSetting.setOnClickListener { view ->

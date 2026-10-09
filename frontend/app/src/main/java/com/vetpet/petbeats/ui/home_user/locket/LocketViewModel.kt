@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -78,7 +79,7 @@ class LocketViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
 
-            val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageFile)
+            val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageFile)
             val imagePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
             val result = repository.onUploadImage(imagePart)

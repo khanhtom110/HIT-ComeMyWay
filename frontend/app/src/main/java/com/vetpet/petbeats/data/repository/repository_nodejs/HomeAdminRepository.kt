@@ -5,12 +5,15 @@ import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiAdminHome
 import com.vetpet.petbeats.data.remote.model.calendar.home_admin.response.StatisticResponse
 import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicPostResponseNodeJs
+import com.vetpet.petbeats.data.remote.realtime.StatisticRealtimeDataSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class HomeAdminRepository @Inject constructor(
-    private val apiAdminHome: ApiAdminHome
+    private val apiAdminHome: ApiAdminHome,
+    private val realtimeDataSource: StatisticRealtimeDataSource
 ): BaseRepository()  {
     suspend fun clinicPostAdmin(status: String): DataResult<ClinicPostResponseNodeJs> {
         return safeApiCall {
@@ -28,5 +31,11 @@ class HomeAdminRepository @Inject constructor(
         return safeApiCall {
             apiAdminHome.statisticAdmin()
         }
+    }
+
+
+
+    fun observeStatisticAdmin(): Flow<StatisticResponse> {
+        return realtimeDataSource.observe()
     }
 }

@@ -118,4 +118,8 @@ dependencies {
 
     //Thư viện biểu đồ B1
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    //Thư viện SSE
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp-sse:4.12.0")
 }

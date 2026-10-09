@@ -7,5 +7,9 @@ data class ListAppointmentAdminState (
     val isWait: Boolean = false,
     val isLoading: Boolean = false,
 
+    val hasNext: Boolean = true,
+    val nextCursor: Int? = null,
+
+
     val listAppointmentAdmin: List<AppointmentAdminChild> = emptyList()
 )

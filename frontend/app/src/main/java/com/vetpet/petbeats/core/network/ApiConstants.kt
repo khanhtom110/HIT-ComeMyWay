@@ -9,6 +9,7 @@ object ApiConstants {
 
     //Admin
     const val CREATECLINIC = "/api/v1/admin/create-clinic"
+    const val CLINICLIST = "/api/v1/admin/clinics"
 
 
     //Authentication
