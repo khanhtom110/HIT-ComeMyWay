@@ -22,6 +22,12 @@
     <fragment
         android:id="@+id/addClinicSuccessAdminFragment"
         android:name="com.vetpet.petbeats.ui.home_admin.add_clinic_success_admin.AddClinicSuccessAdminFragment"
-        android:label="addClinicSuccessAdminFragment"/>
+        android:label="addClinicSuccessAdminFragment">
+        <action
+            android:id="@+id/addClinicSuccess_listAppointment"
+            app:destination="@+id/listAppointmentAdminFragment"
+            app:popUpTo="@id/listAppointmentAdminFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>

@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAddClinicAdminBinding
 import com.example.VetPet.databinding.FragmentAddClinicSuccessAdminBinding
 import kotlinx.coroutines.launch
@@ -44,7 +46,9 @@ class AddClinicSuccessAdminFragment : Fragment() {
 
 
     private fun setOnClick() {
-
+        binding.btnAppointmentAdmin.setOnClickListener {
+            viewModel.appointmentAdminClick()
+        }
     }
 
 
@@ -62,7 +66,11 @@ class AddClinicSuccessAdminFragment : Fragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.event.collect { event ->
-
+                    when (event) {
+                        is AddClinicSuccessAdminEvent.NavigationListAppointmentAdmin -> {
+                            findNavController().navigate(R.id.addClinicSuccess_listAppointment)
+                        }
+                    }
                 }
             }
         }
