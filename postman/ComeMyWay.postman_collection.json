@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "9cc39b8b-58a1-42d7-9628-75218b1c588f",
     "name": "ComeMyWay - Spring Boot + Node.js",
-    "description": "API Node.js: đăng tin có ảnh tự động công khai, admin xử lý tin cũ chờ duyệt và thống kê. Đăng nhập qua Spring Boot. Folder 05 kiểm tra bài mới hiển thị ngay với tài khoản clinic/admin.",
+    "description": "API Node.js: đăng tin có ảnh, admin duyệt hoặc từ chối bài và thống kê. Tin mới PENDING; chỉ APPROVED công khai. Folder 05 kiểm tra đủ 3 trạng thái.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -364,7 +364,7 @@
                   "  pm.expect(Number(post.id)).to.be.above(0);",
                   "  pm.expect(post.title).to.eql(pm.variables.get(\"postTitle\").trim());",
                   "  pm.expect(post.content).to.eql(pm.variables.get(\"postContent\").trim());",
-                  "  pm.expect(post.status).to.eql(\"APPROVED\");",
+                  "  pm.expect(post.status).to.eql(\"PENDING\");",
                   "  pm.expect(post.imageUrls).to.be.an(\"array\");",
                   "  pm.expect(post.clinicName).to.be.a(\"string\").and.not.empty;",
                   "  pm.expect(post).to.have.property(\"clinicThumbnailUrl\");",
@@ -430,7 +430,7 @@
           ]
         },
         {
-          "name": "06 Bài mới xuất hiện ngay trong danh sách công khai",
+          "name": "06 Bài chưa duyệt không công khai",
           "request": {
             "method": "GET",
             "header": [],
@@ -461,10 +461,10 @@
                   "    if (index > 0) pm.expect(Number(posts[index - 1].id)).to.be.at.least(Number(post.id));",
                   "  });",
                   "});",
-                  "pm.test(\"Contains the post just created\", () => {",
+                  "pm.test(\"Pending post is absent\", () => {",
                   "  const id = pm.environment.get(\"createdPostId\");",
                   "  pm.expect(id, \"Run Create post first\").to.be.ok;",
-                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(true);",
+                  "  pm.expect(pm.response.json().data.some(post => String(post.id) === String(id))).to.eql(false);",
                   "  pm.response.json().data.forEach(post => pm.expect(post.status).to.eql('APPROVED'));",
                   "});"
                 ]
@@ -1062,8 +1062,8 @@
       ]
     },
     {
-      "name": "05 - Node.js - Đăng tin tự động công khai",
-      "description": "Chạy tuần tự toàn folder: đăng nhập clinic/admin, tạo tin có ảnh, kiểm tra quyền và trạng thái, duyệt, kiểm tra công khai, xóa tin thử nghiệm. Dùng moderationPostId riêng để không đụng tin của folder khác.",
+      "name": "05 - Node.js - Duyệt bài phòng khám",
+      "description": "Chạy tuần tự: tạo bài PENDING, duyệt và kiểm tra công khai; tạo bài riêng để từ chối, kiểm tra REJECTED không công khai và xóa bài thử nghiệm.",
       "item": [
         {
           "name": "00 Kiểm tra backend hỗ trợ duyệt bài",
@@ -1074,7 +1074,7 @@
               "type": "noauth"
             },
             "header": [],
-            "description": "Kiểm tra phiên bản API trước khi tạo tin. Nếu thiếu endpoint, cập nhật container Node.js và chạy migration 003 sau migration ảnh 002."
+            "description": "Cập nhật backend và chạy migration 004 sau 003 trước khi dùng tính năng từ chối duyệt."
           },
           "event": [
             {
@@ -1082,14 +1082,11 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Backend đã có API duyệt bài và chi tiết', () => {",
-                  "  pm.response.to.have.status(200);",
-                  "  const paths = pm.response.json().paths;",
-                  "  pm.expect(paths, 'Backend cũ: cập nhật Node.js trước khi chạy tiếp').to.have.property('/api/v1/admin/clinic-posts');",
-                  "  pm.expect(paths['/api/v1/admin/clinic-posts']).to.have.property('get');",
-                  "  pm.expect(paths).to.have.property('/api/v1/admin/clinic-posts/{id}/approve');",
-                  "  pm.expect(paths['/api/v1/admin/clinic-posts/{id}/approve']).to.have.property('patch');",
-                  "  pm.expect(paths).to.have.property('/api/v1/public/clinic-posts/{id}');",
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const spec = pm.response.json();",
+                  "pm.test('Có đủ 3 trạng thái và API từ chối', () => {",
+                  "  pm.expect(spec.components.schemas.ClinicPost.properties.status.enum).to.deep.eql(['PENDING', 'APPROVED', 'REJECTED']);",
+                  "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/{id}/reject']).to.have.property('patch');",
                   "});"
                 ]
               }
@@ -1222,7 +1219,7 @@
           ]
         },
         {
-          "name": "03 Tạo bài tự động công khai có ảnh",
+          "name": "03 Tạo bài chờ duyệt có ảnh",
           "request": {
             "method": "POST",
             "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
@@ -1272,10 +1269,10 @@
                   "pm.test('Response envelope', () => pm.expect(pm.response.json().statusCode).to.eql(201));",
                   "pm.test('Moderation contract', () => {",
                   "const post = pm.response.json().data;",
-                  "pm.expect(post.status).to.eql('APPROVED');",
+                  "pm.expect(post.status).to.eql('PENDING');",
                   "pm.expect(post.imageUrls).to.deep.eql(JSON.parse(pm.variables.get('postImageUrls')));",
                   "pm.expect(post.approvedBy).to.eql(null);",
-                  "pm.expect(Number.isNaN(Date.parse(post.approvedAt))).to.eql(false);",
+                  "pm.expect(post.approvedAt).to.eql(null);",
                   "});",
                   "if (pm.response.code === 201) { const post = pm.response.json().data; pm.environment.set('moderationPostId', post.id); pm.environment.set('moderationApprovedAt', post.approvedAt); }"
                 ]
@@ -1284,7 +1281,7 @@
           ]
         },
         {
-          "name": "04 Bài mới không nằm trong danh sách chờ",
+          "name": "04 Bài mới nằm trong danh sách chưa duyệt",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING",
@@ -1312,7 +1309,7 @@
                   "const posts = pm.response.json().data;",
                   "pm.expect(posts.length).to.be.at.most(50);",
                   "posts.forEach(post => pm.expect(post.status).to.eql('PENDING'));",
-                  "pm.expect(posts.some(post => String(post.id) === String(pm.environment.get('moderationPostId')))).to.eql(false);",
+                  "pm.expect(posts.some(post => String(post.id) === String(pm.environment.get('moderationPostId')))).to.eql(true);",
                   "});"
                 ]
               }
@@ -1320,7 +1317,7 @@
           ]
         },
         {
-          "name": "05 Chi tiết bài mới công khai ngay",
+          "name": "05 Bài chưa duyệt không xem được công khai",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts/{{moderationPostId}}",
@@ -1336,7 +1333,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1345,11 +1342,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Response envelope', () => pm.expect(pm.response.json().statusCode).to.eql(200));",
-                  "pm.test('Bài mới công khai', () => {",
-                  "  pm.expect(pm.response.json().data.status).to.eql('APPROVED');",
-                  "});"
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Bài chưa được duyệt', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng')); "
                 ]
               }
             }
@@ -1379,7 +1373,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1412,7 +1406,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1429,7 +1423,7 @@
           ]
         },
         {
-          "name": "08 Admin gọi duyệt lại bài đã tự công khai",
+          "name": "08 Admin duyệt bài",
           "request": {
             "method": "PATCH",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}/approve",
@@ -1452,7 +1446,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1462,20 +1456,21 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Response envelope', () => pm.expect(pm.response.json().statusCode).to.eql(200));",
-                  "pm.test('Moderation contract', () => {",
                   "const post = pm.response.json().data;",
-                  "pm.expect(post.status).to.eql('APPROVED');",
-                  "pm.expect(post.approvedBy).to.eql(null);",
-                  "pm.expect(post.approvedAt).to.eql(pm.environment.get('moderationApprovedAt'));",
-                  "});"
+                  "pm.test('Đã duyệt bởi admin', () => {",
+                  "  pm.expect(post.status).to.eql('APPROVED');",
+                  "  pm.expect(Number(post.approvedBy)).to.be.above(0);",
+                  "  pm.expect(Number.isNaN(Date.parse(post.approvedAt))).to.eql(false);",
+                  "});",
+                  "pm.environment.set('moderationApprovedAt', post.approvedAt);",
+                  "pm.environment.set('moderationApprovedBy', post.approvedBy);"
                 ]
               }
             }
           ]
         },
         {
-          "name": "09 Duyệt lặp giữ nguyên thông tin tự động",
+          "name": "09 Duyệt lặp giữ nguyên thông tin admin",
           "request": {
             "method": "PATCH",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}/approve",
@@ -1498,7 +1493,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1512,7 +1507,7 @@
                   "pm.test('Moderation contract', () => {",
                   "const post = pm.response.json().data;",
                   "pm.expect(post.approvedAt).to.eql(pm.environment.get('moderationApprovedAt'));",
-                  "pm.expect(post.approvedBy).to.eql(null);",
+                  "pm.expect(post.approvedBy).to.eql(pm.environment.get('moderationApprovedBy'));",
                   "});"
                 ]
               }
@@ -1555,7 +1550,7 @@
           ]
         },
         {
-          "name": "11 Bài tự công khai không vào danh sách chờ",
+          "name": "11 Bài đã duyệt không còn trong danh sách chờ",
           "request": {
             "method": "GET",
             "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING",
@@ -1604,7 +1599,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1781,7 +1776,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1821,7 +1816,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1857,7 +1852,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "const postId = pm.environment.get('moderationPostId');",
-                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài tự động công khai có ảnh thành công trước.'); }"
+                  "if (!postId || !/^[1-9][0-9]*$/.test(String(postId))) { throw new Error('Chưa có ID bài thử nghiệm. Chạy request 03 Tạo bài chờ duyệt có ảnh thành công trước.'); }"
                 ]
               }
             },
@@ -1871,6 +1866,364 @@
                   "pm.test('404 do bài đăng, không phải thiếu API', () => {",
                   "  pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng');",
                   "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "20 Tạo bài để từ chối",
+          "request": {
+            "method": "POST",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"{{postTitle}}\",\n  \"content\": \"{{postContent}}\",\n  \"imageUrls\": {{postImageUrls}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset('rejectedPostId');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Tin mới chưa duyệt', () => pm.expect(pm.response.json().data.status).to.eql('PENDING'));",
+                  "if (pm.response.code === 201) pm.environment.set('rejectedPostId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "21 Clinic không được từ chối bài",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "22 Từ chối khi thiếu token",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "23 Admin từ chối bài",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Đã từ chối', () => { const post=pm.response.json().data; pm.expect(post.status).to.eql('REJECTED'); pm.expect(post.approvedBy).to.eql(null); pm.expect(post.approvedAt).to.eql(null); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "24 Danh sách bài từ chối",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=REJECTED",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có bài bị từ chối', () => { const posts=pm.response.json().data; posts.forEach(p=>pm.expect(p.status).to.eql('REJECTED')); pm.expect(posts.some(p=>String(p.id)===String(pm.environment.get('rejectedPostId')))).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "25 Chi tiết bài từ chối không công khai",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts/{{rejectedPostId}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Bài không công khai', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "26 Bài từ chối không có trong feed",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/public/clinic-posts",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Không có bài bị từ chối', () => pm.expect(pm.response.json().data.some(p=>String(p.id)===String(pm.environment.get('rejectedPostId')))).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "27 Không thể duyệt bài đã từ chối",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/approve",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "28 Từ chối lặp",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Vẫn từ chối', () => pm.expect(pm.response.json().data.status).to.eql('REJECTED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "29 ID từ chối không hợp lệ",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/abc/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "30 Xóa bài bị từ chối",
+          "request": {
+            "method": "DELETE",
+            "url": "{{nodeBaseUrl}}/api/v1/clinic/posts/{{rejectedPostId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "31 Không thể từ chối bài đã xóa",
+          "request": {
+            "method": "PATCH",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}/reject",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Không tìm thấy bài', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng'));"
                 ]
               }
             }

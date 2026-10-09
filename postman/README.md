@@ -10,11 +10,11 @@ Nếu đã import collection hoặc environment cũ, Postman không tự cập n
 
 ## Request đăng tin
 
-`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=APPROVED`, `approvedBy=null`, `approvedAt` bằng thời điểm đăng; bài công khai ngay. Chạy migration 003 sau migration ảnh 002 trước khi sử dụng API. Bước **06 Bài mới xuất hiện ngay trong danh sách công khai** kiểm tra hành vi này.
+`POST {{nodeBaseUrl}}/api/v1/clinic/posts` cần Bearer `{{accessToken}}` từ bước đăng nhập. Body gồm `title`, `content` và tùy chọn `imageUrls` (mảng tối đa 10 URL HTTP(S)). Server tự lấy phòng khám từ token, lưu thời gian đăng và gán `status=PENDING`, `approvedBy=null`, `approvedAt=null`; bài chưa công khai. Chạy migration 003 sau migration ảnh 002, rồi migration 004 để thêm trạng thái từ chối. Bước **06 Bài chưa duyệt không công khai** kiểm tra hành vi này.
 
 Response có `clinicThumbnailUrl` lấy từ ảnh đại diện hiện tại của phòng khám; nếu hồ sơ chưa có ảnh thì giá trị là `null`. `imageUrls` là ảnh nội dung bài đăng do client gửi, không phải ảnh đại diện phòng khám.
 
-Sau **04 Tạo bài đăng**, gọi ngay `GET {{nodeBaseUrl}}/api/v1/public/clinic-posts/{{createdPostId}}` hoặc danh sách công khai để xem tin. Admin vẫn có thể gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING` và `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` với Bearer `{{adminAccessToken}}` để xử lý tin cũ còn chờ duyệt; không cần gọi API này cho tin mới.
+Sau **04 Tạo bài đăng**, phòng khám xem bài trong danh sách của mình. Admin gọi `GET {{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=PENDING`, rồi `PATCH {{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{id}}/approve` hoặc `/reject` với Bearer `{{adminAccessToken}}`. Có 3 trạng thái: `PENDING` (chưa duyệt), `APPROVED` (đã duyệt), `REJECTED` (từ chối duyệt). Chỉ bài `APPROVED` được xem công khai.
 
 `DELETE {{nodeBaseUrl}}/api/v1/clinic/posts/{{createdPostId}}` dùng cùng Bearer token, không cần body. Chỉ phòng khám đã đăng bài mới xóa được; bài không tồn tại hoặc thuộc phòng khám khác trả 404. Collection xác nhận bài đã biến mất khỏi feed sau khi xóa.
 
@@ -27,17 +27,18 @@ Sau **04 Tạo bài đăng**, gọi ngay `GET {{nodeBaseUrl}}/api/v1/public/clin
 
 Các folder trong collection kiểm tra health, đăng nhập/refresh, hồ sơ phòng khám, đăng tin, xóa tin, danh sách tin và validation. Mỗi lần chạy **04 Tạo bài đăng** sẽ tạo một tin mới; chạy toàn bộ collection sẽ xóa tin đó ở bước **07 Xóa bài đăng của mình**.
 
-## Đăng tin tự động công khai và API admin
+## Duyệt bài và API admin
 
 Request **00 Kiểm tra backend hỗ trợ duyệt bài** kiểm tra Swagger của server trước khi đăng nhập/tạo tin. Nếu request này thất bại, kiểm tra `nodeBaseUrl` và cập nhật backend trước khi chạy tiếp. Những request dùng `moderationPostId` yêu cầu bước tạo bài đã thành công. Lỗi 404 chỉ được chấp nhận khi `message` là **Không tìm thấy bài đăng**, không chấp nhận **Không tìm thấy API**.
 
-Chạy toàn bộ folder **05 - Node.js - Đăng tin tự động công khai** theo thứ tự. Folder tự đăng nhập clinic và admin, tạo bài riêng có ảnh, kiểm tra bài công khai ngay mà không vào danh sách chờ, chặn clinic gọi API admin, kiểm tra gọi duyệt lặp không thay đổi `approvedBy`/`approvedAt`, kiểm tra danh sách và chi tiết công khai, rồi xóa bài thử nghiệm. Tổng cộng 20 request, gồm các trường hợp 400, 401, 404.
+Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ tự. Folder tự đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài chờ duyệt chưa công khai, chặn clinic gọi API admin, duyệt và kiểm tra công khai. Sau đó tạo bài riêng để kiểm tra từ chối, danh sách `REJECTED`, phân quyền, ID không hợp lệ và việc không công khai bài bị từ chối. Các bài thử nghiệm được xóa cuối luồng.
 
 - Điền `username`, `password`, `adminUsername`, `adminPassword` trong environment trên máy local.
-- Biến collection `postImageUrls` là chuỗi JSON chứa danh sách URL ảnh; mặc định dùng một ảnh mẫu Cloudinary. Có thể thay bằng URL từ API upload hiện có.
-- `moderationPostId`, `moderationApprovedAt` tự lưu trong environment; không cần điền thủ công. Không dùng chung `createdPostId` của folder đăng tin cũ. Bài tự động công khai có `approvedBy=null`.
-- Chạy trên môi trường kiểm thử: folder tạo, duyệt và xóa bài của chính lần chạy đó. Nếu dừng giữa chừng, gọi request **17 Phòng khám xóa bài thử nghiệm** để xóa bài đã tạo trước khi chạy lại.
-- Import lại collection sau khi cập nhật file. Chạy migration `003_clinic_post_moderation.sql` một lần sau migration ảnh 002 trước khi dùng API kiểm duyệt.
+- Biến collection `postImageUrls` chứa chuỗi JSON danh sách URL ảnh.
+- `moderationPostId`, `moderationApprovedAt`, `rejectedPostId` tự lưu; không cần điền thủ công.
+- Gọi duyệt hoặc từ chối lặp trả 200; đổi quyết định đã xử lý trả 409.
+- Import lại collection sau khi cập nhật. Chạy migration 004 sau 003 một lần; migration giữ nguyên trạng thái bài đã có.
+- Nếu dừng giữa luồng, dùng API xóa bài của phòng khám để xóa các ID bài thử nghiệm trước khi chạy lại.
 
 ## Thống kê admin
 
@@ -54,7 +55,7 @@ Nếu đã chạy seed trong `backend-nodejs`, dùng `adminUsername=cmw_test_adm
 Đây là endpoint chưa tồn tại trên server đang chạy (thường do container còn dùng image cũ), không phải trạng thái chờ duyệt. Không đổi test của danh sách chờ duyệt từ 200 sang 404 để làm test đạt.
 
 1. Kiểm tra `nodeBaseUrl`: Node.js chạy trực tiếp hoặc bằng Docker local mặc định dùng `http://localhost:3000`.
-2. Chạy migration `backend-nodejs/database/migrations/002_add_clinic_post_images.sql` rồi `backend-nodejs/database/migrations/003_clinic_post_moderation.sql` **mỗi file một lần** trên database dùng chung nếu chưa có các cột `image_urls`, `status`, `approved_by`, `approved_at`.
+2. Chạy migration `backend-nodejs/database/migrations/002_add_clinic_post_images.sql` rồi `backend-nodejs/database/migrations/003_clinic_post_moderation.sql` rồi `backend-nodejs/database/migrations/004_clinic_post_rejection.sql` **mỗi file một lần** trên database dùng chung. Bỏ qua migration 002/003 nếu đã có các cột tương ứng; chạy 004 nếu enum `status` chưa có `REJECTED`.
 3. Cập nhật riêng Node.js, giữ nguyên cấu hình Compose local đang dùng:
 
 ```powershell

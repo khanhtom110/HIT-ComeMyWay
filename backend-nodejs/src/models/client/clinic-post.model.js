@@ -16,7 +16,7 @@ export function createClinicPostModel(pool) {
   return {
     async create(clinicId, title, content, imageUrls = []) {
       const [result] = await pool.execute(
-        "INSERT INTO clinic_posts (clinic_id, title, content, image_urls, status, approved_at, created_at) VALUES (?, ?, ?, ?, 'APPROVED', UTC_TIMESTAMP(3), UTC_TIMESTAMP(3))",
+        "INSERT INTO clinic_posts (clinic_id, title, content, image_urls, status, created_at) VALUES (?, ?, ?, ?, 'PENDING', UTC_TIMESTAMP(3))",
         [clinicId, title, content, JSON.stringify(imageUrls)],
       );
       return find(result.insertId);
@@ -46,6 +46,12 @@ export function createClinicPostModel(pool) {
       await pool.execute(
         `UPDATE clinic_posts SET status = 'APPROVED', approved_by = ?, approved_at = UTC_TIMESTAMP(3)
          WHERE id = ? AND status = 'PENDING'`, [adminId, id]);
+      return find(id);
+    },
+    async reject(id) {
+      await pool.execute(
+        `UPDATE clinic_posts SET status = 'REJECTED', approved_by = NULL, approved_at = NULL
+         WHERE id = ? AND status = 'PENDING'`, [id]);
       return find(id);
     },
     async deleteByClinic(id, clinicId) {

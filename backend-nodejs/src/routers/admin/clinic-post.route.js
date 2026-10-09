@@ -8,7 +8,7 @@ import { sendResponse } from '../../utils/response.js';
 export function createAdminClinicPostRouter({ clinicPostService, authenticateAdmin }) {
   const router = Router();
   router.get('/admin/clinic-posts', authenticateAdmin, validate({
-    query: Joi.object({ status: Joi.string().valid('PENDING', 'APPROVED').default('PENDING') }),
+    query: Joi.object({ status: Joi.string().valid('PENDING', 'APPROVED', 'REJECTED').default('PENDING') }),
   }), catchAsync(async (request, response) => {
     return sendResponse(response, 200,
       await clinicPostService.listForAdmin(request.validated.query.status));
@@ -17,6 +17,11 @@ export function createAdminClinicPostRouter({ clinicPostService, authenticateAdm
     validate(deleteClinicPostValidation), catchAsync(async (request, response) => {
       return sendResponse(response, 200,
         await clinicPostService.approve(request.validated.params.id, request.admin.id), 'Đã duyệt bài đăng');
+    }));
+  router.patch('/admin/clinic-posts/:id/reject', authenticateAdmin,
+    validate(deleteClinicPostValidation), catchAsync(async (request, response) => {
+      return sendResponse(response, 200,
+        await clinicPostService.reject(request.validated.params.id), 'Đã từ chối duyệt bài đăng');
     }));
   return router;
 }
