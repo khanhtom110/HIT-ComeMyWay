@@ -17,6 +17,12 @@ export function createClinicPostService(clinicPostModel) {
       if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
       return post;
     },
+    async detailForAdmin(id) {
+      const post = await clinicPostModel.findForAdmin(id);
+      if (!post) throw new ApiError(404, 'Không tìm thấy bài đăng');
+      return post;
+    },
+    countsForAdmin() { return clinicPostModel.countByStatus(); },
     async listForAdmin(status, { beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
       const rows = await clinicPostModel.listForAdmin(status, { beforeId, limit });
       const hasMore = rows.length > limit;

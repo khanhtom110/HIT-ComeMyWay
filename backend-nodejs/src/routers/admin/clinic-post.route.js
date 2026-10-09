@@ -18,6 +18,14 @@ export function createAdminClinicPostRouter({ clinicPostService, authenticateAdm
     const { items, pagination } = await clinicPostService.listForAdmin(status, { limit, beforeId });
     return sendResponse(response, 200, items, 'OK', pagination);
   }));
+  router.get('/admin/clinic-posts/counts', authenticateAdmin, catchAsync(async (request, response) => {
+    return sendResponse(response, 200, await clinicPostService.countsForAdmin());
+  }));
+  router.get('/admin/clinic-posts/:id', authenticateAdmin,
+    validate(deleteClinicPostValidation), catchAsync(async (request, response) => {
+      return sendResponse(response, 200,
+        await clinicPostService.detailForAdmin(request.validated.params.id));
+    }));
   router.patch('/admin/clinic-posts/:id/approve', authenticateAdmin,
     validate(deleteClinicPostValidation), catchAsync(async (request, response) => {
       return sendResponse(response, 200,

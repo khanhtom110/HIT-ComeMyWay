@@ -37,6 +37,15 @@ export function createClinicPostModel(pool) {
       return rows.map(decode);
     },
     findPublic(id) { return find(id, true); },
+    findForAdmin(id) { return find(id); },
+    async countByStatus() {
+      const [rows] = await pool.execute(
+        `SELECT p.status, COUNT(*) AS total FROM clinic_posts p
+         JOIN clinics c ON c.id = p.clinic_id GROUP BY p.status`);
+      const counts = { PENDING: 0, APPROVED: 0, REJECTED: 0 };
+      for (const row of rows) counts[row.status] = Number(row.total);
+      return counts;
+    },
     async listForAdmin(status, { beforeId, limit = CLINIC_POST_LIMITS.LIST_SIZE } = {}) {
       const params = beforeId === undefined ? [status] : [status, beforeId];
       const [rows] = await pool.execute(

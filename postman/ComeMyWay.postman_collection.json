@@ -1063,7 +1063,7 @@
     },
     {
       "name": "05 - Node.js - Duyệt bài phòng khám",
-      "description": "Chạy tuần tự: tạo bài PENDING, duyệt và kiểm tra công khai; tạo bài riêng để từ chối, kiểm tra REJECTED không công khai và xóa bài thử nghiệm.",
+      "description": "API hỗ trợ màn admin: 3 tab trạng thái, huy hiệu tổng bài chờ, chi tiết mọi trạng thái, duyệt/từ chối chỉ bài PENDING, phân trang và xóa bài thử nghiệm.",
       "item": [
         {
           "name": "00 Kiểm tra backend hỗ trợ duyệt bài",
@@ -1087,6 +1087,8 @@
                   "pm.test('Có đủ 3 trạng thái và API từ chối', () => {",
                   "  pm.expect(spec.components.schemas.ClinicPost.properties.status.enum).to.deep.eql(['PENDING', 'APPROVED', 'REJECTED']);",
                   "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/{id}/reject']).to.have.property('patch');",
+                  "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/counts']).to.have.property('get');",
+                  "  pm.expect(spec.paths['/api/v1/admin/clinic-posts/{id}']).to.have.property('get');",
                   "});"
                 ]
               }
@@ -1281,6 +1283,74 @@
           ]
         },
         {
+          "name": "03a Chi tiết admin PENDING",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Chi tiết đúng trạng thái và có dữ liệu màn hình', () => {",
+                  "  const post = pm.response.json().data;",
+                  "  pm.expect(post.status).to.eql('PENDING');",
+                  "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('moderationPostId')));",
+                  "  pm.expect(post).to.include.all.keys('clinicName', 'clinicThumbnailUrl', 'createdAt', 'title', 'content', 'imageUrls');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03b Tổng số bài cho huy hiệu",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/counts",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Số bài theo 3 trạng thái', () => { const counts=pm.response.json().data;",
+                  "  ['PENDING','APPROVED','REJECTED'].forEach(status => { pm.expect(counts[status]).to.be.a('number').and.at.least(0); });",
+                  "  pm.expect(counts.PENDING).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "04 Bài mới nằm trong danh sách chưa duyệt",
           "request": {
             "method": "GET",
@@ -1464,6 +1534,74 @@
                   "});",
                   "pm.environment.set('moderationApprovedAt', post.approvedAt);",
                   "pm.environment.set('moderationApprovedBy', post.approvedBy);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08a Chi tiết admin APPROVED",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{moderationPostId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Chi tiết đúng trạng thái và có dữ liệu màn hình', () => {",
+                  "  const post = pm.response.json().data;",
+                  "  pm.expect(post.status).to.eql('APPROVED');",
+                  "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('moderationPostId')));",
+                  "  pm.expect(post).to.include.all.keys('clinicName', 'clinicThumbnailUrl', 'createdAt', 'title', 'content', 'imageUrls');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08b Tổng số bài cho huy hiệu",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/counts",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Số bài theo 3 trạng thái', () => { const counts=pm.response.json().data;",
+                  "  ['PENDING','APPROVED','REJECTED'].forEach(status => { pm.expect(counts[status]).to.be.a('number').and.at.least(0); });",
+                  "  pm.expect(counts.APPROVED).to.be.above(0);",
+                  "});"
                 ]
               }
             }
@@ -2007,6 +2145,74 @@
           ]
         },
         {
+          "name": "23a Chi tiết admin REJECTED",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/{{rejectedPostId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Chi tiết đúng trạng thái và có dữ liệu màn hình', () => {",
+                  "  const post = pm.response.json().data;",
+                  "  pm.expect(post.status).to.eql('REJECTED');",
+                  "  pm.expect(String(post.id)).to.eql(String(pm.environment.get('rejectedPostId')));",
+                  "  pm.expect(post).to.include.all.keys('clinicName', 'clinicThumbnailUrl', 'createdAt', 'title', 'content', 'imageUrls');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "23b Tổng số bài cho huy hiệu",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/counts",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Số bài theo 3 trạng thái', () => { const counts=pm.response.json().data;",
+                  "  ['PENDING','APPROVED','REJECTED'].forEach(status => { pm.expect(counts[status]).to.be.a('number').and.at.least(0); });",
+                  "  pm.expect(counts.REJECTED).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "24 Danh sách bài từ chối",
           "request": {
             "method": "GET",
@@ -2224,6 +2430,142 @@
                 "exec": [
                   "pm.test('HTTP 404', () => pm.response.to.have.status(404));",
                   "pm.test('Không tìm thấy bài', () => pm.expect(pm.response.json().message).to.eql('Không tìm thấy bài đăng'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "32 Danh sách admin mỗi lượt 1 bài",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=APPROVED&limit=1",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Thông tin phân trang hợp lệ', () => { const body=pm.response.json(); pm.expect(body.data.length).to.be.at.most(1); pm.expect(body.pagination.limit).to.eql(1); pm.expect(body.pagination.hasMore).to.be.a('boolean');",
+                  "  if (body.pagination.hasMore) { pm.expect(body.pagination.nextBeforeId).to.eql(body.data[0].id); } else { pm.expect(body.pagination.nextBeforeId).to.eql(null); }",
+                  "});",
+                  "const cursor=pm.response.json().pagination.nextBeforeId; pm.environment.set('adminPostsBeforeId', cursor || 1);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "33 Lấy lượt bài admin tiếp theo",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?status=APPROVED&limit=1&beforeId={{adminPostsBeforeId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Không trùng hoặc vượt mốc trang trước', () => { const body=pm.response.json(); pm.expect(body.data.length).to.be.at.most(1); body.data.forEach(post => { pm.expect(post.status).to.eql('APPROVED'); pm.expect(Number(post.id)).to.be.below(Number(pm.environment.get('adminPostsBeforeId'))); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "34 Không có quyền xem chi tiết admin",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/1",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "35 Không có quyền xem huy hiệu admin",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts/counts",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "36 Giới hạn phân trang không hợp lệ",
+          "request": {
+            "method": "GET",
+            "url": "{{nodeBaseUrl}}/api/v1/admin/clinic-posts?limit=51",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminAccessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "header": []
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
                 ]
               }
             }

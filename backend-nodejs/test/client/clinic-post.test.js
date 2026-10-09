@@ -28,6 +28,10 @@ const clinicPostModel = {
     if (failPublicQuery) throw new Error('Sensitive database error');
     return posts.filter(post => post.status === 'APPROVED');
   },
+  async findForAdmin(id) { return posts.find(post => post.id === id); },
+  async countByStatus() {
+    return Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status, posts.filter(post => post.status === status).length]));
+  },
   async findPublic(id) { return posts.find(post => post.id === id && post.status === 'APPROVED'); },
   async listForAdmin(status, { beforeId, limit }) {
     return posts.filter(post => post.status === status && (beforeId === undefined || post.id < beforeId))
@@ -253,6 +257,8 @@ test('admin can browse more than 50 posts without skipping posts after moderatio
       assert.equal(firstBody.data.length, 50);
       assert.deepEqual(firstBody.pagination, { limit: 50, hasMore: true, nextBeforeId: firstBody.data.at(-1).id });
       assert.ok(firstBody.data.every(post => post.status === status));
+      const counts = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/counts`, { headers });
+      assert.equal((await counts.json()).data[status], posts.filter(post => post.status === status).length);
       if (status === 'PENDING') {
         const approved = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${firstBody.data[0].id}/approve`, { method: 'PATCH', headers });
         assert.equal(approved.status, 200);
@@ -281,6 +287,65 @@ test('admin can browse more than 50 posts without skipping posts after moderatio
   } finally {
     for (let i = posts.length - 1; i >= 0; i--) if (posts[i].id >= 1000000) posts.splice(i, 1);
   }
+});
+
+test('admin sees details of every status and counts update after moderation', async () => {
+  const headers = { authorization: `Bearer ${token({ authorities: 'ADMIN', sub: 'admin' })}` };
+  const expectedCounts = () => Object.fromEntries(['PENDING', 'APPROVED', 'REJECTED'].map(status => [status, posts.filter(post => post.status === status).length]));
+  const getCounts = async () => {
+    const response = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/counts`, { headers });
+    assert.equal(response.status, 200);
+    return (await response.json()).data;
+  };
+  assert.deepEqual(await getCounts(), expectedCounts());
+  for (const status of ['PENDING', 'APPROVED', 'REJECTED']) {
+    const post = posts.find(item => item.status === status);
+    const detail = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${post.id}`, { headers });
+    assert.equal(detail.status, 200);
+    assert.deepEqual((await detail.json()).data, post);
+    if (status !== 'APPROVED') assert.equal((await fetch(`${baseUrl}/api/v1/public/clinic-posts/${post.id}`)).status, 404);
+  }
+  for (const suffix of ['counts', String(posts[0].id)]) {
+    const url = `${baseUrl}/api/v1/admin/clinic-posts/${suffix}`;
+    assert.equal((await fetch(url)).status, 401);
+    for (const claims of [{}, { authorities: 'USER' }, { authorities: 'ADMIN', sub: 'admin', jti: 'revoked' },
+      { authorities: 'ADMIN', sub: 'admin', isRefresh: true }]) {
+      assert.ok([401, 403].includes((await fetch(url, { headers: { authorization: `Bearer ${token(claims)}` } })).status));
+    }
+  }
+  assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/999999`, { headers })).status, 404);
+  assert.equal((await fetch(`${baseUrl}/api/v1/admin/clinic-posts/abc`, { headers })).status, 400);
+  for (const action of ['approve', 'reject']) {
+    const created = await fetch(`${baseUrl}/api/v1/clinic/posts`, {
+      method: 'POST', headers: { authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Count fixture', content: 'Test' }),
+    });
+    const id = (await created.json()).data.id;
+    const beforeCounts = await getCounts();
+    const result = await fetch(`${baseUrl}/api/v1/admin/clinic-posts/${id}/${action}`, { method: 'PATCH', headers });
+    assert.equal(result.status, 200);
+    const afterCounts = await getCounts();
+    assert.equal(afterCounts.PENDING, beforeCounts.PENDING - 1);
+    assert.equal(afterCounts[action === 'approve' ? 'APPROVED' : 'REJECTED'], beforeCounts[action === 'approve' ? 'APPROVED' : 'REJECTED'] + 1);
+    assert.deepEqual(afterCounts, expectedCounts());
+  }
+});
+
+test('admin SQL details include private posts and counts cover all rows', async () => {
+  const calls = [];
+  const model = createClinicPostModel({ async execute(sql, params) {
+    calls.push({ sql, params });
+    if (sql.includes('COUNT(*)')) return [[{ status: 'PENDING', total: '75' }, { status: 'REJECTED', total: 3 }]];
+    return [[{ id: 42, status: 'REJECTED', imageUrls: '["https://example.com/a.jpg"]' }]];
+  } });
+  const post = await model.findForAdmin(42);
+  assert.equal(post.status, 'REJECTED');
+  assert.deepEqual(post.imageUrls, ['https://example.com/a.jpg']);
+  assert.deepEqual(calls[0].params, [42]);
+  assert.doesNotMatch(calls[0].sql, /p.status = 'APPROVED'/);
+  assert.deepEqual(await model.countByStatus(), { PENDING: 75, APPROVED: 0, REJECTED: 3 });
+  assert.match(calls[1].sql, /GROUP BY p.status/);
+  assert.doesNotMatch(calls[1].sql, /LIMIT/);
 });
 
 test('admin SQL pagination applies status and cursor before limiting rows', async () => {
@@ -478,6 +543,9 @@ test('Swagger UI serves the clinic post contract and accepts same-origin request
   assert.deepEqual(spec.components.schemas.ClinicPost.properties.status.enum, ['PENDING', 'APPROVED', 'REJECTED']);
   assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/{id}/approve'].patch.security, [{ adminBearer: [] }]);
   assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/{id}/reject'].patch.security, [{ adminBearer: [] }]);
+  assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/{id}'].get.security, [{ adminBearer: [] }]);
+  assert.deepEqual(spec.paths['/api/v1/admin/clinic-posts/counts'].get.security, [{ adminBearer: [] }]);
+  assert.deepEqual(Object.keys(spec.paths['/api/v1/admin/clinic-posts/{id}'].get.responses[200].content['application/json'].examples), ['PENDING', 'APPROVED', 'REJECTED']);
   assert.ok(spec.paths['/api/v1/admin/clinic-posts/{id}/reject'].patch.responses[409]);
   assert.equal(spec.paths['/api/v1/clinic/posts'].post.responses[201].content['application/json'].example.data.status, 'PENDING');
   assert.ok(spec.paths['/api/v1/public/clinic-posts/{id}'].get.responses[404]);

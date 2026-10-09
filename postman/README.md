@@ -31,7 +31,7 @@ Các folder trong collection kiểm tra health, đăng nhập/refresh, hồ sơ 
 
 Request **00 Kiểm tra backend hỗ trợ duyệt bài** kiểm tra Swagger của server trước khi đăng nhập/tạo tin. Nếu request này thất bại, kiểm tra `nodeBaseUrl` và cập nhật backend trước khi chạy tiếp. Những request dùng `moderationPostId` yêu cầu bước tạo bài đã thành công. Lỗi 404 chỉ được chấp nhận khi `message` là **Không tìm thấy bài đăng**, không chấp nhận **Không tìm thấy API**.
 
-Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ tự. Folder tự đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài chờ duyệt chưa công khai, chặn clinic gọi API admin, duyệt và kiểm tra công khai. Sau đó tạo bài riêng để kiểm tra từ chối, danh sách `REJECTED`, phân quyền, ID không hợp lệ và việc không công khai bài bị từ chối. Các bài thử nghiệm được xóa cuối luồng.
+Chạy toàn bộ folder **05 - Node.js - Duyệt bài phòng khám** theo thứ tự. Folder tự đăng nhập clinic/admin, tạo bài có ảnh, kiểm tra bài chờ duyệt chưa công khai, chặn clinic gọi API admin, duyệt và kiểm tra công khai. Sau đó tạo bài riêng để kiểm tra từ chối, danh sách `REJECTED`, phân quyền, ID không hợp lệ và việc không công khai bài bị từ chối. Có bước xem chi tiết admin ở cả 3 trạng thái, kiểm tra số huy hiệu qua `/counts`, phân trang với `limit`/`beforeId`, và kiểm tra phân quyền. Các bài thử nghiệm được xóa cuối luồng.
 
 - Điền `username`, `password`, `adminUsername`, `adminPassword` trong environment trên máy local.
 - Biến collection `postImageUrls` chứa chuỗi JSON danh sách URL ảnh.

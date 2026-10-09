@@ -67,6 +67,7 @@ export const openApiDocument = {
       '1. Đăng nhập Spring Boot để lấy access token. Chọn **Authorize**: `clinicBearer` cho CLINIC, `adminBearer` cho ADMIN.',
       '2. Phòng khám tạo bài qua `POST /api/v1/clinic/posts`. Bài mới ở trạng thái `PENDING` (chưa duyệt).',
       '3. Admin xem `GET /api/v1/admin/clinic-posts?status=PENDING`, rồi gọi `PATCH /api/v1/admin/clinic-posts/{id}/approve` hoặc `/reject`. Hai API không cần body.',
+      'Màn admin: 3 tab Chưa duyệt/Đã duyệt/Từ chối tương ứng PENDING/APPROVED/REJECTED. Lấy số huy hiệu từ `GET /api/v1/admin/clinic-posts/counts` và mở chi tiết bằng `GET /api/v1/admin/clinic-posts/{id}`.',
       '4. `APPROVED` (đã duyệt) được công khai; `PENDING` và `REJECTED` (từ chối duyệt) không công khai.',
       'Gọi lại cùng quyết định trả 200 và giữ nguyên dữ liệu; đổi quyết định đã xử lý trả 409.',
       'Chạy lần lượt migration 001–004 trước khi sử dụng. Migration 004 thêm REJECTED và giữ nguyên trạng thái bài hiện có.',
@@ -122,7 +123,15 @@ export const openApiDocument = {
           clinicName: { type: 'string', example: 'Phòng khám thú y' },
           title: { type: 'string', example: 'Lịch khám thú cưng' },
           content: { type: 'string', example: 'Phòng khám nhận lịch khám từ thứ Hai đến thứ Sáu.' },
-          createdAt: { type: 'string', format: 'date-time' },
+          createdAt: { type: 'string', format: 'date-time', description: 'Thời gian gửi bài do server lưu; client định dạng theo múi giờ hiển thị.' },
+        },
+      },
+      ClinicPostCounts: {
+        type: 'object', required: ['PENDING', 'APPROVED', 'REJECTED'],
+        properties: {
+          PENDING: { type: 'integer', minimum: 0, example: 3, description: 'Tổng bài chưa duyệt, dùng cho huy hiệu tab.' },
+          APPROVED: { type: 'integer', minimum: 0, example: 2, description: 'Tổng bài đã duyệt.' },
+          REJECTED: { type: 'integer', minimum: 0, example: 1, description: 'Tổng bài bị từ chối.' },
         },
       },
       AdminStatistics: {
@@ -154,11 +163,40 @@ export const openApiDocument = {
           { in: 'query', name: 'beforeId', required: false,
             description: 'Bỏ trống ở lượt đầu. Lượt tiếp theo truyền pagination.nextBeforeId của response trước, giữ nguyên status.',
             schema: { type: 'integer', format: 'int64', minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, example: 100 }],
-        description: 'Danh sách bài theo trạng thái, mới nhất trước. Mỗi lượt tối đa 50 bài. Nếu pagination.hasMore=true, truyền pagination.nextBeforeId vào beforeId để lấy tiếp. data vẫn là mảng bài đăng. Dùng ID làm mốc để không bỏ sót bài cũ khi bài ở lượt trước vừa được duyệt hoặc từ chối. Bài mới đăng sau lượt đầu sẽ xuất hiện khi tải lại từ đầu. Mặc định status=PENDING.',
+        description: 'Danh sách bài theo trạng thái, mới nhất trước. Mỗi lượt tối đa 50 bài. Nếu pagination.hasMore=true, truyền pagination.nextBeforeId vào beforeId để lấy tiếp. data vẫn là mảng bài đăng. Dùng ID làm mốc để không bỏ sót bài cũ khi bài ở lượt trước vừa được duyệt hoặc từ chối. Bài mới đăng sau lượt đầu sẽ xuất hiện khi tải lại từ đầu. Mặc định status=PENDING. Thẻ bài dùng imageUrls[0] làm ảnh nội dung (nếu có), clinicName làm tên phòng khám, createdAt làm thời gian gửi. Nhấn thẻ gọi GET /api/v1/admin/clinic-posts/{id}; huy hiệu lấy từ GET /api/v1/admin/clinic-posts/counts.',
         responses: { 200: moderationListResponse, 400: errorResponse('Trạng thái, limit hoặc beforeId không hợp lệ', 400),
           401: errorResponse('Thiếu token, token hết hạn, refresh token hoặc sai vai trò ADMIN', 401),
           403: errorResponse('Tài khoản ADMIN không tồn tại hoặc token bị thu hồi', 403),
           500: errorResponse('Lỗi xử lý phía server', 500) },
+      },
+    },
+    '/api/v1/admin/clinic-posts/counts': {
+      get: {
+        tags: ['Admin'], summary: 'Số bài theo 3 trạng thái', operationId: 'countClinicPostsForModeration',
+        security: [{ adminBearer: [] }],
+        description: 'Tổng số bài ở mỗi trạng thái trên toàn bộ danh sách, không giới hạn 50 và không phụ thuộc lượt phân trang. Dùng data.PENDING cho huy hiệu Chưa duyệt. Gọi lại sau khi duyệt, từ chối hoặc tải lại danh sách.',
+        responses: { 200: response('OK', { $ref: '#/components/schemas/ClinicPostCounts' }, { PENDING: 3, APPROVED: 2, REJECTED: 1 }),
+          401: errorResponse('Thiếu hoặc sai access token ADMIN', 401),
+          403: errorResponse('Tài khoản ADMIN không tồn tại hoặc token bị thu hồi', 403),
+          500: errorResponse('Lỗi xử lý phía server', 500) },
+      },
+    },
+    '/api/v1/admin/clinic-posts/{id}': {
+      get: {
+        tags: ['Admin'], summary: 'Chi tiết bài viết cho admin (mọi trạng thái)', operationId: 'getClinicPostForModeration',
+        security: [{ adminBearer: [] }], parameters: [postId],
+        description: 'Admin xem bài PENDING, APPROVED hoặc REJECTED. Trả tên và ảnh đại diện phòng khám, thời gian gửi, tiêu đề, nội dung và toàn bộ ảnh bài viết. Chỉ hiển thị nút Duyệt/Từ chối khi status=PENDING; APPROVED/REJECTED chỉ xem. createdAt là thời gian gửi, approvedAt là thời gian duyệt. Khi thao tác trả 409, tải lại chi tiết để hiển thị trạng thái mới.',
+        responses: { 200: { description: 'Chi tiết bài viết', content: { 'application/json': {
+          schema: response('OK', post).content['application/json'].schema,
+          examples: Object.fromEntries([['PENDING', 'Chưa duyệt — có nút Duyệt/Từ chối', pendingExample],
+            ['APPROVED', 'Đã duyệt — chỉ xem', approvedExample], ['REJECTED', 'Từ chối — chỉ xem', rejectedExample]]
+            .map(([status, summary, example]) => [status, { summary, value: { statusCode: 200, message: 'OK', data: example,
+              timestamp: '2026-10-09T08:00:00.000Z' } }])),
+        } } },
+          400: errorResponse('ID phải là số nguyên dương an toàn', 400),
+          401: errorResponse('Thiếu hoặc sai access token ADMIN', 401),
+          403: errorResponse('Tài khoản ADMIN không tồn tại hoặc token bị thu hồi', 403),
+          404: errorResponse('Không tìm thấy bài đăng', 404), 500: errorResponse('Lỗi xử lý phía server', 500) },
       },
     },
     '/api/v1/admin/clinic-posts/{id}/approve': {

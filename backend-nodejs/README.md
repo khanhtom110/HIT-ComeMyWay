@@ -37,7 +37,7 @@ Cần Node.js 20+, npm và MySQL đã có schema của backend Spring Boot.
 
 1. Chạy `cd backend-nodejs` rồi `npm ci`.
 2. Sao chép `.env.example` thành `.env`, rồi điền `JWT_SECRET` giống Spring Boot (ít nhất 32 ký tự), `DB_USERNAME`, `DB_PASSWORD` và các biến `DB_*` trỏ tới cùng database. `.env` được nạp tự động, biến môi trường của tiến trình được ưu tiên.
-3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql`, `database/migrations/002_add_clinic_post_images.sql` `database/migrations/003_clinic_post_moderation.sql` và `database/migrations/004_clinic_post_rejection.sql` trên database đó. Mỗi migration chỉ chạy một lần. Migration 003 đưa tin cũ về `PENDING`; migration 004 thêm `REJECTED` và giữ nguyên trạng thái bài hiện có.
+3. Chạy lần lượt `database/migrations/001_create_clinic_posts.sql`, `database/migrations/002_add_clinic_post_images.sql`, `database/migrations/003_clinic_post_moderation.sql` và `database/migrations/004_clinic_post_rejection.sql` trên database đó. Mỗi migration chỉ chạy một lần. Migration 003 đưa tin cũ về `PENDING`; migration 004 thêm `REJECTED` và giữ nguyên trạng thái bài hiện có.
 4. Chạy `npm run dev` khi phát triển hoặc `npm start` để khởi động. Server kiểm tra kết nối MySQL trước khi nghe tại `127.0.0.1:3000`; có thể đổi `HOST`/`PORT` trong `.env`.
 5. Chạy `npm test` để kiểm tra API, phân quyền, validation và cấu hình.
 
@@ -60,6 +60,8 @@ Swagger UI: `http://localhost:3000/api-docs/` khi chạy bằng Docker hoặc No
 - `GET /api/v1/public/clinic-posts/:id`: chi tiết và toàn bộ ảnh của tin đã duyệt; tin chưa duyệt hoặc bị từ chối trả 404.
 - Response bài đăng (tạo, danh sách của phòng khám, danh sách/chi tiết công khai và danh sách admin) có `clinicThumbnailUrl`: URL ảnh đại diện lấy từ hồ sơ phòng khám hiện tại (`clinics.thumbnail_url`), hoặc `null` nếu chưa có. Trường này khác `imageUrls` là ảnh của chính bài đăng.
 - `GET /api/v1/admin/clinic-posts?status=PENDING`: admin xem danh sách chưa duyệt, đầy đủ nội dung và ảnh; mỗi lượt tối đa 50 bài. Thêm `limit=1..50` để đổi số bài. Response giữ `data` là mảng và thêm `pagination: {limit, hasMore, nextBeforeId}`. Khi `hasMore=true`, gọi tiếp với `beforeId=nextBeforeId`, giữ nguyên `status`; hết bài khi `hasMore=false`. Bỏ `beforeId` để tải lại từ bài mới nhất. Có thể lọc `APPROVED` (đã duyệt) hoặc `REJECTED` (từ chối duyệt). Mặc định `PENDING`.
+- `GET /api/v1/admin/clinic-posts/counts`: tổng số bài theo `PENDING`, `APPROVED`, `REJECTED`, không giới hạn 50. Dùng `data.PENDING` cho huy hiệu trên tab chưa duyệt.
+- `GET /api/v1/admin/clinic-posts/:id`: admin xem chi tiết bài ở cả 3 trạng thái. Có tên/ảnh đại diện phòng khám, thời gian gửi, tiêu đề, nội dung và ảnh bài. Màn chi tiết chỉ hiện Duyệt/Từ chối với `PENDING`; `APPROVED`/`REJECTED` chỉ xem. Sau thao tác, tải lại danh sách và số huy hiệu; khi gặp 409 thì tải lại chi tiết.
 - `PATCH /api/v1/admin/clinic-posts/:id/approve`: access token ADMIN, không cần body. Duyệt tin `PENDING`, lưu `approvedBy`, `approvedAt` và công khai tin. Gọi duyệt lặp trả 200, giữ nguyên thông tin duyệt; tin `REJECTED` trả 409.
 - `PATCH /api/v1/admin/clinic-posts/:id/reject`: access token ADMIN, không cần body. Chuyển tin `PENDING` sang `REJECTED`, không công khai. Gọi từ chối lặp trả 200; tin `APPROVED` trả 409. Các trường thông tin duyệt vẫn là `null`.
 
