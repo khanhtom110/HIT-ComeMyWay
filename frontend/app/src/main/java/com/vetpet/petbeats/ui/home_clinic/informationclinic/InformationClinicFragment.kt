@@ -28,6 +28,7 @@ import com.vetpet.petbeats.ui.home_user.calendar.adapter.TimePagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -69,7 +70,7 @@ class InformationClinicFragment : Fragment() {
             }
         } ?: return null
 
-        val mediaType = MediaType.parse(inputStream)
+        val mediaType = inputStream.toMediaTypeOrNull()
         val requestBody = RequestBody.create(mediaType, tempFile)
 
         return MultipartBody.Part.createFormData("file", tempFile.name, requestBody)
