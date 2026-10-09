@@ -146,7 +146,7 @@
             android:layout_marginBottom="@dimen/_4sdp"
             android:background="@drawable/button_auth_blue"
             android:gravity="center"
-            android:text="Đăng nhập"
+            android:text="Tạo tài khoản mới"
             android:textColor="@color/colorBackground"
             app:layout_constraintBottom_toBottomOf="parent" />
 
