@@ -37,9 +37,9 @@ class TokenAuthenticator(
                     tokenManager.saveTokens(newToken.accessToken, newToken.refreshToken)
 
                     // 2. Nhét cái vé Access Token MỚI vào lại cái API vừa bị tạch
-                    return response.request()?.newBuilder()
-                        ?.header("Authorization", "Bearer ${newToken.accessToken}")
-                        ?.build() // Trả về request mới, hệ thống sẽ tự động gọi lại API đó!
+                    return response.request.newBuilder()
+                        .header("Authorization", "Bearer ${newToken.accessToken}")
+                        .build() // Trả về request mới, hệ thống sẽ tự động gọi lại API đó!
                 }
                 else {
                     tokenManager.clearTokens()
