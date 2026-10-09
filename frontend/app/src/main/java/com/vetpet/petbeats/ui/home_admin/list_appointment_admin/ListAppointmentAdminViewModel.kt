@@ -2,7 +2,7 @@ package com.vetpet.petbeats.ui.home_admin.list_appointment_admin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vetpet.petbeats.data.repository.repository_nodejs.HomeAdminRepository
+import com.vetpet.petbeats.data.repository.repository_springboot.AuthAdminRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ListAppointmentAdminViewModel @Inject constructor(
-    private val repository: HomeAdminRepository
+    private val repository: AuthAdminRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(ListAppointmentAdminState())
     val state = _state.asStateFlow()

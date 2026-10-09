@@ -1,13 +1,11 @@
 package com.vetpet.petbeats.ui.home_admin.list_appointment_admin
 
-import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -20,10 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentListAppointmentAdminBinding
 import com.example.VetPet.databinding.LayoutPopupClinicActionBinding
-import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.core.utils.AnimationUtils.crossFadeShimmerToContent
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
-import com.vetpet.petbeats.ui.home_admin.list_appointment_admin.adapter.AppointmentAdminAdapter
+import com.vetpet.petbeats.ui.home_admin.list_appointment_admin.adapter.AppointmentAdminCurrentAdapter
+import com.vetpet.petbeats.ui.home_admin.list_appointment_admin.adapter.AppointmentAdminNotCurrentAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -32,7 +30,8 @@ import kotlin.getValue
 class ListAppointmentAdminFragment : Fragment() {
     private var _binding: FragmentListAppointmentAdminBinding ?= null
     private val binding get() = _binding!!
-    private lateinit var adapter: AppointmentAdminAdapter
+    private lateinit var adapterCurrent: AppointmentAdminCurrentAdapter
+    private lateinit var adapterNotCurrent: AppointmentAdminNotCurrentAdapter
     private val viewModel: ListAppointmentAdminViewModel by viewModels()
 
     override fun onCreateView(
@@ -64,7 +63,7 @@ class ListAppointmentAdminFragment : Fragment() {
 
 
     private fun clickList() {
-        adapter = AppointmentAdminAdapter(
+        adapterCurrent = AppointmentAdminCurrentAdapter(
             onSettingClick = { id, view ->
                 when {
                     viewModel.state.value.isReceive -> {
@@ -79,7 +78,13 @@ class ListAppointmentAdminFragment : Fragment() {
                             }
                         )
                     }
+                }
+            }
+        )
 
+        adapterCurrent = AppointmentAdminCurrentAdapter(
+            onSettingClick = { id, view ->
+                when {
                     viewModel.state.value.isWait -> {
                         showPopupClinic(
                             anchorView = view,
@@ -93,7 +98,6 @@ class ListAppointmentAdminFragment : Fragment() {
                         )
                     }
                 }
-
             }
         )
     }
@@ -173,7 +177,7 @@ class ListAppointmentAdminFragment : Fragment() {
                         val clinic = ContextCompat.getColor(requireContext(),R.color.colorTextReceive)
                         binding.btnReceive.setTextColor(clinic)
 
-                        binding.recycle.adapter = adapter
+                        binding.recycle.adapter = adapterCurrent
                     }
                     else {
                         binding.btnReceive.setBackgroundResource(R.color.colorBackground)
@@ -191,7 +195,7 @@ class ListAppointmentAdminFragment : Fragment() {
                         binding.btnWait.setTextColor(clinic)
 
 
-                        binding.recycle.adapter = adapter
+                        binding.recycle.adapter = adapterNotCurrent
                     }
                     else {
                         binding.btnWait.setBackgroundResource(R.color.colorBackground)
@@ -234,7 +238,12 @@ class ListAppointmentAdminFragment : Fragment() {
                     }
 
                     if (!state.isLoading) {
-                        adapter.submitList(state.listAppointmentAdmin)
+                        if (state.isReceive) {
+                            adapterCurrent.submitList(state.listAppointmentAdmin)
+                        }
+                        else {
+                            adapterNotCurrent.submitList(state.listAppointmentAdmin)
+                        }
                     }
 
                 }
