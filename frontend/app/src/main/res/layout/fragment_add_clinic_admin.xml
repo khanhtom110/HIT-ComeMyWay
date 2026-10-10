@@ -44,56 +44,14 @@
 
             <TextView
                 style="@style/Chu3"
-                android:id="@+id/tvNameAccount"
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tên tài khoản"
                 android:textColor="@color/colorTextSub"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <EditText
-                style="@style/Chu3"
-                android:id="@+id/editNameAccount"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_36sdp"
-                android:background="@drawable/tittle_search"
-                android:layout_marginHorizontal="@dimen/_16sdp"
-                android:textColor="@color/colorTextTitle"
-                android:textColorHint="@color/colorTextHint"
-                android:inputType="text"
-                android:hint="Nhập tên phòng khám đăng ký"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_40sdp"
-                android:layout_marginTop="@dimen/_4sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvNameAccount"/>
-
-            <TextView
-                style="@style/Chu3"
-                android:id="@+id/nameAccountError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:text=""
-                android:textColor="@color/colorError"
-                android:visibility="gone"
-                android:drawablePadding="2dp"
-                app:drawableStartCompat="@drawable/warning"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editNameAccount" />
-
-            <TextView
-                style="@style/Chu3"
-                android:id="@+id/tvEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="@color/colorTextSub"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:layout_constraintTop_toBottomOf="@id/nameAccountError"
+                app:layout_constraintTop_toTopOf="@id/boxInformation"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <EditText

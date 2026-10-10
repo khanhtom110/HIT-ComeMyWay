@@ -1,5 +1,7 @@
 package com.vetpet.petbeats.ui.home_admin.add_clinic_admin
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -7,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAddClinicAdminBinding
 import com.example.VetPet.databinding.FragmentAddClinicSuccessAdminBinding
+import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeIn
 import com.vetpet.petbeats.core.utils.AnimationUtils.fadeOut
 import com.vetpet.petbeats.core.utils.AnimationUtils.shake
@@ -56,13 +61,16 @@ class AddClinicAdminFragment : Fragment() {
 
     private fun setOnClick() {
         binding.btnBack.setOnClickListener {
-            viewModel.listAppointmentAdminClick()
+            showPopupDialog(
+                message = "Bạn có chắc chắn muốn huỷ lịch khám này không?",
+                leftButton = "Quay lại",
+                rightButton = "Tiếp tục",
+                onRightButtonClick = {
+                    viewModel.listAppointmentAdminClick()
+                }
+            )
         }
 
-        binding.editNameAccount.addTextChangedListener {
-            viewModel.onNameChange(it.toString())
-
-        }
         binding.editEmail.addTextChangedListener {
             viewModel.onPasswordChange(it.toString())
         }
@@ -73,26 +81,49 @@ class AddClinicAdminFragment : Fragment() {
     }
 
 
+
+    private fun showPopupDialog(
+        message: String,
+        leftButton: String,
+        rightButton: String,
+
+        onLeftButtonClick: (() -> Unit)? = null,
+        onRightButtonClick: (() -> Unit)? = null
+    ) {
+        //Khởi tạo binding
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        val dialogBinding = LayoutPopupDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        //Xử lý giao diện
+        dialogBinding.tvDialogTitle.text = message
+        dialogBinding.btnLeft.text = leftButton
+        dialogBinding.btnRight.text = rightButton
+
+        dialogBinding.btnLeft.setOnClickListener {
+            dialog.dismiss()
+            onLeftButtonClick?.invoke()
+        }
+
+        dialogBinding.btnRight.setOnClickListener {
+            dialog.dismiss()
+            onRightButtonClick?.invoke()
+        }
+
+        dialog.show()
+    }
+
+
+
     private fun stateData() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     //check error
-                    if (state.isName) {
-                        binding.editNameAccount.setBackgroundResource(R.drawable.button_input_errol)
-                        binding.nameAccountError.fadeIn()
-                        binding.editNameAccount.shake()
-
-                        val nameError = ContextCompat.getColor(requireContext(),R.color.colorError)
-                        binding.editNameAccount.setTextColor(nameError)
-                    }
-                    else {
-                        binding.editNameAccount.setBackgroundResource(R.drawable.button_input)
-                        binding.nameAccountError.fadeOut()
-
-                        val nameSub = ContextCompat.getColor(requireContext(),R.color.colorTextSub)
-                        binding.editNameAccount.setTextColor(nameSub)
-                    }
                     if (state.isEmail) {
                         binding.editEmail.setBackgroundResource(R.drawable.button_input_errol)
                         binding.emailError.fadeIn()
@@ -109,18 +140,8 @@ class AddClinicAdminFragment : Fragment() {
                         binding.editEmail.setTextColor(passwordSub)
                     }
 
-                    if (binding.nameAccountError.text.toString() != state.nameError) {
-                        binding.nameAccountError.text = state.nameError
-                    }
                     if (binding.emailError.text.toString() != state.emailError) {
                         binding.emailError.text = state.emailError
-                    }
-
-
-
-                    //check name
-                    if (binding.editNameAccount.text.toString() != state.name) {
-                        binding.editNameAccount.setText(state.name)
                     }
 
                     //check password
