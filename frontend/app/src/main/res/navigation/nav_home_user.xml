@@ -173,10 +173,20 @@
         <action
             android:id="@+id/informationRoom_calendar"
             app:destination="@id/calendarFragment"
-            app:popUpTo="@id/searchFragment"
+            app:popUpTo="@id/calendarFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/informationRoom_search"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
@@ -205,8 +215,8 @@
             app:destination="@+id/informationRoomFragment"
             app:popUpTo="@id/informationRoomFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
 
@@ -223,7 +233,7 @@
         <action
             android:id="@+id/calendar_successAppointment"
             app:destination="@id/successAppointFragment"
-            app:popUpTo="@id/bookFragment"
+            app:popUpTo="@id/successAppointFragment"
             app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -248,8 +258,6 @@
         <action
             android:id="@+id/confirmAppointment_editCalendar"
             app:destination="@+id/editCalendarFragment"
-            app:popUpTo="@id/searchFragment"
-            app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -307,8 +315,8 @@
             app:destination="@+id/confirmAppointmentFragment"
             app:popUpTo="@id/confirmAppointmentFragment"
             app:popUpToInclusive="true"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
 
