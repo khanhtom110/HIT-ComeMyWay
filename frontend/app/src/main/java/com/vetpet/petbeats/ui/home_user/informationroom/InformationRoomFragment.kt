@@ -169,7 +169,7 @@ class InformationRoomFragment : Fragment() {
                 viewModel.event.collect { event ->
                     when (event) {
                         is InformationRoomEvent.NavigationResultSearch -> {
-                            findNavController().popBackStack()
+                            findNavController().navigate(R.id.informationRoom_search)
                         }
                         is InformationRoomEvent.NavigationCalendar -> {
                             findNavController().navigate(
