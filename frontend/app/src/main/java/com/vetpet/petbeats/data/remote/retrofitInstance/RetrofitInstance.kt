@@ -8,7 +8,7 @@ import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiUserHome
 import com.vetpet.petbeats.data.remote.interceptor.AuthInterceptor
 import com.vetpet.petbeats.data.remote.interceptor.TokenAuthenticator
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.local.session.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

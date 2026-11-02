@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.VetPet.R
 import com.example.VetPet.databinding.ActivitySplashBinding
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.local.session.TokenManager
 import com.vetpet.petbeats.ui.auth.activitymain.AuthActivity
 import com.vetpet.petbeats.ui.home_user.activitymain.HomeActivity
 import com.vetpet.petbeats.core.utils.AnimationUtils.splashEntrance

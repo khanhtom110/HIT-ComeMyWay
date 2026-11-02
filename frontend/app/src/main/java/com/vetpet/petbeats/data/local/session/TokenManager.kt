@@ -1,4 +1,4 @@
-package com.vetpet.petbeats.data.remote.sharepreference
+package com.vetpet.petbeats.data.local.session
 
 import android.content.Context
 import android.content.SharedPreferences

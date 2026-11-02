@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.local.session.TokenManager
 import com.example.VetPet.databinding.FragmentLoginBinding
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat

@@ -1,7 +1,7 @@
 package com.vetpet.petbeats.data.remote.interceptor
 
 import android.util.Log
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.local.session.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Response
 
