@@ -36,6 +36,7 @@ import kotlin.getValue
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.collections.isNotEmpty
 import kotlin.math.abs
 
 @AndroidEntryPoint

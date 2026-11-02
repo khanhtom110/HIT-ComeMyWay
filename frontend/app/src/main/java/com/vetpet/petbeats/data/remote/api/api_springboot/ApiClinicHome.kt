@@ -2,13 +2,13 @@ package com.vetpet.petbeats.data.remote.api.api_springboot
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.AppointmentListClinicResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.GetClinicProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ChangePasswordRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ProfileRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.AppointmentListClinicResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ChangePasswordResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.GetClinicProfileResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET

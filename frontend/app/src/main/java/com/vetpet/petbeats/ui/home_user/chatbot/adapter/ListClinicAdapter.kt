@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.VetPet.R
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.RecommendClinic
+import com.vetpet.petbeats.data.remote.dto.home_user.response.chatbotresponse.RecommendClinic
 
 class ListClinicAdapter(
     private val onItemClick: (Int) -> Unit

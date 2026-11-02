@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ChangePasswordRequest
 import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
 import com.vetpet.petbeats.data.repository.repository_springboot.HomeClinicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

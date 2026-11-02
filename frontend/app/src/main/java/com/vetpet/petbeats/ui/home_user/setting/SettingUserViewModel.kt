@@ -3,8 +3,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
-import com.vetpet.petbeats.data.remote.sharepreference.TokenManager
+import com.vetpet.petbeats.data.remote.dto.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.local.session.TokenManager
 import com.vetpet.petbeats.data.repository.repository_springboot.HomeUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

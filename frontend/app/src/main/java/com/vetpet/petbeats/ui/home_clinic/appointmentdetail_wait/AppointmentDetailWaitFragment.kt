@@ -21,6 +21,7 @@ import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import com.example.VetPet.databinding.LayoutPopupReasonBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.collections.joinToString
 import kotlin.getValue
 
 @AndroidEntryPoint

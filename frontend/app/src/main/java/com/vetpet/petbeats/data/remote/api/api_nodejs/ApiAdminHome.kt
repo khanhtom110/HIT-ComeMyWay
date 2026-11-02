@@ -2,8 +2,8 @@ package com.vetpet.petbeats.data.remote.api.api_nodejs
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_admin.response.StatisticResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicPostResponseNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_admin.response.StatisticResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicPostResponseNodeJs
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.Path

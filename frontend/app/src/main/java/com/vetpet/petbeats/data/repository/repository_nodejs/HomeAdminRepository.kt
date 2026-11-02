@@ -3,8 +3,8 @@ package com.vetpet.petbeats.data.repository.repository_nodejs
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiAdminHome
-import com.vetpet.petbeats.data.remote.model.calendar.home_admin.response.StatisticResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicPostResponseNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_admin.response.StatisticResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicPostResponseNodeJs
 import com.vetpet.petbeats.data.remote.realtime.StatisticRealtimeDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -17,6 +17,7 @@ import com.example.VetPet.databinding.FragmentConfirmAppointmentBinding
 import com.vetpet.petbeats.ui.home_user.book.adapter.BookChildState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.collections.joinToString
 import kotlin.getValue
 
 @AndroidEntryPoint

@@ -2,35 +2,35 @@ package com.vetpet.petbeats.data.remote.api.api_springboot
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LogoutRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AddFriendRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChangePasswordUserRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.ChatRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreatePostLocketRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.DeviceTokenFireBaseRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.LinkFriendRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.UpdateProfileRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AddFriendResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.AppointmentIdResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicIdResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostConstainResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ClinicPostDetailResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreateAppointmentResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.CreatePostLocketResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LinkFriendResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.LocationResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.MyPostLocketResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.SearchResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeAppointmentResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.TakeBookingResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.UpdateProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.chatbotresponse.ChatResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.LogoutRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.OtpRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.ForgotPasswordResponse
+import com.vetpet.petbeats.data.remote.dto.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.request.AddFriendRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.ChangePasswordUserRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.ChatRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.CreatePostLocketRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.DeviceTokenFireBaseRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.LinkFriendRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.UpdateProfileRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.response.AddFriendResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.AppointmentIdResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicIdResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicPostConstainResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicPostDetailResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.CreateAppointmentResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.CreatePostLocketResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.LinkFriendResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.LocationResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.MyPostLocketResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.SearchResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.TakeAppointmentResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.TakeBookingResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.UpdateProfileResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.response.chatbotresponse.ChatResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -46,14 +46,14 @@ interface ApiUserHome {
     suspend fun location(
         @Query("latitude") latitude: Double?,
         @Query("longitude") longitude: Double?
-    ): ApiResponse<List<LocationResponse>>
+    ): ApiResponse<List<com.vetpet.petbeats.data.remote.dto.home_user.response.LocationResponse>>
 
     @GET(ApiConstants.CLINICID)
     suspend fun clinicid(
         @Path("clinicId") clinicId: Int,
         @Query("latitude") latitude: Double?,
         @Query("longitude") longitude: Double?
-    ): ApiResponse<ClinicIdResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicIdResponse>
 
 
     @GET(ApiConstants.SEARCH)
@@ -61,50 +61,50 @@ interface ApiUserHome {
         @Query("keyword") keyword: String,
         @Query("latitude") latitude: Double?,
         @Query("longitude") longitude: Double?
-    ): ApiResponse<List<SearchResponse>>
+    ): ApiResponse<List<com.vetpet.petbeats.data.remote.dto.home_user.response.SearchResponse>>
 
     @GET(ApiConstants.TAKEBOOKING)
     suspend fun takeBooking(
         @Path("clinicId") clinicId: Int
-    ): ApiResponse<TakeBookingResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.TakeBookingResponse>
 
     @GET(ApiConstants.CREATAPPOINTMENT)
-    suspend fun takeAppointment(): ApiResponse<List<TakeAppointmentResponse>>
+    suspend fun takeAppointment(): ApiResponse<List<com.vetpet.petbeats.data.remote.dto.home_user.response.TakeAppointmentResponse>>
 
     @POST(ApiConstants.CREATAPPOINTMENT)
     suspend fun createAppointment(
-        @Body request: CreateAppointmentRequest
-    ): ApiResponse<CreateAppointmentResponse>
+        @Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.CreateAppointmentRequest
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.CreateAppointmentResponse>
 
     @POST(ApiConstants.EDITAPPOINTMENT)
     suspend fun editAppointment(
         @Path("appointmentId") id: Int,
-        @Body request: CreateAppointmentRequest
-    ): ApiResponse<CreateAppointmentResponse>
+        @Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.CreateAppointmentRequest
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.CreateAppointmentResponse>
 
     @GET(ApiConstants.TAKEAPPOINTMENTID)
     suspend fun takeAppointmentId(
         @Path("id") id: Int
-    ): ApiResponse<AppointmentIdResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.AppointmentIdResponse>
 
     @POST(ApiConstants.CANCELAPPOINTMENT)
     suspend fun cancelAppointment(
         @Path("appointmentId") id: Int
-    ): ApiResponse<AppointmentIdResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.AppointmentIdResponse>
 
     @POST(ApiConstants.FIREBASE)
     suspend fun deviceToken(
-        @Body request: DeviceTokenFireBaseRequest
+        @Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.DeviceTokenFireBaseRequest
     ): ApiResponse<Any>
 
     @POST(ApiConstants.UPDATEPROFILEUSER)
     suspend fun updateProfile(
         @Path("id") id: Int,
-        @Body request: UpdateProfileRequest
-    ): ApiResponse<UpdateProfileResponse>
+        @Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.UpdateProfileRequest
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.UpdateProfileResponse>
 
     @GET(ApiConstants.PROFILEUSER)
-    suspend fun profile(): ApiResponse<UpdateProfileResponse>
+    suspend fun profile(): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.UpdateProfileResponse>
 
     @POST(ApiConstants.LOGOUT)
     suspend fun logout(
@@ -119,10 +119,10 @@ interface ApiUserHome {
     ): ApiResponse<String>
 
     @POST(ApiConstants.CHANGEPASSWORDUSER)
-    suspend fun changePasswordUser(@Body request: ChangePasswordUserRequest): ApiResponse<Any>
+    suspend fun changePasswordUser(@Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.ChangePasswordUserRequest): ApiResponse<Any>
 
     @POST(ApiConstants.CHATBOT)
-    suspend fun chatBot(@Body request: ChatRequest): ApiResponse<ChatResponse>
+    suspend fun chatBot(@Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.ChatRequest): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.chatbotresponse.ChatResponse>
 
 
 
@@ -138,19 +138,19 @@ interface ApiUserHome {
 
 
     @POST(ApiConstants.CREATEPOSTLOCKET)
-    suspend fun createPostLocket(@Body request: CreatePostLocketRequest): ApiResponse<CreatePostLocketResponse>
+    suspend fun createPostLocket(@Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.CreatePostLocketRequest): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.CreatePostLocketResponse>
 
     @GET(ApiConstants.GETMYLOCKET)
     suspend fun getMyPostLocket(
         @Query("lastPostId") lastPostId: Int?,
         @Query("size") size: Int = 10
-    ): ApiResponse<MyPostLocketResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.MyPostLocketResponse>
 
     @GET(ApiConstants.GETFEEDSLOCKET)
     suspend fun getMyFeedLocket(
         @Query("lastPostId") lastPostId: Int?,
         @Query("size") size: Int = 10
-    ): ApiResponse<MyPostLocketResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.MyPostLocketResponse>
 
     @POST(ApiConstants.REJECTFRIENDLOCKET)
     suspend fun rejectFriendLocket(
@@ -158,7 +158,7 @@ interface ApiUserHome {
     ): ApiResponse<Any>
 
     @POST(ApiConstants.SENDFRIENDLOCKET)
-    suspend fun sendFriendLocket(@Body request: AddFriendRequest): ApiResponse<AddFriendResponse>
+    suspend fun sendFriendLocket(@Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.AddFriendRequest): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.AddFriendResponse>
 
     @POST(ApiConstants.ACCEPTFRIENDLOCKET)
     suspend fun acceptFriendLocket(
@@ -166,16 +166,16 @@ interface ApiUserHome {
     ): ApiResponse<Any>
 
     @GET(ApiConstants.GETPENDINGFRIENDLOCKET)
-    suspend fun getPendingFriendLocket(): ApiResponse<List<AddFriendResponse>>
+    suspend fun getPendingFriendLocket(): ApiResponse<List<com.vetpet.petbeats.data.remote.dto.home_user.response.AddFriendResponse>>
 
     @GET(ApiConstants.GETMYFRIENDLOCKET)
-    suspend fun getMyFriendLocket(): ApiResponse<List<AddFriendResponse>>
+    suspend fun getMyFriendLocket(): ApiResponse<List<com.vetpet.petbeats.data.remote.dto.home_user.response.AddFriendResponse>>
 
     @GET(ApiConstants.LOCKETLINK)
     suspend fun getLocketLink(): ApiResponse<String>
 
     @POST(ApiConstants.FINDFRIEND)
-    suspend fun findFriend(@Body request: LinkFriendRequest): ApiResponse<LinkFriendResponse>
+    suspend fun findFriend(@Body request: com.vetpet.petbeats.data.remote.dto.home_user.request.LinkFriendRequest): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.LinkFriendResponse>
 
     @POST(ApiConstants.UNFRIEND)
     suspend fun unFriend(
@@ -191,10 +191,10 @@ interface ApiUserHome {
     suspend fun clinicPost(
         @Query("lastPostId") lastPostId: Int?,
         @Query("limit") limit: Int = 10
-    ): ApiResponse<ClinicPostConstainResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicPostConstainResponse>
 
     @GET(ApiConstants.CLINICPOSTDETAIL)
     suspend fun clinicPostDetail(
         @Path("id") id: Int
-    ): ApiResponse<ClinicPostDetailResponse>
+    ): ApiResponse<com.vetpet.petbeats.data.remote.dto.home_user.response.ClinicPostDetailResponse>
 }

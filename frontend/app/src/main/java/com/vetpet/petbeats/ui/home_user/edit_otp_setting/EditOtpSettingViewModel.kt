@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.OtpRequest
 import com.vetpet.petbeats.data.repository.repository_springboot.HomeUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
