@@ -3,9 +3,9 @@ package com.vetpet.petbeats.data.repository.repository_nodejs
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.api_nodejs.ApiClinicPost
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ClinicPostRequestNodeJs
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicDeleteResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicPostResponseNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ClinicPostRequestNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicDeleteResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicPostResponseNodeJs
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -2,7 +2,7 @@ package com.vetpet.petbeats.data.remote.interceptor
 
 import android.content.Context
 import android.util.Log
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.RefreshTokenRequest
 import com.vetpet.petbeats.data.local.session.TokenManager
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuth
 import okhttp3.Authenticator

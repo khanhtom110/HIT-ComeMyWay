@@ -3,14 +3,14 @@ package com.vetpet.petbeats.data.repository.repository_springboot
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiClinicHome
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ChangePasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ProfileRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ReasonRejectRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.AppointmentListClinicResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ChangePasswordResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.GetClinicProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ProfileResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ChangePasswordRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ProfileRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ReasonRejectRequest
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.AppointmentListClinicResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ChangePasswordResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.GetClinicProfileResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ProfileResponse
+import com.vetpet.petbeats.data.remote.dto.home_user.request.AppointmentIdRequest
 import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -67,7 +67,7 @@ class HomeClinicRepository @Inject constructor(
         }
     }
 
-    suspend fun takeAppointmentId(request: AppointmentIdRequest): DataResult<AppointmentListClinicResponse> {
+    suspend fun takeAppointmentId(request: com.vetpet.petbeats.data.remote.dto.home_user.request.AppointmentIdRequest): DataResult<AppointmentListClinicResponse> {
         return safeApiCall {
             apiClinicHome.takeAppointmentId(
                 id = request.id

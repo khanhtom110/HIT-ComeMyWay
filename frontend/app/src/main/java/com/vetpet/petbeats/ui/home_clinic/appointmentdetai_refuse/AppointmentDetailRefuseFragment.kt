@@ -15,6 +15,7 @@ import com.example.VetPet.R
 import com.example.VetPet.databinding.FragmentAppointmentDetailRefuseBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.collections.joinToString
 import kotlin.getValue
 
 

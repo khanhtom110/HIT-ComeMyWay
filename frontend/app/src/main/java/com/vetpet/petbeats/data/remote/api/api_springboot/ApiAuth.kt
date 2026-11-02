@@ -2,16 +2,16 @@ package com.vetpet.petbeats.data.remote.api.api_springboot
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RefreshTokenRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ForgotPasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.LoginResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.OtpRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.OtpResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.RegisterRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.RegisterResponse
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.ResetPasswordRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.ForgotPasswordResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.RefreshTokenRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.ForgotPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.LoginRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.LoginResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.OtpRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.OtpResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.RegisterRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.RegisterResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.ResetPasswordRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.ForgotPasswordResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

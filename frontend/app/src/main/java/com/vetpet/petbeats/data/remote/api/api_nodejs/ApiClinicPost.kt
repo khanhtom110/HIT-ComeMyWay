@@ -2,9 +2,9 @@ package com.vetpet.petbeats.data.remote.api.api_nodejs
 
 import com.vetpet.petbeats.core.network.ApiConstants
 import com.vetpet.petbeats.core.network.ApiResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.request.ClinicPostRequestNodeJs
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicDeleteResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_clinic.response.ClinicPostResponseNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_clinic.request.ClinicPostRequestNodeJs
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicDeleteResponse
+import com.vetpet.petbeats.data.remote.dto.home_clinic.response.ClinicPostResponseNodeJs
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

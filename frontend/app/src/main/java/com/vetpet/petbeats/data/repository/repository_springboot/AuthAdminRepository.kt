@@ -3,9 +3,9 @@ package com.vetpet.petbeats.data.repository.repository_springboot
 import com.vetpet.petbeats.core.base.BaseRepository
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.remote.api.api_springboot.ApiAuthAdmin
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.CreateClinicRequest
-import com.vetpet.petbeats.data.remote.model.calendar.auth.response.CreateClinicResponse
-import com.vetpet.petbeats.data.remote.model.calendar.home_admin.response.CreateClinicChildResponse
+import com.vetpet.petbeats.data.remote.dto.auth.request.CreateClinicRequest
+import com.vetpet.petbeats.data.remote.dto.auth.response.CreateClinicResponse
+import com.vetpet.petbeats.data.remote.dto.home_admin.response.CreateClinicChildResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

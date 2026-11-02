@@ -34,6 +34,7 @@ import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.RecyclerView
 import com.example.VetPet.databinding.LayoutPopupDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.collections.isNotEmpty
 import kotlin.math.abs
 
 @AndroidEntryPoint

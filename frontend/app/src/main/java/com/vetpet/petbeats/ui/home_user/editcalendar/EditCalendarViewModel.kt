@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.AppointmentIdRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.CreateAppointmentRequest
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.request.TakeBookingRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.AppointmentIdRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.CreateAppointmentRequest
+import com.vetpet.petbeats.data.remote.dto.home_user.request.TakeBookingRequest
 import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
 import com.vetpet.petbeats.data.repository.repository_springboot.HomeUserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.vetpet.petbeats.core.base.DataResult
 import com.vetpet.petbeats.data.repository.repository_springboot.AuthRepository
 import com.vetpet.petbeats.data.repository.repository_springboot.ErrorTarget
-import com.vetpet.petbeats.data.remote.model.calendar.auth.request.LoginRequest
+import com.vetpet.petbeats.data.remote.dto.auth.request.LoginRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

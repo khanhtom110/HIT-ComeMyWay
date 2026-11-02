@@ -1,7 +1,7 @@
 package com.vetpet.petbeats.data.remote.realtime
 
 import com.google.gson.Gson
-import com.vetpet.petbeats.data.remote.model.calendar.home_admin.response.StatisticResponse
+import com.vetpet.petbeats.data.remote.dto.home_admin.response.StatisticResponse
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

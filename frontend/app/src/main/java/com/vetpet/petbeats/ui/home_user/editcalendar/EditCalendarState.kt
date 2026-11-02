@@ -1,6 +1,6 @@
 package com.vetpet.petbeats.ui.home_user.editcalendar
 
-import com.vetpet.petbeats.data.remote.model.calendar.home_user.response.ServiceItem
+import com.vetpet.petbeats.data.remote.dto.home_user.response.ServiceItem
 
 data class EditCalendarState (
     //information
